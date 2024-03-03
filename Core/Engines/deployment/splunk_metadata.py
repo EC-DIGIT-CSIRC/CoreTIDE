@@ -63,11 +63,10 @@ class SplunkMetadataDeploy(DeployMetadata):
 
         # Build lookup data
         for mdr in deployment:
-            print(f"🗃️ Generating Lookup entry for {mdr.split('/')[-1]}...")
-
             entry = dict()
             # Could load from index, but this is fast enough for lookup update purposes
             body = DataTide.Models.mdr[mdr]
+            log("ONGOING", "Generating Lookup entry", body["name"])
 
             techniques = techniques_resolver(body.get("uuid"))
             if techniques:
