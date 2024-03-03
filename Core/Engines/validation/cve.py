@@ -13,13 +13,12 @@ from Core.Engines.modules.tide import DataTide
 from Core.Engines.modules.deployment import Proxy
 
 TVM_MODEL_FIELD = DataTide.Configurations.Global.datafields["tvm"]
-if DataTide.Configurations.Documentation.cve.get("proxy"):
-    Proxy.set_proxy()
-else:
-    Proxy.unset_proxy()
-
 
 def run():
+    if DataTide.Configurations.Documentation.cve.get("proxy"):
+        Proxy.set_proxy()
+    else:
+        Proxy.unset_proxy()
 
     log("TITLE", "CVE Validation")
     log(

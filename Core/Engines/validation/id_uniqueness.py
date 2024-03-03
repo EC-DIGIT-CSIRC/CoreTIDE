@@ -9,14 +9,15 @@ sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Core.Engines.modules.documentation import get_icon
 from Core.Engines.modules.logging import log
+from Core.Engines.modules.files import absolute_paths
 
 ROOT = Path(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 TIDE_CONFIG = toml.load(open(ROOT / "Core/Configurations/global.toml", encoding="utf-8"))
 METASCHEMAS = TIDE_CONFIG["metaschemas"]
 SKIPS = ["logsources", "ram", "mdrv2", "lookup_metadata"]
-raw_paths = TIDE_CONFIG["paths"]["core"] | TIDE_CONFIG["paths"]["tide"]
-PATHS = {k: (ROOT / path) for k, path in raw_paths.items()}
+
+PATHS = absolute_paths
 
 duplicates = list()
 registry = dict()

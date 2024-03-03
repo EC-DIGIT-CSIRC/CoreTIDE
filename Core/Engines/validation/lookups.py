@@ -14,10 +14,11 @@ sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Core.Engines.modules.validation import indicator_validation
 from Core.Engines.modules.logging import Colors, log
+from Core.Engines.modules.files import absolute_paths
 
 ROOT = Path(str(git.Repo(".", search_parent_directories=True).working_dir))
 CONFIG = toml.load(open(ROOT / "Core/Configurations/global.toml", encoding="utf-8"))
-PATHS = {k: (ROOT / path) for k, path in CONFIG["paths"].items()}
+PATHS = absolute_paths()
 
 JSONSCHEMAS_PATHS = PATHS["json_schemas"]
 LOOKUPS_METADATA_JSONSCHEMA_PATH = (
