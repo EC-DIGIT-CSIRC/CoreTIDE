@@ -17,7 +17,7 @@ TIDE_CONFIG = toml.load(open(ROOT / "Core/Configurations/global.toml", encoding=
 METASCHEMAS = TIDE_CONFIG["metaschemas"]
 SKIPS = ["logsources", "ram", "mdrv2", "lookup_metadata"]
 
-PATHS = absolute_paths
+PATHS = absolute_paths()
 
 duplicates = list()
 registry = dict()
