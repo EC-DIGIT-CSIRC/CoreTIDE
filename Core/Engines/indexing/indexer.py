@@ -15,7 +15,7 @@ def indexer(write_index=False) -> dict:
     )
     SKIPS = ["logsources", "ram", "mdrv2", "lookup_metadata"]
     
-    TIDE_PATHS = {k: (ROOT / path) for k, path in TIDE_CONFIG["paths"]["tide"].items()}
+    TIDE_PATHS = {k: (ROOT.parent / path) for k, path in TIDE_CONFIG["paths"]["tide"].items()}
     CORE_PATHS = {k: (ROOT / path) for k, path in TIDE_CONFIG["paths"]["core"].items()}
     
     PATHS = TIDE_PATHS | CORE_PATHS
