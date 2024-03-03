@@ -17,9 +17,9 @@ def indexer(write_index=False) -> dict:
         open(ROOT / "Core/Configurations/global.toml", encoding="utf-8")
     )
     SKIPS = ["logsources", "ram", "mdrv2", "lookup_metadata"]
-        
-    PATHS = absolute_paths()
     
+    PATHS = absolute_paths()
+    print(PATHS)
     VOCAB_PATH = PATHS["vocabularies"]
     CONFIGURATIONS_PATH = PATHS["configurations"]
     METASCHEMA_PATH = PATHS["metaschemas"]
