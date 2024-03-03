@@ -1,0 +1,240 @@
+
+stages:
+  - debug
+  - 📝 Reporting
+  - 🧬 Mutation
+  - ✅ Validation
+  - 📖 Knowledge Management
+  - 🗿 Data Model
+  - 🚀 Deployment
+
+🗡️ Att&ck Navigator Layer:
+  stage: 📝 Reporting
+  script:
+  - cd ./Core/Engines/framework/
+  - python attack_layer_builder.py
+  - git add -A
+  - if ! git diff-index --quiet HEAD; then
+  -   git commit -m "[Reporting] Update Navigator Layer"
+  -   git push $TIDE_REPO_ACCESS HEAD:$CI_COMMIT_REF_NAME
+  - fi
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: manual
+      allow_failure: true
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+      when: manual
+      allow_failure: true
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+
+
+🧪 Data Mutation Toolchain:
+  stage: 🧬 Mutation
+  script:
+  - cd ./Core/Orchestration/
+  - python mutate.py
+  - git add -A
+  - if ! git diff-index --quiet HEAD; then
+  -   git commit -m "[Mutated] $CI_COMMIT_MESSAGE"
+  -   git rebase origin/$CI_DEFAULT_BRANCH
+  -   git push $TIDE_REPO_ACCESS HEAD:$CI_COMMIT_REF_NAME
+  - fi
+  rules:
+    - if:  $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+  resource_group: mutation
+
+# Separating Toolchains since in main mutation is expected to run beforehand
+🔮 Validation Toolchain:
+  stage: ✅ Validation
+  script:
+    - git rebase origin/$CI_DEFAULT_BRANCH #Allows to pull latest mutation if there are
+    - cd ./tidemec/Core/Orchestration/
+    - python validate.py
+  rules:
+    - if:  $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+      when: always
+  needs:
+    - 🧪 Data Mutation Toolchain
+  variables:
+    FF_USE_NEW_BASH_EVAL_STRATEGY: "true"
+  allow_failure:
+    exit_codes: 19
+
+🔮 Staging Validation Toolchain:
+  stage: ✅ Validation
+  script:
+    - cd tidemec/Core/Orchestration
+    - python validate.py
+  rules:
+    - if:  $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+      when: always
+  variables:
+    FF_USE_NEW_BASH_EVAL_STRATEGY: "true"
+  allow_failure:
+    exit_codes: 19
+
+📄 Lookups Validation:
+  stage: ✅ Validation
+  script:
+    - cd ./Core/Engines/validation/
+    - python lookups.py
+  rules:
+    - changes: 
+        - Lookups/*/*
+
+🏗️ Framework Generation Toolchain:
+  stage: 🗿 Data Model
+  script:
+    - git rebase origin/$CI_DEFAULT_BRANCH #Allows to pull latest mutation if there are
+    - cd ./Core/Orchestration/
+    - python ./generate.py
+    - git add -A
+    - if ! git diff-index --quiet HEAD; then
+    -   git commit -m "TIDeMEC Data Model Automation"
+    -   git rebase origin/$CI_DEFAULT_BRANCH
+    -   git push $TIDE_REPO_ACCESS HEAD:$CI_COMMIT_REF_NAME
+    - fi
+  rules:
+    - if:  $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+  needs:
+    - 🔮 Validation Toolchain
+  resource_group: synthesis
+
+
+
+🗃️ Documentation Toolchain:
+  stage: 📖 Knowledge Management
+  script:
+    - git rebase origin/$CI_DEFAULT_BRANCH #Allows to pull latest mutation if there are
+    
+    # Generate Index in new location
+    - cd ./Core/Engines/indexing/
+    - export GENERATE_INDEX_FILE=True
+    - python ./indexer.py #Staging Index generates in the root of the repo
+    - cd ../../../ #Back within the Repo Root directory
+    - echo $TIDE_WIKI
+    - git clone $TIDE_WIKI_ACCESS
+    
+    # Inject index and Core fully into the wiki for generation
+    - cp -rf index.json ./$TIDE_WIKI/index.json
+    - rm -rf ./$TIDE_WIKI/Core
+    - cp -rf Core ./$TIDE_WIKI/Core
+    
+    # Execute Toolchain
+    - cd ./$TIDE_WIKI/Core/Orchestration
+    - python document.py
+    - cp -fr ../Engines/documentation/wiki/. ../../ #Copy content of wiki to top level directory
+
+    - git add -A
+    
+    #Graceful exit when there is nothing to commit
+    - if ! git diff-index --quiet HEAD; then
+    -   git commit -m "$CI_COMMIT_MESSAGE"
+    -   git rebase
+    -   git push $TIDE_WIKI_ACCESS
+    - fi
+  rules:
+    - if:  $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+  needs:
+    - 🔮 Validation Toolchain
+  resource_group: wiki
+
+🚧 MDR Staging Documentation:
+  stage: 📖 Knowledge Management
+  script:
+    # Generate Index in new location
+    - cd ./Core/Engines/indexing/
+    - export GENERATE_INDEX_FILE=True
+    - python ./staging_indexer.py #Staging Index generates in the root of the repo
+    - cd ../../../ #Back within the Repo Root directory 
+    - echo $TIDE_WIKI
+    - git clone $TIDE_WIKI_ACCESS
+    
+    # Inject index and Core fully into the wiki for generation
+    - cp -rf stg_index.json ./$TIDE_WIKI/stg_index.json
+    - cp -rf ./tidemec ./$TIDE_WIKI/tidemec/
+    - cd $TIDE_WIKI/tidemec/Orchestration
+    - python document.py
+    - cp -fr ../Engines/documentation/wiki/. ../../ #Copy content of wiki to top level directory
+
+    - git add -A
+    #Graceful exit when there is nothing to commit
+    - if ! git diff-index --quiet HEAD; then
+    -   git commit -m "$CI_COMMIT_MESSAGE"
+    -   git rebase
+    -   git push $TIDE_WIKI_ACCESS
+    - fi
+  rules:
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /🛑 Do Not Deploy/'
+      when: never
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+      changes: 
+        - Models Library/Managed Detection Rules/*.yaml
+  needs:
+    - 🔮 Staging Validation Toolchain
+  retry: 1
+  variables:
+    FF_USE_NEW_BASH_EVAL_STRATEGY: "true"
+  allow_failure:
+    exit_codes: 19
+  resource_group: wiki
+
+🚧 Staging Deployment:
+  stage: 🚀 Deployment
+  environment: MDR Staging
+  script:
+    - export DEPLOYMENT_PLAN=STAGING
+    - cd ./tidemec/Core/Orchestration/
+    - python deploy.py
+  rules:
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /🛑 Do Not Deploy/'
+      when: never
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+      #changes: 
+      #  - Models Library/Managed Detection Rules/*.yaml
+  needs:
+    - 🔮 Staging Validation Toolchain
+  retry: 2 # Retrying twice helps with certain systems, like CBC which has random issues
+  variables:
+    FF_USE_NEW_BASH_EVAL_STRATEGY: "true"
+  allow_failure:
+    exit_codes: 19
+
+☄️ Production Deployment:
+  stage: 🚀 Deployment
+  environment: MDR Production
+  script:
+    - export DEPLOYMENT_PLAN=PRODUCTION
+    - cd ./Core/Orchestration/
+    - python deploy.py
+    - git add -A
+    - if ! git diff-index --quiet HEAD; then
+    -   git commit -m "[MDR STATUS PROMOTION] $CI_COMMIT_MESSAGE"
+    -   git rebase origin/$CI_DEFAULT_BRANCH
+    -   git push $TIDE_REPO_ACCESS HEAD:$CI_COMMIT_REF_NAME
+    - fi
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+      changes: 
+        - Models Library/Managed Detection Rules/*.yaml
+  needs:
+    - 🔮 Validation Toolchain
+  retry: 2
+  variables:
+    FF_USE_NEW_BASH_EVAL_STRATEGY: "true"
+  allow_failure:
+    exit_codes: 19
+
+📄 Lookups Deployment:
+  stage: 🚀 Deployment
+  environment: Lookups Production
+  script:
+    - git rebase origin/$CI_DEFAULT_BRANCH #Allows to pull latest mutation if there are
+    - cd ./Core/Orchestration/
+    - python lookups.py
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+      changes: 
+        - Data Model/Lookups/*/*
+  needs:
+    - 📄 Lookups Validation

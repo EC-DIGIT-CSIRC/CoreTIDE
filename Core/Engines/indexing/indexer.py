@@ -6,11 +6,12 @@ from pathlib import Path
 import sys
 import toml
 import git
+from pprint import pprint
 
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Core.Engines.modules.files import absolute_paths
-
+from Core.Engines.modules.logging import log
 def indexer(write_index=False) -> dict:
     ROOT = Path(str(git.Repo(".", search_parent_directories=True).working_dir))
     TIDE_CONFIG = toml.load(
@@ -19,7 +20,8 @@ def indexer(write_index=False) -> dict:
     SKIPS = ["logsources", "ram", "mdrv2", "lookup_metadata"]
     
     PATHS = absolute_paths()
-    print("NOW PRINTING PATHS", PATHS)
+    log("INFO", "Loaded all paths")
+    pprint(PATHS)
     VOCAB_PATH = PATHS["vocabularies"]
     CONFIGURATIONS_PATH = PATHS["configurations"]
     METASCHEMA_PATH = PATHS["metaschemas"]
