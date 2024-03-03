@@ -2,7 +2,6 @@ import os
 import git
 import uuid
 import sys
-from collections.abc import MutableMapping as Map
 from typing import Literal
 
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
@@ -14,22 +13,6 @@ DEFINITIONS_INDEX = DataTide.TideSchemas.definitions
 VOCAB_INDEX = DataTide.Vocabularies.Index
 MODELS_INDEX = DataTide.Models.Index
 CHAINING_INDEX = DataTide.Models.chaining
-
-
-def recursive_dict_merge(source_dict, merge_dict):
-    """
-    Recursive dict merge. Mitigation for dict.update() which will not resolve
-    two dictionaries with common nested keys and just overwrite from the top level.
-    """
-    for key in merge_dict:
-        if (
-            key in source_dict
-            and isinstance(source_dict[key], Map)
-            and isinstance(merge_dict[key], Map)
-        ):
-            recursive_dict_merge(source_dict[key], merge_dict[key])
-        else:
-            source_dict[key] = merge_dict[key]
 
 
 def unroll_dot_dict(dot_dict, separator="."):

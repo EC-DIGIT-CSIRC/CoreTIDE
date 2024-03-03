@@ -3,16 +3,28 @@ import git
 import os
 import toml
 from pathlib import Path
-
-sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
-
-from Engines.modules.framework import recursive_dict_merge
+from collections.abc import MutableMapping as Map
 
 def resolve_configurations()->dict[str, dict]:
+    def recursive_dict_merge(source_dict, merge_dict):
+        """
+        Recursive dict merge. Mitigation for dict.update() which will not resolve
+        two dictionaries with common nested keys and just overwrite from the top level.
+        """
+        for key in merge_dict:
+            if (
+                key in source_dict
+                and isinstance(source_dict[key], Map)
+                and isinstance(merge_dict[key], Map)
+            ):
+                recursive_dict_merge(source_dict[key], merge_dict[key])
+            else:
+                source_dict[key] = merge_dict[key]
+
+
     def fetch_configs(configuration_path:Path)->dict[str, dict]:
         
         config_index = dict()
-        folders = list()
         for entry in os.listdir(configuration_path):
             # If there are loose top level files, indexes them
             if os.path.isfile(configuration_path / entry):
@@ -31,7 +43,7 @@ def resolve_configurations()->dict[str, dict]:
                     ) or config.removesuffix(".toml")
                     config_index[entry][config] = configuration
         
-        return config_index, folders
+        return config_index
 
     PATHS = resolve_paths()
     core_configs = fetch_configs(PATHS["configurations"])
@@ -90,6 +102,3 @@ def safe_file_name(string: str, safe_mode: bool = True) -> str:
                     cleaned_string += char
 
     return cleaned_string
-
-from pprint import pprint
-pprint(resolve_configurations())

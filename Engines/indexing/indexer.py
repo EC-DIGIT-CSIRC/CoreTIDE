@@ -24,7 +24,6 @@ def indexer(write_index=False) -> dict:
     log("INFO", "Loaded all paths")
     pprint(PATHS)
     VOCAB_PATH = PATHS["vocabularies"]
-    CONFIGURATIONS_PATH = PATHS["configurations"]
     METASCHEMA_PATH = PATHS["metaschemas"]
     METASCHEMAS = TIDE_CONFIG["metaschemas"]
     JSONSCHEMAS_PATH = PATHS["json_schemas"]
@@ -93,24 +92,9 @@ def indexer(write_index=False) -> dict:
     index["json_schemas"] = json_index
 
     # Config Indexer
+    # Configurations resolve by merging the default Core configs
+    # with custom ones defined in the user space
     config_index = resolve_configurations()
-    #for entry in os.listdir(CONFIGURATIONS_PATH):
-    #    # If there are loose top level files, indexes them
-    #    if os.path.isfile(CONFIGURATIONS_PATH / entry):
-    #        config_index[entry.removesuffix(".toml")] = toml.load(
-    #            open(CONFIGURATIONS_PATH / entry, encoding="utf-8")
-    #        )
-    #    # Some configurations, especially for recomposition, are namespaced within folders.
-    #    elif os.path.isdir(CONFIGURATIONS_PATH / entry):
-    #        config_index[entry] = dict()
-    #        for config in os.listdir(CONFIGURATIONS_PATH / entry):
-    #            configuration = toml.load(
-    #                open(CONFIGURATIONS_PATH / entry / config, encoding="utf-8")
-    #            )
-    #            config = configuration.get("tide", {}).get(
-    #                "identifier"
-    #            ) or config.removesuffix(".toml")
-    #            config_index[entry][config] = configuration
 
     index["configurations"] = config_index
 
