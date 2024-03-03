@@ -13,7 +13,6 @@ from Core.Engines.modules.logging import log
 JSONSCHEMAS_INDEX = DataTide.JsonSchemas.Index
 MODELS_INDEX = DataTide.Models.Index
 
-
 def run():
 
     log("TITLE", "JSON Schema Validation")

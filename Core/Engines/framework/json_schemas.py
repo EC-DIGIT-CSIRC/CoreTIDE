@@ -13,12 +13,13 @@ from Core.Engines.modules.framework import get_vocab_entry
 from Core.Engines.modules.documentation import get_icon
 from Core.Engines.modules.logging import log
 from Core.Engines.modules.tide import DataTide
+from Core.Engines.modules.files import absolute_paths
 
 GLOBAL_CONFIG = DataTide.Configurations.Global
 
 VOCAB_INDEX = DataTide.Vocabularies.Index
 CONFIG_INDEX = DataTide.Configurations.Index
-PATHS = GLOBAL_CONFIG.paths
+PATHS = absolute_paths()
 
 # Configuration settings fetching routine
 METASCHEMAS_FOLDER = Path(PATHS["metaschemas"])
