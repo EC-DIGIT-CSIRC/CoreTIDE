@@ -1,10 +1,8 @@
 import os
 import git
 import sys
+
 from mitrecve import crawler
-
-# CONFIG = yaml.safe_load(open('../../Resources/config.yaml', encoding='utf-8'))
-
 
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
@@ -13,6 +11,7 @@ from Core.Engines.modules.tide import DataTide
 from Core.Engines.modules.deployment import Proxy
 
 TVM_MODEL_FIELD = DataTide.Configurations.Global.datafields["tvm"]
+
 
 def run():
     if DataTide.Configurations.Documentation.cve.get("proxy"):
