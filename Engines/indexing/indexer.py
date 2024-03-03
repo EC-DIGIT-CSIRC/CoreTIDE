@@ -94,9 +94,8 @@ def indexer(write_index=False) -> dict:
     # Config Indexer
     # Configurations resolve by merging the default Core configs
     # with custom ones defined in the user space
-    config_index = resolve_configurations()
 
-    index["configurations"] = config_index
+    index["configurations"] = resolve_configurations()
 
     # Metaschema Indexer
     print("🛠️ Indexing Metaschemas...")

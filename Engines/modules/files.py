@@ -5,11 +5,14 @@ import toml
 from pathlib import Path
 from collections.abc import MutableMapping as Map
 
-def resolve_configurations()->dict[str, dict]:
-    def recursive_dict_merge(source_dict, merge_dict):
+
+def resolve_configurations() -> dict[str, dict]:
+    def deep_merge(source_dict, merge_dict):
         """
         Recursive dict merge. Mitigation for dict.update() which will not resolve
         two dictionaries with common nested keys and just overwrite from the top level.
+
+        The source_dict is the one that will be overwritten to by the merge_dict
         """
         for key in merge_dict:
             if (
@@ -17,13 +20,12 @@ def resolve_configurations()->dict[str, dict]:
                 and isinstance(source_dict[key], Map)
                 and isinstance(merge_dict[key], Map)
             ):
-                recursive_dict_merge(source_dict[key], merge_dict[key])
+                deep_merge(source_dict[key], merge_dict[key])
             else:
                 source_dict[key] = merge_dict[key]
 
+    def fetch_configs(configuration_path: Path) -> dict[str, dict]:
 
-    def fetch_configs(configuration_path:Path)->dict[str, dict]:
-        
         config_index = dict()
         for entry in os.listdir(configuration_path):
             # If there are loose top level files, indexes them
@@ -42,23 +44,24 @@ def resolve_configurations()->dict[str, dict]:
                         "identifier"
                     ) or config.removesuffix(".toml")
                     config_index[entry][config] = configuration
-        
+
         return config_index
 
     PATHS = resolve_paths()
     core_configs = fetch_configs(PATHS["configurations"])
-    unified_configs = core_configs.copy()
+    unified_configs = (
+        core_configs.copy()
+    )  # Copy since deep merge modifies the dict in place
     custom_configs = fetch_configs(PATHS["custom_configurations"])
-    
-    recursive_dict_merge(unified_configs, custom_configs)
+
+    deep_merge(unified_configs, custom_configs)
 
     return unified_configs
 
+
 def resolve_paths() -> dict[str, Path]:
     ROOT = Path(str(git.Repo(".", search_parent_directories=True).working_dir))
-    TIDE_CONFIG = toml.load(
-        open(ROOT / "Configurations/global.toml", encoding="utf-8")
-    )
+    TIDE_CONFIG = toml.load(open(ROOT / "Configurations/global.toml", encoding="utf-8"))
 
     TIDE_PATHS = {
         k: (ROOT.parent / path) for k, path in TIDE_CONFIG["paths"]["tide"].items()
