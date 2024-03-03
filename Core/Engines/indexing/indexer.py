@@ -14,8 +14,12 @@ def indexer(write_index=False) -> dict:
         open(ROOT / "Core/Configurations/global.toml", encoding="utf-8")
     )
     SKIPS = ["logsources", "ram", "mdrv2", "lookup_metadata"]
-    raw_paths = TIDE_CONFIG["paths"]["core"] | TIDE_CONFIG["paths"]["tide"]
-    PATHS = {k: (ROOT / path) for k, path in raw_paths.items()}
+    
+    TIDE_PATHS = {k: (ROOT / path) for k, path in TIDE_CONFIG["paths"]["tide"].items()}
+    CORE_PATHS = {k: (ROOT / path) for k, path in TIDE_CONFIG["paths"]["core"].items()}
+    
+    PATHS = TIDE_PATHS | CORE_PATHS
+    
     VOCAB_PATH = PATHS["vocabularies"]
     CONFIGURATIONS_PATH = PATHS["configurations"]
     METASCHEMA_PATH = PATHS["metaschemas"]
