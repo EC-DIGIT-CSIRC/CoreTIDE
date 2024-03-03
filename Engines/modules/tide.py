@@ -393,7 +393,7 @@ class DataTide:
             skip_model_keys = list(Index["skip_model_keys"])
             skip_vocabularies = list(Index["skip_model_keys"])
             cve = dict(Index["cve"])
-            wiki = dict(Index["wiki"])
+            wiki = dict(Index.get("wiki"))
             object_names = dict(Index["object_names"])
             titles = dict(Index["titles"])
             icons = dict(Index["icons"])

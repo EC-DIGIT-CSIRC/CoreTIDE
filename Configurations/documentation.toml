@@ -19,10 +19,13 @@ skip_vocabularies = ["mitigation",
 [cve]
 default_db_link = "https://nvd.nist.gov/vuln/detail/"
 retrieve_details = true
-proxy = true
+proxy = false
 
 [wiki]
-wiki_link = "https://git.s.cec.eu.int/catch/ec-tide/-/wikis"
+# Custom wiki link to the generated documentation.
+# If generating a Gitlab Wiki, the URL is automatically
+# computed from CI Variables
+wiki_link = ""
 
 [object_names]
 tam = "Threat Actors"

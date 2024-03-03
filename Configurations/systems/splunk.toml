@@ -1,5 +1,5 @@
 [tide]
-enabled = true
+enabled = false
 identifier = "splunk"
 name = "Splunk Enterprise"
 subschema = "Splunk Sub Schema"
@@ -10,12 +10,12 @@ visualize your data to quickly act on insights from across your technology lands
 proxy = true
 url = "$SPLUNK_URL"
 port = "$SPLUNK_PORT"
-app = "DA-DIGIT-S2-CSOC" # App the searches will be deployed to.
+app = "" # App the searches will be deployed to.
 correlation_searches = true # Enables or disable saved search also being correlation searches
-allow_skew = "20%" # Time Skewing Setup
-schedule_offset = 5
+#allow_skew = "10%" # Time Skewing Setup
+#schedule_offset = 5
 frequency_scheduling = "random" # random | current . Frequencies get generated into a cron expression. Hour and minutes can be randomized, or anchored on the current time when the query was made
-actions_enabled = ["notable", "risk"]
+actions_enabled = ["notable"] # Actions authorized to be allocated by the deployment engine 
 default_actions = ["notable"] # When no actions parameters were identified as part of the deployment, this adds default actions
 
 [lookups]
@@ -27,8 +27,6 @@ token = "$SPLUNK_TOKEN"
 [defaults]
 # Be mindful that dotted (.) strings in TOML are significant and represent a dict nesting.
 # Use Double Quote to avoid changing the data type as Splunk uses a flat dict.
-"action.email.to" = "EC-DIGIT-SOC@ec.europa.eu"
-"action.email.cc" = "remi.seguy@ec.europa.eu"
 "request.ui_dispatch_app" = "SplunkEnterpriseSecuritySuite"
 "dispatch.latest_time" = "-5m@m"
 "dispatch.index_latest" = ""
@@ -38,11 +36,6 @@ cron_schedule = "0 * * * *"
 "alert.severity" = "3"
 "alert.suppress.fields" = ""
 is_scheduled = "true"
-"action.email.inline" = "1"
-"action.email.message.alert" = "The alert condition for '$name$' was triggered. \n\n$description$"
-"action.email.sendcsv" = "1"
-"action.email.sendresults" = "1"
-"action.email.useNSSubject" = "1"
 "action.customsearchbuilder.spec" = "{}"
 "action.notable.param.verbose" = "0"
 "action.notable.param.security_domain" = "threat"
@@ -57,6 +50,5 @@ realtime_schedule = "0"
 "request.ui_dispatch_view" = "search"
 schedule_window = "auto"
 schedule_priority = "default"
-allow_skew = "20%"
 "dispatch.earliest_time" = ""
 "dispatch.index_earliest" = ""

@@ -1,6 +1,7 @@
 import yaml
 import git
 import sys
+import os
 from collections import OrderedDict
 from pathlib import Path
 from urllib.parse import quote_plus
@@ -18,7 +19,11 @@ WIKI_PATH = (
     .replace(" ", "-")
 )
 WIKI_MODEL_FOLDER = DataTide.Configurations.Documentation.object_names
-WIKI_URL = DataTide.Configurations.Documentation.wiki["wiki_link"]
+
+if os.getenv("TIDE_WIKI_GENERATION") == "GITLAB_WIKI":
+    WIKI_URL = f"{os.getenv('CI_SERVER_URL')}/{os.getenv('CI_PROJECT_PATH')}/_/wikis/"
+else:
+    WIKI_URL = DataTide.Configurations.Documentation.wiki.get("wiki_link")
 
 
 class IndentFullDumper(yaml.Dumper):

@@ -1,12 +1,11 @@
 models = [ "tam", "tvm", "cdm", "bdr", "mdr" ]
 
 [paths.tide]
-tam = "Models Library/Threat Actor Models/"
-tvm = "Models Library/Threat Vector Models/"
-cdm = "Models Library/Cyber Detection Models/"
-mdr = "Models Library/Managed Detection Rules/"
-mdrv2 = "Models Library/TIDeMEC Detection Rules/"
-bdr = "Models Library/Business Detection Requests/"
+tam = "Models/Threat Actor Models/"
+tvm = "Models/Threat Vector Models/"
+cdm = "Models/Cyber Detection Models/"
+mdr = "Models/Managed Detection Rules/"
+bdr = "Models/Business Detection Requests/"
 reports = "Reports/"
 lookups = "Lookups/"
 analytics = "Analytics/"
