@@ -19,7 +19,7 @@ def indexer(write_index=False) -> dict:
     SKIPS = ["logsources", "ram", "mdrv2", "lookup_metadata"]
     
     PATHS = absolute_paths()
-    print(PATHS)
+    print("NOW PRINTING PATHS", PATHS)
     VOCAB_PATH = PATHS["vocabularies"]
     CONFIGURATIONS_PATH = PATHS["configurations"]
     METASCHEMA_PATH = PATHS["metaschemas"]
