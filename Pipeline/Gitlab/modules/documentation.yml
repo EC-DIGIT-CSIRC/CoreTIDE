@@ -4,25 +4,29 @@
     - git rebase origin/$CI_DEFAULT_BRANCH #Allows to pull latest mutation if there are
     
     # Generate Index in new location
-    - cd ./Core/Engines/indexing/
+    - cd $TIDE_CORE_REPO/Core/Engines/indexing/
     - export GENERATE_INDEX_FILE=True
     - python ./indexer.py #Staging Index generates in the root of the repo
     - cd ../../../ #Back within the Repo Root directory
     - echo $TIDE_WIKI
     - git clone $TIDE_WIKI_ACCESS
-    
-    # Inject index and Core fully into the wiki for generation
+    # Inject Index and CoreTIDE into the wiki for generation
     - cp -rf index.json ./$TIDE_WIKI/index.json
-    - rm -rf ./$TIDE_WIKI/Core
-    - cp -rf Core ./$TIDE_WIKI/Core
-    
-    # Execute Toolchain
-    - cd ./$TIDE_WIKI/Core/Orchestration
+    - cd $TIDE_WIKI
+    # If Core repo does not exist, clone, else pull
+    - if [ ! -d $LOCALREPO_VC_DIR ]
+    -   then
+    -       git clone $TIDE_CORE_ACCESS
+    -   else
+    -       cd $LOCALREPO
+    -       git pull $TIDE_CORE_ACCESS
+    -       cd ..
+    -   fi    
+    - cd /$TIDE_CORE_REPO/Orchestration
     - python document.py
-    - cp -fr ../Engines/documentation/wiki/. ../../ #Copy content of wiki to top level directory
-
+    - cd ../../
+    - cp -fr wiki/. ../ #Copy content of wiki to top level directory
     - git add -A
-    
     #Graceful exit when there is nothing to commit
     - if ! git diff-index --quiet HEAD; then
     -   git commit -m "$CI_COMMIT_MESSAGE"
@@ -30,7 +34,9 @@
     -   git push $TIDE_WIKI_ACCESS
     - fi
   rules:
-    - if:  $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+    - if: $TIDE_WIKI_GENERATION != "GITLAB_WIKI"
+      when: never
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
   needs:
     - 🔮 Validation Toolchain
   resource_group: wiki
@@ -39,21 +45,28 @@
   stage: 📖 Documentation
   script:
     # Generate Index in new location
-    - cd ./Core/Engines/indexing/
+    - cd $TIDE_CORE_REPO/Core/Engines/indexing/
     - export GENERATE_INDEX_FILE=True
     - python ./staging_indexer.py #Staging Index generates in the root of the repo
-    - cd ../../../ #Back within the Repo Root directory 
+    - cd ../../../ #Back within the Repo Root directory
     - echo $TIDE_WIKI
     - git clone $TIDE_WIKI_ACCESS
-    
-    # Inject index and Core fully into the wiki for generation
+    # Inject Index and CoreTIDE into the wiki for generation
     - cp -rf stg_index.json ./$TIDE_WIKI/stg_index.json
-    - cp -rf ./tidemec ./$TIDE_WIKI/tidemec/
-    - cd $TIDE_WIKI/tidemec/Orchestration
+    - cd $TIDE_WIKI
+    # If Core repo does not exist, clone, else pull
+    - if [ ! -d $LOCALREPO_VC_DIR ]
+    -   then
+    -       git clone $TIDE_CORE_ACCESS
+    -   else
+    -       cd $LOCALREPO
+    -       git pull $TIDE_CORE_ACCESS
+    -       cd ..
+    -   fi    
+    - cd $TIDE_CORE_REPO/Orchestration
     - python document.py
     - cd ../../
     - cp -fr wiki/. ../ #Copy content of wiki to top level directory
-
     - git add -A
     #Graceful exit when there is nothing to commit
     - if ! git diff-index --quiet HEAD; then
@@ -64,6 +77,8 @@
   rules:
     - if: '$CI_MERGE_REQUEST_LABELS =~ /🛑 Do Not Deploy/'
       when: never
+    - if: $TIDE_WIKI_GENERATION != "GITLAB_WIKI"
+      when: never
     - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
       changes: 
         - Models Library/Managed Detection Rules/*.yaml
@@ -72,6 +87,4 @@
   retry: 1
   variables:
     FF_USE_NEW_BASH_EVAL_STRATEGY: "true"
-  allow_failure:
-    exit_codes: 19
   resource_group: wiki

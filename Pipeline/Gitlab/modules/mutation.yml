@@ -1,7 +1,7 @@
 🧪 Data Mutation Toolchain:
   stage: 🧬 Mutation
   script:
-  - cd ./Core/Orchestration/
+  - cd $TIDE_CORE_REPO/Core/Orchestration/
   - python mutate.py
   - git add -A
   - if ! git diff-index --quiet HEAD; then

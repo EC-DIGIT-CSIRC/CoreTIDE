@@ -2,7 +2,7 @@
   stage: 🗿 Framework
   script:
     - git rebase origin/$CI_DEFAULT_BRANCH #Allows to pull latest mutation if there are
-    - cd ./Core/Orchestration/
+    - cd $TIDE_CORE_REPO/Core/Orchestration/
     - python ./generate.py
     - git add -A
     - if ! git diff-index --quiet HEAD; then

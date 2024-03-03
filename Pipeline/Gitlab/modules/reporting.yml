@@ -1,7 +1,7 @@
 🗡️ Att&ck Navigator Layer:
   stage: 📝 Reporting
   script:
-  - cd ./Core/Engines/framework/
+  - cd $TIDE_CORE_REPO/Core/Engines/framework/
   - python attack_layer_builder.py
   - git add -A
   - if ! git diff-index --quiet HEAD; then

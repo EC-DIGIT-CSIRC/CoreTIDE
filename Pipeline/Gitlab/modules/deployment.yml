@@ -3,12 +3,14 @@
   environment: MDR Staging
   script:
     - export DEPLOYMENT_PLAN=STAGING
-    - cd ./tidemec/Core/Orchestration/
+    - cd $TIDE_CORE_REPO/Core/Orchestration/
     - python deploy.py
   rules:
     - if: '$CI_MERGE_REQUEST_LABELS =~ /🛑 Do Not Deploy/'
       when: never
-    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+    - if: $TIDE_DEPLOYMENT == "DISABLED"
+      when: never
+    - if: ($CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH) && ($TIDE_DEPLOYMENT == "ENABLED")
       #changes: 
       #  - Models Library/Managed Detection Rules/*.yaml
   needs:
@@ -24,7 +26,7 @@
   environment: MDR Production
   script:
     - export DEPLOYMENT_PLAN=PRODUCTION
-    - cd ./Core/Orchestration/
+    - cd $TIDE_CORE_REPO/Core/Orchestration/
     - python deploy.py
     - git add -A
     - if ! git diff-index --quiet HEAD; then
@@ -33,7 +35,9 @@
     -   git push $TIDE_REPO_ACCESS HEAD:$CI_COMMIT_REF_NAME
     - fi
   rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+    - if: $TIDE_DEPLOYMENT == "DISABLED"
+      when: never
+    - if: ($CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH) && ($TIDE_DEPLOYMENT == "ENABLED")
       changes: 
         - Models Library/Managed Detection Rules/*.yaml
   needs:
@@ -49,11 +53,14 @@
   environment: Lookups Production
   script:
     - git rebase origin/$CI_DEFAULT_BRANCH #Allows to pull latest mutation if there are
-    - cd ./Core/Orchestration/
+    - cd $TIDE_CORE_REPO/Core/Orchestration/
     - python lookups.py
   rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+    - if: $TIDE_DEPLOYMENT == "DISABLED"
+      when: never
+    - if: ($CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH) && ($TIDE_DEPLOYMENT == "ENABLED")
       changes: 
         - Data Model/Lookups/*/*
+      
   needs:
     - 📄 Lookups Validation
