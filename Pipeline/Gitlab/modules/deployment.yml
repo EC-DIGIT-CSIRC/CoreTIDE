@@ -3,7 +3,7 @@
   environment: MDR Staging
   script:
     - export DEPLOYMENT_PLAN=STAGING
-    - cd $TIDE_CORE_REPO/Core/Orchestration/
+    - cd $TIDE_CORE_REPO/Orchestration/
     - python deploy.py
   rules:
     - if: '$CI_MERGE_REQUEST_LABELS =~ /🛑 Do Not Deploy/'
@@ -26,7 +26,7 @@
   environment: MDR Production
   script:
     - export DEPLOYMENT_PLAN=PRODUCTION
-    - cd $TIDE_CORE_REPO/Core/Orchestration/
+    - cd $TIDE_CORE_REPO/Orchestration/
     - python deploy.py
     - git add -A
     - if ! git diff-index --quiet HEAD; then
@@ -53,7 +53,7 @@
   environment: Lookups Production
   script:
     - git rebase origin/$CI_DEFAULT_BRANCH #Allows to pull latest mutation if there are
-    - cd $TIDE_CORE_REPO/Core/Orchestration/
+    - cd $TIDE_CORE_REPO/Orchestration/
     - python lookups.py
   rules:
     - if: $TIDE_DEPLOYMENT == "DISABLED"

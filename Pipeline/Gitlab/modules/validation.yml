@@ -3,7 +3,7 @@
   stage: ✅ Validation
   script:
     - git rebase origin/$CI_DEFAULT_BRANCH #Allows to pull latest mutation if there are
-    - cd $TIDE_CORE_REPO/Core/Orchestration/
+    - cd $TIDE_CORE_REPO/Orchestration/
     - python validate.py
   rules:
     - if:  $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
@@ -18,7 +18,7 @@
 🔮 Staging Validation Toolchain:
   stage: ✅ Validation
   script:
-    - cd $TIDE_CORE_REPO/Core/Orchestration
+    - cd $TIDE_CORE_REPO/Orchestration
     - python validate.py
   rules:
     - if:  $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
@@ -31,7 +31,7 @@
 📄 Lookups Validation:
   stage: ✅ Validation
   script:
-    - cd $TIDE_CORE_REPO/Core/Engines/validation/
+    - cd $TIDE_CORE_REPO/Engines/validation/
     - python lookups.py
   rules:
     - changes: 

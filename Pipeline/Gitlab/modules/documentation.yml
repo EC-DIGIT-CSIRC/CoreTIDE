@@ -4,7 +4,7 @@
     - git rebase origin/$CI_DEFAULT_BRANCH #Allows to pull latest mutation if there are
     
     # Generate Index in new location
-    - cd $TIDE_CORE_REPO/Core/Engines/indexing/
+    - cd $TIDE_CORE_REPO/Engines/indexing/
     - export GENERATE_INDEX_FILE=True
     - python ./indexer.py #Staging Index generates in the root of the repo
     - cd ../../../ #Back within the Repo Root directory
@@ -45,7 +45,7 @@
   stage: 📖 Documentation
   script:
     # Generate Index in new location
-    - cd $TIDE_CORE_REPO/Core/Engines/indexing/
+    - cd $TIDE_CORE_REPO/Engines/indexing/
     - export GENERATE_INDEX_FILE=True
     - python ./staging_indexer.py #Staging Index generates in the root of the repo
     - cd ../../../ #Back within the Repo Root directory
