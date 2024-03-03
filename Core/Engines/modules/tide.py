@@ -13,7 +13,7 @@ from Core.Engines.indexing.indexer import indexer
 from Core.Engines.modules.logging import log
 
 ROOT = Path(str(git.Repo(".", search_parent_directories=True).working_dir))
-TIDEMEC_AS_SUBMODULE = False
+TIDEMEC_AS_SUBMODULE = True
 
 
 @dataclass
