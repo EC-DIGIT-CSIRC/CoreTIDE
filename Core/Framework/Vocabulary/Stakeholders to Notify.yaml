@@ -1,0 +1,35 @@
+name: Stakeholders to Notify
+field: stakeholders
+description: When an incident is analyzed and prioritized, the incident response team needs to notify the appropriate  individuals so that all who need to be involved will play their roles. Incident response policies should include provisions concerning incident reporting—at a minimum, what must be reported to whom and at what times (e.g., initial notification, regular status updates).
+reference: https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-61r2.pdf
+keys:
+  - id: STK0001
+    name: CIO
+    description: Chief information officer, chief digital information officer or information technology director, is a job title commonly given to the most senior executive in an enterprise who works with information technology and computer systems, in order to support enterprise goals.
+  - id: STK0002
+    name: Head of information security
+    description: Senior-level executive responsible for developing and implementing an information security program, which includes procedures and policies designed to protect enterprise communications, systems and assets from both internal and external threats.
+  - id: STK0003
+    name: Local information security officer
+    description: LISOs (Local Information Security Officers) are responsible for local security in each country where everis operates as well as for coordinating local privacy activities. They apply the corporate security and privacy guidelines at country level and make necessary amendments to adapt to each country situation.
+  - id: STK0004
+    name: Other incident response teams 
+    description: Other internal incident response counterparies within the organization.
+  - id: STK0005
+    name: External incident response teams
+    description: Third-parties on retainer that may intervene in the event of an incident requiring their support. 
+  - id: STK0006
+    name: System owner
+    description: The system owner is the individual responsible for the availability, security, compliance, maintenance, and support of a computerised system and for the security of the data residing on that system.
+  - id: STK0007
+    name: Human resources
+    description: The human resource department's mission is to make sure the company's employees are adequately managed, appropriately compensated, and effectively trained.
+  - id: STK0008
+    name: Public affairs
+    description: Public affairs generally refers to the engagement efforts between organizations, often times in the context of building business or governmental relationships. 
+  - id: STK0009
+    name: CERT-EU
+    description: After a pilot phase of one year and a successful assessment by its constituency and its peers, the EU Institutions have decided to set up a permanent Computer Emergency Response Team (CERT-EU) for the EU institutions, agencies and bodies on September 11th 2012. The team is made up of IT security experts from the main EU Institutions (European Commission, General Secretariat of the Council, European Parliament, Committee of the Regions, Economic and Social Committee). It cooperates closely with other CERTs in the Member States and beyond as well as with specialised IT security companies.
+  - id: STK0010
+    name: Law Enforcement
+    description: Cyber threats from malicious actors are a growing concern across the United States. Voluntary sharing of incident information between state, local, tribal, and territorial (SLTT) law enforcement and the federal government is important to ensuring a safe and secure cyberspace. No matter which "door" SLTT law enforcement uses, information is shared within the government(s) to provide an appropriate response while protecting citizens’ privacy and civil liberties under the law. 

@@ -1,0 +1,103 @@
+models = [ "tam", "tvm", "cdm", "bdr", "mdr" ]
+index_output = "index.json"
+staging_index_output = "staging_index.json"
+
+[paths.tide]
+tam = "Models Library/Threat Actor Models/"
+tvm = "Models Library/Threat Vector Models/"
+cdm = "Models Library/Cyber Detection Models/"
+mdr = "Models Library/Managed Detection Rules/"
+mdrv2 = "Models Library/TIDeMEC Detection Rules/"
+bdr = "Models Library/Business Detection Requests/"
+reports = "Reports/"
+lookups = "Lookups/"
+analytics = "Analytics/"
+vscode = ".vscode/"
+
+[paths.core]
+vocabularies = "Core/Framework/Vocabulary/"
+configurations = "Core/Configurations/"
+metaschemas = "Core/Framework/Meta Schemas/"
+subschemas = "Core/Framework/Meta Schemas/Sub Schemas/"
+definitions = "Core/Framework/Meta Schemas/Definitions/"
+json_schemas = "Core/Framework/JSON Schemas/"
+templates = "Core/Framework/Templates/"
+wiki_docs_folder = "Core/Engines/documentation/wiki/"
+models_docs_folder = "Core/Engines/documentation/wiki/Knowledge Graph/"
+lookup_docs = "Core/Engines/documentation/wiki/Lookups/"
+schemas_docs_folder = "Core/Engines/documentation/wiki/Specifications/"
+vocabularies_docs = "Core/Engines/documentation/wiki/Vocabularies/"
+resources = "Core/External/"
+
+
+
+[metaschemas]
+tam = "TAM Meta Schema.yaml"
+tvm = "TVM Meta Schema.yaml"
+cdm = "CDM Meta Schema.yaml"
+mdr = "MDR Meta Schema.yaml"
+mdrv2 = "MDRv2 Meta Schema.yaml"
+bdr = "BDR Meta Schema.yaml"
+lookup_metadata = "Lookup Metadata Meta Schema.yaml"
+
+[recomposition]
+systems = "MDR Systems Deployment"
+
+[json_schemas]
+tam = "TAM Schema.json"
+tvm = "TVM Schema.json"
+cdm = "CDM Schema.json"
+mdr = "MDR Schema.json"
+bdr = "BDR Schema.json"
+lookup_metadata = "Lookup Metadata Schema.json"
+
+
+[models_vocabularies]
+tam = "Threat Actors.yaml"
+tvm = "Threat Vectors.yaml"
+cdm = "Detection Models.yaml"
+bdr = "Detection Models.yaml"
+
+[datafields]
+tam = "actor"
+tvm = "threat"
+cdm = "detection"
+mdr = "rule"
+bdr = "request"
+
+[templates]
+tam = "TAM TEMPLATE.yaml"
+tvm = "TVM TEMPLATE.yaml"
+cdm = "CDM TEMPLATE.yaml"
+mdr = "MDR TEMPLATE.yaml"
+bdr = "BDR TEMPLATE.yaml"
+lookup_metadata = "LOOKUP METADATA TEMPLATE.yaml"
+
+#This section can be simplified
+[snippets]
+file = "Model Templates.code-snippets"
+
+[snippets.models.tam]
+keyword = "TAM template"
+description = "Generates TAM template"
+
+[snippets.models.tvm]
+keyword = "TVM template"
+description = "Generates TVM template"
+
+[snippets.models.cdm]
+keyword = "Generate CDM template"
+description = "Generates CDM template"
+
+[snippets.models.mdr]
+keyword = "Generate MDR template"
+description = "Generates MDR template"
+
+[snippets.models.bdr]
+keyword = "Generate BDR template"
+description = "Generates BDR template"
+
+[snippets.models.lookup_metadata]
+keyword = "Generate Lookup Metadata"
+description = "Create a lookup metadata companion file"
+

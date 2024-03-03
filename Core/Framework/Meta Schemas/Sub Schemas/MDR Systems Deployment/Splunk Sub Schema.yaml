@@ -1,0 +1,339 @@
+required: 
+  - status
+  - query
+  - scheduling
+
+properties:
+
+  status: 
+    title: Status of the use-case
+    type: string
+    description: Define the status according to use case development life cycle process
+    tide.vocab: true
+    example: STAGING
+    default: DEVELOPMENT
+
+  contributors:
+    title: Development Contributors
+    type: array
+    description: Individuals who supported creating, enriching or tuning the detection. 
+    items:
+      type: string
+      format: email
+
+  threshold: 
+    title: Event threshold
+    type: integer
+    description: If amount of events is higher than threshold (during the timeframe) the alert is triggered. Default = 0.
+    example: 10
+    default: 0
+    tide.mdr.parameter: alert_threshold
+
+  throttling:
+    title: Throttling parameters
+    type: object
+    description: Configuration for throttling incoming alerts 
+    required:
+      - duration
+
+    properties:
+      fields:
+        title: Throttling Fields
+        type: array
+        description: Fields to check for matching values in events. Events with the same value for these fields are suppressed.
+        example: dst
+        tide.mdr.parameter: alert.suppress.fields
+        items:
+          type: string
+      
+      duration: 
+        title: Throttling Period
+        type: string
+        description: How long do discard new alerts that have the same characteristics (duplicate alerts), based on the fields defined below in hours/days. Default same as scheduling (value = 1h).
+        example: 5m
+        default: 1h
+        pattern: .*(h|d|m)$
+        tide.mdr.parameter: alert.suppress.period
+
+  scheduling:
+    title: Throttling parameters
+    type: object
+    description: Configuration for throttling incoming alerts 
+    required:
+      - lookback
+
+    anyOf:
+      - required:
+          - frequency
+      - required:
+          - cron
+
+    properties:
+
+      cron:
+        title: Scheduled search cron scheduling 
+        type: string
+        icon: ⏲
+        description: Cron Expression describing the scheduling for running the search.
+        example: 0 4 8-14 * *
+        pattern: (@(annually|yearly|monthly|weekly|daily|hourly|reboot))|(@every (\d+(ns|us|µs|ms|s|m|h))+)|((((\d+,)+\d+|([\d\*]+(\/|-)\d+)|\d+|\*) ?){5,7})
+        tide.mdr.parameter: cron_schedule
+
+      frequency: 
+        title: Recurring Search Interval
+        type: string
+        description: >
+          Time intervals at which the scheduled search should be ran at. Warning: due to implementation details,
+          only the following intervals are allowed for Splunk : 1-59m , 1-23h , 1-30d .
+          For more complex scheduling, use the cron option instead. 
+        markdownDescription: >-
+          Time intervals at which the scheduled search should be ran at. ⚠️ **Warning :** due to implementation details,
+          only the following intervals are allowed for Splunk : 1-59m , 1-23h , 1-30d .
+          
+
+          Frequency is translated into cron expressions.
+          
+
+          **Examples**
+
+          - 15m is translated into `*/15 * * * *`, or _At every 15th minute_
+
+          - 4h is translated into `MM */4 * * *`, or _At minute MM past every 4th hour_
+
+          - 2d is translated into `MM HH */2 * *`, or _At HH:MM on every 2nd day-of-month_
+
+
+          👉 HH:MM is a timestamp we take to allow a correct cron setup. This timestamp has 2 default modes
+          setup in Splunk's config.yaml entry: `random`, which takes random hours and minutes at each deployment, 
+          which can be preferable for performances, and `current` which take the current time of the **latest** deployment.
+
+
+          You can override this behaviour with `custom_time`, hidden from the template but accessible with `Control+Space`.
+          There you can setup a custom timestamp (note that hours only matter in the case for frequency with days, and that when
+          the frequency is minutes it won't have an effect)
+
+          For more complex scheduling, use the cron option instead. 
+        example: 5m
+        pattern: "^((([1-5]?[0-9]|60)m)|((?:[1-9]|1[0-9]|2[0-3])h)|((?:[1-9]|1[0-9]|2[0-9]|30)d))$"
+
+      custom_time: 
+        title: Custom Frequency Setup
+        type: string
+        description: |
+          Customize the base time that the frequency takes as an anchor. Expects HHhmm format.
+          See frequency description for more explanation in how they interact.
+        example: "12:30"
+        pattern: "^(0[0-9]|1[0-9]|2[0-3])h[0-5][0-9]$"
+
+      lookback: 
+        title: Lookback Configuration
+        type: string
+        description: Duration of logs to search in
+        example: 5m
+        pattern: "^[1-9][0-9]*(m{1}|h{1}|d{1})$"
+        tide.mdr.parameter: dispatch.earliest_time
+    
+  notable:
+    title: Notable Event Settings
+    icon: 🎖️
+    type: object
+    description: Configuration for notable events generated by the alert
+
+    properties:
+      
+      event:
+        title: Notable Event Configuration
+        icon: 📣
+        type: object
+        description: Describes attributes related to the notable event 
+        anyOf:
+          - required:
+              - title
+          - required:
+              - description
+        properties:
+
+          title:
+            title: Notable Event Name
+            icon: 🪪
+            type: string
+            description:  Supporting $token usage
+            example: New Abnormal Credentials added to Azure AD from user $logonuser
+            tide.mdr.parameter: action.notable.param.rule_title
+
+          description: 
+            title: Notable Event Description
+            type: string
+            tide.template.multiline : True
+            description: Supporting $token usage
+            example: <insert example>
+            tide.mdr.parameter: action.notable.param.rule_description
+
+      drilldown:
+        title: Drilldown search configuration
+        icon: 🕵
+        type: object
+        description: Describes attributes related to drilldown search accompanying the notable event. 
+        required:
+          - name
+          - search
+        properties:
+
+          name:
+            title: Drilldown Search Name
+            type: string
+            description:  Name of the secondary search
+            tide.mdr.parameter: action.notable.param.drilldown_name
+
+          search: 
+            title: Drilldown Search
+            type: string
+            icon: ❓
+            tide.template.multiline : True
+            description: A custom secondary search.
+            tide.mdr.parameter: action.notable.param.drilldown_search
+
+  security_domain:
+    title: Security Domain
+    icon: 🛡️
+    type: string
+    tide.template.spacer: true
+    description: Categorization of the notable event
+    example: Threat
+    tide.mdr.parameter: action.notable.param.security_domain
+    enum:
+      - Access
+      - Endpoint
+      - Network
+      - Threat
+      - Identity
+      - Audit 
+
+  risk:
+    title: Splunk Risk Analysis
+    description: |
+      Risk notables are automatically generated when you run a risk incident rule,
+      which associates risk scores with a system, user, or other risk objects.
+    type: object
+    link: https://docs.splunk.com/Documentation/ES/7.1.0/User/RiskScoring
+    tide.mdr.parameter: action.risk.param._risk
+    required: 
+      - message
+    anyOf:
+      - required: [risk_objects]
+      - required: [threat_objects]
+    properties:
+
+      message:
+        title: Risk Message
+        icon: 💬
+        description: |
+          A unique message to describe the risk activity, which can use fields
+          from the risk event surrounded by "$". 
+        type: string
+        tide.mdr.parameter: action.risk.param._risk_message
+        example: Suspicious Activity to $domain$
+
+      risk_objects:
+        title: Risk Objects
+        icon: 💣
+        description: |
+          A unique message to describe the risk activity, which can use
+          fields from the risk event surrounded by "$". For example:
+          Suspicious Activity to $domain$
+        type: array
+        items:
+          type: object
+          required:
+            - field
+            - type
+            - score
+          properties:
+            field:
+              type: string
+              icon: 🏷️
+              description: |
+                Splunk field containing the risk object
+              tide.mdr.parameter: risk_object_field
+            type:
+              type: string
+              description: The risk object identifier
+              icon: ❓
+              tide.mdr.parameter: risk_object_type
+              enum: # To parametize since new ES version have more options
+                - user
+                - system
+                - other
+            score:
+              type: integer
+              icon: 🧮
+              maximum: 100000
+              description: |
+                A number that represents the risk level of a
+                specific risk object. Risk events have a default score
+                that you can modify using risk factors.	
+              tide.mdr.parameter: risk_score
+      
+      threat_objects:
+        title: Risk Objects
+        description: |
+          Deviant behavior patterns of a risk object or entity,
+          which indicate a security breach. For example: The Domain
+          threat object tracks the behavior of the domain across all risk objects.
+        icon: 🔪
+        type: array
+        items:
+          type: object
+          required:
+            - field
+            - type
+          properties:
+
+            field:
+              type: string
+              icon: 🏷️
+              description: |
+                Splunk field containing the threat object
+              tide.mdr.parameter: threat_object_field
+
+            type:
+              type: string
+              description: Identification of the threat object
+              icon: ❓
+              tide.mdr.parameter: threat_object_type
+              enum: # To parametize since new ES version have more options
+                - domain
+                - url
+                - ip
+                - asn
+                - user_agent
+                - location
+                - file_hash
+                - file_name
+                - command_line
+                - process_name
+                - certificate
+                - registry
+                - email_sender
+                - email_subject
+                - other
+
+  query: 
+    title: Splunk SPL Detection Query
+    icon: 🔍
+    type: string
+    tide.template.multiline : True
+    description: Correlation search in spl language
+    tide.template.spacer: true # Forces the template synthesis to add a space
+    example: '| search (code=10 OR code=29 OR code=43) host!="localhost" xqp>5'
+    #tide.mdr.parameter: search
+
+  advanced:
+    title: Advanced Edit custom parameters
+    icon: 🦾
+    description: Support for any parameter able to edited through Advanced Edit. Ensure that the naming and data inputed is as expected from Splunk.
+    tide.template.hide: true
+    type: object
+    additionalProperties:
+      type: object
+      example: parameter_to_set

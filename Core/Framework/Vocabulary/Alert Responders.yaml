@@ -1,0 +1,17 @@
+name: Alert Handling Team
+field: responders
+description: Team responsible to handle incoming security alerts 
+icon: ‍🚒
+keys:
+  - id: AHT0001
+    name: CATCH
+    description: Cybersecurity Analytics, Trending, Correlations & Hunting
+  - id: AHT0002
+    name: CSIRC
+    description: Computer Security Incident Response Centre
+  - id: AHT0003
+    name: MARTI
+    description: Malware Analysis, Research and Threat Intelligence
+  - id: AHT0004
+    name: S1-SA
+    description: Security Assurance and Vulnerability Management

@@ -1,0 +1,184 @@
+name: Platforms
+field: platforms
+description: Actual technologies used by the organization that will be exploited by adversaries during a successful attack, and eventually of relevance for detection. Are named by commercial designation.
+icon: 💿
+keys:
+  - id: PFM0001
+    name: AWS
+    description: Placeholder
+  - id: PFM0002
+    name: Azure
+    description: Placeholder
+  - id: PFM0003
+    name: Windows
+    description: Placeholder
+  - id: PFM0004
+    name: Azure AD
+    description: Placeholder
+  - id: PFM0005
+    name: Office 365
+    description: Placeholder
+  - id: PFM0006
+    name: Linux
+    description: Placeholder
+  - id: PFM0007
+    name: macOS
+    description: Placeholder
+  - id: PFM0008
+    name: Android
+    description: Placeholder
+  - id: PFM0009
+    name: iOS
+    description: Placeholder
+  - id: PFM0010
+    name: AWS IAM
+    description: Placeholder
+  - id: PFM0011
+    name: AD FS
+    description: Placeholder
+  - id: PFM0012
+    name: NGINX
+    description: Placeholder
+  - id: PFM0013
+    name: MySQL
+    description: Placeholder
+  - id: PFM0014
+    name: Kubernetes
+    description: Placeholder
+  - id: PFM0015
+    name: Placeholder
+    description: Placeholder
+  - id: PFM0016
+    name: Active Directory
+    description: Placeholder
+  - id: PFM0017
+    name: S3 Buckets
+    description: Placeholder
+  - id: PFM0018
+    name: Blob Storage
+    description: Placeholder
+  - id: PFM0019
+    name: AWS Lambda
+    description: Placeholder
+  - id: PFM0020
+    name: Placeholder
+    description: Placeholder
+  - id: PFM0021
+    name: Exchange
+    description: Placeholder
+  - id: PFM0022
+    name: Docker Engine
+    description: Placeholder
+  - id: PFM0023
+    name: Network Router
+    description: Placeholder
+  - id: PFM0024
+    name: Cassandra
+    description: Placeholder
+  - id: PFM0025
+    name: Postgress
+    description: Placeholder
+  - id: PFM0026
+    name: Kafka
+    description: Placeholder
+  - id: PFM0027
+    name: Apache HTTP Server
+    description: Placeholder
+  - id: PFM0028
+    name: PowerShell
+    description: Placeholder
+  - id: PFM1024
+    name: EU Login
+    tlp: red
+    description: Placeholder
+  - id: PFM0030
+    name: VMWare
+    description: Placeholder
+  - id: PFM0031
+    name: AWS EC2
+    description: Amazon Elastic Compute Cloud (Amazon EC2) is a web service that provides resizable computing capacity—literally, servers in Amazon's data centers—that you use to build and host your software systems.
+    link: https://docs.aws.amazon.com/ec2/index.html
+  - id: PFM0032
+    name: AWS EKS
+    description: Amazon Elastic Kubernetes Service (Amazon EKS) is a managed service that makes it easy for you to run Kubernetes on AWS without needing to install and operate your own Kubernetes clusters.
+    link: https://docs.aws.amazon.com/eks/index.html
+  - id: PFM0033
+    name: AWS ECS 
+    description: Amazon Elastic Container Service (Amazon ECS) is a highly scalable, fast, container management service that makes it easy to run, stop, and manage Docker containers on a cluster of Amazon EC2 instances.
+    link: https://docs.aws.amazon.com/ecs/index.html
+  - id: PFM0034
+    name: AWS Fargate
+    description: AWS Fargate is a technology that you can use with Amazon ECS to run containers without having to manage servers or clusters of Amazon EC2 instances. 
+    link: https://docs.aws.amazon.com/AmazonECS/latest/userguide/what-is-fargate.html
+  - id: PFM0035
+    name: Azure AKS
+    description: AKS allows you to quickly deploy a production ready Kubernetes cluster in Azure. Learn how to use AKS with these quickstarts, tutorials, and samples.
+    link: https://docs.microsoft.com/en-us/azure/aks/
+  - id: PFM0036
+    name: VMware Tanzu
+    description: Tanzu is a suite of products that helps users run and manage multiple Kubernetes (K8S) clusters across public and private clouds. 
+    link: https://docs.vmware.com/en/VMware-Tanzu/index.html
+  - id: PFM0036
+    name: OVHcloud
+    description: OVH, legally OVH Groupe SAS, is a French cloud computing company which offers VPS, dedicated servers and other web services. 
+    link: https://docs.ovh.com/gb/en/
+  - id: PFM0037
+    name: IBM Cloud Kubernetes
+    description: IBM Cloud Kubernetes Service is a managed offering to create your own Kubernetes cluster of compute hosts to deploy and manage containerized apps on IBM Cloud.
+    link: https://cloud.ibm.com/docs/containers?topic=containers-getting-started
+  - id: PFM0038
+    name: Oracle Container Engine
+    description: Oracle Cloud Infrastructure Container Engine for Kubernetes is a fully-managed, scalable, and highly available service that you can use to deploy your containerized applications to the cloud.
+    link: https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengoverview.htm
+  - id: PFM0039
+    name: Microsoft SharePoint
+    description: Microsoft SharePoint is a cloud-based service that helps organizations share and manage content, knowledge, and applications
+    link: https://docs.microsoft.com/en-us/sharepoint/
+  - id: PFM0040
+    name: Google Workspace
+    description: Google Workspace is a collection of cloud computing, productivity and collaboration tools, software and products developed and marketed by Google.
+    link: https://workspace.google.com/intl/en_id/
+  - id: PFM0041
+    name: Outlook Web Access
+    description: Outlook on the web (formerly known as Outlook Web App or Outlook Web Access) is a browser-based email client. Outlook on the web lets you access your Microsoft Exchange Server mailbox from almost any web browser.
+    link: https://docs.microsoft.com/en-us/exchange/troubleshoot/client-connectivity/set-up-web-access
+  - id: PFM0042
+    name: Microsoft Teams
+    description: Microsoft Teams is a proprietary business communication platform developed by Microsoft, as part of the Microsoft 365 family of products. Teams primarily competes with the similar service Slack, offering workspace chat and videoconferencing, file storage, and application integration.
+    link: https://docs.microsoft.com/en-us/microsoftteams/
+  - id: PFM0043
+    name: Slack
+    description: Slack is a messaging program designed specifically for the office, but has also been adopted for personal use.
+    link: https://api.slack.com/docs
+  - id: PFM0044
+    name: Confluence
+    description: Confluence is a web-based corporate wiki developed by Australian software company Atlassian. Atlassian wrote Confluence in the Java programming language and first published it in 2004. Confluence Standalone comes with a built-in Tomcat web server and hsql database, and also supports other databases.
+    link: https://support.atlassian.com/confluence-cloud/resources/
+  - id: PFM0045
+    name: JIRA
+    description: Jira is a proprietary issue tracking product developed by Atlassian that allows bug tracking and agile project management. 
+    link: https://support.atlassian.com/jira-software-cloud/resources/
+  - id: PFM0046
+    name: Gitlab
+    description: GitLab Inc. is an open-core company that provides GitLab, a DevOps software package that combines the ability to develop, secure, and operate software in a single application. 
+    link: https://docs.gitlab.com/
+  - id: PFM0047
+    name: Github
+    description: GitHub, Inc. is a provider of Internet hosting for software development and version control using Git. It offers the distributed version control and source code management functionality of Git, plus its own features.
+    link: https://docs.github.com/en
+  - id: PFM0048
+    name: Sysdig Backend 
+    description: Sysdig, Inc. is a provider of runtime security solutions for everything based on *nix variants, including a focus on container environments. Available as Saas or IaaS. 
+    link: https://sysdig.com
+  - id: PFM0049
+    name: AWS VPC
+    description: A virtual private cloud (VPC) is a virtual network dedicated to your AWS account. It is logically isolated from other virtual networks in the AWS Cloud. You can launch your AWS resources, such as Amazon EC2 instances, into your VPC.
+    link: https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html
+  - id: PFM0050
+    name: Bitbucket
+    description: Bitbucket is a Git-based source code repository hosting service owned by Atlassian.
+    link: https://confluence.atlassian.com/bitbucketserver
+  - id: PFM0051
+    name: Bamboo
+    description: Bamboo is a continuous integration and deployment tool that ties automated builds, tests and releases together in a single workflow
+    link: https://support.atlassian.com/bamboo/

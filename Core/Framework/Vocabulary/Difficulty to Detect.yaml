@@ -1,0 +1,33 @@
+name: Difficulty to Detect
+field: feasibility
+description: How possible it is to implement the detection objectives, according to data availability, available tooling and sophistication
+icon: 🤔
+keys:
+  - id: FSB0001
+    name: Available
+    icon: 🥳
+    description: Detections are easy to build, since data is available and building blocks already exist
+  - id: FSB0002
+    name: Minor Work
+    icon: 😤
+    description: Building the detection requires some light known and defined development
+  - id: FSB0003
+    name: Possible
+    icon: 😅
+    description: Technical details are known, but some moderate research is required to understand how to build detections
+  - id: FSB0004
+    name: Challenging
+    icon: 😰
+    description: Available information exist to support development, but unfamiliarity will lead to a sharper learning curve
+  - id: FSB0005
+    name: Complex
+    icon: 🥵
+    description: Multiple challenges in the path of development, which will need to resolved alongside technical work
+  - id: FSB0006
+    name: Needs Investment
+    icon: 🤑
+    description: Blocked at the current technological maturity stage, but might be part of a larger investment, i.e. to increase log collection or new toolings
+  - id: FSB0007
+    name: Impossible
+    icon: 😵
+    description: No perceived technical possibilities to fulfill detection objectives, due to the nature of the threat vector or non-technical aspects

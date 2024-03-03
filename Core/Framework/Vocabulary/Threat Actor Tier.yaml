@@ -1,0 +1,91 @@
+name: Threat Actor Tier
+field: tier
+stix: threat-actor-type-ov
+description: Category within which the threat actor is best summarized, and which gives an indicator of the adversarial mindset motivated by strategic objectives.
+reference: https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_tqbl8z36yoir
+icon: 🎭
+keys:
+  - id: TAT0001
+    name: Ideological Activists
+    stix: activist
+    icon: 🪬
+    description: 'Highly motivated, potentially destructive supporter of a social or
+      political cause (e.g., trade, labor, environment, etc.) that attempts to disrupt
+      an organization''s business model or damage their image.
+
+
+      This category includes actors sometimes referred to as anarchists, cyber vandals,
+      extremists, and hacktivists.'
+  - id: TAT0002
+    name: Commercial Competitor
+    stix: competitor
+    icon: 💼
+    description: 'An organization that competes in the same economic marketplace.
+
+
+      The goal of a competitor is to gain an advantage in business with respect to the
+      rival organization it targets. It usually does this by copying intellectual property,
+      trade secrets, acquisition strategies, or other technical or business data from
+      a rival organization with the intention of using the data to bolster its own assets
+      and market position.'
+  - id: TAT0003
+    name: Organized Cyber Criminals
+    stix: crime-syndicate
+    icon: 🦹‍♂️
+    description: 'An enterprise organized to conduct significant, large-scale criminal
+      activity for profit.
+
+
+      Crime syndicates, also known as organized crime, are generally large, well-resourced
+      groups that operate to create profit from all types of crime.'
+  - id: TAT0004
+    name: Black Hat
+    stix: criminal
+    icon: 🎩
+    description: 'Individual who commits computer crimes, often for personal financial
+      gain and often involves the theft of something valuable.
+
+
+      Intellectual property theft, extortion via ransomware, and physical destruction
+      are common examples. A criminal as defined here refers to those acting individually
+      or in very small or informal groups. For sophisticated organized criminal activity,
+      see the crime syndicate descriptor.'
+  - id: TAT0006
+    name: Nation State
+    stix: nation-state
+    icon: 🕵🏻‍♂️
+    description: 'Entities who work for the government or military of a nation state
+      or who work at their direction.
+
+
+      These actors typically have access to significant support, resources, training,
+      and tools and are capable of designing and executing very sophisticated and effective
+      Intrusion Sets and Campaigns.'
+  - id: TAT0007
+    name: Sensationalists
+    stix: sensationalist
+    icon: 👺
+    description: 'Seeks to cause embarrassment and brand damage by exposing sensitive
+      information in a manner designed to cause a public relations crisis.
+
+
+      A sensationalist may be an individual or small group of people motivated primarily
+      by a need for notoriety. Unlike the activist, the sensationalist generally has
+      no political goal, and is not using bad PR to influence the target to change its
+      behavior or business practices.'
+  - id: TAT0009
+    name: Cyber Terrorists
+    stix: terrorist
+    icon: 🪦
+    description: 'Uses extreme violence to advance a social or political agenda as well
+      as monetary crimes to support its activities.
+
+
+      In this context a terrorist refers to individuals who target noncombatants with
+      violence to send a message of fear far beyond the actual events. They may act
+      independently or as part of a terrorist organization.
+
+
+      Terrorist organizations must typically raise much of their operating budget through
+      criminal activity, which often occurs online. Terrorists are also often adept
+      at using and covertly manipulating social media for both recruitment and impact.'

@@ -1,0 +1,42 @@
+  status: DEVELOPMENT
+  #contributors:
+    #-
+  #threshold: 0
+  
+  #throttling:
+    #fields:
+      #-
+    #duration: 1h
+  
+  scheduling:
+    #cron: 
+    #frequency: 
+    #custom_time: 
+    lookback: 
+  
+  #notable:
+  
+    #event:
+      #title: 
+      #description: |
+        #Type Here
+  
+    #drilldown:
+      #name: 
+      #search: |
+        #Type Here
+  
+  #security_domain: 
+  
+  #risk:
+    #message: 
+    #risk_objects:
+      #- field: 
+        #type: 
+        #score: 
+    #threat_objects:
+      #- field: 
+        #type: 
+  
+  query: |
+    Type Here

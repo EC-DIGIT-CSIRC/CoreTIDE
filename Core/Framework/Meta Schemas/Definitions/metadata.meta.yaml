@@ -1,0 +1,63 @@
+title: Metadata
+type: object
+tide.template.spacer: true
+description: Non technical indicators helping with overall data management
+required:
+  - tlp
+  - version
+  - created
+  - modified
+  - author
+
+properties:
+
+  version:
+    title: Version
+    type: integer
+    description: Latest revision of the model object, always in integer 
+    example: 3
+
+  created:  
+    title: Creation Date
+    type: string
+    format: date
+    description: Creation date of initial version
+    example: 2022-09-12
+
+  modified:
+    title: Last Modification
+    type: string
+    format: date
+    description: Creation date of the latest version
+    example: 2022-09-13
+
+  tlp:
+    title: Traffic Light Protocol
+    type: string
+    tide.vocab: true
+    description: "The Traffic Light Protocol - or short: TLP - was designed with the objective to create a favorable classification scheme for sharing sensitive information while keeping the control over its distribution at the same time." 
+    example: green
+
+  classification:
+    title: Data Classification
+    type: string
+    tide.vocab: true
+    tide.template.hide: true
+    description: "Data Classification Marking"
+    example: SECRET UE/EU SECRET
+
+  author:
+    title: Model author
+    type: string
+    format: email
+    description: Creator of latest version
+    example: amine.besson@ext.ec.europa.eu
+
+  contributors:
+    title: Research Contributors
+    type: array
+    description: Individuals who supported creating, enriching or informing the information contained in the document. 
+    items:
+      type: string
+      format: email
+    

@@ -1,0 +1,29 @@
+name: Threat Level to Organization
+field: level
+description: Informed estimate of the risk level that can be attributed to the adversary, from public or closed reports, the targets they are actively engaging, their sophistication, and targets. The closer their domains, successes and victims are similar to the organization, the more at risk it is and thus the higher the threat level.
+icon: ☠️
+keys:
+  - id: TLO0001
+    name: Faun
+    icon: 🐐
+    description: Active attacker that isn't necessarily highly sophisticated, but conducts campaigns with some degree of end success.
+  - id: TLO0002
+    name: Cerberus
+    icon: 🐶
+    description: Group with a defined modus operandi, recognizable successes but limited capabilites, may do a limited range of damage in weakest part of infrastructure
+  - id: TLO0003
+    name: Medusa
+    icon: 🐍
+    description: Actor with record of potent attacks, but not necessarily demonstrating a high level of sophistication and unlikely to severely impact the organization.
+  - id: TLO0004
+    name: Hydra
+    icon: 🐲
+    description: Advanced threat actor with proven ability to impact the organization, even if known exploitation paths are mostly guarded. 
+  - id: TLO0005
+    name: Titan
+    icon: 🧌
+    description: Significant ability to penetrate and leverage a target, able to provoke direct loss of capabilities , strategic or monetary value to the organization.
+  - id: TLO0006
+    name: Leviathan
+    icon: 🐉
+    description: Considerable threat generator with a proven track record of full compromise of similar organization. Will  cause irreparable damages.

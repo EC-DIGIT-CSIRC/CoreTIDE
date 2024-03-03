@@ -1,0 +1,45 @@
+name: Domains
+field: domains
+description: Infrastructure technologies domain of interest to attackers. 
+icon: 🛰️
+keys:
+  - id: DOM0001
+    name: Public Cloud
+    icon: ☁️
+    description: Infrastructure handled by a commercial cloud provider. Managed mostly on a service level, and connected over the internet. 
+  - id: DOM0002
+    name: Private Cloud
+    icon: ☁️
+    description: Infrastructure hosted at a third party, but based on custom specification and managed on a platform level.
+  - id: DOM0003
+    name: Enterprise
+    icon: 🏢
+    description: Generic databases, applications, machines and systems that are usually on premises or on Cloud traditional VMs. 
+  - id: DOM0004
+    name: Mobile
+    icon: 📱
+    description: Smartphones, tablets and applications running these devices.
+  - id: DOM0005
+    name: SaaS
+    icon: 🕸️
+    description: Subscription based access to software.
+  - id: DOM0006
+    name: Networking
+    icon: 🌐
+    description: Communications backbone connecting users, applications and machines. 
+  - id: DOM0007
+    name: OSINT
+    icon: 🌏
+    description: Data publicly available to attackers used during reconnaissance.
+  - id: DOM0008
+    name: Embedded
+    icon: 🔧
+    description: Firmware, middleware and low level software running on devices which are typically not manageable by the consumer.
+  - id: DOM0009
+    name: IoT
+    icon: 🦾
+    description: Placeholder
+  - id: DOM0010
+    name: Industrial
+    icon: 🏭
+    description: Related to Industrial Control Systems, Operational Technologies their specific concepts (SCADA, PLCs, DCS etc.)

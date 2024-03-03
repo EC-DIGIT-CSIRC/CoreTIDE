@@ -1,0 +1,17 @@
+name: NIST 800-61 Recoverability Efforts
+field: efforts
+description: NIST Special Publication reference for recoverability effort categories that reflect the level of and type of resources required to recover from the incident.
+reference: https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-61r2.pdf
+keys:
+  - id: RCV0001
+    name: Regular
+    description: Time to recovery is predictable with existing resources
+  - id: RCV0002
+    name: Supplemented
+    description: Time to recovery is predictable with additional resources
+  - id: RCV0003
+    name: Extended
+    description: Time to recovery is unpredictable; additional resources and outside help are needed
+  - id: RCV0004
+    name: Not Recoverable
+    description: Recovery from the incident is not possible (e.g., sensitive data exfiltrated and posted publicly); launch investigation

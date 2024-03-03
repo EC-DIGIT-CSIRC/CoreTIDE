@@ -1,0 +1,750 @@
+name: MITRE ATT&CK Data Sources
+field: datasources
+description: Data sources represent the various subjects/topics of information that
+  can be collected by sensors/logs. Data sources also include data components, which
+  identify specific properties/values of a data source relevant to detecting a given
+  ATT&CK technique or sub-technique.
+reference: https://attack.mitre.org/datasources/
+icon: 📊
+keys:
+  - id: DS0026
+    name: Active Directory
+    description: 'A database and set of services that allows administrators to manage
+      permissions, access to network resources, and stored data objects (user, group,
+      application, or devices)(Citation: Microsoft AD DS Getting Started)'
+    link: https://attack.mitre.org/datasources/DS0026
+  - id: DS0026
+    name: Active Directory Credential Request
+    description: 'A user requested active directory credentials, such as a ticket
+      or token (ex: Windows EID 4769)'
+    link: https://attack.mitre.org/datasources/DS0026
+  - id: DS0026
+    name: Active Directory Object Access
+    description: 'Opening of an active directory object, typically to collect/read
+      its value (ex: Windows EID 4661)'
+    link: https://attack.mitre.org/datasources/DS0026
+  - id: DS0026
+    name: Active Directory Object Creation
+    description: 'Initial construction of a new active directory object (ex: Windows
+      EID 5137)'
+    link: https://attack.mitre.org/datasources/DS0026
+  - id: DS0026
+    name: Active Directory Object Deletion
+    description: 'Removal of an active directory object (ex: Windows EID 5141)'
+    link: https://attack.mitre.org/datasources/DS0026
+  - id: DS0026
+    name: Active Directory Object Modification
+    description: 'Changes made to an active directory object (ex: Windows EID 5163
+      or 5136)'
+    link: https://attack.mitre.org/datasources/DS0026
+  - id: DS0015
+    name: Application Log
+    description: 'Events collected by third-party services such as mail servers, web
+      applications, or other appliances (not by the native OS or platform)(Citation:
+      Confluence Logs)'
+    link: https://attack.mitre.org/datasources/DS0015
+  - id: DS0015
+    name: Application Log Content
+    description: 'Logging, messaging, and other artifacts provided by third-party
+      services (ex: metrics, errors, and/or alerts from mail/web applications)'
+    link: https://attack.mitre.org/datasources/DS0015
+  - id: DS0037
+    name: Certificate
+    description: A digital document, which highlights information such as the owner's
+      identity, used to instill trust in public keys used while encrypting network
+      communications
+    link: https://attack.mitre.org/datasources/DS0037
+  - id: DS0037
+    name: Certificate Registration
+    description: 'Queried or logged information highlighting current and expired digital
+      certificates (ex: Certificate transparency)'
+    link: https://attack.mitre.org/datasources/DS0037
+  - id: DS0025
+    name: Cloud Service
+    description: 'Infrastructure, platforms, or software that are hosted on-premise
+      or by third-party providers, made available to users through network connections
+      and/or APIs(Citation: Amazon AWS)(Citation: Azure Products)'
+    link: https://attack.mitre.org/datasources/DS0025
+  - id: DS0025
+    name: Cloud Service Disable
+    description: 'Deactivation or stoppage of a cloud service (ex: AWS Cloudtrail
+      StopLogging)'
+    link: https://attack.mitre.org/datasources/DS0025
+  - id: DS0025
+    name: Cloud Service Enumeration
+    description: 'An extracted list of cloud services (ex: AWS ECS ListServices)'
+    link: https://attack.mitre.org/datasources/DS0025
+  - id: DS0025
+    name: Cloud Service Metadata
+    description: Contextual data about a cloud service and activity around it such
+      as name, type, or purpose/function
+    link: https://attack.mitre.org/datasources/DS0025
+  - id: DS0025
+    name: Cloud Service Modification
+    description: 'Changes made to a cloud service, including its settings and/or data
+      (ex: AWS CloudTrail DeleteTrail or DeleteConfigRule)'
+    link: https://attack.mitre.org/datasources/DS0025
+  - id: DS0010
+    name: Cloud Storage
+    description: 'Data object storage infrastructure hosted on-premise or by third-party
+      providers, made available to users through network connections and/or APIs(Citation:
+      Amazon S3)(Citation: Azure Blob Storage)(Citation: Google Cloud Storage)'
+    link: https://attack.mitre.org/datasources/DS0010
+  - id: DS0010
+    name: Cloud Storage Access
+    description: 'Opening of a cloud storage infrastructure, typically to collect/read
+      its value (ex: AWS S3 GetObject)'
+    link: https://attack.mitre.org/datasources/DS0010
+  - id: DS0010
+    name: Cloud Storage Creation
+    description: 'Initial construction of new cloud storage infrastructure (ex: AWS
+      S3 CreateBucket)'
+    link: https://attack.mitre.org/datasources/DS0010
+  - id: DS0010
+    name: Cloud Storage Deletion
+    description: 'Removal of cloud storage infrastructure (ex: AWS S3 DeleteBucket)'
+    link: https://attack.mitre.org/datasources/DS0010
+  - id: DS0010
+    name: Cloud Storage Enumeration
+    description: 'An extracted list of cloud storage infrastructure (ex: AWS S3 ListBuckets
+      or ListObjects)'
+    link: https://attack.mitre.org/datasources/DS0010
+  - id: DS0010
+    name: Cloud Storage Metadata
+    description: Contextual data about cloud storage infrastructure and activity around
+      it such as name, size, or owner
+    link: https://attack.mitre.org/datasources/DS0010
+  - id: DS0010
+    name: Cloud Storage Modification
+    description: 'Changes made to cloud storage infrastructure, including its settings
+      and/or data (ex: AWS S3 PutObject or PutObjectAcl)'
+    link: https://attack.mitre.org/datasources/DS0010
+  - id: DS0017
+    name: Command
+    description: 'A directive given to a computer program, acting as an interpreter
+      of some kind, in order to perform a specific task(Citation: Confluence Linux
+      Command  Line)(Citation: Audit OSX)'
+    link: https://attack.mitre.org/datasources/DS0017
+  - id: DS0017
+    name: Command Execution
+    description: The execution of a line of text, potentially with arguments, created
+      from program code (e.g. a cmdlet executed via powershell.exe, interactive commands
+      like >dir, shell executions, etc. )
+    link: https://attack.mitre.org/datasources/DS0017
+  - id: DS0032
+    name: Container
+    description: 'A standard unit of virtualized software that packages up code and
+      all its dependencies so the application runs quickly and reliably from one computing
+      environment to another(Citation: Docker Docs Container)'
+    link: https://attack.mitre.org/datasources/DS0032
+  - id: DS0032
+    name: Container Creation
+    description: 'Initial construction of a new container (ex: docker create <container_name>)'
+    link: https://attack.mitre.org/datasources/DS0032
+  - id: DS0032
+    name: Container Enumeration
+    description: 'An extracted list of containers (ex: docker ps)'
+    link: https://attack.mitre.org/datasources/DS0032
+  - id: DS0032
+    name: Container Start
+    description: 'Activation or invocation of a container (ex: docker start or docker
+      restart)'
+    link: https://attack.mitre.org/datasources/DS0032
+  - id: DS0038
+    name: Domain Name
+    description: 'Information obtained (commonly through registration or activity
+      logs) regarding one or more IP addresses registered with human readable names
+      (ex: mitre.org)'
+    link: https://attack.mitre.org/datasources/DS0038
+  - id: DS0038
+    name: Active DNS
+    description: 'Queried domain name system (DNS) registry data highlighting current
+      domain to IP address resolutions (ex: dig/nslookup queries)'
+    link: https://attack.mitre.org/datasources/DS0038
+  - id: DS0038
+    name: Domain Registration
+    description: 'Information about domain name assignments and other domain metadata
+      (ex: WHOIS)'
+    link: https://attack.mitre.org/datasources/DS0038
+  - id: DS0038
+    name: Passive DNS
+    description: 'Logged domain name system (DNS) data highlighting timelines of domain
+      to IP address resolutions (ex: passive DNS)'
+    link: https://attack.mitre.org/datasources/DS0038
+  - id: DS0016
+    name: Drive
+    description: 'A non-volatile data storage device (hard drive, floppy disk, USB
+      flash drive) with at least one formatted partition, typically mounted to the
+      file system and/or assigned a drive letter(Citation: Sysmon EID 9)'
+    link: https://attack.mitre.org/datasources/DS0016
+  - id: DS0016
+    name: Drive Access
+    description: Opening of a data storage device with an assigned drive letter or
+      mount point
+    link: https://attack.mitre.org/datasources/DS0016
+  - id: DS0016
+    name: Drive Creation
+    description: Initial construction of a drive letter or mount point to a data storage
+      device
+    link: https://attack.mitre.org/datasources/DS0016
+  - id: DS0016
+    name: Drive Modification
+    description: Changes made to a drive letter or mount point of a data storage device
+    link: https://attack.mitre.org/datasources/DS0016
+  - id: DS0027
+    name: Driver
+    description: 'A computer program that operates or controls a particular type of
+      device that is attached to a computer. Provides a software interface to hardware
+      devices, enabling operating systems and other computer programs to access hardware
+      functions without needing to know precise details about the hardware being used(Citation:
+      IOKit Fundamentals)(Citation: Windows Getting Started Drivers)'
+    link: https://attack.mitre.org/datasources/DS0027
+  - id: DS0027
+    name: Driver Load
+    description: 'Attaching a driver to either user or kernel-mode of a system (ex:
+      Sysmon EID 6)'
+    link: https://attack.mitre.org/datasources/DS0027
+  - id: DS0027
+    name: Driver Metadata
+    description: Contextual data about a driver and activity around it such as driver
+      issues reporting or integrity (page hash, code) checking
+    link: https://attack.mitre.org/datasources/DS0027
+  - id: DS0022
+    name: File
+    description: 'A computer resource object, managed by the I/O system, for storing
+      data (such as images, text, videos, computer programs, or any wide variety of
+      other media).(Citation: Microsoft File Mgmt)'
+    link: https://attack.mitre.org/datasources/DS0022
+  - id: DS0022
+    name: File Access
+    description: 'Opening a file, which makes the file contents available to the requestor
+      (ex: Windows EID 4663)'
+    link: https://attack.mitre.org/datasources/DS0022
+  - id: DS0022
+    name: File Creation
+    description: 'Initial construction of a new file (ex: Sysmon EID 11)'
+    link: https://attack.mitre.org/datasources/DS0022
+  - id: DS0022
+    name: File Deletion
+    description: 'Removal of a file (ex: Sysmon EID 23, macOS ESF EID ES_EVENT_TYPE_AUTH_UNLINK,
+      or Linux commands auditd unlink, rename, rmdir, unlinked, or renameat rules)'
+    link: https://attack.mitre.org/datasources/DS0022
+  - id: DS0022
+    name: File Metadata
+    description: 'Contextual data about a file, which may include information such
+      as name, the content (ex: signature, headers, or data/media), user/owner, permissions,
+      etc.'
+    link: https://attack.mitre.org/datasources/DS0022
+  - id: DS0022
+    name: File Modification
+    description: 'Changes made to a file, or its access permissions and attributes,
+      typically to alter the contents of the targeted file (ex: Windows EID 4670 or
+      Sysmon EID 2)'
+    link: https://attack.mitre.org/datasources/DS0022
+  - id: DS0018
+    name: Firewall
+    description: 'A network security system, running locally on an endpoint or remotely
+      as a service (ex: cloud environment), that monitors and controls incoming/outgoing
+      network traffic based on predefined rules(Citation: AWS Sec Groups VPC)'
+    link: https://attack.mitre.org/datasources/DS0018
+  - id: DS0018
+    name: Firewall Disable
+    description: 'Deactivation or stoppage of a cloud service (ex: Write/Delete entries
+      within Azure Firewall Activity Logs)'
+    link: https://attack.mitre.org/datasources/DS0018
+  - id: DS0018
+    name: Firewall Enumeration
+    description: 'An extracted list of available firewalls and/or their associated
+      settings/rules (ex: Azure Network Firewall CLI Show commands)'
+    link: https://attack.mitre.org/datasources/DS0018
+  - id: DS0018
+    name: Firewall Metadata
+    description: Contextual data about a firewall and activity around it such as name,
+      policy, or status
+    link: https://attack.mitre.org/datasources/DS0018
+  - id: DS0018
+    name: Firewall Rule Modification
+    description: 'Changes made to a firewall rule, typically to allow/block specific
+      network traffic (ex: Windows EID 4950 or Write/Delete entries within Azure Firewall
+      Rule Collection Activity Logs)'
+    link: https://attack.mitre.org/datasources/DS0018
+  - id: DS0001
+    name: Firmware
+    description: Computer software that provides low-level control for the hardware
+      and device(s) of a host, such as BIOS or UEFI/EFI
+    link: https://attack.mitre.org/datasources/DS0001
+  - id: DS0001
+    name: Firmware Modification
+    description: Changes made to firmware, including its settings and/or data, such
+      as MBR (Master Boot Record) and VBR (Volume Boot Record)
+    link: https://attack.mitre.org/datasources/DS0001
+  - id: DS0036
+    name: Group
+    description: 'A collection of multiple user accounts that share the same access
+      rights to the computer and/or network resources and have common security rights(Citation:
+      Amazon IAM Groups)'
+    link: https://attack.mitre.org/datasources/DS0036
+  - id: DS0036
+    name: Group Enumeration
+    description: 'An extracted list of available groups and/or their associated settings
+      (ex: AWS list-groups)'
+    link: https://attack.mitre.org/datasources/DS0036
+  - id: DS0036
+    name: Group Metadata
+    description: Contextual data about a group which describes group and activity
+      around it, such as name, permissions, or user accounts within the group
+    link: https://attack.mitre.org/datasources/DS0036
+  - id: DS0036
+    name: Group Modification
+    description: 'Changes made to a group, such as membership, name, or permissions
+      (ex: Windows EID 4728 or 4732, AWS IAM UpdateGroup)'
+    link: https://attack.mitre.org/datasources/DS0036
+  - id: DS0007
+    name: Image
+    description: 'A single file used to deploy a virtual machine/bootable disk into
+      an on-premise or third-party cloud environment(Citation: Microsoft Image)(Citation:
+      Amazon AMI)'
+    link: https://attack.mitre.org/datasources/DS0007
+  - id: DS0007
+    name: Image Creation
+    description: 'Initial construction of a virtual machine image (ex: Azure Compute
+      Service Images PUT)'
+    link: https://attack.mitre.org/datasources/DS0007
+  - id: DS0007
+    name: Image Deletion
+    description: 'Removal of a virtual machine image (ex: Azure Compute Service Images
+      DELETE)'
+    link: https://attack.mitre.org/datasources/DS0007
+  - id: DS0007
+    name: Image Metadata
+    description: Contextual data about a virtual machine image such as name, resource
+      group, state, or type
+    link: https://attack.mitre.org/datasources/DS0007
+  - id: DS0007
+    name: Image Modification
+    description: 'Changes made to a virtual machine image, including setting and/or
+      control data (ex: Azure Compute Service Images PATCH)'
+    link: https://attack.mitre.org/datasources/DS0007
+  - id: DS0030
+    name: Instance
+    description: 'A virtual server environment which runs workloads, hosted on-premise
+      or by third-party cloud providers(Citation: Amazon VM)(Citation: Google VM)'
+    link: https://attack.mitre.org/datasources/DS0030
+  - id: DS0030
+    name: Instance Creation
+    description: 'Initial construction of a new instance (ex: instance.insert within
+      GCP Audit Logs)'
+    link: https://attack.mitre.org/datasources/DS0030
+  - id: DS0030
+    name: Instance Deletion
+    description: 'Removal of an instance (ex: instance.delete within GCP Audit Logs)'
+    link: https://attack.mitre.org/datasources/DS0030
+  - id: DS0030
+    name: Instance Enumeration
+    description: 'An extracted list of instances within a cloud environment (ex: instance.list
+      within GCP Audit Logs)'
+    link: https://attack.mitre.org/datasources/DS0030
+  - id: DS0030
+    name: Instance Metadata
+    description: Contextual data about an instance and activity around it such as
+      name, type, or status
+    link: https://attack.mitre.org/datasources/DS0030
+  - id: DS0030
+    name: Instance Modification
+    description: 'Changes made to an instance, including its settings and/or control
+      data (ex: instance.addResourcePolicies or instances.setMetadata within GCP Audit
+      Logs)'
+    link: https://attack.mitre.org/datasources/DS0030
+  - id: DS0030
+    name: Instance Start
+    description: 'Activation or invocation of an instance (ex: instance.start within
+      GCP Audit Logs)'
+    link: https://attack.mitre.org/datasources/DS0030
+  - id: DS0030
+    name: Instance Stop
+    description: 'Deactivation or stoppage of an instance (ex: instance.stop within
+      GCP Audit Logs)'
+    link: https://attack.mitre.org/datasources/DS0030
+  - id: DS0035
+    name: Internet Scan
+    description: Information obtained (commonly via active network traffic probes
+      or web crawling) regarding various types of resources and servers connected
+      to the public Internet
+    link: https://attack.mitre.org/datasources/DS0035
+  - id: DS0035
+    name: Response Content
+    description: Logged network traffic in response to a scan showing both protocol
+      header and body values
+    link: https://attack.mitre.org/datasources/DS0035
+  - id: DS0035
+    name: Response Metadata
+    description: Contextual data about an Internet-facing resource gathered from a
+      scan, such as running services or ports
+    link: https://attack.mitre.org/datasources/DS0035
+  - id: DS0008
+    name: Kernel
+    description: 'A computer program, at the core of a computer OS, that resides in
+      memory and facilitates interactions between hardware and software components(Citation:
+      STIG Audit Kernel Modules)(Citation: Init Man Page)'
+    link: https://attack.mitre.org/datasources/DS0008
+  - id: DS0008
+    name: Kernel Module Load
+    description: An object file that contains code to extend the running kernel of
+      an OS, typically used to add support for new hardware (as device drivers) and/or
+      filesystems, or for adding system calls
+    link: https://attack.mitre.org/datasources/DS0008
+  - id: DS0028
+    name: Logon Session
+    description: 'Logon occurring on a system or resource (local, domain, or cloud)
+      to which a user/device is gaining access after successful authentication and
+      authorization(Citation: Microsoft Audit Logon Events)'
+    link: https://attack.mitre.org/datasources/DS0028
+  - id: DS0028
+    name: Logon Session Creation
+    description: Initial construction of a successful new user logon following an
+      authentication attempt. (e.g. Windows EID 4624, /var/log/utmp, or /var/log/wmtp)
+    link: https://attack.mitre.org/datasources/DS0028
+  - id: DS0028
+    name: Logon Session Metadata
+    description: Contextual data about a logon session, such as username, logon type,
+      access tokens (security context, user SIDs, logon identifiers, and logon SID),
+      and any activity associated within it
+    link: https://attack.mitre.org/datasources/DS0028
+  - id: DS0004
+    name: Malware Repository
+    description: Information obtained (via shared or submitted samples) regarding
+      malicious software (droppers, backdoors, etc.) used by adversaries
+    link: https://attack.mitre.org/datasources/DS0004
+  - id: DS0004
+    name: Malware Content
+    description: Code, strings, and other signatures that compromise a malicious payload
+    link: https://attack.mitre.org/datasources/DS0004
+  - id: DS0004
+    name: Malware Metadata
+    description: Contextual data about a malicious payload, such as compilation times,
+      file hashes, as well as watermarks or other identifiable configuration information
+    link: https://attack.mitre.org/datasources/DS0004
+  - id: DS0011
+    name: Module
+    description: 'Executable files consisting of one or more shared classes and interfaces,
+      such as portable executable (PE) format binaries/dynamic link libraries (DLL),
+      executable and linkable format (ELF) binaries/shared libraries, and Mach-O format
+      binaries/shared libraries(Citation: Microsoft LoadLibrary)(Citation: Microsoft
+      Module Class)'
+    link: https://attack.mitre.org/datasources/DS0011
+  - id: DS0011
+    name: Module Load
+    description: 'Attaching a module into the memory of a process/program, typically
+      to access shared resources/features provided by the module (ex: Sysmon EID 7)'
+    link: https://attack.mitre.org/datasources/DS0011
+  - id: DS0023
+    name: Named Pipe
+    description: 'Mechanisms that allow inter-process communication locally or over
+      the network. A named pipe is usually found as a file and processes attach to
+      it(Citation: Microsoft Named Pipes)'
+    link: https://attack.mitre.org/datasources/DS0023
+  - id: DS0023
+    name: Named Pipe Metadata
+    description: 'Contextual data about a named pipe on a system, including pipe name
+      and creating process (ex: Sysmon EIDs 17-18)'
+    link: https://attack.mitre.org/datasources/DS0023
+  - id: DS0033
+    name: Network Share
+    description: 'A storage resource (typically a folder or drive) made available
+      from one host to others using network protocols, such as Server Message Block
+      (SMB) or Network File System (NFS)(Citation: Microsoft NFS Overview)'
+    link: https://attack.mitre.org/datasources/DS0033
+  - id: DS0033
+    name: Network Share Access
+    description: 'Opening a network share, which makes the contents available to the
+      requestor (ex: Windows EID 5140 or 5145)'
+    link: https://attack.mitre.org/datasources/DS0033
+  - id: DS0029
+    name: Network Traffic
+    description: 'Data transmitted across a network (ex: Web, DNS, Mail, File, etc.),
+      that is either summarized (ex: Netflow) and/or captured as raw data in an analyzable
+      format (ex: PCAP)'
+    link: https://attack.mitre.org/datasources/DS0029
+  - id: DS0029
+    name: Network Connection Creation
+    description: 'Initial construction of a network connection, such as capturing
+      socket information with a source/destination IP and port(s) (ex: Windows EID
+      5156, Sysmon EID 3, or Zeek conn.log)'
+    link: https://attack.mitre.org/datasources/DS0029
+  - id: DS0029
+    name: Network Traffic Content
+    description: 'Logged network traffic data showing both protocol header and body
+      values (ex: PCAP)'
+    link: https://attack.mitre.org/datasources/DS0029
+  - id: DS0029
+    name: Network Traffic Flow
+    description: 'Summarized network packet data, with metrics, such as protocol headers
+      and volume (ex: Netflow or Zeek http.log)'
+    link: https://attack.mitre.org/datasources/DS0029
+  - id: DS0021
+    name: Persona
+    description: A malicious online profile representing a user commonly used by adversaries
+      to social engineer or otherwise target victims
+    link: https://attack.mitre.org/datasources/DS0021
+  - id: DS0021
+    name: Social Media
+    description: Established, compromised, or otherwise acquired social media personas
+    link: https://attack.mitre.org/datasources/DS0021
+  - id: DS0014
+    name: Pod
+    description: 'A single unit of shared resources within a cluster, comprised of
+      one or more containers(Citation: Kube Kubectl)(Citation: Kube Pod)'
+    link: https://attack.mitre.org/datasources/DS0014
+  - id: DS0014
+    name: Pod Creation
+    description: 'Initial construction of a new pod (ex: kubectl apply|run)'
+    link: https://attack.mitre.org/datasources/DS0014
+  - id: DS0014
+    name: Pod Enumeration
+    description: 'An extracted list of pods within a cluster (ex: kubectl get pods)'
+    link: https://attack.mitre.org/datasources/DS0014
+  - id: DS0014
+    name: Pod Modification
+    description: 'Changes made to a pod, including its settings and/or control data
+      (ex: kubectl set|patch|edit)'
+    link: https://attack.mitre.org/datasources/DS0014
+  - id: DS0009
+    name: Process
+    description: 'Instances of computer programs that are being executed by at least
+      one thread. Processes have memory space for process executables, loaded modules
+      (DLLs or shared libraries), and allocated memory regions containing everything
+      from user input to application-specific data structures(Citation: Microsoft
+      Processes and Threads)'
+    link: https://attack.mitre.org/datasources/DS0009
+  - id: DS0009
+    name: OS API Execution
+    description: Operating system function/method calls executed by a process
+    link: https://attack.mitre.org/datasources/DS0009
+  - id: DS0009
+    name: Process Access
+    description: 'Opening of a process by another process, typically to read memory
+      of the target process (ex: Sysmon EID 10)'
+    link: https://attack.mitre.org/datasources/DS0009
+  - id: DS0009
+    name: Process Creation
+    description: The initial construction of an executable managed by the OS, that
+      may involve one or more tasks or threads. (e.g. Win EID 4688, Sysmon EID 1,
+      cmd.exe > net use, etc.)
+    link: https://attack.mitre.org/datasources/DS0009
+  - id: DS0009
+    name: Process Metadata
+    description: Contextual data about a running process, which may include information
+      such as environment variables, image name, user/owner, etc.
+    link: https://attack.mitre.org/datasources/DS0009
+  - id: DS0009
+    name: Process Modification
+    description: 'Changes made to a process, or its contents, typically to write and/or
+      execute code in the memory of the target process (ex: Sysmon EID 8)'
+    link: https://attack.mitre.org/datasources/DS0009
+  - id: DS0009
+    name: Process Termination
+    description: 'Exit of a running process (ex: Sysmon EID 5 or Windows EID 4689)'
+    link: https://attack.mitre.org/datasources/DS0009
+  - id: DS0003
+    name: Scheduled Job
+    description: 'Automated tasks that can be executed at a specific time or on a
+      recurring schedule running in the background (ex: Cron daemon, task scheduler,
+      BITS)(Citation: Microsoft Tasks)'
+    link: https://attack.mitre.org/datasources/DS0003
+  - id: DS0003
+    name: Scheduled Job Creation
+    description: 'Initial construction of a new scheduled job (ex: Windows EID 4698
+      or /var/log cron logs)'
+    link: https://attack.mitre.org/datasources/DS0003
+  - id: DS0003
+    name: Scheduled Job Metadata
+    description: Contextual data about a scheduled job, which may include information
+      such as name, timing, command(s), etc.
+    link: https://attack.mitre.org/datasources/DS0003
+  - id: DS0003
+    name: Scheduled Job Modification
+    description: 'Changes made to a scheduled job, such as modifications to the execution
+      launch (ex: Windows EID 4702 or /var/log cron logs)'
+    link: https://attack.mitre.org/datasources/DS0003
+  - id: DS0012
+    name: Script
+    description: 'A file or stream containing a list of commands, allowing them to
+      be launched in sequence(Citation: Microsoft PowerShell Logging)(Citation: FireEye
+      PowerShell Logging)(Citation: Microsoft AMSI)'
+    link: https://attack.mitre.org/datasources/DS0012
+  - id: DS0012
+    name: Script Execution
+    description: The execution of a text file that contains code via the interpreter
+      (e.g. Powershell, WMI, Windows EID 4104, etc.)
+    link: https://attack.mitre.org/datasources/DS0012
+  - id: DS0013
+    name: Sensor Health
+    description: Information from host telemetry providing insights about system status,
+      errors, or other notable functional activity
+    link: https://attack.mitre.org/datasources/DS0013
+  - id: DS0013
+    name: Host Status
+    description: 'Logging, messaging, and other artifacts highlighting the health
+      of host sensors (ex: metrics, errors, and/or exceptions from logging applications)'
+    link: https://attack.mitre.org/datasources/DS0013
+  - id: DS0019
+    name: Service
+    description: 'A computer process that is configured to execute continuously in
+      the background and perform system tasks, in some cases before any user has logged
+      in(Citation: Microsoft Services)(Citation: Linux Services Run Levels)'
+    link: https://attack.mitre.org/datasources/DS0019
+  - id: DS0019
+    name: Service Creation
+    description: 'Initial construction of a new service/daemon (ex: Windows EID 4697
+      or /var/log daemon logs)'
+    link: https://attack.mitre.org/datasources/DS0019
+  - id: DS0019
+    name: Service Metadata
+    description: Contextual data about a service/daemon, which may include information
+      such as name, service executable, start type, etc.
+    link: https://attack.mitre.org/datasources/DS0019
+  - id: DS0019
+    name: Service Modification
+    description: 'Changes made to a service/daemon, such as changes to name, description,
+      and/or start type (ex: Windows EID 7040 or /var/log daemon logs)'
+    link: https://attack.mitre.org/datasources/DS0019
+  - id: DS0020
+    name: Snapshot
+    description: 'A point-in-time copy of cloud volumes (files, settings, etc.) that
+      can be created and/or deployed in cloud environments(Citation: Microsoft Snapshot)(Citation:
+      Amazon Snapshots)'
+    link: https://attack.mitre.org/datasources/DS0020
+  - id: DS0020
+    name: Snapshot Creation
+    description: 'Initial construction of a new snapshot (ex: AWS create-snapshot)'
+    link: https://attack.mitre.org/datasources/DS0020
+  - id: DS0020
+    name: Snapshot Deletion
+    description: 'Removal of a snapshot (ex: AWS delete-snapshot)'
+    link: https://attack.mitre.org/datasources/DS0020
+  - id: DS0020
+    name: Snapshot Enumeration
+    description: 'An extracted list of snapshops within a cloud environment (ex: AWS
+      describe-snapshots)'
+    link: https://attack.mitre.org/datasources/DS0020
+  - id: DS0020
+    name: Snapshot Metadata
+    description: Contextual data about a snapshot, which may include information such
+      as ID, type, and status
+    link: https://attack.mitre.org/datasources/DS0020
+  - id: DS0020
+    name: Snapshot Modification
+    description: 'Changes made to a snapshop, such as metadata and control data (ex:
+      AWS modify-snapshot-attribute)'
+    link: https://attack.mitre.org/datasources/DS0020
+  - id: DS0002
+    name: User Account
+    description: A profile representing a user, device, service, or application used
+      to authenticate and access resources
+    link: https://attack.mitre.org/datasources/DS0002
+  - id: DS0002
+    name: User Account Authentication
+    description: 'An attempt by a user to gain access to a network or computing resource,
+      often by providing credentials (ex: Windows EID 4776 or /var/log/auth.log)'
+    link: https://attack.mitre.org/datasources/DS0002
+  - id: DS0002
+    name: User Account Creation
+    description: 'Initial construction of a new account (ex: Windows EID 4720 or /etc/passwd
+      logs)'
+    link: https://attack.mitre.org/datasources/DS0002
+  - id: DS0002
+    name: User Account Deletion
+    description: 'Removal of an account (ex: Windows EID 4726 or /var/log access/authentication
+      logs)'
+    link: https://attack.mitre.org/datasources/DS0002
+  - id: DS0002
+    name: User Account Metadata
+    description: Contextual data about an account, which may include a username, user
+      ID, environmental data, etc.
+    link: https://attack.mitre.org/datasources/DS0002
+  - id: DS0002
+    name: User Account Modification
+    description: 'Changes made to an account, such as permissions and/or membership
+      in specific groups (ex: Windows EID 4738 or /var/log access/authentication logs)'
+    link: https://attack.mitre.org/datasources/DS0002
+  - id: DS0034
+    name: Volume
+    description: 'Block object storage hosted on-premise or by third-party providers,
+      typically made available to resources as virtualized hard drives(Citation: Amazon
+      S3)(Citation: Azure Blob Storage)(Citation: Google Cloud Storage)'
+    link: https://attack.mitre.org/datasources/DS0034
+  - id: DS0034
+    name: Volume Creation
+    description: 'Initial construction of a cloud volume (ex: AWS create-volume)'
+    link: https://attack.mitre.org/datasources/DS0034
+  - id: DS0034
+    name: Volume Deletion
+    description: 'Removal of a a cloud volume (ex: AWS delete-volume)'
+    link: https://attack.mitre.org/datasources/DS0034
+  - id: DS0034
+    name: Volume Enumeration
+    description: 'An extracted list of available volumes within a cloud environment
+      (ex: AWS describe-volumes)'
+    link: https://attack.mitre.org/datasources/DS0034
+  - id: DS0034
+    name: Volume Metadata
+    description: Contextual data about a cloud volume and activity around it, such
+      as id, type, state, and size
+    link: https://attack.mitre.org/datasources/DS0034
+  - id: DS0034
+    name: Volume Modification
+    description: 'Changes made to a cloud volume, including its settings and control
+      data (ex: AWS modify-volume)'
+    link: https://attack.mitre.org/datasources/DS0034
+  - id: DS0005
+    name: WMI
+    description: 'The infrastructure for management data and operations that enables
+      local and remote management of Windows personal computers and servers(Citation:
+      Microsoft WMI System Classes)(Citation: Microsoft WMI Architecture)'
+    link: https://attack.mitre.org/datasources/DS0005
+  - id: DS0005
+    name: WMI Creation
+    description: 'Initial construction of a WMI object, such as a filter, consumer,
+      subscription, binding, or provider (ex: Sysmon EIDs 19-21)'
+    link: https://attack.mitre.org/datasources/DS0005
+  - id: DS0006
+    name: Web Credential
+    description: 'Credential material, such as session cookies or tokens, used to
+      authenticate to web applications and services(Citation: Medium Authentication
+      Tokens)(Citation: Auth0 Access Tokens)'
+    link: https://attack.mitre.org/datasources/DS0006
+  - id: DS0006
+    name: Web Credential Creation
+    description: 'Initial construction of new web credential material (ex: Windows
+      EID 1200 or 4769)'
+    link: https://attack.mitre.org/datasources/DS0006
+  - id: DS0006
+    name: Web Credential Usage
+    description: 'An attempt by a user to gain access to a network or computing resource
+      by providing web credentials (ex: Windows EID 1202)'
+    link: https://attack.mitre.org/datasources/DS0006
+  - id: DS0024
+    name: Windows Registry
+    description: 'A Windows OS hierarchical database that stores much of the information
+      and settings for software programs, hardware devices, user preferences, and
+      operating-system configurations(Citation: Microsoft Registry)'
+    link: https://attack.mitre.org/datasources/DS0024
+  - id: DS0024
+    name: Windows Registry Key Access
+    description: 'Opening a Registry Key, typically to read the associated value (ex:
+      Windows EID 4656)'
+    link: https://attack.mitre.org/datasources/DS0024
+  - id: DS0024
+    name: Windows Registry Key Creation
+    description: 'Initial construction of a new Registry Key (ex: Windows EID 4656
+      or Sysmon EID 12)'
+    link: https://attack.mitre.org/datasources/DS0024
+  - id: DS0024
+    name: Windows Registry Key Deletion
+    description: 'Removal of a Registry Key (ex: Windows EID 4658 or Sysmon EID 12)'
+    link: https://attack.mitre.org/datasources/DS0024
+  - id: DS0024
+    name: Windows Registry Key Modification
+    description: 'Changes made to a Registry Key and/or Key value (ex: Windows EID
+      4657 or Sysmon EID 13|14)'
+    link: https://attack.mitre.org/datasources/DS0024

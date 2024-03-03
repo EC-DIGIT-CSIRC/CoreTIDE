@@ -1,0 +1,297 @@
+description: Logs collection point where  relevant data can be extracted and used to build detections.
+name: Data Collection 
+field: collection
+icon: 📢
+keys:
+  - id: COL0001
+    name: Azure Active Directory Audit Logs
+    description: Azure Active Directory reporting contains the history of sign-in activity and audit trail of changes made within a particular tenant.
+    link: https://docs.microsoft.com/en-us/azure/active-directory/reports-monitoring/concept-audit-logs
+  - id: COL0002
+    name: Azure Activity Log
+    description: The Azure Activity log includes service health records along with records on any configuration changes made to the resources in your Azure subscription. The Activity log is available to all Azure resources and represents their external view.
+    link: https://docs.microsoft.com/en-us/azure/azure-monitor/essentials/activity-log
+  - id: COL0003
+    name: Azure Service Health
+    description: Azure Service Health provides information about the health of the Azure services in your subscription that your application and resources rely on.
+    link: https://docs.microsoft.com/en-us/azure/service-health/service-notifications
+  - id: COL0005
+    name: Azure Platform Metrics
+    description: Most Azure services will send platform metrics that reflect their performance and operation directly to the metrics database. The specific metrics will vary for each type of resource.
+    link: https://docs.microsoft.com/en-us/azure/azure-monitor/essentials/metrics-supported 
+  - id: COL0006
+    name: Azure Resource Logs
+    description: Resource logs provide insights into the internal operation of an Azure resource. Resource logs are created automatically, but you must create a diagnostic setting to specify a destination for them to collected for each resource.
+    link: https://docs.microsoft.com/en-us/azure/azure-monitor/essentials/resource-logs
+  - id: COL0007
+    name: Azure Monitor Agent
+    description: Install the Azure Monitor agent for comprehensive monitoring and management of your Windows or Linux virtual machines, scale sets and Arc-enabled servers (resources in other clouds or on-premises with Azure Arc installed, at no additional cost).
+    link: https://docs.microsoft.com/en-us/azure/azure-monitor/agents/azure-monitor-agent-overview?tabs=PowerShellWindows
+  - id: COL0008
+    name: Azure Diagnostic Extension
+    description: Enabling the Azure Diagnostics extension for Azure Virtual machines allows you to collect logs and metrics from the guest operating system of Azure compute resources including Azure Cloud Service (classic) Web and Worker Roles, Virtual Machines, virtual machine scale sets, and Service Fabric.
+    link: https://docs.microsoft.com/en-us/azure/azure-monitor/agents/diagnostics-extension-overview
+  - id: COL0009
+    name: Azure VM Insight
+    description: VM insights provides a customized monitoring experience for virtual machines providing features beyond core Azure Monitor functionality. It requires a Dependency Agent on Windows and Linux virtual machines that integrates with the Log Analytics agent to collect discovered data about processes running on the virtual machine and external process dependencies.
+    link: https://docs.microsoft.com/en-us/azure/azure-monitor/vm/vminsights-overview
+  - id: COL0010
+    name: Azure Application Insight
+    description: When you enable Application Insights for an application by installing an instrumentation package, it collects metrics and logs related to the performance and operation of the application. Application Insights stores the data it collects in the same Azure Monitor data platform used by other data sources. It includes extensive tools for analyzing this data, but you can also analyze it with data from other sources using tools such as Metrics Explorer and Log Analytics.
+    link: https://docs.microsoft.com/en-us/azure/azure-monitor/app/app-insights-overview
+  - id: COL0011
+    name: Azure Monitor Logs
+    description: Monitoring solutions collect data into Azure Monitor logs where it may be analyzed using the query language or views that are typically included in the solution.
+    link: https://docs.microsoft.com/en-us/azure/azure-monitor/logs/data-platform-logs
+  - id: COL0012
+    name: Azure Container Insights
+    description: Container insights provides a customized monitoring experience for Azure Kubernetes Service (AKS). It collects additional data about these resources described in the following table.
+    link: https://docs.microsoft.com/en-us/azure/azure-monitor/containers/container-insights-onboard
+  - id: COL0013
+    name: Microsoft Defender for Cloud
+    description: Microsoft Defender for Cloud stores the security data it collects in a Log Analytics workspace which allows it to be analyzed with other log data collected by Azure Monitor.
+    link: https://docs.microsoft.com/en-us/azure/defender-for-cloud/faq-data-collection-agents
+  - id: COL0014
+    name: Microsoft 365 Basic Audit
+    description: Basic Audit provides with you with the ability to log and search for audited activities and power your forensic, IT, compliance, and legal investigations.
+    link: https://docs.microsoft.com/en-us/microsoft-365/compliance/set-up-basic-audit?view=o365-worldwide
+  - id: COL0015
+    name: Microsoft 365 Advanced Audit
+    description: Advanced Audit builds on the capabilities of Basic Audit by providing audit log retention policies, longer retention of audit records, high-value crucial events, and higher bandwidth access to the Office 365 Management Activity API.
+    link: https://docs.microsoft.com/en-us/microsoft-365/compliance/set-up-advanced-audit?view=o365-worldwide
+  - id: COL0016
+    name: Carbon Black EDR Connectors
+    description: Events and audit logs from Carbon Black endpoint protection made available to other platforms for Log Ingestion
+    link: https://developer.carbonblack.com/reference/enterprise-response/connectors/
+  - id: COL0017
+    name: Sysmon Logs
+    description: System Monitor (or Sysmon) is a free software tool/device driver from Microsoft which monitors and logs system activity to the Windows event log. It creates logs of various activities like process creation, network connection, file creation or modification, driver loads, raw disk access, remote threads, process memory access in one single place.
+    link: https://docs.microsoft.com/en-us/sysinternals/downloads/sysmon
+  - id: COL0018
+    name: Windows Security Logs
+    description: Log that maintains security-related activities based on the system’s audit policy. It is a great tool to view attempted and successful unauthorized activities and to troubleshoot problems. The logs and policies are governed by the system administrator which means that he can delete specific logs, separate rights, and even clear the log. That means once the administrator’s account has been compromised, Security logs cannot be trusted. It also lists the login/logout activities, giving the account and IP address by which the system was logged into, privilege and policy changes, system events, and process tracking.
+    link:  https://docs.microsoft.com/en-us/windows/security/threat-protection/auditing/view-the-security-event-log
+  - id: COL0019
+    name: Windows Systems Logs
+    description: Event log of application and system events and also includes some error or warning messages. It helps in almost all kinds of troubleshooting for different windows problems. It records logs like Windows system components, like drivers and built-in interface components, and logs related to programs installed on the system. It also keeps track of logs of the system’s boot time. It uses event identifiers (IDs) to uniquely define the identifiable events that the computer can encounter.
+    link: https://docs.microsoft.com/en-us/windows/win32/eventlog/event-logging
+  - id: COL0020
+    name: PCAP Logs
+    description: Packet Capture (PCAP) is an Application Programming Interface(API) for collecting network traffic. It is used to capture packets and even save those captures to a file and reading files that contain saved packets. Applications include network statistics collection, security monitoring, and network debugging. It is supported across multiple software tools where the saved packed files can be fed to get analyzed user-friendly outputs. It can examine IP addresses, policies, domain names, IP types, timestamp, source ports, and much more.
+    link: https://kb.acronis.com/pcaplog
+  - id: COL0021
+    name: Firewall Logs
+    description: Documents how the firewall deals with traffic types and provides insights into source and destination IP addresses, protocols, and port numbers. It also indicates when malicious activity is present in the network by identifying suspicious connections. Windows firewall log tells the time and date of the connection, kind of connection (TCP/UDP), the port used on your computer, dropped, or accepted packet. It also allows planning the bandwidth requirements based on the bandwidth usage across firewalls. It provides real-time information to the network administrator to find out any suspicious activity.
+    link: https://www.exabeam.com/siem-guide/siem-concepts/firewall-logs/#:~:text=The%20logging%20feature%20records%20how,to%20help%20investigate%20an%20attack.
+  - id: COL0022
+    name: Proxy Logs
+    description: Contains the logs of users and applications that access your network. Along with website requests from users it also includes application or service requests. The information they track includes date and time, HTTP protocol version, the HTTP request method, content type, user agent, authenticated username of the client, client IP and source port, proxy action, requested resource, and a lot more. 
+    link: https://www.vanimpe.eu/2016/10/21/proxy-server-logs-incident-response/#:~:text=Proxy%20server%20logs%20contain%20the,(for%20example%20application%20updates).
+  - id: COL0023
+    name: Browser History Logs
+    description: Map of what and when the user visited different webpages and applications. They can leak a substantial amount of data to determine what origins has the user been visiting. It can be exploited using various techniques like CSS color selectors (mostly patched in newer browsers), using cached data timing, by browser APIs, plugins can be hacked or network communications can be intercepted outside the machine. The browser logs tell the forensics the websites visited, timestamp, no. of times it was accessed, was data entered on it, or was something downloaded.
+    link: https://nxlog.co/documentation/nxlog-user-guide/browser-history.html
+  - id: COL0024
+    name: DNS Logs 
+    description: Provides extremely detailed information about DNS data that is sent and received by the DNS server. DNS attacks include DNS hijacking, DNS tunneling, Denial-of-Service (DoS) attacks, Command and control, and cache poisoning. Hence, DNS logs help to identify information related to these attacks so that source could be found out. These include detailed data on records requested, client IP, request flags, zone transfers, query logs, rate timing, and DNS signing.
+    link: https://nxlog.co/whitepapers/dns-logging
+  - id: COL0025
+    name: Microsoft Defender for Endpoint
+    description: Microsoft Defender for Endpoint is an enterprise endpoint security platform designed to help enterprise networks prevent, detect, investigate, and respond to advanced threats.
+    link: https://docs.microsoft.com/en-us/windows/win32/etw/about-event-tracing
+  - id: COL0026
+    name: Event Tracing for Windows 
+    description: Event Tracing for Windows (ETW) provides application programmers the ability to start and stop event tracing sessions, instrument an application to provide trace events, and consume trace events. Trace events contain an event header and provider-defined data that describes the current state of an application or operation.
+  - id: COL0027
+    name: Exchange Mailbox Audit Logging
+    description: Mailbox audit logs are generated for each mailbox that has mailbox audit logging enabled. Log entries are stored in the Recoverable Items folder in the audited mailbox, in the Audits subfolder. This ensures that all audit log entries are available from a single location, regardless of which client access method was used to access the mailbox or which server or computer an administrator uses to access the mailbox audit log. If you move a mailbox to another Mailbox server, the mailbox audit logs for that mailbox are also moved because they're located in the mailbox.
+    link: https://docs.microsoft.com/en-us/exchange/policy-and-compliance/mailbox-audit-logging/mailbox-audit-logging?view=exchserver-2019 
+  - id: COL0028
+    name: AWS Cloudtrail
+    description: AWS CloudTrail is a service that enables governance, compliance, operational auditing, and risk auditing of your AWS account. With CloudTrail, you can log, continuously monitor, and retain account activity related to actions across your AWS infrastructure. CloudTrail provides event history of your AWS account activity, including actions taken through the AWS Management Console, AWS SDKs, command line tools, and other AWS services. This event history simplifies security analysis, resource change tracking, and troubleshooting.
+    link: https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html
+  - id: COL0029
+    name: Amazon CloudWatch Events
+    description: Amazon CloudWatch Events delivers a near real-time stream of system events that describe changes in AWS resources, or when API calls are published by AWS CloudTrail. Using simple rules that you can quickly set up, you can match events and route them to one or more target functions or streams. CloudWatch Events becomes aware of operational changes as they occur. CloudWatch Events can respond to these operational changes and take corrective action as necessary, by sending messages to respond to the environment, activating functions, making changes, and capturing state information. Some security services, such as Amazon GuardDuty, produce their output in the form of CloudWatch Events.
+    link: https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/WhatIsCloudWatchEvents.html
+  - id: COL0030
+    name: AWS Config
+    description: AWS Config is a service that enables you to assess, audit, and evaluate the configurations of your AWS resources. Config continuously monitors and records your AWS resource configurations and enables you to automate the evaluation of recorded configurations against desired configurations. With Config, you can review changes in configurations and relationships between AWS resources, manually or automatically. You can review detailed resource configuration histories, and determine your overall compliance against the configurations specified in your internal guidelines. This enables you to simplify compliance auditing, security analysis, change management, and operational troubleshooting.
+    link: https://docs.aws.amazon.com/config/latest/developerguide/WhatIsConfig.html
+  - id: COL0031
+    name: Amazon S3 Access 
+    description: If you store sensitive information in an Amazon S3 bucket, you can enable S3 access logs to record every upload, download, and modification to that data. This log is separate from, and in addition to, the CloudTrail logs that record changes to the bucket itself (such as changing access policies and lifecycle policies).
+    link: https://docs.aws.amazon.com/AmazonS3/latest/userguide/ServerLogs.html
+  - id: COL0032
+    name: Amazon CloudWatch 
+    description: You can use Amazon CloudWatch Logs to monitor, store, and access your log files (such as your operating system, application, and custom log files) from your Amazon Elastic Compute Cloud (Amazon EC2) instances using the CloudWatch Logs agent. Additionally, Amazon CloudWatch Logs can capture logs from AWS CloudTrail, Amazon Route 53 DNS Queries, VPC Flow Logs, Lambda functions, and other sources. You can then retrieve the associated log data from CloudWatch Logs.
+    link:  https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/WhatIsCloudWatchLogs.html
+  - id: COL0033
+    name: Amazon VPC Flow 
+    description: VPC flow logs enable you to capture information about the IP traffic going to and from network interfaces in your VPC. After you've created a flow log, you can view and retrieve its data in Amazon CloudWatch Logs. VPC flow logs can help you with a number of tasks. For example, you can use flow logs to troubleshoot why specific traffic is not reaching an instance, which can help you diagnose overly restrictive security group rules. You can also use flow logs as a security tool to monitor the traffic to your instance.
+    link: https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/WhatIsCloudWatchLogs.html
+  - id: COL0034
+    name: AWS WAF 
+    description: AWS WAF now supports full logging of all web requests that are inspected by the service. You can store these logs in Amazon S3 for compliance and auditing needs, as well as to use them for debugging and additional forensics. These logs help you to understand why certain rules are triggered and why certain web requests are blocked. You can also integrate the logs with your SIEM and log analysis tools.
+    link: https://docs.aws.amazon.com/waf/latest/developerguide/waf-incident-response.html
+  - id: COL0035
+    name: AWS Application Load Balancer 
+    description: Elastic Load Balancing provides access logs that capture detailed information about requests sent to your load balancer. Each log contains information such as the time the request was received, the client's IP address, latencies, request paths, and server responses. You can use these access logs to analyze traffic patterns and troubleshoot issues.
+    link: https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-access-logs.html
+  - id: COL0036
+    name: AWS Classic Load Balancer 
+    description: Elastic Load Balancing provides access logs that capture detailed information about requests sent to your load balancer. Each log contains information such as the time the request was received, the client's IP address, latencies, request paths, and server responses. You can use these access logs to analyze traffic patterns and to troubleshoot issues.
+    link: https://docs.aws.amazon.com/elasticloadbalancing/latest/classic/access-log-collection.html
+  - id: COL0037
+    name: AWS Network Load Balancer 
+    description: Elastic Load Balancing provides access logs that capture detailed information about the TLS requests sent to your Network Load Balancer. You can use these access logs to analyze traffic patterns and troubleshoot issues.
+    link: https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-access-logs.html
+  - id: COL0038
+    name: Amazon Cloudfront 
+    description: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/logging.html
+    link: CloudFront standard logs provide detailed records about every request that’s made to a distribution. These logs are useful for many scenarios, including security and access audits.
+  - id: COL0039
+    name: Amazon EMR 
+    description: Amazon EMR provides several tools you can use to gather information about your cluster. You can access information about the cluster from the console, the CLI or programmatically. The standard Hadoop web interfaces and log files are available on the master node. You can also use monitoring services such as CloudWatch and Ganglia to track the performance of your cluster.
+    link: https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-manage-view.html
+  - id: COL0041
+    name: AWS Network Firewall 
+    description: You can configure AWS Network Firewall logging for your firewall's stateful engine. Logging gives you detailed information about network traffic, including the time that the stateful engine received a packet, detailed information about the packet, and any stateful rule action taken against the packet. The logs are published to the log destination that you've configured, where you can retrieve and view them.
+    link: https://docs.aws.amazon.com/network-firewall/latest/developerguide/firewall-logging.html
+  - id: COL0042
+    name: Amazon Route 53
+    description: You can configure Route 53 to log information about the queries that Route 53 receives, such as the domain or subdomain that was requested, the date and time of the request, and the DNS record type, such as A or AAAA.
+    link: https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/logging-monitoring.html
+  - id: COL0043
+    name: EULOGIN Authentication
+    description: Logs pertaining to authentication activity.
+    link: https://conf.s.cec.eu.int/display/SOCRATES/EULOGIN-0+eulogin+authentication+JSON
+  - id: COL0044
+    name: Sysdig Policy Events
+    description: Policy alerts based on Falco engine, Kubernetes audit logs and cloud logs.
+    links: https://docs.sysdig.com/en/docs/sysdig-secure/secure-events/#secure-events
+  - id: COL0045
+    name: Sysdig Platform Audit
+    description: Audit log containing actions performed on Sysdig platform.
+    links: https://docs.sysdig.com/en/docs/administration/sysdig-platform-audit/
+  - id: COL0046
+    name: Sysdig Activity Audit
+    description: This stream includes executed commands, network activity, file activity, and kube exec requests to the Kubernetes API performed in monitored containers.
+    link: https://docs.sysdig.com/en/docs/sysdig-secure/investigate/activity-audit/
+  - id: COL0047
+    name: Sysdig Benchmark Events
+    description: Compliance reporting based on industry benchmarks like CIS. 
+    link: https://docs.sysdig.com/en/docs/sysdig-secure/posture/compliance/benchmarks-legacy/
+  - id: COL0048
+    name: Sysdig Host Scanning
+    description: Vulnerabilities detected on nodes monitored by Sysdig agent.
+    link: https://docs.sysdig.com/en/docs/sysdig-secure/scanning/host-scanning/
+  - id: COL0049
+    name: Sysdig Vulnerability Scanning
+    description: Vulnerability data collected from containers scanned by Sysdig engine on running clusters, CI/CD pipelines and in container registries.
+    link: https://docs.sysdig.com/en/docs/sysdig-secure/scanning/new-scanning-engine/
+  - id: COL0050
+    name: Falco engine alerts
+    description: Falco can detect and alert on any behavior that involves making Linux system calls.
+    link: https://falco.org/docs/
+  - id: COL0051
+    name: Kubernetes audit log
+    description: Activities generated by users, by applications that use the Kubernetes API, and by the control plane itself.
+    link: https://kubernetes.io/docs/tasks/debug/debug-cluster/audit/
+  - id: COL0052
+    name : Snyk Notifications
+    description: Snyk is a DevSecOps scanner which discovers new vulnerabilities in code repositories.
+    link: https://docs.snyk.io/features/user-and-group-management/notifications
+  - id: COL0053
+    name: GitKraken Activity Logs
+    description: Git actions made to repositories and all application actions made in GitKraken Client.
+    link: https://help.gitkraken.com/gitkraken-client/activity-logs/
+  - id: COL0053
+    name: Sonarcloud
+    description: Sonarcloud is an cloud platform developed by SonarSource for continuous inspection of code quality to perform automatic reviews with static analysis of code.
+    link: https://www.sonarsource.com/products/sonarcloud/
+  - id: COL0054
+    name: GitHub Audit Logs
+    description: GitHub is an cloud platform developed by Microsoft as a common code repository
+    link: https://www.github.com
+  - id: COL0055
+    name: Proofpoint Email Scanner Logs
+    description: Proofpoint mail scanning SaaS service 
+    link: https://www.proofpoint.com
+  - id: COL0056
+    name: Fireeye Mail Scanner Logs
+    description: Fireeye mail scanning device
+    link: https://www.fireeye.com
+  - id: COL0057
+    name: Thinkst Canary Incidents
+    description: Incidents from Thinkst Canaries and honeytokens
+    link: https://canary.tools
+  - id: COL0058
+    name: Reverse Proxy Logs
+    description: Contains the access logs of clients and applications that access your web servers. The information in RPS includes date and time, HTTP protocol version, the HTTP request method, content type, user agent, client IP and source port, proxy action, requested resource, and a lot more.  
+    link: https://en.wikipedia.org/wiki/Reverse_proxy
+  - id: COL0059
+    name: Web Application Logs (WAF)
+    description: Contains the access logs of clients and applications that access your web servers. The information in RPS includes date and time, HTTP protocol version, the HTTP request method, content type, user agent, client IP and source port, proxy action, requested resource, and a lot more.  
+    link: https://owasp.org/www-community/Web_Application_Firewall
+  - id: COL0060
+    name: Privx privilege access management (PAM) audit logs
+    description: audit logs from Privx solution.  
+    link: https://privx.docs.ssh.com/docs/viewing-audit-data
+  - id: COL0061
+    name: Hashicorp secret management (SAM) audit logs
+    description: Audit devices are the components in Vault that collectively keep a detailed log of all requests and response to Vault. Because every operation with Vault is an API request/response, when using a single audit device, the audit log contains every authenticated interaction with Vault, including errors.  
+    link: https://developer.hashicorp.com/vault/docs/audit
+  - id: COL0062
+    name: Bitbucket audit logs
+    description: The auditing feature tracks key activities in Bitbucket Data Center and Server, allowing administrators to get an insight into the way Bitbucket is being used. The audit system can be used to identify authorized and unauthorized changes, or suspicious activity over a period of time. The audit log experience lets you search and filter the log for details, along with utilizing grouped coverage areas for clarity.
+    link: https://confluence.atlassian.com/bitbucketserver/audit-log-events-776640423.html
+  - id: COL0063
+    name: Gitlab audit logs
+    description: Audit events to track important events, including who performed the related action and when.
+    link: https://docs.gitlab.com/ee/administration/audit_events.html
+  - id: COL0064
+    name: Bamboo audit logs
+    description: Track changes to the configuration of your Bamboo server, as well as track changes to any plans it may be running.
+    link: https://confluence.atlassian.com/bamboo/tracking-changes-to-your-bamboo-server-405046591.html
+  - id: COL0065
+    name: Network appliance audit logs
+    description: Log collection of audit logs related to network appliances. Their availability depends on the vendor and would require research into vendor documentation. Network appliance audit logs should track key activity at management level including authentication, configuration changes. They must contain network-related information such as source IP or source DNS host. They should contain session identifiers to track activities related to a given (src,account,dest)
+    link: https://en.wikipedia.org/wiki/Audit_trail
+  - id: COL0066
+    name: MobileIron Alerts
+    description: MobileIron Mobile Threat Defense (MTD) allows to protect both corporate and BYOD Android and iOS devices from threats.
+    link: https://rs.ivanti.com/ivi/2659/3e4f9360b99f.pdf
+  - id: COL0067
+    name: MobileIron Audit Logs
+    description: Using log entries, the Admin Portal tracks status and operations for each managed device.
+    link: https://help.ivanti.com/mi/help/en_us/CORE/11.0.0.0/dmgw/Content/DMGfiles/About_logs.htm
+  - id: COL0068
+    name: Zimperium Alerts
+    description: Designed to protect mobile devices from advanced persistent threats across device, network, phishing and app attack categories.
+    link: https://www.zimperium.com/mtd/
+  - id: COL0069
+    name: Zimperium Audit Logs
+    description: Zimperium Audit Logs are currently available in zConsole.
+    link: https://www.zimperium.com/platform/
+  - id: COL00070
+    name: Linux Auditd logs
+    description: Linux auditd is a userspace utility that provides system auditing for Linux systems. It monitors and records system events related to security, user authentication, and other system activities.
+    link: https://access.redhat.com/documentation/es-es/red_hat_enterprise_linux/7/html/security_guide/sec-understanding_audit_log_files
+  - id: COL00071
+    name: Linux secure (authentication) logs
+    description: /var/log/secure or /var/log/auth is a system log file on Linux systems that captures authentication-related messages. It includes information about user logins, authentication failures, and other security-related events.
+    link: https://www.crowdstrike.com/guides/linux-logging/
+  - id: COL00072
+    name: Linux general system messages
+    description: /var/log/messages is a system log file on Linux systems that contains general system messages. It includes information about various system events, errors, and warnings.
+    link: https://www.crowdstrike.com/guides/linux-logging/
+  - id: COL00073
+    name: Pulse Connect Secure logs
+    description: Pulse Connect Secure is a secure remote access solution that provides VPN (Virtual Private Network) capabilities for connecting remote users to corporate networks securely.
+    link: https://help.ivanti.com/ps/help/en_US/PCS/9.1R13/pcsag/logging_n_monitoring.htm
+  - id: COL00074
+    name: Pulse Connect Secure Web Logs 
+    description: Pulse Connect Secure Web Logs pertain to the logs generated by the web-related activities on the Pulse Connect Secure platform. These logs may include information about user web sessions, access attempts, and other web-related events.
+    link: https://help.ivanti.com/ps/help/en_US/PCS/9.1R13/pcsag/logging_n_monitoring.htm
+

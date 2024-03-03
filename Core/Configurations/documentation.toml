@@ -1,0 +1,105 @@
+scope = [ "tam", "tvm", "cdm", "bdr" ]
+skip_model_keys = ["description",
+                            "guidelines",
+                            "aliases",
+                            "terrain",
+                            "tuning",
+                            "att&ck",
+                            "actors",
+                            "vectors",
+                            "justification",
+                            "chaining",
+                            "cve",
+                            "att&ck_groups"]
+skip_vocabularies = ["mitigation",
+                    "logsources",
+                    "nist",
+                    "att&ck"]
+
+[cve]
+default_db_link = "https://nvd.nist.gov/vuln/detail/"
+retrieve_details = true
+proxy = true
+
+[wiki]
+wiki_link = "https://git.s.cec.eu.int/catch/ec-tide/-/wikis"
+
+[object_names]
+tam = "Threat Actors"
+tvm = "Threat Vectors"
+cdm = "Detection Models"
+mdr = "Detection Rules"
+bdr = "Business Requests"
+rpt = "Intelligence Reports"
+lookup_metadata = "Lookup Metadata"
+
+[titles]
+tam = "Threat Actor Models Data Model Reference"
+tvm = "Threat Vector Models Data Model Reference"
+cdm = "Cyber Detection Models Data Model Reference"
+mdr = "Managed Detection Rules Data Model Reference"
+bdr = "Business Detection Rules Data Model Reference"
+
+[icons]
+tam = "👺"
+tvm = "☣️"
+cdm = "🛡️"
+mdr = "🚨"
+bdr = "🏛️"
+vocab = "📒"
+metaschema = "🏗️"
+lookups = "🔎"
+metadata = "🗃️"
+lookup_metadata = "🔣"
+id = "🔑"
+uuid = "🔑"
+name = "🎫"
+title = "🎫"
+references = "🔗"
+meta = "✍"
+version = "🏷️"
+created = "🗓️"
+modified = "🗓️"
+configurations = "🛠️"
+author = "👩‍💻"
+priority = "❗"
+actor = "👹"
+threat = "☣️"
+detection = "🛡️"
+alert = "🚨"
+request = "🏛️"
+description = "🔬"
+affiliations = "👥"
+aliases = "🍀"
+guidelines = "🧪"
+tuning = "🔧"
+terrain = "🖥️"
+playbook = "👣"
+home = "⚜️"
+misp = "🌌"
+stix = "☢️"
+cve = "❤️‍🩹"
+link = "🔗"
+logsources = "📑"
+fields = "🔖"
+atomics = "⚛️"
+systems = "🔩"
+subschemas = "🧩"
+tags = "🏷️"
+contributors = "👥"
+scheduling = "⏲"
+timeframe = "⏱️"
+frequency = "⏱"
+lookback = "⌛"
+duration = "⌛"
+throttling = "🗜️"
+threshold = "⚖️"
+query = "🔎"
+
+[indexes]
+tam = "Threat Actors Navigation Index"
+tvm = "Threat Vectors Navigation Index"
+cdm = "Detection Models Navigation Index"
+bdr = "Business Detection Requests Navigation Index"
+mdr = "Detection Rules Navigation Index"
+

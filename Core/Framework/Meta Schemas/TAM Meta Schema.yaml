@@ -1,0 +1,184 @@
+title: TAM Schema validator
+description: A Threat Actor Model is ...
+
+$schema: http://json-schema.org/draft-07/schema#
+additionalProperties: false
+
+required:
+  - id
+  - name
+  - criticality
+  - actor
+
+tide.template.force-required:
+  - metadata
+
+anyOf:
+  - required:
+    - metadata
+  - required:
+    - meta
+
+properties:
+
+  id:
+    title: Model Identifier
+    type: string
+    description: Identifier as TAMXXXX where XXXX is incremented from the previous model
+    pattern: '(TAM)\d{4}'
+    example: TAM0001
+    default: TAM0000
+
+  name: 
+    title: Actor name
+    type: string
+    description: Common name of the threat actor
+    example: NOBELIUM
+
+  criticality: 
+    title: Actor criticality
+    type: string
+    tide.vocab: true
+    description: Objective urgency to survey the attacker's activity
+    example: Emergency
+
+  references:
+    tide.meta.definition: true
+
+  meta:
+    tide.template.hide: true
+    tide.meta.deprecation: Use metadata keyword instead
+    tide.meta.definition: metadata
+
+  metadata:
+    tide.meta.definition: true
+
+  actor:
+
+    title: Actor Data
+    type: object
+    description: Technical details regarding the actor's operations
+    required:
+      - tier
+      - sophistication
+      - resources
+      - level
+      - sectors
+      - domains
+      - platforms
+      - targets
+      - objectives
+      - description
+      - att&ck
+
+
+    
+    properties:
+
+      misp: 
+        title: MISP Galaxy UUID for the actor
+        type: string
+        format: uuid
+        description: "UUID of the actor object MISP galaxy. See : https://github.com/MISP/misp-galaxy"
+        example: 323d548d-17ca-46fa-a7c7-de43302456a1
+
+      aliases:
+        title: Other known aliases
+        type: array
+        description: Public or internal reference describing the threat
+        format: string
+        example: YTRIUM
+        items:
+          type: string
+
+      att&ck.groups:
+        tide.vocab: true
+        type: string
+
+      tier: 
+        title: Threat Actor Tier
+        type: string
+        tide.vocab: true
+        description: Category within which the threat actor is best summarized, and which gives an indicator of the adversarial mindset motivated by strategic objectives.
+        example: State-sponsored
+
+      sophistication: 
+        title: Adversary Sophistication
+        type: string
+        tide.vocab: true
+        description: Threat actor sophistication vocabulary captures the skill level of a threat actor. It ranges from "none", which describes a complete novice, to "strategic", which describes an attacker who is able to influence supply chains to introduce vulnerabilities.
+        example: Innovator
+
+      resources: 
+        title: Adversary Resource Level
+        type: string
+        tide.vocab: true
+        description: Attack Resource Level is an open vocabulary that captures the general level of resources that a threat actor, intrusion set, or campaign might have access to. It ranges from individual, a person acting alone, to government, the resources of a national government.
+        example: Innovator
+
+      level: 
+        title: Threat Level
+        type: string
+        tide.vocab: true
+        description: Informed estimate of the risk level the adversary has for the organization, based on attack patterns, sophistication, victims and targets.
+        example: Goliath
+
+      affiliations: 
+        title: Affiliations
+        type: array
+        description: Known other groups or entities related to the actor
+        example: Russia Foreign Intelligence Service (SVR)
+        items:
+          type: string
+
+      sectors:
+        title: Victim Industry Sectors
+        type: array
+        tide.vocab: true
+        description: Observed sectors impacted during actor's attacks
+        example: National Government
+
+      domains:
+        title: Domains
+        type: array
+        tide.vocab: true
+        description: High-level technology domain where the actor is known to be active in
+        example: Public Cloud
+
+      targets: 
+        title: Targets
+        type: array
+        tide.vocab: true
+        description: Category of devices or services the actor is known to be targeting
+        example: Microservices
+
+      platforms: 
+        title: Platforms concerned
+        type: array
+        tide.vocab: true
+        description: Technical platforms the actor is actively exploiting
+        example: Kubernetes
+
+      objectives: 
+        title: Strategic Objectives
+        description: Believed motives behind the actor's activity
+        type: array
+        tide.vocab: true
+        example: Incapacitation
+
+      description:
+        title: Description of the threat
+        description: Details regarding the attacker's background and motivations
+        tide.template.multiline : True
+        type: string
+        example: Placeholder
+
+      att&ck: 
+        title: ATT&CK Techniques
+        type: array
+        tide.vocab: true
+        description: T-ID of the techniques known to be used by the threat actor
+        example: T1098
+        items: 
+          type: string
+          pattern: 'T\d{4}'

@@ -1,0 +1,37 @@
+name: Indicator Type
+field: indicators
+description: Define the status of the rule implementation according to use case development life cycle process.
+model: true # Id will be taken as identifier instead of name field.
+icon: 🧬
+keys:
+  - id: email
+    name: Email Address
+    icon: 📧
+    description:
+      Standard email format, such as described in [🔗 RFC 5322](https://datatracker.ietf.org/doc/html/rfc5322)
+      
+      - ✅ wave@tide.mec
+      - ✅ tide.governance@tide.babel
+      - ❌ tide@10.0.0.19
+                      
+      💡 Any Top-Level Domain (`tld`) is accepted, as long as the `user@domain.tld` format is respected.
+
+  - id: url
+    name: URL Address
+    icon: 🔗
+    description:
+      Standard URL format, such as described in [🔗 URL Living Standard](https://url.spec.whatwg.org/)
+      
+      💡 For simple domain validation with no URI, use the _domain_ instead.
+      
+      👉 Expects the standard pattern `FQDN/URI`, meaning `[ftp | http | https]://(subdomain.)domain.tld/resource`
+
+  - id: domain
+    name: Domain Name
+    icon: 🌐
+    description:
+      Standard domain name format, such as described in [🔗 RFC 1034](https://datatracker.ietf.org/doc/html/rfc1034)
+
+      💡A full FQDN (containing protocol) is not expected. For full `FQDN` + `URI`, use _url_ instead
+
+      👉 Expects the standard pattern `FQDN/URI`, meaning `[ftp | http | https]://(subdomain.)domain.tld/resource`

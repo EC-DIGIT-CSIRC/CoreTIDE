@@ -1,0 +1,1811 @@
+name: RE&CT Response Actions
+field: actions
+description: Response Action is a description of a specific atomic procedure/task
+  that has to be executed during the Incident Response. It is an initial entity that
+  is used to construct Response Playbooks.
+reference: http://detect-respond.blogspot.com/2013/03/the-pyramid-of-pain.html
+stages:
+  - Preparation
+  - Identification
+  - Containment
+  - Eradication
+  - Recovery
+  - Lessons Learned
+keys:
+  - id: RA1001
+    name: Practice
+    description: Practice in the real environment. Sharpen Response Actions within
+      your organization
+    tide.vocab.stages: Preparation
+    workflow: "Make sure that most of the Response Action has been performed on an\
+      \ internal exercise by your Incident Response Team.  \nYou need to make sure\
+      \ that when an Incident will happen, the team will not just try to follow the\
+      \ playbooks they see first time in their lives, but will be able to quickly\
+      \ execute the actual steps in **your environment**, i.e. blocking an IP address\
+      \ or a domain name.  \n"
+  - id: RA1002
+    name: Take trainings
+    description: Take training courses to gain relevant knowledge
+    tide.vocab.stages: Preparation
+    workflow: "> We do not rise to the level of our expectations. We fall to the level\
+      \ of our training.  \n\nHere are some relevant training courses that will help\
+      \ you in the Incident Response activities:  \n\n1. [Investigation Theory](https://chrissanders.org/training/investigationtheory/)\
+      \ by Chris Sanders. We recommend you to have it as a mandatory training for\
+      \ every member of your Incident Response team  \n2. [Offensive Security](https://www.offensive-security.com/courses-and-certifications/)\
+      \ trainings. We recommend [PWK](https://www.offensive-security.com/pwk-oscp/)\
+      \ to begin with  \n3. [SANS Digital Forensics & Incident Response](https://digital-forensics.sans.org/training/courses)\
+      \ trainings  \n\nOffensive Security trainings are in the list because to fight\
+      \ a threat, you need to understand their motivation, tactics, and techniques.\
+      \  \n\nAt the same time, we assume that you already have a strong technical\
+      \ background in fundamental disciplines \xE2\u20AC\u201D Networking, Operating\
+      \ Systems, and Programming.  \n"
+  - id: RA1003
+    name: Raise personnel awareness
+    description: 'Raise personnel awareness regarding phishing, ransomware, social
+      engineering,  and other attacks that involve user interaction
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: "Train users to to be aware of access or manipulation attempts by an\
+      \ adversary to reduce the risk of \nsuccessful spearphishing, social engineering,\
+      \ and other techniques that involve user interaction.\n"
+  - id: RA1004
+    name: Make personnel report suspicious activity
+    description: 'Make sure that personnel will report suspicious activity i.e. suspicious
+      emails,  links, files, activity on their computers, etc
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: "Develop a simplified, company wide-known way to contact IR team in\
+      \ case of suspicious activity on the user system.  \nMake sure that the personnel\
+      \ is aware of it, can and will use it.  \n"
+  - id: RA1005
+    name: Set up relevant data collection
+    description: 'Usually, data collection is managed by Log Management/Security Monitoring/Threat
+      Detection teams.  You need to provide them with a list of data that is critically
+      important for IR process. Most of  the time, data like DNS and DHCP logs are
+      not being collected, as their value for detection is  relatively low. You can
+      refer to the existing Response Actions (Preparation stage) to develop the list
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1006
+    name: Set up a centralized long-term log storage
+    description: 'Set up a centralized long-term log storage. This is one of the most
+      critical problems companies have nowadays. Even if there is such a system, in
+      most of the cases it stores irrelevant data or has too small retention period
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1007
+    name: Develop communication map
+    description: 'Develop a communication map for both internal (C-level, managers
+      and technical specialists from the other departments, that could be involved
+      in IR process) and external communications (law enforcement, national CERTs,
+      subject matter experts that you have lack of, etc)
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1008
+    name: Make sure there are backups
+    description: 'Make sure there are both online and offline backups. Make sure they
+      are fully operational. In the case of a successful ransomware worm attack, thats
+      the only thing that will help you to safe your critically important data
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1009
+    name: Get network architecture map
+    description: 'Get network architecture map. Usually, its managed by the Network
+      security team. It will help you to choose the containment strategy, such as
+      isolating specific network segments
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1010
+    name: Get access control matrix
+    description: 'Get Access Control Matrix. Usually, its managed by the Network security
+      team. It will help you to identify adversary opportunities, such as laterally
+      movement and so on
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1011
+    name: Develop assets knowledge base
+    description: 'Develop assets knowledge base. It will help you to compare observed
+      activity with a normal activity profile for a specific host, user or network
+      segment
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1012
+    name: Check analysis toolset
+    description: 'Make sure your toolset for analysis and management is updated and
+      fully operational. Make sure that all the required permissions have been granted
+      as well
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1013
+    name: Access vulnerability management system logs
+    description: 'Access vulnerability management system logs. It will help to identify
+      the vulnerabilities a specific host had at a specific time in the past
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1014
+    name: Connect with trusted communities
+    description: Connect with trusted communities for information exchange
+    tide.vocab.stages: Preparation
+    workflow: 'Contact other companies or information providers for getting on a ML
+      or get connected to other MISP instances.
+
+      '
+  - id: RA1101
+    name: Access external network flow logs
+    description: 'Make sure you have access to external communication Network Flow
+      logs
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: "Make sure that there is a collection of Network Flow logs for external\
+      \ communication (from corporate assets to the Internet) configured.  \nIf there\
+      \ is no option to configure it on a network device, you can install a special\
+      \ software on each endpoint and collect it from them.  \n\nWarning:  \n\n- There\
+      \ is a feature called [\"NetFlow Sampling\"](https://www.plixer.com/blog/how-accurate-is-sampled-netflow/),\
+      \ that eliminates the value of the Network Flow logs for some of the tasks,\
+      \ such as \"check if some host communicated to an external IP\". Make sure it's\
+      \ disabled or you have an alternative way to collect Network Flow logs  \n"
+  - id: RA1102
+    name: Access internal network flow logs
+    description: 'Make sure you have access to internal communication Network Flow
+      logs
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1103
+    name: Access internal HTTP logs
+    description: 'Make sure you have access to internal communication HTTP logs
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1104
+    name: Access external HTTP logs
+    description: 'Make sure you have access to external communication HTTP logs
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: "Make sure that there is a collection of HTTP connections logs for external\
+      \ communication (from corporate assets to the Internet) configured.  \n"
+  - id: RA1105
+    name: Access internal DNS logs
+    description: 'Make sure you have access to internal communication DNS logs
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1106
+    name: Access external DNS logs
+    description: 'Make sure you have access to external communication DNS logs
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: "Make sure that there is a collection of DNS logs for external communication\
+      \ (from corporate assets to the Internet) configured.  \nIf there is no option\
+      \ to configure it on a network device/DNS Server, you can install a special\
+      \ software on each endpoint and collect it from them.  \n\nWarning:  \n\n- Make\
+      \ sure that there are both DNS query and answer logs collected. It's quite hard\
+      \ to configure such a collection on MS Windows DNS server and ISC BIND. Sometimes\
+      \ it much easier to use 3rd party solutions to fulfill this requirement.  \n\
+      - Make sure that DNS traffic to the external (public) DNS servers is blocked\
+      \ by the Border Firewall. This way, corporate DNS servers is the only place\
+      \ assets can resolve the domain names.  \n"
+  - id: RA1107
+    name: Access VPN logs
+    description: 'Make sure you have access to VPN logs
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1108
+    name: Access DHCP logs
+    description: 'Make sure you have access to DHCP logs
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1109
+    name: Access internal packet capture data
+    description: 'Make sure you have access to internal communication Packet Capture
+      data
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1110
+    name: Access external packet capture data
+    description: 'Make sure you have access to external communication Packet Capture
+      data
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1111
+    name: Get ability to block external IP address
+    description: 'Make sure you have the ability to block an external IP address from
+      being accessed by corporate assets
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: "Make sure you have the ability to create a policy rule in one of the\
+      \ listed Mitigation Systems that will you to block an external IP address from\
+      \ being accessed by corporate assets.  \n\nWarning:  \n\n- Make sure that using\
+      \ the listed systems (1 or multiple) you can control access to the internet\
+      \ of all assets in the infrastructure. In some cases, you will need a guaranteed\
+      \ way to block an external IP address from being accessed by corporate assets\
+      \ completely. If some of the assets are not under the management of the listed\
+      \ Mitigation Systems, (so they can access the internet bypassing these systems),\
+      \ you will not be able to fully achieve the final objective of the Response\
+      \ Action.  \n"
+  - id: RA1112
+    name: Get ability to block internal IP address
+    description: 'Make sure you can block an internal IP address from being accessed
+      by corporate assets
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1113
+    name: Get ability to block external domain
+    description: 'Make sure you have the ability to block an external domain name
+      from being accessed by corporate assets
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: "Make sure you have the ability to create a policy rule or a specific\
+      \ configuration in one of the listed Mitigation Systems that will you to block\
+      \ an external domain name from being accessed by corporate assets.  \n\nWarning:\
+      \  \n\n- Make sure that using the listed systems (1 or multiple) you can control\
+      \ access to the internet of all assets in the infrastructure. In some cases,\
+      \ you will need a guaranteed way to block an external domain name from being\
+      \ accessed by corporate assets completely. If some of the assets are not under\
+      \ the management of the listed Mitigation Systems, (so they can access the internet\
+      \ bypassing these systems), you will not be able to fully achieve the final\
+      \ objective of the Response Action.  \n"
+  - id: RA1114
+    name: Get ability to block internal domain
+    description: 'Make sure you can block an internal domain name from being accessed
+      by corporate assets
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1115
+    name: Get ability to block external URL
+    description: 'Make sure you have the ability to block an external URL from being
+      accessed by corporate assets
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: "Make sure you have the ability to create a policy rule or a specific\
+      \ configuration in one of the listed Mitigation Systems that will you to block\
+      \ an external URL from being accessed by corporate assets.  \n\nWarning:  \n\
+      \n- Make sure that using the listed systems (1 or multiple) you can control\
+      \ access to the internet of all assets in the infrastructure. In some cases,\
+      \ you will need a guaranteed way to block an external URL from being accessed\
+      \ by corporate assets completely. If some of the assets are not under the management\
+      \ of the listed Mitigation Systems, (so they can access the internet bypassing\
+      \ these systems), you will not be able to fully achieve the final objective\
+      \ of the Response Action.  \n"
+  - id: RA1116
+    name: Get ability to block internal URL
+    description: 'Make sure you can block an internal URL from being accessed by corporate
+      assets
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1117
+    name: Get ability to block port external communication
+    description: 'Make sure you can block a network port for external communications
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1118
+    name: Get ability to block port internal communication
+    description: 'Make sure you can block a network port for internal communications
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1119
+    name: Get ability to block user external communication
+    description: 'Make sure you can block a user for external communications
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1120
+    name: Get ability to block user internal communication
+    description: 'Make sure you can block a user for internal communications
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1121
+    name: Get ability to find data transferred by content pattern
+    description: 'Make sure you have the ability to find data transferred at a particular
+      time in the past by its content pattern (i.e. specific string, keyword, binary
+      pattern etc)
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1122
+    name: Get ability to block data transferring by content pattern
+    description: 'Make sure you have the ability to block data transferring by its
+      content pattern (i.e. specific string, keyword, binary pattern etc)
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1123
+    name: Get ability to list data transferred
+    description: 'Make sure you have the ability to list the data that is being transferred
+      at the moment or at a particular time in the past
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1124
+    name: Get ability to collect transferred data
+    description: 'Make sure you have the ability to collect the data that is being
+      transferred at the moment or at a particular time in the past
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1125
+    name: Get ability to identify transferred data
+    description: 'Make sure you have the ability to identify the data that is being
+      transferred at the moment or at a particular time in the past (i.e. its content,
+      value)
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1126
+    name: Find data transferred by content pattern
+    description: 'Make sure you have the ability to find the data that is being transferred
+      at the moment or at a particular time in the past by its content pattern
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1127
+    name: Get ability to analyse user-agent
+    description: 'Make sure you have the ability to analyse an User-Agent request
+      header
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1128
+    name: Get ability to list Firewall rules
+    description: Make sure you have the ability to list firewall rules
+    tide.vocab.stages: Preparation
+    workflow: "Make sure you have the ability to list firewall rules on a particular\
+      \ firewall. \n"
+  - id: RA1201
+    name: Get ability to list users opened email message
+    description: 'Make sure you have the ability to list users who opened a particular
+      email message
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: 'Make sure you have the ability to list users who opened/read a particular
+      email message using the Email Server''s functionality.
+
+      '
+  - id: RA1202
+    name: Get ability to list email message receivers
+    description: 'Make sure you have the ability to list receivers of a particular
+      email message
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: 'Make sure you have the ability to list receivers of a particular email
+      message using the Email Server''s functionality.
+
+      '
+  - id: RA1203
+    name: Get ability to block email domain
+    description: 'Make sure you have the ability to block an email domain
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: "Make sure you have the ability to block an email domain on an Email\
+      \ Server using its native filtering functionality.  \n"
+  - id: RA1204
+    name: Get ability to block email sender
+    description: 'Make sure you have the ability to block an email sender
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: "Make sure you have the ability to block an email sender on an Email\
+      \ Server using its native filtering functionality.  \n"
+  - id: RA1205
+    name: Get ability to delete email message
+    description: 'Make sure you have the ability to delete an email message
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: 'Make sure you have the ability to delete an email message from an Email
+      Server and users'' email boxes using its native functionality.
+
+      '
+  - id: RA1206
+    name: Get ability to quarantine email message
+    description: 'Make sure you have the ability to quarantine an email message
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: "Make sure you have the ability to quarantine an email message on an\
+      \ Email Server using its native functionality.  \n"
+  - id: RA1207
+    name: Get ability to collect email message
+    description: 'Make sure you have the ability to collect an email message
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1208
+    name: Get ability to analyse email address
+    description: 'Make sure you have the ability to analyse an email address
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1301
+    name: Get ability to list files created
+    description: 'Make sure you have the ability to list files that have been created
+      at a particular time in the past
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1302
+    name: Get ability to list files modified
+    description: 'Make sure you have the ability to list files that have been modified
+      at a particular time in the past
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1303
+    name: Get ability to list files deleted
+    description: 'Make sure you have the ability to list files that have been deleted
+      at a particular time in the past
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1304
+    name: Get ability to list files downloaded
+    description: 'Make sure you have the ability to list files that have been downloaded
+      from the internet at a particular time in the past
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1305
+    name: Get ability to list files with tampered timestamps
+    description: 'Make sure you have the ability to list files with a tampered timestamp
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1306
+    name: Get ability to find file by path
+    description: 'Make sure you have the ability to find a file by its path (including
+      its name)
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1307
+    name: Get ability to find file by metadata
+    description: 'Make sure you have the ability to find file by its metadata (i.e.
+      signature, permissions, MAC times)
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1308
+    name: Get ability to find file by hash
+    description: 'Make sure you have the ability to find a file by its hash
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1309
+    name: Get ability to find file by format
+    description: 'Make sure you have the ability to find a file by its format
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1310
+    name: Get ability to find file by content pattern
+    description: 'Make sure you have the ability to find a file by its content pattern
+      (i.e. specific string, keyword, binary pattern etc)
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1311
+    name: Get ability to collect file
+    description: 'Make sure you have the ability to collect a specific file from a
+      (remote) host or a system
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1312
+    name: Get ability to quarantine file by path
+    description: 'Make sure you have the ability to block a file from being accessed
+      by its path (including its name)
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1313
+    name: Get ability to quarantine file by hash
+    description: 'Make sure you have the ability to block a file from being accessed
+      by its hash
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1314
+    name: Get ability to quarantine file by format
+    description: 'Make sure you have the ability to block a file from being accessed
+      by its format
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1315
+    name: Get ability to quarantine file by content pattern
+    description: 'Make sure you have the ability to block a file from being accessed
+      by its content pattern (i.e. specific string, keyword, binary pattern etc)
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1316
+    name: Get ability to remove file
+    description: 'Make sure you have the ability to remove a specific file from a
+      (remote) host or a system
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1317
+    name: Get ability to analyse file hash
+    description: 'Make sure you have the ability to analyse a file hash
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1318
+    name: Get ability to analyse Windows PE
+    description: 'Make sure you have the ability to analyse a Windows Portable Executable
+      file
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1319
+    name: Get ability to analyse macos macho
+    description: 'Make sure you have the ability to analyse a macOS Mach-O file
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1320
+    name: Get ability to analyse Unix ELF
+    description: 'Make sure you have the ability to analyse a UNIX ELF file
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1321
+    name: Get ability to analyse MS office file
+    description: 'Make sure you have the ability to analyse a Microsoft Office file
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1322
+    name: Get ability to analyse PDF file
+    description: 'Make sure you have the ability to analyse a PDF file
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1323
+    name: Get ability to analyse script
+    description: 'Make sure you have the ability to analyse a script file (i.e. Python,
+      PowerShell, Bash scripts etc)
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1324
+    name: Get ability to analyse jar
+    description: 'Make sure you have the ability to analyse JAR file
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1325
+    name: Get ability to analyse filename
+    description: 'Make sure you have the ability to analyse a filename
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1401
+    name: Get ability to list processes executed
+    description: 'Make sure you have the ability to list processes being executed
+      at the moment or at a particular time in the past
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1402
+    name: Get ability to find process by executable path
+    description: 'Make sure you have the ability to find process executed at a particular
+      time in the past by its executable path (including its name)
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1403
+    name: Get ability to find process by executable metadata
+    description: 'Make sure you have the ability to find process executed at a particular
+      time in the past by its executable metadata (i.e. signature, permissions, MAC
+      times)
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1404
+    name: Get ability to find process by executable hash
+    description: 'Make sure you have the ability to find process executed at a particular
+      time in the past by its executable hash
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1405
+    name: Get ability to find process by executable format
+    description: 'Make sure you have the ability to find process executed at a particular
+      time in the past by its executable format
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1406
+    name: Get ability to find process by executable content pattern
+    description: 'Make sure you have the ability to find process executed at a particular
+      time in the past by its executable content pattern (i.e. specific string, keyword,
+      binary pattern etc)
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1407
+    name: Get ability to block process by executable path
+    description: 'Make sure you have the ability to block process by its executable
+      path (including its name)
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1408
+    name: Get ability to block process by executable metadata
+    description: 'Make sure you have the ability to block process by its executable
+      metadata (i.e. signature, permissions, MAC times)
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1409
+    name: Get ability to block process by executable hash
+    description: 'Make sure you have the ability to block process by its executable
+      hash
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1410
+    name: Get ability to block process by executable format
+    description: 'Make sure you have the ability to block process by its executable
+      format
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1411
+    name: Get ability to block process by executable content pattern
+    description: 'Make sure you have the ability to block process by its executable
+      content pattern (i.e. specific string, keyword, binary pattern etc)
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1501
+    name: Manage remote computer management system policies
+    description: 'Make sure you can manage Remote Computer Management system policies
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1502
+    name: Get ability to list registry keys modified
+    description: 'Make sure you have the ability to list registry keys modified at
+      a particular time in the past
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1503
+    name: Get ability to list registry keys deleted
+    description: 'Make sure you have the ability to list registry keys deleted at
+      a particular time in the past
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1504
+    name: Get ability to list registry keys accessed
+    description: 'Make sure you have the ability to list registry keys accessed at
+      a particular time in the past
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1505
+    name: Get ability to list registry keys created
+    description: 'Make sure you have the ability to list registry keys created at
+      a particular time in the past
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1506
+    name: Get ability to list services created
+    description: 'Make sure you have the ability to list services that have created
+      at a particular time in the past
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1507
+    name: Get ability to list services modified
+    description: 'Make sure you have the ability to list services that have been modified
+      at a particular time in the past
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1508
+    name: Get ability to list services deleted
+    description: 'Make sure you have the ability to list services that have been deleted
+      at a particular time in the past
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1509
+    name: Get ability to remove registry key
+    description: 'Make sure you have the ability to remove a registry key
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1510
+    name: Get ability to remove service
+    description: 'Make sure you have the ability to remove a service
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1511
+    name: Get ability to analyse registry key
+    description: 'Make sure you have the ability to analyse a registry key
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1601
+    name: Manage identity management system
+    description: 'Make sure you can manage Identity Management System, i.e. remove/block
+      users, revoke credentials, and execute other Response Actions
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1602
+    name: Get ability to lock user account
+    description: 'Make sure you have the ability to lock user account from being used
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1603
+    name: Get ability to list users authenticated
+    description: 'Make sure you have the ability to list users authenticated at a
+      particular time in the past on a particular system
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1604
+    name: Get ability to revoke authentication credentials
+    description: 'Make sure you have the ability to revoke authentication credentials
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1605
+    name: Get ability to remove user account
+    description: 'Make sure you have the ability to remove a user account
+
+      '
+    tide.vocab.stages: Preparation
+    workflow: Placeholder
+  - id: RA1606
+    name: Get ability to list user accounts
+    description: Make sure you have the ability to list user accounts on a particular
+      system
+    tide.vocab.stages: Preparation
+    workflow: "Make sure you have the ability to list user accounts on a particular\
+      \ system. \n"
+  - id: RA2001
+    name: List victims of security alert
+    description: 'List victims of a security alert
+
+      '
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2002
+    name: List host vulnerabilities
+    description: 'Get information about a specific host existing vulnerabilities,
+      or about vulnerabilities it had at a particular time in the past
+
+      '
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2003
+    name: Put compromised accounts on monitoring
+    description: Put (potentially) compromised accounts on monitoring
+    tide.vocab.stages: Identification
+    workflow: "Start monitoring for authentification attempts and all potentially\
+      \ harmful actions from (potentially) compromised accounts.  \nLook for anomalies,\
+      \ unusual network connections, unusual geolocation/time of work, actions that\
+      \ were never executed before.  \nKeep in touch with the real users and, in case\
+      \ of need, ask them if they executing some suspicious actions by themselves\
+      \ or not.  \n"
+  - id: RA2101
+    name: List hosts communicated with internal domain
+    description: 'List hosts communicated with an internal domain
+
+      '
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2102
+    name: List hosts communicated with internal IP
+    description: 'List hosts communicated with an internal IP address
+
+      '
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2103
+    name: List hosts communicated with internal URL
+    description: 'List hosts communicated with an internal URL
+
+      '
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2104
+    name: Analyse domain name
+    description: 'Analyse a domain name
+
+      '
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2105
+    name: Analyse IP
+    description: 'Analyse an IP address
+
+      '
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2106
+    name: Analyse uri
+    description: 'Analyse an URI
+
+      '
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2107
+    name: List hosts communicated by port
+    description: 'List hosts communicating by a specific port at the moment or at
+      a particular time in the past
+
+      '
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2108
+    name: List hosts connected to VPN
+    description: 'List hosts connected to a VPN at the moment or at a particular time
+      in the past
+
+      '
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2109
+    name: List hosts connected to intranet
+    description: 'List hosts connected to the internal network at the moment or at
+      a particular time in the past
+
+      '
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2110
+    name: List data transferred
+    description: 'List the data that is being transferred at the moment or at a particular
+      time in the past
+
+      '
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2111
+    name: Collect transferred data
+    description: 'Collect the data that is being transferred at the moment or at a
+      particular time in the past
+
+      '
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2112
+    name: Identify transferred data
+    description: 'Identify the data that is being transferred at the moment or at
+      a particular time in the past (i.e. its content, value)
+
+      '
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2113
+    name: List hosts communicated with external domain
+    description: 'List hosts communicated with an external domain
+
+      '
+    tide.vocab.stages: Identification
+    workflow: "List hosts communicated with an external domain using the most efficient\
+      \ way.  \n"
+  - id: RA2114
+    name: List hosts communicated with external IP
+    description: 'List hosts communicated with an external IP address
+
+      '
+    tide.vocab.stages: Identification
+    workflow: "List hosts communicated with an external IP address using the most\
+      \ efficient way.  \n"
+  - id: RA2115
+    name: List hosts communicated with external URL
+    description: 'List hosts communicated with an external URL
+
+      '
+    tide.vocab.stages: Identification
+    workflow: 'List hosts communicated with an external URL using the most efficient
+      way.  '
+  - id: RA2116
+    name: Find data transferred by content pattern
+    description: 'Find the data that is being transferred at the moment or at a particular
+      time in the past by its content pattern (i.e. specific string, keyword, binary
+      pattern etc)
+
+      '
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2117
+    name: Analyse user-agent
+    description: 'Analyse an User-Agent request header for indications of suspicious
+      activity
+
+      '
+    tide.vocab.stages: Identification
+    workflow: "A User-Agent string is a piece of metadata associated with the header\
+      \ of a HTTP request and is used for content negotiation as outlined within [RFC1945](https://tools.ietf.org/html/rfc1945#page-46).\
+      \  User-agents may often be overlooked by adversaries, and as such provide a\
+      \ valuable point of investigation.\n\n1. Retrieve the user-agent from the HTTP\
+      \ header.\n2. Using the below methodology as a reference make a judgement as\
+      \ to whether the user-agent provided is suspicious or not. \n\n**Indications\
+      \ of suspicious user-agents based upon string analysis:**\n\n* The user-agent\
+      \ is left empty.\n* The user-agent contains typos or deviations in capitilisation\
+      \ that are different from known good user-agents.\n* The user-agent contains\
+      \ a sequence of random characters or \"gibberish\" akin to those found within\
+      \ MITRE ATT&CK [T1568.002](https://attack.mitre.org/techniques/T1568/002/).\
+      \  \n* The user-agent contains code that would execute an XSS or SQL Injection\
+      \ attack.\n\n**Indications of suspicious user-agents based upon reputational\
+      \ analysis:**\n\n* The user-agent is not listed as a popular user-agent on reference\
+      \ materials such as [WhatIsMyBrowser](https://developers.whatismybrowser.com/useragents/explore/).\n\
+      * It should be noted that there is value in engaging with the community on particular\
+      \ User-Agents, and this can often be done by leveraging a search engine such\
+      \ as Google.\n\n **Contextualise your findings with knowledge from your environment.**\n\
+      \n* Consider whether the user-agent is relevant for your SoE environment.  For\
+      \ instance, the presence of Mac OS X user-agents in a Windows only environment.\n\
+      * Consider performing long-tail analysis or clustering to identify anomalies\
+      \ within your environment.\n\n### Important Considerations\n* User-Agents are\
+      \ client-side generated and can be easily spoofed.  Many adversaries will default\
+      \ to leveraging known-good user-agents to hide activity.\n* User-Agent analysis\
+      \ should be combined with other analysis to improve the fidelity of the signal.\
+      \ It is well known that many legitimate applications (especially custom applications)\
+      \ will omit user-agent strings or utilise defaults associated with the popular\
+      \ libraries. "
+  - id: RA2118
+    name: List Firewall rules
+    description: List firewall rules
+    tide.vocab.stages: Identification
+    workflow: 'List firewall rules.
+
+      '
+  - id: RA2201
+    name: List users opened email message
+    description: 'List users that have opened am email message
+
+      '
+    tide.vocab.stages: Identification
+    workflow: "List users who opened/read a particular email message using the Email\
+      \ Server's functionality.  \n"
+  - id: RA2202
+    name: Collect email message
+    description: Collect an email message
+    tide.vocab.stages: Identification
+    workflow: "Collect an email message using the most appropriate option:  \n\n-\
+      \ Email Team/Email server: if there is such option  \n- The person that reported\
+      \ the attack (if it wasn't detected automatically or reported by victims)  \n\
+      - Victims: if they reported the attack  \n- Following the local computer forensic\
+      \ evidence collection procedure, if the situation requires it\n\nAsk for the\
+      \ email in `.EML` format. Instructions:  \n\n  1. Drug and drop email from Email\
+      \ client to Desktop  \n  2. Archive with password \"infected\" and send to IR\
+      \ specialists by email  \n"
+  - id: RA2203
+    name: List email message receivers
+    description: 'List receivers of a particular email message
+
+      '
+    tide.vocab.stages: Identification
+    workflow: 'List receivers of a particular email message using the Email Server''s
+      functionality.  '
+  - id: RA2204
+    name: Make sure email message is phishing
+    description: Make sure that an email message is a phishing attack
+    tide.vocab.stages: Identification
+    workflow: "Check an email and its metadata for evidences of phishing attack: \
+      \ \n\n- **Impersonalisation attempts**: sender is trying to identify himself\
+      \ as somebody he is not  \n- **Suspicious askings or offers**: download \"invoice\"\
+      , click on link with something important etc  \n- **Psychological manipulations**:\
+      \ invoking a sense of urgency or fear is a common phishing tactic  \n- **Spelling\
+      \ mistakes**: legitimate messages usually don't have spelling mistakes or poor\
+      \ grammar  \n\nExplore references of the article to make yourself familiar with\
+      \ phishing attacks history and examples.  \n"
+  - id: RA2205
+    name: Extract observables from email message
+    description: Extract observables from an email message
+    tide.vocab.stages: Identification
+    workflow: "Extract the data for further response steps:  \n\n- attachments (using\
+      \ munpack tool: `munpack email.eml`)  \n- from, to, cc  \n- subject of the email\
+      \  \n- received servers path  \n- list of URLs from the text content of the\
+      \ mail body and attachments  \n\nThis Response Action could be automated with\
+      \ [TheHive EmlParser](https://blog.thehive-project.org/2018/07/31/emlparser-a-new-cortex-analyzer-for-eml-files/).\
+      \  \n"
+  - id: RA2206
+    name: Analyse email address
+    description: Analyse an email address
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2301
+    name: List files created
+    description: 'List files that have been created at a particular time in the past
+
+      '
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2302
+    name: List files modified
+    description: 'List files that have been modified at a particular time in the past
+
+      '
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2303
+    name: List files deleted
+    description: 'List files that have been deleted at a particular time in the past
+
+      '
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2304
+    name: List files downloaded
+    description: 'List files that have been downloaded at a particular time in the
+      past
+
+      '
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2305
+    name: List files with tampered timestamps
+    description: 'List files with tampered timestamps
+
+      '
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2306
+    name: Find file by path
+    description: 'Find a file by its path (including its name)
+
+      '
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2307
+    name: Find file by metadata
+    description: 'Find a file by its metadata (i.e. signature, permissions, MAC times)
+
+      '
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2308
+    name: Find file by hash
+    description: 'Find a file by its hash
+
+      '
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2309
+    name: Find file by format
+    description: 'Find a file by its format
+
+      '
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2310
+    name: Find file by content pattern
+    description: 'Find a file by its content pattern (i.e. specific string, keyword,
+      binary pattern etc)
+
+      '
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2311
+    name: Collect file
+    description: 'Collect a specific file from a (remote) host or a system
+
+      '
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2312
+    name: Analyse file hash
+    description: 'Analise a hash of a file
+
+      '
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2313
+    name: Analyse Windows PE
+    description: 'Analise MS Windows Portable Executable
+
+      '
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2314
+    name: Analyse macos macho
+    description: 'Analise macOS Mach-O
+
+      '
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2315
+    name: Analyse Unix ELF
+    description: 'Analise Unix ELF
+
+      '
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2316
+    name: Analyse MS office file
+    description: 'Analise MS Office file
+
+      '
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2317
+    name: Analyse PDF file
+    description: 'Analise PDF file
+
+      '
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2318
+    name: Analyse script
+    description: 'Analyse a script file (i.e. Python, PowerShell, Bash scripts etc)
+
+      '
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2319
+    name: Analyse jar
+    description: 'Analyse a JAR file
+
+      '
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2320
+    name: Analyse filename
+    description: 'Analyse a filename
+
+      '
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2401
+    name: List processes executed
+    description: 'List processes being executed at the moment or at a particular time
+      in the past
+
+      '
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2402
+    name: Find process by executable path
+    description: 'Find a process that is being executed at the moment or at a particular
+      time in the past by its executable path (including its name)
+
+      '
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2403
+    name: Find process by executable metadata
+    description: 'Find a process that is being executed at the moment or at a particular
+      time in the past by its executable metadata (i.e. signature, permissions, MAC
+      times)
+
+      '
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2404
+    name: Find process by executable hash
+    description: 'Find a process that is being executed at the moment or at a particular
+      time in the past by its executable hash
+
+      '
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2405
+    name: Find process by executable format
+    description: 'Find a process that is being executed at the moment or at a particular
+      time in the past by its executable format
+
+      '
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2406
+    name: Find process by executable content pattern
+    description: 'Find a process that is being executed at the moment or at a particular
+      time in the past by its executable content (i.e. specific string, keyword, binary
+      pattern etc)
+
+      '
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2501
+    name: List registry keys modified
+    description: 'List registry keys modified at a particular time in the past
+
+      '
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2502
+    name: List registry keys deleted
+    description: 'List registry keys that have been deleted at a particular time in
+      the past
+
+      '
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2503
+    name: List registry keys accessed
+    description: 'List registry keys that have been accessed at a particular time
+      in the past
+
+      '
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2504
+    name: List registry keys created
+    description: 'List registry keys that have been created at a particular time in
+      the past
+
+      '
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2505
+    name: List services created
+    description: 'List services that have been created at a particular time in the
+      past
+
+      '
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2506
+    name: List services modified
+    description: 'List services that have been modified at a particular time in the
+      past
+
+      '
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2507
+    name: List services deleted
+    description: 'List services that have been deleted at a particular time in the
+      past
+
+      '
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2508
+    name: Analyse registry key
+    description: 'Analyse a registry key
+
+      '
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2601
+    name: List users authenticated
+    description: 'List users authenticated at a particular time in the past on a particular
+      system
+
+      '
+    tide.vocab.stages: Identification
+    workflow: Placeholder
+  - id: RA2602
+    name: List user accounts
+    description: 'List user accounts on a particular system
+
+      '
+    tide.vocab.stages: Identification
+    workflow: "List user accounts on a particular system to get an overview of \n\
+      the available accounts.\n"
+  - id: RA3001
+    name: Patch vulnerability
+    description: 'Patch a vulnerability in an asset
+
+      '
+    tide.vocab.stages: Containment
+    workflow: Placeholder
+  - id: RA3101
+    name: Block external IP address
+    description: 'Block an external IP address from being accessed by corporate assets
+
+      '
+    tide.vocab.stages: Containment
+    workflow: "Block an external IP address from being accessed by corporate assets,\
+      \ using the most efficient way.  \n\nWarning:  \n\n- Be careful blocking IP\
+      \ addresses. Make sure it's not a cloud provider or a hoster. If you would like\
+      \ to block something that is hosted on a well-known cloud provider or on a big\
+      \ hoster IP address, you should block (if applicable) a specific URL using alternative\
+      \ Response Action   \n"
+  - id: RA3102
+    name: Block internal IP address
+    description: 'Block an internal IP address from being accessed by corporate assets
+
+      '
+    tide.vocab.stages: Containment
+    workflow: 'Block an internal IP address from being accessed by corporate assets,
+      using the most efficient way.
+
+      '
+  - id: RA3103
+    name: Block external domain
+    description: 'Block an external domain name from being accessed by corporate assets
+
+      '
+    tide.vocab.stages: Containment
+    workflow: "Block an external domain name from being accessed by corporate assets,\
+      \ using the most efficient way.  \n\nWarning:  \n\n- Be careful blocking doman\
+      \ names. Make sure it's not a cloud provider or a hoster. If you would like\
+      \ to block something that is hosted on a well-known cloud provider or on a big\
+      \ hoster doman, you should block (if applicable) a specific URL using alternative\
+      \ Response Action   \n"
+  - id: RA3104
+    name: Block internal domain
+    description: 'Block an internal domain name from being accessed by corporate assets
+
+      '
+    tide.vocab.stages: Containment
+    workflow: "Block an internal domain name from being accessed by corporate assets,\
+      \ using the most efficient way.  \n"
+  - id: RA3105
+    name: Block external URL
+    description: 'Block an external URL from being accessed by corporate assets
+
+      '
+    tide.vocab.stages: Containment
+    workflow: "Block an external URL from being accessed by corporate assets, using\
+      \ the most efficient way.  \n"
+  - id: RA3106
+    name: Block internal URL
+    description: 'Block an internal URL from being accessed by corporate assets
+
+      '
+    tide.vocab.stages: Containment
+    workflow: "Block an internal URL from being accessed by corporate assets, using\
+      \ the most efficient way.  \n"
+  - id: RA3107
+    name: Block port external communication
+    description: 'Block a network port for external communications
+
+      '
+    tide.vocab.stages: Containment
+    workflow: "Block a network port for external communications, using the most efficient\
+      \ way.  \n"
+  - id: RA3108
+    name: Block port internal communication
+    description: 'Block a network port for internal communications
+
+      '
+    tide.vocab.stages: Containment
+    workflow: "Block a network port for internal communications, using the most efficient\
+      \ way.  \n"
+  - id: RA3109
+    name: Block user external communication
+    description: 'Block a user for external communications
+
+      '
+    tide.vocab.stages: Containment
+    workflow: 'Block a user for external communications, using the most efficient
+      way.
+
+      '
+  - id: RA3110
+    name: Block user internal communication
+    description: 'Block a user for internal communications
+
+      '
+    tide.vocab.stages: Containment
+    workflow: 'Block a user for internal communications, using the most efficient
+      way.
+
+      '
+  - id: RA3111
+    name: Block data transferring by content pattern
+    description: 'Block data transferring by its content pattern (i.e. specific string,
+      keyword, binary pattern etc)
+
+      '
+    tide.vocab.stages: Containment
+    workflow: Placeholder
+  - id: RA3201
+    name: Block domain on email
+    description: Block a domain name on an Email server
+    tide.vocab.stages: Containment
+    workflow: "Block a domain name on an Email Server using its native filtering functionality.\
+      \  \n"
+  - id: RA3202
+    name: Block sender on email
+    description: 'Block an email sender on the Email-server
+
+      '
+    tide.vocab.stages: Containment
+    workflow: "Block an email sender on an Email Server using its native filtering\
+      \ functionality.  \n"
+  - id: RA3203
+    name: Quarantine email message
+    description: 'Quarantine an email message
+
+      '
+    tide.vocab.stages: Containment
+    workflow: "Quarantine an email message on an Email Server using its native functionality.\
+      \  \n"
+  - id: RA3301
+    name: Quarantine file by format
+    description: 'Quarantine a file by its format
+
+      '
+    tide.vocab.stages: Containment
+    workflow: Placeholder
+  - id: RA3302
+    name: Quarantine file by hash
+    description: 'Quarantine a file by its hash
+
+      '
+    tide.vocab.stages: Containment
+    workflow: Placeholder
+  - id: RA3303
+    name: Quarantine file by path
+    description: 'Quarantine a file by its path
+
+      '
+    tide.vocab.stages: Containment
+    workflow: Placeholder
+  - id: RA3304
+    name: Quarantine file by content pattern
+    description: 'Quarantine a file by its content pattern
+
+      '
+    tide.vocab.stages: Containment
+    workflow: Placeholder
+  - id: RA3401
+    name: Block process by executable path
+    description: 'Block a process execution by its executable path (including its
+      name)
+
+      '
+    tide.vocab.stages: Containment
+    workflow: Placeholder
+  - id: RA3402
+    name: Block process by executable metadata
+    description: 'Block a process execution by its executable metadata (i.e. signature,
+      permissions, MAC times)
+
+      '
+    tide.vocab.stages: Containment
+    workflow: Placeholder
+  - id: RA3403
+    name: Block process by executable hash
+    description: 'Block a process execution by its executable hash
+
+      '
+    tide.vocab.stages: Containment
+    workflow: Placeholder
+  - id: RA3404
+    name: Block process by executable format
+    description: 'Block a process execution by its executable format
+
+      '
+    tide.vocab.stages: Containment
+    workflow: Placeholder
+  - id: RA3405
+    name: Block process by executable content pattern
+    description: 'Block a process execution by its executable content pattern (i.e.
+      specific string, keyword, binary pattern etc)
+
+      '
+    tide.vocab.stages: Containment
+    workflow: Placeholder
+  - id: RA3501
+    name: Disable system service
+    description: 'Disable a system service
+
+      '
+    tide.vocab.stages: Containment
+    workflow: Placeholder
+  - id: RA3601
+    name: Lock user account
+    description: 'Lock an user account
+
+      '
+    tide.vocab.stages: Containment
+    workflow: Placeholder
+  - id: RA4001
+    name: Report incident to external companies
+    description: Report incident to external companies
+    tide.vocab.stages: Eradication
+    workflow: "Report incident to external security companites, i.e. [National Computer\
+      \ Security Incident Response Teams (CSIRTs)](https://www.sei.cmu.edu/education-outreach/computer-security-incident-response-teams/national-csirts/).\
+      \  \nProvide all Indicators of Compromise and Indicators of Attack that have\
+      \ been observed.  \n\nA phishing attack could be reported to:  \n\n1. [National\
+      \ Computer Security Incident Response Teams (CSIRTs)](https://www.sei.cmu.edu/education-outreach/computer-security-incident-response-teams/national-csirts/)\
+      \  \n2. [U.S. government-operated website](http://www.us-cert.gov/nav/report_phishing.html)\
+      \  \n3. [Anti-Phishing Working Group (APWG)](http://antiphishing.org/report-phishing/)\
+      \  \n4. [Google Safe Browsing](https://safebrowsing.google.com/safebrowsing/report_phish/?hl=en)\
+      \  \n5. [The FBI's Intenet Crime Complaint Center (IC3)](https://www.ic3.gov/default.aspx)\
+      \  \n\nThis Response Action could be automated with [TheHive and MISP integration](https://blog.thehive-project.org/2017/06/19/thehive-cortex-and-misp-how-they-all-fit-together/).\
+      \  \n"
+  - id: RA4101
+    name: Remove rogue network device
+    description: 'Remove a rogue network device
+
+      '
+    tide.vocab.stages: Eradication
+    workflow: Placeholder
+  - id: RA4201
+    name: Delete email message
+    description: Delete an email message from an Email Server and users' email boxes
+    tide.vocab.stages: Eradication
+    workflow: 'Delete an email message from an Email Server and users'' email boxes
+      using its native functionality.
+
+      '
+  - id: RA4301
+    name: Remove file
+    description: 'Remove a specific file from a (remote) host or a system
+
+      '
+    tide.vocab.stages: Eradication
+    workflow: Placeholder
+  - id: RA4501
+    name: Remove registry key
+    description: 'Remove a registry key
+
+      '
+    tide.vocab.stages: Eradication
+    workflow: Placeholder
+  - id: RA4502
+    name: Remove service
+    description: 'Remove a service
+
+      '
+    tide.vocab.stages: Eradication
+    workflow: Placeholder
+  - id: RA4601
+    name: Revoke authentication credentials
+    description: Revoke authentication credentials
+    tide.vocab.stages: Eradication
+    workflow: "On this step, you supposed to know what kind of credentials have been\
+      \ compromised/you would like to revoke.  \nYou need to revoke them in your Identity\
+      \ and Access Management system where they were created (i.e. Windows AD) using\
+      \ native functionality.  \n\nWarning:  \n\n- If the adversary has generated\
+      \ Golden Ticket in Windows Domain/forest, you have to revoke KRBTGT Account\
+      \ password **twice** for each domain in a forest and proceed to monitor malicious\
+      \ activity for next 20 minutes (Domain Controller KDC service doesn\xE2\u20AC\
+      \u2122t perform validate the user account until the TGT is older than 20 minutes\
+      \ old)\n"
+  - id: RA4602
+    name: Remove user account
+    description: 'Remove a user account
+
+      '
+    tide.vocab.stages: Eradication
+    workflow: Placeholder
+  - id: RA5001
+    name: Reinstall host from golden image
+    description: 'Reinstall host OS from a golden image
+
+      '
+    tide.vocab.stages: Recovery
+    workflow: Placeholder
+  - id: RA5002
+    name: Restore data from backup
+    description: 'Restore data from a backup
+
+      '
+    tide.vocab.stages: Recovery
+    workflow: Placeholder
+  - id: RA5101
+    name: Unblock blocked IP
+    description: 'Unblock a blocked IP address
+
+      '
+    tide.vocab.stages: Recovery
+    workflow: "Unblock a blocked IP address in the system(s) used to block it.  \n"
+  - id: RA5102
+    name: Unblock blocked domain
+    description: 'Unblock a blocked domain name
+
+      '
+    tide.vocab.stages: Recovery
+    workflow: "Unblock a blocked domain name in the system(s) used to block it.  \n"
+  - id: RA5103
+    name: Unblock blocked URL
+    description: 'Unblock a blocked URL
+
+      '
+    tide.vocab.stages: Recovery
+    workflow: "Unblock a blocked URL in the system(s) used to block it.  \n"
+  - id: RA5104
+    name: Unblock blocked port
+    description: 'Unblock a blocked port
+
+      '
+    tide.vocab.stages: Recovery
+    workflow: Placeholder
+  - id: RA5105
+    name: Unblock blocked user
+    description: 'Unblock a blocked user
+
+      '
+    tide.vocab.stages: Recovery
+    workflow: Placeholder
+  - id: RA5201
+    name: Unblock domain on email
+    description: 'Unblock a domain on email
+
+      '
+    tide.vocab.stages: Recovery
+    workflow: "Unblock an email domain on an Email Server using its native functionality.\
+      \  \n"
+  - id: RA5202
+    name: Unblock sender on email
+    description: 'Unblock a sender on email
+
+      '
+    tide.vocab.stages: Recovery
+    workflow: "Unblock an email sender on an Email Server using its native functionality.\
+      \  \n"
+  - id: RA5203
+    name: Restore quarantined email message
+    description: 'Restore a quarantined email message
+
+      '
+    tide.vocab.stages: Recovery
+    workflow: "Restore a quarantined email message on an Email Server using its native\
+      \ functionality.  \n"
+  - id: RA5301
+    name: Restore quarantined file
+    description: 'Restore a quarantined file
+
+      '
+    tide.vocab.stages: Recovery
+    workflow: Placeholder
+  - id: RA5401
+    name: Unblock blocked process
+    description: 'Unblock a blocked process
+
+      '
+    tide.vocab.stages: Recovery
+    workflow: Placeholder
+  - id: RA5501
+    name: Enable disabled service
+    description: 'Enable a disabled service
+
+      '
+    tide.vocab.stages: Recovery
+    workflow: Placeholder
+  - id: RA5601
+    name: Unlock locked user account
+    description: 'Unlock a locked user account
+
+      '
+    tide.vocab.stages: Recovery
+    workflow: Placeholder
+  - id: RA6001
+    name: Develop incident report
+    description: Develop the incident report
+    tide.vocab.stages: Lessons Learned
+    workflow: "Develop the Incident Report using your corporate template.  \n\nIt\
+      \ should include:  \n\n1. Executive Summary with a short description of damage,\
+      \ actions taken, root cause, and key metrics (Time To Detect, Time To Respond,\
+      \ Time To Recover etc)  \n2. Detailed timeline of adversary actions mapped to\
+      \ [ATT&CK tactics](https://attack.mitre.org/tactics/enterprise/) (you can use\
+      \ the [Kill Chain](https://en.wikipedia.org/wiki/Kill_chain), but most probably\
+      \ most of the actions will be in Actions On Objective stage, which is not very\
+      \ representative and useful)  \n3. Detailed timeline of actions taken by Incident\
+      \ Response Team  \n4. Root Cause Analysis and Recommendations for improvements\
+      \ based on its conclusion  \n5. List of specialists involved in Incident Response\
+      \ with their roles  \n"
+  - id: RA6002
+    name: Conduct lessons learned exercise
+    description: Conduct Lessons Learned exercise
+    tide.vocab.stages: Lessons Learned
+    workflow: "The Lessons Learned phase evaluates the team's performance through\
+      \ each step. \nThe goal of the phase is to discover how to improve the incident\
+      \ response process.  \nYou need to answer some basic questions, using developed\
+      \ incident report:  \n\n- What happened?  \n- What did we do well?  \n- What\
+      \ could we have done better?  \n- What will we do differently next time?  \n\
+      \nThe incident report is the key to improvements.  \n"

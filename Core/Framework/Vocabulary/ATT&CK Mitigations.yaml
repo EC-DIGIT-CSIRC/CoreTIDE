@@ -1,0 +1,1157 @@
+name: MITRE ATT&CK Mitigations
+field: mitigations
+description: Mitigations represent security concepts and classes of technologies that
+  can be used to prevent a technique or sub-technique from being successfully executed.
+reference: https://attack.mitre.org/mitigations/enterprise/
+icon: 🔒
+keys:
+  - id: M1036
+    name: Account Use Policies
+    description: Configure features related to account use like login attempt lockouts,
+      specific login times, etc.
+    link: https://attack.mitre.org/mitigations/M1036
+  - id: M1015
+    name: Active Directory Configuration
+    description: Configure Active Directory to prevent use of certain techniques;
+      use SID Filtering, etc.
+    link: https://attack.mitre.org/mitigations/M1015
+  - id: M1049
+    name: Antivirus/Antimalware
+    description: Use signatures or heuristics to detect malicious software.
+    link: https://attack.mitre.org/mitigations/M1049
+  - id: M1013
+    name: Application Developer Guidance
+    description: This mitigation describes any guidance or training given to developers
+      of applications to avoid introducing security weaknesses that an adversary may
+      be able to take advantage of.
+    link: https://attack.mitre.org/mitigations/M1013
+  - id: M1048
+    name: Application Isolation and Sandboxing
+    description: Restrict execution of code to a virtual environment on or in transit
+      to an endpoint system.
+    link: https://attack.mitre.org/mitigations/M1048
+  - id: M1047
+    name: Audit
+    description: Perform audits or scans of systems, permissions, insecure software,
+      insecure configurations, etc. to identify potential weaknesses.
+    link: https://attack.mitre.org/mitigations/M1047
+  - id: M1040
+    name: Behavior Prevention on Endpoint
+    description: Use capabilities to prevent suspicious behavior patterns from occurring
+      on endpoint systems. This could include suspicious process, file, API call,
+      etc. behavior.
+    link: https://attack.mitre.org/mitigations/M1040
+  - id: M1046
+    name: Boot Integrity
+    description: Use secure methods to boot a system and verify the integrity of the
+      operating system and loading mechanisms.
+    link: https://attack.mitre.org/mitigations/M1046
+  - id: M1045
+    name: Code Signing
+    description: Enforce binary and application integrity with digital signature verification
+      to prevent untrusted code from executing.
+    link: https://attack.mitre.org/mitigations/M1045
+  - id: M1043
+    name: Credential Access Protection
+    description: Use capabilities to prevent successful credential access by adversaries;
+      including blocking forms of credential dumping.
+    link: https://attack.mitre.org/mitigations/M1043
+  - id: M1053
+    name: Data Backup
+    description: Take and store data backups from end user systems and critical servers.
+      Ensure backup and storage systems are hardened and kept separate from the corporate
+      network to prevent compromise.
+    link: https://attack.mitre.org/mitigations/M1053
+  - id: M1057
+    name: Data Loss Prevention
+    description: 'Use a data loss prevention (DLP) strategy to categorize sensitive
+      data, identify data formats indicative of personal identifiable information
+      (PII), and restrict exfiltration of sensitive data.(Citation: PurpleSec Data
+      Loss Prevention)'
+    link: https://attack.mitre.org/mitigations/M1057
+  - id: M1042
+    name: Disable or Remove Feature or Program
+    description: Remove or deny access to unnecessary and potentially vulnerable software
+      to prevent abuse by adversaries.
+    link: https://attack.mitre.org/mitigations/M1042
+  - id: M1055
+    name: Do Not Mitigate
+    description: This category is to associate techniques that mitigation might increase
+      risk of compromise and therefore mitigation is not recommended.
+    link: https://attack.mitre.org/mitigations/M1055
+  - id: M1041
+    name: Encrypt Sensitive Information
+    description: Protect sensitive information with strong encryption.
+    link: https://attack.mitre.org/mitigations/M1041
+  - id: M1039
+    name: Environment Variable Permissions
+    description: Prevent modification of environment variables by unauthorized users
+      and groups.
+    link: https://attack.mitre.org/mitigations/M1039
+  - id: M1038
+    name: Execution Prevention
+    description: Block execution of code on a system through application control,
+      and/or script blocking.
+    link: https://attack.mitre.org/mitigations/M1038
+  - id: M1050
+    name: Exploit Protection
+    description: Use capabilities to detect and block conditions that may lead to
+      or be indicative of a software exploit occurring.
+    link: https://attack.mitre.org/mitigations/M1050
+  - id: M1037
+    name: Filter Network Traffic
+    description: Use network appliances to filter ingress or egress traffic and perform
+      protocol-based filtering. Configure software on endpoints to filter network
+      traffic.
+    link: https://attack.mitre.org/mitigations/M1037
+  - id: M1035
+    name: Limit Access to Resource Over Network
+    description: Prevent access to file shares, remote access to systems, unnecessary
+      services. Mechanisms to limit access may include use of network concentrators,
+      RDP gateways, etc.
+    link: https://attack.mitre.org/mitigations/M1035
+  - id: M1034
+    name: Limit Hardware Installation
+    description: Block users or groups from installing or using unapproved hardware
+      on systems, including USB devices.
+    link: https://attack.mitre.org/mitigations/M1034
+  - id: M1033
+    name: Limit Software Installation
+    description: Block users or groups from installing unapproved software.
+    link: https://attack.mitre.org/mitigations/M1033
+  - id: M1032
+    name: Multi-factor Authentication
+    description: Use two or more pieces of evidence to authenticate to a system; such
+      as username and password in addition to a token from a physical smart card or
+      token generator.
+    link: https://attack.mitre.org/mitigations/M1032
+  - id: M1031
+    name: Network Intrusion Prevention
+    description: Use intrusion detection signatures to block traffic at network boundaries.
+    link: https://attack.mitre.org/mitigations/M1031
+  - id: M1030
+    name: Network Segmentation
+    description: Architect sections of the network to isolate critical systems, functions,
+      or resources. Use physical and logical segmentation to prevent access to potentially
+      sensitive systems and information. Use a DMZ to contain any internet-facing
+      services that should not be exposed from the internal network. Configure separate
+      virtual private cloud (VPC) instances to isolate critical cloud systems.
+    link: https://attack.mitre.org/mitigations/M1030
+  - id: M1028
+    name: Operating System Configuration
+    description: Make configuration changes related to the operating system or a common
+      feature of the operating system that result in system hardening against techniques.
+    link: https://attack.mitre.org/mitigations/M1028
+  - id: M1027
+    name: Password Policies
+    description: Set and enforce secure password policies for accounts.
+    link: https://attack.mitre.org/mitigations/M1027
+  - id: M1056
+    name: Pre-compromise
+    description: This category is used for any applicable mitigation activities that
+      apply to techniques occurring before an adversary gains Initial Access, such
+      as Reconnaissance and Resource Development techniques.
+    link: https://attack.mitre.org/mitigations/M1056
+  - id: M1026
+    name: Privileged Account Management
+    description: Manage the creation, modification, use, and permissions associated
+      to privileged accounts, including SYSTEM and root.
+    link: https://attack.mitre.org/mitigations/M1026
+  - id: M1025
+    name: Privileged Process Integrity
+    description: Protect processes with high privileges that can be used to interact
+      with critical system components through use of protected process light, anti-process
+      injection defenses, or other process integrity enforcement measures.
+    link: https://attack.mitre.org/mitigations/M1025
+  - id: M1029
+    name: Remote Data Storage
+    description: Use remote security log and sensitive file storage where access can
+      be controlled better to prevent exposure of intrusion detection log data or
+      sensitive information.
+    link: https://attack.mitre.org/mitigations/M1029
+  - id: M1022
+    name: Restrict File and Directory Permissions
+    description: Restrict access by setting directory and file permissions that are
+      not specific to users or privileged accounts.
+    link: https://attack.mitre.org/mitigations/M1022
+  - id: M1044
+    name: Restrict Library Loading
+    description: Prevent abuse of library loading mechanisms in the operating system
+      and software to load untrusted code by configuring appropriate library loading
+      mechanisms and investigating potential vulnerable software.
+    link: https://attack.mitre.org/mitigations/M1044
+  - id: M1024
+    name: Restrict Registry Permissions
+    description: Restrict the ability to modify certain hives or keys in the Windows
+      Registry.
+    link: https://attack.mitre.org/mitigations/M1024
+  - id: M1021
+    name: Restrict Web-Based Content
+    description: Restrict use of certain websites, block downloads/attachments, block
+      Javascript, restrict browser extensions, etc.
+    link: https://attack.mitre.org/mitigations/M1021
+  - id: M1020
+    name: SSL/TLS Inspection
+    description: Break and inspect SSL/TLS sessions to look at encrypted web traffic
+      for adversary activity.
+    link: https://attack.mitre.org/mitigations/M1020
+  - id: M1054
+    name: Software Configuration
+    description: Implement configuration changes to software (other than the operating
+      system) to mitigate security risks associated to how the software operates.
+    link: https://attack.mitre.org/mitigations/M1054
+  - id: M1019
+    name: Threat Intelligence Program
+    description: A threat intelligence program helps an organization generate their
+      own threat intelligence information and track trends to inform defensive priorities
+      to mitigate risk.
+    link: https://attack.mitre.org/mitigations/M1019
+  - id: M1051
+    name: Update Software
+    description: Perform regular software updates to mitigate exploitation risk.
+    link: https://attack.mitre.org/mitigations/M1051
+  - id: M1052
+    name: User Account Control
+    description: Configure Windows User Account Control to mitigate risk of adversaries
+      obtaining elevated process access.
+    link: https://attack.mitre.org/mitigations/M1052
+  - id: M1018
+    name: User Account Management
+    description: Manage the creation, modification, use, and permissions associated
+      to user accounts.
+    link: https://attack.mitre.org/mitigations/M1018
+  - id: M1017
+    name: User Training
+    description: Train users to be aware of access or manipulation attempts by an
+      adversary to reduce the risk of successful spearphishing, social engineering,
+      and other techniques that involve user interaction.
+    link: https://attack.mitre.org/mitigations/M1017
+  - id: M1016
+    name: Vulnerability Scanning
+    description: Vulnerability scanning is used to find potentially exploitable software
+      vulnerabilities to remediate them.
+    link: https://attack.mitre.org/mitigations/M1016
+  - id: M1058
+    name: 'Mobile : Antivirus/Antimalware'
+    description: Mobile security products, such as Mobile Threat Defense (MTD), offer
+      various device-based mitigations against certain behaviors.
+    link: https://attack.mitre.org/mitigations/M1058
+  - id: M1013
+    name: 'Mobile : Application Developer Guidance'
+    description: This mitigation describes any guidance or training given to developers
+      of applications to avoid introducing security weaknesses that an adversary may
+      be able to take advantage of.
+    link: https://attack.mitre.org/mitigations/M1013
+  - id: M1002
+    name: 'Mobile : Attestation'
+    description: Enable remote attestation capabilities when available (such as Android
+      SafetyNet or Samsung Knox TIMA Attestation) and prohibit devices that fail the
+      attestation from accessing enterprise resources.
+    link: https://attack.mitre.org/mitigations/M1002
+  - id: M1010
+    name: 'Mobile : Deploy Compromised Device Detection Method'
+    description: A variety of methods exist that can be used to enable enterprises
+      to identify compromised (e.g. rooted/jailbroken) devices, whether using security
+      mechanisms built directly into the device, third-party mobile security applications,
+      enterprise mobility management (EMM)/mobile device management (MDM) capabilities,
+      or other methods. Some methods may be trivial to evade while others may be more
+      sophisticated.
+    link: https://attack.mitre.org/mitigations/M1010
+  - id: M1009
+    name: 'Mobile : Encrypt Network Traffic'
+    description: 'Application developers should encrypt all of their application network
+      traffic using the Transport Layer Security (TLS) protocol to ensure protection
+      of sensitive data and deter network-based attacks. If desired, application developers
+      could perform message-based encryption of data before passing it for TLS encryption.
+
+
+      iOS''s App Transport Security feature can be used to help ensure that all application
+      network traffic is appropriately protected. Apple intends to mandate use of
+      App Transport Security  (Citation: TechCrunch-ATS) for all apps in the Apple
+      App Store unless appropriate justification is given.
+
+
+      Android''s Network Security Configuration feature similarly can be used by app
+      developers to help ensure that all of their application network traffic is appropriately
+      protected  (Citation: Android-NetworkSecurityConfig).
+
+
+      Use of Virtual Private Network (VPN) tunnels, e.g. using the IPsec protocol,
+      can help mitigate some types of network attacks as well.'
+    link: https://attack.mitre.org/mitigations/M1009
+  - id: M1012
+    name: 'Mobile : Enterprise Policy'
+    description: An enterprise mobility management (EMM), also known as mobile device
+      management (MDM), system can be used to provision policies to mobile devices
+      to control aspects of their allowed behavior.
+    link: https://attack.mitre.org/mitigations/M1012
+  - id: M1014
+    name: 'Mobile : Interconnection Filtering'
+    description: 'In order to mitigate Signaling System 7 (SS7) exploitation, the
+      Communications, Security, Reliability, and Interoperability Council (CSRIC)
+      describes filtering interconnections between network operators to block inappropriate
+      requests (Citation: CSRIC5-WG10-FinalReport).'
+    link: https://attack.mitre.org/mitigations/M1014
+  - id: M1003
+    name: 'Mobile : Lock Bootloader'
+    description: On devices that provide the capability to unlock the bootloader (hence
+      allowing any operating system code to be flashed onto the device), perform periodic
+      checks to ensure that the bootloader is locked.
+    link: https://attack.mitre.org/mitigations/M1003
+  - id: M1001
+    name: 'Mobile : Security Updates'
+    description: 'Install security updates in response to discovered vulnerabilities.
+
+
+      Purchase devices with a vendor and/or mobile carrier commitment to provide security
+      updates in a prompt manner for a set period of time.
+
+
+      Decommission devices that will no longer receive security updates.
+
+
+      Limit or block access to enterprise resources from devices that have not installed
+      recent security updates.
+
+
+      On Android devices, access can be controlled based on each device''s security
+      patch level. On iOS devices, access can be controlled based on the iOS version.'
+    link: https://attack.mitre.org/mitigations/M1001
+  - id: M1004
+    name: 'Mobile : System Partition Integrity'
+    description: Ensure that Android devices being used include and enable the Verified
+      Boot capability, which cryptographically ensures the integrity of the system
+      partition.
+    link: https://attack.mitre.org/mitigations/M1004
+  - id: M1006
+    name: 'Mobile : Use Recent OS Version'
+    description: New mobile operating system versions bring not only patches against
+      discovered vulnerabilities but also often bring security architecture improvements
+      that provide resilience against potential vulnerabilities or weaknesses that
+      have not yet been discovered. They may also bring improvements that block use
+      of observed adversary techniques.
+    link: https://attack.mitre.org/mitigations/M1006
+  - id: M1011
+    name: 'Mobile : User Guidance'
+    description: Describes any guidance or training given to users to set particular
+      configuration settings or avoid specific potentially risky behaviors.
+    link: https://attack.mitre.org/mitigations/M1011
+  - id: M0801
+    name: 'Industrial : Access Management'
+    description: 'Access Management technologies can be used to enforce authorization
+      polices and decisions, especially when existing field devices do not provided
+      sufficient capabilities to support user identification and authentication. (Citation:
+      McCarthy, J et al. July 2018) These technologies typically utilize an in-line
+      network device or gateway system to prevent access to unauthenticated users,
+      while also integrating with an authentication service to first verify user credentials.
+      (Citation: Centre for the Protection of National Infrastructure November 2010)'
+    link: https://attack.mitre.org/mitigations/M0801
+  - id: M0936
+    name: 'Industrial : Account Use Policies'
+    description: Configure features related to account use like login attempt lockouts,
+      specific login times, etc.
+    link: https://attack.mitre.org/mitigations/M0936
+  - id: M0915
+    name: 'Industrial : Active Directory Configuration'
+    description: Configure Active Directory to prevent use of certain techniques;
+      use security identifier (SID) Filtering, etc.
+    link: https://attack.mitre.org/mitigations/M0915
+  - id: M0949
+    name: 'Industrial : Antivirus/Antimalware'
+    description: 'Use signatures or heuristics to detect malicious software.  Within
+      industrial control environments, antivirus/antimalware installations should
+      be limited to assets that are not involved in critical or real-time operations.
+      To minimize the impact to system availability, all products should first be
+      validated within a representative test environment before deployment to production
+      systems. (Citation: NCCIC August 2018)'
+    link: https://attack.mitre.org/mitigations/M0949
+  - id: M0913
+    name: 'Industrial : Application Developer Guidance'
+    description: This mitigation describes any guidance or training given to developers
+      of applications to avoid introducing security weaknesses that an adversary may
+      be able to take advantage of.
+    link: https://attack.mitre.org/mitigations/M0913
+  - id: M0948
+    name: 'Industrial : Application Isolation and Sandboxing'
+    description: Restrict the execution of code to a virtual environment on or in-transit
+      to an endpoint system.
+    link: https://attack.mitre.org/mitigations/M0948
+  - id: M0947
+    name: 'Industrial : Audit'
+    description: Perform audits or scans of systems, permissions, insecure software,
+      insecure configurations, etc. to identify potential weaknesses. Perform periodic
+      integrity checks of the device to validate the correctness of the firmware,
+      software, programs, and configurations. Integrity checks, which typically include
+      cryptographic hashes or digital signatures, should be compared to those obtained
+      at known valid states, especially after events like device reboots, program
+      downloads, or program restarts.
+    link: https://attack.mitre.org/mitigations/M0947
+  - id: M0800
+    name: 'Industrial : Authorization Enforcement'
+    description: 'The device or system should restrict read, manipulate, or execute
+      privileges to only authenticated users who require access based on approved
+      security policies.  Role-based Access Control (RBAC) schemes can help reduce
+      the overhead of assigning permissions to the large number of devices within
+      an ICS. For example, IEC 62351 provides examples of roles used to support common
+      system operations within the electric power sector  (Citation: International
+      Electrotechnical Commission July 2020), while IEEE 1686 defines standard permissions
+      for users of IEDs. (Citation: Institute of Electrical and Electronics Engineers
+      January 2014)'
+    link: https://attack.mitre.org/mitigations/M0800
+  - id: M0946
+    name: 'Industrial : Boot Integrity'
+    description: Use secure methods to boot a system and verify the integrity of the
+      operating system and loading mechanisms.
+    link: https://attack.mitre.org/mitigations/M0946
+  - id: M0945
+    name: 'Industrial : Code Signing'
+    description: Enforce binary and application integrity with digital signature verification
+      to prevent untrusted code from executing.
+    link: https://attack.mitre.org/mitigations/M0945
+  - id: M0802
+    name: 'Industrial : Communication Authenticity'
+    description: When communicating over an untrusted network, utilize secure network
+      protocols that both authenticate the message sender and can verify its integrity.
+      This can be done either through message authentication codes (MACs) or digital
+      signatures, to detect spoofed network messages and unauthorized connections.
+    link: https://attack.mitre.org/mitigations/M0802
+  - id: M0953
+    name: 'Industrial : Data Backup'
+    description: 'Take and store data backups from end user systems and critical servers.
+      Ensure backup and storage systems are hardened and kept separate from the corporate
+      network to prevent compromise.   Maintain and exercise incident response plans  (Citation:
+      Department of Homeland Security October 2009), including the management of  ''gold-copy''
+      back-up images and configurations for key systems to enable quick recovery and
+      response from adversarial activities that impact control, view, or availability.'
+    link: https://attack.mitre.org/mitigations/M0953
+  - id: M0803
+    name: 'Industrial : Data Loss Prevention'
+    description: Data Loss Prevention (DLP) technologies can be used to help identify
+      adversarial attempts to exfiltrate operational information, such as engineering
+      plans, trade secrets, recipes, intellectual property, or process telemetry.
+      DLP functionality may be built into other security products such as firewalls
+      or standalone suites running on the network and host-based agents. DLP may be
+      configured to prevent the transfer of information through corporate resources
+      such as email, web, and physical media such as USB for host-based solutions.
+    link: https://attack.mitre.org/mitigations/M0803
+  - id: M0942
+    name: 'Industrial : Disable or Remove Feature or Program'
+    description: Remove or deny access to unnecessary and potentially vulnerable software
+      to prevent abuse by adversaries.
+    link: https://attack.mitre.org/mitigations/M0942
+  - id: M0808
+    name: 'Industrial : Encrypt Network Traffic'
+    description: Utilize strong cryptographic techniques and protocols to prevent
+      eavesdropping on network communications.
+    link: https://attack.mitre.org/mitigations/M0808
+  - id: M0941
+    name: 'Industrial : Encrypt Sensitive Information'
+    description: Protect sensitive data-at-rest with strong encryption.
+    link: https://attack.mitre.org/mitigations/M0941
+  - id: M0938
+    name: 'Industrial : Execution Prevention'
+    description: Block execution of code on a system through application control,
+      and/or script blocking.
+    link: https://attack.mitre.org/mitigations/M0938
+  - id: M0950
+    name: 'Industrial : Exploit Protection'
+    description: Use capabilities to detect and block conditions that may lead to
+      or be indicative of a software exploit occurring.
+    link: https://attack.mitre.org/mitigations/M0950
+  - id: M0937
+    name: 'Industrial : Filter Network Traffic'
+    description: 'Use network appliances to filter ingress or egress traffic and perform
+      protocol-based filtering. Configure software on endpoints to filter network
+      traffic.   Perform inline allow/denylisting of network messages based on the
+      application layer (OSI Layer 7) protocol, especially for automation protocols.
+      Application allowlists are beneficial when there are well-defined communication
+      sequences, types, rates, or patterns needed during expected system operations.
+      Application denylists may be needed if all acceptable communication sequences
+      cannot be defined, but instead a set of known malicious uses can be denied (e.g.,
+      excessive communication  attempts, shutdown messages, invalid commands).  Devices
+      performing these functions are often referred to as deep-packet inspection (DPI)
+      firewalls, context-aware firewalls, or firewalls blocking specific automation/SCADA
+      protocol aware firewalls. (Citation: Centre for the Protection of National Infrastructure
+      February 2005)'
+    link: https://attack.mitre.org/mitigations/M0937
+  - id: M0804
+    name: 'Industrial : Human User Authentication'
+    description: Require user authentication before allowing access to data or accepting
+      commands to a device. While strong multi-factor authentication is preferable,
+      it is not always feasible within ICS environments. Performing strong user authentication
+      also requires additional security controls and processes which are often the
+      target of related adversarial techniques (e.g., Valid Accounts, Default Credentials).
+      Therefore, associated ATT&CK mitigations should be considered in addition to
+      this, including [Multi-factor Authentication](https://attack.mitre.org/mitigations/M0932),
+      [Account Use Policies](https://attack.mitre.org/mitigations/M0936), [Password
+      Policies](https://attack.mitre.org/mitigations/M0927), [User Account Management](https://attack.mitre.org/mitigations/M0918),
+      [Privileged Account Management](https://attack.mitre.org/mitigations/M0926),
+      and [User Account Control](https://attack.mitre.org/mitigations/M1052).
+    link: https://attack.mitre.org/mitigations/M0804
+  - id: M0935
+    name: 'Industrial : Limit Access to Resource Over Network'
+    description: Prevent access to file shares, remote access to systems, unnecessary
+      services. Mechanisms to limit access may include use of network concentrators,
+      RDP gateways, etc.
+    link: https://attack.mitre.org/mitigations/M0935
+  - id: M0934
+    name: 'Industrial : Limit Hardware Installation'
+    description: Block users or groups from installing or using unapproved hardware
+      on systems, including USB devices.
+    link: https://attack.mitre.org/mitigations/M0934
+  - id: M0805
+    name: 'Industrial : Mechanical Protection Layers'
+    description: 'Utilize a layered protection design based on physical or mechanical
+      protection systems to prevent damage to property, equipment, human safety, or
+      the environment. Examples include interlocks, rupture disk, release values,
+      etc. (Citation: A G Foord, W G Gulland, C R Howard, T Kellacher, W H Smith 2004) '
+    link: https://attack.mitre.org/mitigations/M0805
+  - id: M0806
+    name: 'Industrial : Minimize Wireless Signal Propagation'
+    description: 'Wireless signals frequently propagate outside of organizational
+      boundaries, which provide opportunities for adversaries to monitor or gain unauthorized
+      access to the wireless network. (Citation: CISA March 2010) To minimize this
+      threat, organizations should implement measures to detect, understand, and reduce
+      unnecessary RF propagation. (Citation: DHS  National Urban Security Technology
+      Laboratory April 2019)'
+    link: https://attack.mitre.org/mitigations/M0806
+  - id: M0816
+    name: 'Industrial : Mitigation Limited or Not Effective'
+    description: This type of attack technique cannot be easily mitigated with preventative
+      controls since it is based on the abuse of system features.
+    link: https://attack.mitre.org/mitigations/M0816
+  - id: M0932
+    name: 'Industrial : Multi-factor Authentication'
+    description: Use two or more pieces of evidence to authenticate to a system; such
+      as username and password in addition to a token from a physical smart card or
+      token generator.  Within industrial control environments assets such as low-level
+      controllers, workstations, and HMIs have real-time operational control and safety
+      requirements which may restrict the use of multi-factor.
+    link: https://attack.mitre.org/mitigations/M0932
+  - id: M0807
+    name: 'Industrial : Network Allowlists'
+    description: Network allowlists can be implemented through either host-based files
+      or system hosts files to specify what connections (e.g., IP address, MAC address,
+      port, protocol) can be made from a device. Allowlist techniques that operate
+      at the  application layer (e.g., DNP3, Modbus, HTTP) are addressed in [Filter
+      Network Traffic](https://attack.mitre.org/mitigations/M0937) mitigation.
+    link: https://attack.mitre.org/mitigations/M0807
+  - id: M0931
+    name: 'Industrial : Network Intrusion Prevention'
+    description: Use intrusion detection signatures to block traffic at network boundaries.  In
+      industrial control environments, network intrusion prevention should be configured
+      so it will not disrupt protocols and communications responsible for real-time
+      functions related to control or safety.
+    link: https://attack.mitre.org/mitigations/M0931
+  - id: M0930
+    name: 'Industrial : Network Segmentation'
+    description: 'Architect sections of the network to isolate critical systems, functions,
+      or resources. Use physical and logical segmentation to prevent access to potentially
+      sensitive systems and information. Use a DMZ to contain any internet-facing
+      services that should not be exposed from the internal network.  Restrict network
+      access to only required systems and services. In addition, prevent systems from
+      other networks or business functions (e.g., enterprise) from accessing critical
+      process control systems. For example, in IEC 62443, systems within the same
+      secure level should be grouped into a zone, and access to that zone is restricted
+      by a conduit, or mechanism to restrict data flows between zones by segmenting
+      the network. (Citation: IEC February 2019) (Citation: IEC August 2013)'
+    link: https://attack.mitre.org/mitigations/M0930
+  - id: M0928
+    name: 'Industrial : Operating System Configuration'
+    description: Make configuration changes related to the operating system or a common
+      feature of the operating system that result in system hardening against techniques.
+    link: https://attack.mitre.org/mitigations/M0928
+  - id: M0809
+    name: 'Industrial : Operational Information Confidentiality'
+    description: Deploy mechanisms to protect the confidentiality of information related
+      to operational processes, facility locations, device configurations, programs,
+      or databases that may have information that can be used to infer organizational
+      trade-secrets, recipes, and other intellectual property (IP).
+    link: https://attack.mitre.org/mitigations/M0809
+  - id: M0810
+    name: 'Industrial : Out-of-Band Communications Channel'
+    description: 'Have alternative methods to support communication requirements during
+      communication failures and data integrity attacks. (Citation: National Institute
+      of Standards and Technology April 2013) (Citation: Defense Advanced Research
+      Projects Agency)'
+    link: https://attack.mitre.org/mitigations/M0810
+  - id: M0927
+    name: 'Industrial : Password Policies'
+    description: Set and enforce secure password policies for accounts.
+    link: https://attack.mitre.org/mitigations/M0927
+  - id: M0926
+    name: 'Industrial : Privileged Account Management'
+    description: Manage the creation, modification, use, and permissions associated
+      to privileged accounts, including SYSTEM and root.
+    link: https://attack.mitre.org/mitigations/M0926
+  - id: M0811
+    name: 'Industrial : Redundancy of Service'
+    description: Redundancy could be provided for both critical ICS devices and services,
+      such as back-up devices or hot-standbys.
+    link: https://attack.mitre.org/mitigations/M0811
+  - id: M0922
+    name: 'Industrial : Restrict File and Directory Permissions'
+    description: Restrict access by setting directory and file permissions that are
+      not specific to users or privileged accounts.
+    link: https://attack.mitre.org/mitigations/M0922
+  - id: M0944
+    name: 'Industrial : Restrict Library Loading'
+    description: Prevent abuse of library loading mechanisms in the operating system
+      and software to load untrusted code by configuring appropriate library loading
+      mechanisms and investigating potential vulnerable software.
+    link: https://attack.mitre.org/mitigations/M0944
+  - id: M0924
+    name: 'Industrial : Restrict Registry Permissions'
+    description: Restrict the ability to modify certain hives or keys in the Windows
+      Registry.
+    link: https://attack.mitre.org/mitigations/M0924
+  - id: M0921
+    name: 'Industrial : Restrict Web-Based Content'
+    description: Restrict use of certain websites, block downloads/attachments, block
+      Javascript, restrict browser extensions, etc.
+    link: https://attack.mitre.org/mitigations/M0921
+  - id: M0920
+    name: 'Industrial : SSL/TLS Inspection'
+    description: Break and inspect SSL/TLS sessions to look at encrypted web traffic
+      for adversary activity.
+    link: https://attack.mitre.org/mitigations/M0920
+  - id: M0812
+    name: 'Industrial : Safety Instrumented Systems'
+    description: 'Utilize Safety Instrumented Systems (SIS) to provide an additional
+      layer of protection to hazard scenarios that may cause property damage. A SIS
+      will typically include sensors, logic solvers, and a final control element that
+      can be used to automatically respond to an hazardous condition  (Citation: A
+      G Foord, W G Gulland, C R Howard, T Kellacher, W H Smith 2004) . Ensure that
+      all SISs are segmented from operational networks to prevent them from being
+      targeted by additional adversarial behavior.'
+    link: https://attack.mitre.org/mitigations/M0812
+  - id: M0954
+    name: 'Industrial : Software Configuration'
+    description: Implement configuration changes to software (other than the operating
+      system) to mitigate security risks associated with how the software operates.
+    link: https://attack.mitre.org/mitigations/M0954
+  - id: M0813
+    name: 'Industrial : Software Process and Device Authentication'
+    description: Require the authentication of devices and software processes where
+      appropriate. Devices that connect remotely to other systems should require strong
+      authentication to prevent spoofing of communications. Furthermore, software
+      processes should also require authentication when accessing APIs.
+    link: https://attack.mitre.org/mitigations/M0813
+  - id: M0814
+    name: 'Industrial : Static Network Configuration'
+    description: Configure hosts and devices to use static network configurations
+      when possible, protocols that require dynamic discovery/addressing (e.g., ARP,
+      DHCP, DNS) can be used to manipulate network message forwarding and enable various
+      AiTM attacks. This mitigation may not always be usable due to limited device
+      features or challenges introduced with different network configurations.
+    link: https://attack.mitre.org/mitigations/M0814
+  - id: M0817
+    name: 'Industrial : Supply Chain Management'
+    description: Implement a supply chain management program, including policies and
+      procedures to ensure all devices and components originate from a trusted supplier
+      and are tested to verify their integrity.
+    link: https://attack.mitre.org/mitigations/M0817
+  - id: M0919
+    name: 'Industrial : Threat Intelligence Program'
+    description: A threat intelligence program helps an organization generate their
+      own threat intelligence information and track trends to inform defensive priorities
+      to mitigate risk.
+    link: https://attack.mitre.org/mitigations/M0919
+  - id: M0951
+    name: 'Industrial : Update Software'
+    description: Perform regular software updates to mitigate exploitation risk. Software
+      updates may need to be scheduled around operational down times.
+    link: https://attack.mitre.org/mitigations/M0951
+  - id: M0918
+    name: 'Industrial : User Account Management'
+    description: Manage the creation, modification, use, and permissions associated
+      to user accounts.
+    link: https://attack.mitre.org/mitigations/M0918
+  - id: M0917
+    name: 'Industrial : User Training'
+    description: Train users to be aware of access or manipulation attempts by an
+      adversary to reduce the risk of successful spearphishing, social engineering,
+      and other techniques that involve user interaction.
+    link: https://attack.mitre.org/mitigations/M0917
+  - id: M0818
+    name: 'Industrial : Validate Program Inputs'
+    description: 'Devices and programs designed to interact with control system parameters
+      should validate the format and content of all user inputs and actions to ensure
+      the values are within intended operational ranges. These values should be evaluated
+      and further enforced through the program logic running on the field controller.
+      If a problematic or invalid input is identified, the programs should either
+      utilize a predetermined safe value or enter a known safe state, while also logging
+      or alerting on the event.(Citation: PLCTop20 Mar 2023)'
+    link: https://attack.mitre.org/mitigations/M0818
+  - id: M0916
+    name: 'Industrial : Vulnerability Scanning'
+    description: Vulnerability scanning is used to find potentially exploitable software
+      vulnerabilities to remediate them.
+    link: https://attack.mitre.org/mitigations/M0916
+  - id: M0815
+    name: 'Industrial : Watchdog Timers'
+    description: Utilize watchdog timers to ensure devices can quickly detect whether
+      a system is unresponsive.
+    link: https://attack.mitre.org/mitigations/M0815
+  - id: M1058
+    name: 'Mobile : Antivirus/Antimalware'
+    description: Mobile security products, such as Mobile Threat Defense (MTD), offer
+      various device-based mitigations against certain behaviors.
+    link: https://attack.mitre.org/mitigations/M1058
+  - id: M1013
+    name: 'Mobile : Application Developer Guidance'
+    description: This mitigation describes any guidance or training given to developers
+      of applications to avoid introducing security weaknesses that an adversary may
+      be able to take advantage of.
+    link: https://attack.mitre.org/mitigations/M1013
+  - id: M1002
+    name: 'Mobile : Attestation'
+    description: Enable remote attestation capabilities when available (such as Android
+      SafetyNet or Samsung Knox TIMA Attestation) and prohibit devices that fail the
+      attestation from accessing enterprise resources.
+    link: https://attack.mitre.org/mitigations/M1002
+  - id: M1010
+    name: 'Mobile : Deploy Compromised Device Detection Method'
+    description: A variety of methods exist that can be used to enable enterprises
+      to identify compromised (e.g. rooted/jailbroken) devices, whether using security
+      mechanisms built directly into the device, third-party mobile security applications,
+      enterprise mobility management (EMM)/mobile device management (MDM) capabilities,
+      or other methods. Some methods may be trivial to evade while others may be more
+      sophisticated.
+    link: https://attack.mitre.org/mitigations/M1010
+  - id: M1009
+    name: 'Mobile : Encrypt Network Traffic'
+    description: 'Application developers should encrypt all of their application network
+      traffic using the Transport Layer Security (TLS) protocol to ensure protection
+      of sensitive data and deter network-based attacks. If desired, application developers
+      could perform message-based encryption of data before passing it for TLS encryption.
+
+
+      iOS''s App Transport Security feature can be used to help ensure that all application
+      network traffic is appropriately protected. Apple intends to mandate use of
+      App Transport Security  (Citation: TechCrunch-ATS) for all apps in the Apple
+      App Store unless appropriate justification is given.
+
+
+      Android''s Network Security Configuration feature similarly can be used by app
+      developers to help ensure that all of their application network traffic is appropriately
+      protected  (Citation: Android-NetworkSecurityConfig).
+
+
+      Use of Virtual Private Network (VPN) tunnels, e.g. using the IPsec protocol,
+      can help mitigate some types of network attacks as well.'
+    link: https://attack.mitre.org/mitigations/M1009
+  - id: M1012
+    name: 'Mobile : Enterprise Policy'
+    description: An enterprise mobility management (EMM), also known as mobile device
+      management (MDM), system can be used to provision policies to mobile devices
+      to control aspects of their allowed behavior.
+    link: https://attack.mitre.org/mitigations/M1012
+  - id: M1014
+    name: 'Mobile : Interconnection Filtering'
+    description: 'In order to mitigate Signaling System 7 (SS7) exploitation, the
+      Communications, Security, Reliability, and Interoperability Council (CSRIC)
+      describes filtering interconnections between network operators to block inappropriate
+      requests (Citation: CSRIC5-WG10-FinalReport).'
+    link: https://attack.mitre.org/mitigations/M1014
+  - id: M1003
+    name: 'Mobile : Lock Bootloader'
+    description: On devices that provide the capability to unlock the bootloader (hence
+      allowing any operating system code to be flashed onto the device), perform periodic
+      checks to ensure that the bootloader is locked.
+    link: https://attack.mitre.org/mitigations/M1003
+  - id: M1001
+    name: 'Mobile : Security Updates'
+    description: 'Install security updates in response to discovered vulnerabilities.
+
+
+      Purchase devices with a vendor and/or mobile carrier commitment to provide security
+      updates in a prompt manner for a set period of time.
+
+
+      Decommission devices that will no longer receive security updates.
+
+
+      Limit or block access to enterprise resources from devices that have not installed
+      recent security updates.
+
+
+      On Android devices, access can be controlled based on each device''s security
+      patch level. On iOS devices, access can be controlled based on the iOS version.'
+    link: https://attack.mitre.org/mitigations/M1001
+  - id: M1004
+    name: 'Mobile : System Partition Integrity'
+    description: Ensure that Android devices being used include and enable the Verified
+      Boot capability, which cryptographically ensures the integrity of the system
+      partition.
+    link: https://attack.mitre.org/mitigations/M1004
+  - id: M1006
+    name: 'Mobile : Use Recent OS Version'
+    description: New mobile operating system versions bring not only patches against
+      discovered vulnerabilities but also often bring security architecture improvements
+      that provide resilience against potential vulnerabilities or weaknesses that
+      have not yet been discovered. They may also bring improvements that block use
+      of observed adversary techniques.
+    link: https://attack.mitre.org/mitigations/M1006
+  - id: M1011
+    name: 'Mobile : User Guidance'
+    description: Describes any guidance or training given to users to set particular
+      configuration settings or avoid specific potentially risky behaviors.
+    link: https://attack.mitre.org/mitigations/M1011
+  - id: M0801
+    name: 'Industrial : Access Management'
+    description: 'Access Management technologies can be used to enforce authorization
+      polices and decisions, especially when existing field devices do not provided
+      sufficient capabilities to support user identification and authentication. (Citation:
+      McCarthy, J et al. July 2018) These technologies typically utilize an in-line
+      network device or gateway system to prevent access to unauthenticated users,
+      while also integrating with an authentication service to first verify user credentials.
+      (Citation: Centre for the Protection of National Infrastructure November 2010)'
+    link: https://attack.mitre.org/mitigations/M0801
+  - id: M0936
+    name: 'Industrial : Account Use Policies'
+    description: Configure features related to account use like login attempt lockouts,
+      specific login times, etc.
+    link: https://attack.mitre.org/mitigations/M0936
+  - id: M0915
+    name: 'Industrial : Active Directory Configuration'
+    description: Configure Active Directory to prevent use of certain techniques;
+      use security identifier (SID) Filtering, etc.
+    link: https://attack.mitre.org/mitigations/M0915
+  - id: M0949
+    name: 'Industrial : Antivirus/Antimalware'
+    description: 'Use signatures or heuristics to detect malicious software.  Within
+      industrial control environments, antivirus/antimalware installations should
+      be limited to assets that are not involved in critical or real-time operations.
+      To minimize the impact to system availability, all products should first be
+      validated within a representative test environment before deployment to production
+      systems. (Citation: NCCIC August 2018)'
+    link: https://attack.mitre.org/mitigations/M0949
+  - id: M0913
+    name: 'Industrial : Application Developer Guidance'
+    description: This mitigation describes any guidance or training given to developers
+      of applications to avoid introducing security weaknesses that an adversary may
+      be able to take advantage of.
+    link: https://attack.mitre.org/mitigations/M0913
+  - id: M0948
+    name: 'Industrial : Application Isolation and Sandboxing'
+    description: Restrict the execution of code to a virtual environment on or in-transit
+      to an endpoint system.
+    link: https://attack.mitre.org/mitigations/M0948
+  - id: M0947
+    name: 'Industrial : Audit'
+    description: Perform audits or scans of systems, permissions, insecure software,
+      insecure configurations, etc. to identify potential weaknesses. Perform periodic
+      integrity checks of the device to validate the correctness of the firmware,
+      software, programs, and configurations. Integrity checks, which typically include
+      cryptographic hashes or digital signatures, should be compared to those obtained
+      at known valid states, especially after events like device reboots, program
+      downloads, or program restarts.
+    link: https://attack.mitre.org/mitigations/M0947
+  - id: M0800
+    name: 'Industrial : Authorization Enforcement'
+    description: 'The device or system should restrict read, manipulate, or execute
+      privileges to only authenticated users who require access based on approved
+      security policies.  Role-based Access Control (RBAC) schemes can help reduce
+      the overhead of assigning permissions to the large number of devices within
+      an ICS. For example, IEC 62351 provides examples of roles used to support common
+      system operations within the electric power sector  (Citation: International
+      Electrotechnical Commission July 2020), while IEEE 1686 defines standard permissions
+      for users of IEDs. (Citation: Institute of Electrical and Electronics Engineers
+      January 2014)'
+    link: https://attack.mitre.org/mitigations/M0800
+  - id: M0946
+    name: 'Industrial : Boot Integrity'
+    description: Use secure methods to boot a system and verify the integrity of the
+      operating system and loading mechanisms.
+    link: https://attack.mitre.org/mitigations/M0946
+  - id: M0945
+    name: 'Industrial : Code Signing'
+    description: Enforce binary and application integrity with digital signature verification
+      to prevent untrusted code from executing.
+    link: https://attack.mitre.org/mitigations/M0945
+  - id: M0802
+    name: 'Industrial : Communication Authenticity'
+    description: When communicating over an untrusted network, utilize secure network
+      protocols that both authenticate the message sender and can verify its integrity.
+      This can be done either through message authentication codes (MACs) or digital
+      signatures, to detect spoofed network messages and unauthorized connections.
+    link: https://attack.mitre.org/mitigations/M0802
+  - id: M0953
+    name: 'Industrial : Data Backup'
+    description: 'Take and store data backups from end user systems and critical servers.
+      Ensure backup and storage systems are hardened and kept separate from the corporate
+      network to prevent compromise.   Maintain and exercise incident response plans  (Citation:
+      Department of Homeland Security October 2009), including the management of  ''gold-copy''
+      back-up images and configurations for key systems to enable quick recovery and
+      response from adversarial activities that impact control, view, or availability.'
+    link: https://attack.mitre.org/mitigations/M0953
+  - id: M0803
+    name: 'Industrial : Data Loss Prevention'
+    description: Data Loss Prevention (DLP) technologies can be used to help identify
+      adversarial attempts to exfiltrate operational information, such as engineering
+      plans, trade secrets, recipes, intellectual property, or process telemetry.
+      DLP functionality may be built into other security products such as firewalls
+      or standalone suites running on the network and host-based agents. DLP may be
+      configured to prevent the transfer of information through corporate resources
+      such as email, web, and physical media such as USB for host-based solutions.
+    link: https://attack.mitre.org/mitigations/M0803
+  - id: M0942
+    name: 'Industrial : Disable or Remove Feature or Program'
+    description: Remove or deny access to unnecessary and potentially vulnerable software
+      to prevent abuse by adversaries.
+    link: https://attack.mitre.org/mitigations/M0942
+  - id: M0808
+    name: 'Industrial : Encrypt Network Traffic'
+    description: Utilize strong cryptographic techniques and protocols to prevent
+      eavesdropping on network communications.
+    link: https://attack.mitre.org/mitigations/M0808
+  - id: M0941
+    name: 'Industrial : Encrypt Sensitive Information'
+    description: Protect sensitive data-at-rest with strong encryption.
+    link: https://attack.mitre.org/mitigations/M0941
+  - id: M0938
+    name: 'Industrial : Execution Prevention'
+    description: Block execution of code on a system through application control,
+      and/or script blocking.
+    link: https://attack.mitre.org/mitigations/M0938
+  - id: M0950
+    name: 'Industrial : Exploit Protection'
+    description: Use capabilities to detect and block conditions that may lead to
+      or be indicative of a software exploit occurring.
+    link: https://attack.mitre.org/mitigations/M0950
+  - id: M0937
+    name: 'Industrial : Filter Network Traffic'
+    description: 'Use network appliances to filter ingress or egress traffic and perform
+      protocol-based filtering. Configure software on endpoints to filter network
+      traffic.   Perform inline allow/denylisting of network messages based on the
+      application layer (OSI Layer 7) protocol, especially for automation protocols.
+      Application allowlists are beneficial when there are well-defined communication
+      sequences, types, rates, or patterns needed during expected system operations.
+      Application denylists may be needed if all acceptable communication sequences
+      cannot be defined, but instead a set of known malicious uses can be denied (e.g.,
+      excessive communication  attempts, shutdown messages, invalid commands).  Devices
+      performing these functions are often referred to as deep-packet inspection (DPI)
+      firewalls, context-aware firewalls, or firewalls blocking specific automation/SCADA
+      protocol aware firewalls. (Citation: Centre for the Protection of National Infrastructure
+      February 2005)'
+    link: https://attack.mitre.org/mitigations/M0937
+  - id: M0804
+    name: 'Industrial : Human User Authentication'
+    description: Require user authentication before allowing access to data or accepting
+      commands to a device. While strong multi-factor authentication is preferable,
+      it is not always feasible within ICS environments. Performing strong user authentication
+      also requires additional security controls and processes which are often the
+      target of related adversarial techniques (e.g., Valid Accounts, Default Credentials).
+      Therefore, associated ATT&CK mitigations should be considered in addition to
+      this, including [Multi-factor Authentication](https://attack.mitre.org/mitigations/M0932),
+      [Account Use Policies](https://attack.mitre.org/mitigations/M0936), [Password
+      Policies](https://attack.mitre.org/mitigations/M0927), [User Account Management](https://attack.mitre.org/mitigations/M0918),
+      [Privileged Account Management](https://attack.mitre.org/mitigations/M0926),
+      and [User Account Control](https://attack.mitre.org/mitigations/M1052).
+    link: https://attack.mitre.org/mitigations/M0804
+  - id: M0935
+    name: 'Industrial : Limit Access to Resource Over Network'
+    description: Prevent access to file shares, remote access to systems, unnecessary
+      services. Mechanisms to limit access may include use of network concentrators,
+      RDP gateways, etc.
+    link: https://attack.mitre.org/mitigations/M0935
+  - id: M0934
+    name: 'Industrial : Limit Hardware Installation'
+    description: Block users or groups from installing or using unapproved hardware
+      on systems, including USB devices.
+    link: https://attack.mitre.org/mitigations/M0934
+  - id: M0805
+    name: 'Industrial : Mechanical Protection Layers'
+    description: 'Utilize a layered protection design based on physical or mechanical
+      protection systems to prevent damage to property, equipment, human safety, or
+      the environment. Examples include interlocks, rupture disk, release values,
+      etc. (Citation: A G Foord, W G Gulland, C R Howard, T Kellacher, W H Smith 2004) '
+    link: https://attack.mitre.org/mitigations/M0805
+  - id: M0806
+    name: 'Industrial : Minimize Wireless Signal Propagation'
+    description: 'Wireless signals frequently propagate outside of organizational
+      boundaries, which provide opportunities for adversaries to monitor or gain unauthorized
+      access to the wireless network. (Citation: CISA March 2010) To minimize this
+      threat, organizations should implement measures to detect, understand, and reduce
+      unnecessary RF propagation. (Citation: DHS  National Urban Security Technology
+      Laboratory April 2019)'
+    link: https://attack.mitre.org/mitigations/M0806
+  - id: M0816
+    name: 'Industrial : Mitigation Limited or Not Effective'
+    description: This type of attack technique cannot be easily mitigated with preventative
+      controls since it is based on the abuse of system features.
+    link: https://attack.mitre.org/mitigations/M0816
+  - id: M0932
+    name: 'Industrial : Multi-factor Authentication'
+    description: Use two or more pieces of evidence to authenticate to a system; such
+      as username and password in addition to a token from a physical smart card or
+      token generator.  Within industrial control environments assets such as low-level
+      controllers, workstations, and HMIs have real-time operational control and safety
+      requirements which may restrict the use of multi-factor.
+    link: https://attack.mitre.org/mitigations/M0932
+  - id: M0807
+    name: 'Industrial : Network Allowlists'
+    description: Network allowlists can be implemented through either host-based files
+      or system hosts files to specify what connections (e.g., IP address, MAC address,
+      port, protocol) can be made from a device. Allowlist techniques that operate
+      at the  application layer (e.g., DNP3, Modbus, HTTP) are addressed in [Filter
+      Network Traffic](https://attack.mitre.org/mitigations/M0937) mitigation.
+    link: https://attack.mitre.org/mitigations/M0807
+  - id: M0931
+    name: 'Industrial : Network Intrusion Prevention'
+    description: Use intrusion detection signatures to block traffic at network boundaries.  In
+      industrial control environments, network intrusion prevention should be configured
+      so it will not disrupt protocols and communications responsible for real-time
+      functions related to control or safety.
+    link: https://attack.mitre.org/mitigations/M0931
+  - id: M0930
+    name: 'Industrial : Network Segmentation'
+    description: 'Architect sections of the network to isolate critical systems, functions,
+      or resources. Use physical and logical segmentation to prevent access to potentially
+      sensitive systems and information. Use a DMZ to contain any internet-facing
+      services that should not be exposed from the internal network.  Restrict network
+      access to only required systems and services. In addition, prevent systems from
+      other networks or business functions (e.g., enterprise) from accessing critical
+      process control systems. For example, in IEC 62443, systems within the same
+      secure level should be grouped into a zone, and access to that zone is restricted
+      by a conduit, or mechanism to restrict data flows between zones by segmenting
+      the network. (Citation: IEC February 2019) (Citation: IEC August 2013)'
+    link: https://attack.mitre.org/mitigations/M0930
+  - id: M0928
+    name: 'Industrial : Operating System Configuration'
+    description: Make configuration changes related to the operating system or a common
+      feature of the operating system that result in system hardening against techniques.
+    link: https://attack.mitre.org/mitigations/M0928
+  - id: M0809
+    name: 'Industrial : Operational Information Confidentiality'
+    description: Deploy mechanisms to protect the confidentiality of information related
+      to operational processes, facility locations, device configurations, programs,
+      or databases that may have information that can be used to infer organizational
+      trade-secrets, recipes, and other intellectual property (IP).
+    link: https://attack.mitre.org/mitigations/M0809
+  - id: M0810
+    name: 'Industrial : Out-of-Band Communications Channel'
+    description: 'Have alternative methods to support communication requirements during
+      communication failures and data integrity attacks. (Citation: National Institute
+      of Standards and Technology April 2013) (Citation: Defense Advanced Research
+      Projects Agency)'
+    link: https://attack.mitre.org/mitigations/M0810
+  - id: M0927
+    name: 'Industrial : Password Policies'
+    description: Set and enforce secure password policies for accounts.
+    link: https://attack.mitre.org/mitigations/M0927
+  - id: M0926
+    name: 'Industrial : Privileged Account Management'
+    description: Manage the creation, modification, use, and permissions associated
+      to privileged accounts, including SYSTEM and root.
+    link: https://attack.mitre.org/mitigations/M0926
+  - id: M0811
+    name: 'Industrial : Redundancy of Service'
+    description: Redundancy could be provided for both critical ICS devices and services,
+      such as back-up devices or hot-standbys.
+    link: https://attack.mitre.org/mitigations/M0811
+  - id: M0922
+    name: 'Industrial : Restrict File and Directory Permissions'
+    description: Restrict access by setting directory and file permissions that are
+      not specific to users or privileged accounts.
+    link: https://attack.mitre.org/mitigations/M0922
+  - id: M0944
+    name: 'Industrial : Restrict Library Loading'
+    description: Prevent abuse of library loading mechanisms in the operating system
+      and software to load untrusted code by configuring appropriate library loading
+      mechanisms and investigating potential vulnerable software.
+    link: https://attack.mitre.org/mitigations/M0944
+  - id: M0924
+    name: 'Industrial : Restrict Registry Permissions'
+    description: Restrict the ability to modify certain hives or keys in the Windows
+      Registry.
+    link: https://attack.mitre.org/mitigations/M0924
+  - id: M0921
+    name: 'Industrial : Restrict Web-Based Content'
+    description: Restrict use of certain websites, block downloads/attachments, block
+      Javascript, restrict browser extensions, etc.
+    link: https://attack.mitre.org/mitigations/M0921
+  - id: M0920
+    name: 'Industrial : SSL/TLS Inspection'
+    description: Break and inspect SSL/TLS sessions to look at encrypted web traffic
+      for adversary activity.
+    link: https://attack.mitre.org/mitigations/M0920
+  - id: M0812
+    name: 'Industrial : Safety Instrumented Systems'
+    description: 'Utilize Safety Instrumented Systems (SIS) to provide an additional
+      layer of protection to hazard scenarios that may cause property damage. A SIS
+      will typically include sensors, logic solvers, and a final control element that
+      can be used to automatically respond to an hazardous condition  (Citation: A
+      G Foord, W G Gulland, C R Howard, T Kellacher, W H Smith 2004) . Ensure that
+      all SISs are segmented from operational networks to prevent them from being
+      targeted by additional adversarial behavior.'
+    link: https://attack.mitre.org/mitigations/M0812
+  - id: M0954
+    name: 'Industrial : Software Configuration'
+    description: Implement configuration changes to software (other than the operating
+      system) to mitigate security risks associated with how the software operates.
+    link: https://attack.mitre.org/mitigations/M0954
+  - id: M0813
+    name: 'Industrial : Software Process and Device Authentication'
+    description: Require the authentication of devices and software processes where
+      appropriate. Devices that connect remotely to other systems should require strong
+      authentication to prevent spoofing of communications. Furthermore, software
+      processes should also require authentication when accessing APIs.
+    link: https://attack.mitre.org/mitigations/M0813
+  - id: M0814
+    name: 'Industrial : Static Network Configuration'
+    description: Configure hosts and devices to use static network configurations
+      when possible, protocols that require dynamic discovery/addressing (e.g., ARP,
+      DHCP, DNS) can be used to manipulate network message forwarding and enable various
+      AiTM attacks. This mitigation may not always be usable due to limited device
+      features or challenges introduced with different network configurations.
+    link: https://attack.mitre.org/mitigations/M0814
+  - id: M0817
+    name: 'Industrial : Supply Chain Management'
+    description: Implement a supply chain management program, including policies and
+      procedures to ensure all devices and components originate from a trusted supplier
+      and are tested to verify their integrity.
+    link: https://attack.mitre.org/mitigations/M0817
+  - id: M0919
+    name: 'Industrial : Threat Intelligence Program'
+    description: A threat intelligence program helps an organization generate their
+      own threat intelligence information and track trends to inform defensive priorities
+      to mitigate risk.
+    link: https://attack.mitre.org/mitigations/M0919
+  - id: M0951
+    name: 'Industrial : Update Software'
+    description: Perform regular software updates to mitigate exploitation risk. Software
+      updates may need to be scheduled around operational down times.
+    link: https://attack.mitre.org/mitigations/M0951
+  - id: M0918
+    name: 'Industrial : User Account Management'
+    description: Manage the creation, modification, use, and permissions associated
+      to user accounts.
+    link: https://attack.mitre.org/mitigations/M0918
+  - id: M0917
+    name: 'Industrial : User Training'
+    description: Train users to be aware of access or manipulation attempts by an
+      adversary to reduce the risk of successful spearphishing, social engineering,
+      and other techniques that involve user interaction.
+    link: https://attack.mitre.org/mitigations/M0917
+  - id: M0818
+    name: 'Industrial : Validate Program Inputs'
+    description: 'Devices and programs designed to interact with control system parameters
+      should validate the format and content of all user inputs and actions to ensure
+      the values are within intended operational ranges. These values should be evaluated
+      and further enforced through the program logic running on the field controller.
+      If a problematic or invalid input is identified, the programs should either
+      utilize a predetermined safe value or enter a known safe state, while also logging
+      or alerting on the event.(Citation: PLCTop20 Mar 2023)'
+    link: https://attack.mitre.org/mitigations/M0818
+  - id: M0916
+    name: 'Industrial : Vulnerability Scanning'
+    description: Vulnerability scanning is used to find potentially exploitable software
+      vulnerabilities to remediate them.
+    link: https://attack.mitre.org/mitigations/M0916
+  - id: M0815
+    name: 'Industrial : Watchdog Timers'
+    description: Utilize watchdog timers to ensure devices can quickly detect whether
+      a system is unresponsive.
+    link: https://attack.mitre.org/mitigations/M0815

@@ -1,0 +1,50 @@
+title: Vector Chaining
+tide.template.spacer: true
+type: array
+icon: ⛓️
+description: Describe the relation of this threat vector to others
+markdownDescription: | # The invisible characters are required for vscode to display correctly
+  **Describe the relation of this threat vector to others**
+
+  💡 The relation is always **from** the vector containing the chain
+  **to** the vector described in the chain
+
+  ```yaml
+  id: TVM1919
+  ...
+  chaining:
+  ⠀⠀- relation: sequence::succeeds
+  ⠀⠀⠀⠀vector: TVM1234
+  ```
+
+  👉 Translates to : _TVM1919 **succeeds** (or _is succeeding_) TVM1234._
+
+items:
+  type: object
+  required:
+    - relation
+    - vector
+    - description
+  
+  properties:
+    
+    relation:
+      title: Vectors Relationship
+      icon: 🔗
+      type: string
+      tide.vocab: chaining_relations
+      tide.vocab.scoped: true
+
+    vector:
+      title: Target Threat Vector Model
+      icon: ☣️
+      description: The target of the relationship the chain is representing 
+      type: string
+      tide.vocab: vectors
+
+    description:
+      title: Chaining Description
+      icon: ✏️
+      type: string
+      description: Describe with sufficient details the relation between 
+      tide.template.multiline : True

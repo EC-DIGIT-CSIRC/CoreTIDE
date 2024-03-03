@@ -1,0 +1,57 @@
+name: MDR Status
+field: status
+description: Define the status of the rule implementation according to use case development life cycle process.
+model: true # Id will be taken as identifier instead of name field.
+vocab.search_hints: False
+icon: ♻️
+keys:
+  - id: DESIGN
+    name: In Design
+    icon: ✍
+    description: Under active functional design, without technical translation yet
+    legacy: 2-DESIGN
+  - id: DEVELOPMENT
+    name: Under Active Development
+    icon: 👩‍💻
+    description: Under active technical implementation, going in exploratory rounds
+    legacy: 3-DEV
+    configurations:
+      splunk:
+        parameters:
+          alert.severity : 1 # Alert set to 1-debug severity 
+        allowed_actions : False
+  - id: IMPROVING
+    name: Ongoing Improvement
+    icon: 🏗️
+    legacy: 4-IMPROVING
+    description: Rule is qualified functionally, but is undergoing refinment rounds
+    configurations:
+      splunk:
+        parameters:
+          alert.severity : 1 # Alert set to 1-debug severity
+  - id: STAGING
+    name: Staging
+    icon: 🚧
+    legacy: 5-STAGING
+    description: Deployed in staging environment for operational testing
+  - id: PRODUCTION
+    name: In Production
+    icon: 📣
+    legacy: 6-PRODUCTION
+    description: Deployed in active production environment, potentially raising alerts 
+  - id: ACCEPTANCE
+    name: Acceptance Gate
+    icon: ⚖️
+    description: |
+      A MDR is ready to go for PRODUCTION for CSIRC team. During ACCEPTANCE a CSIRC
+      analyst will handle the alert and will ensure the CSOC ticket and playbook are correct.
+  - id: DISABLED
+    name: Disabled Rule
+    icon: 🛑
+    legacy: 8-DISABLED
+    description: Rule is still accessible, but not active in any environment
+  - id: REMOVED
+    name: Removed from Platforms
+    icon: 🗑️
+    description: Rule is fully deprecated, and only flagged under this status for archival purposes
+    legacy: 9-REMOVED

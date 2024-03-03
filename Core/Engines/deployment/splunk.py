@@ -1,0 +1,435 @@
+import os
+import git
+import sys
+import yaml
+import json
+from pathlib import Path
+
+import pandas as pd
+
+sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
+
+from Core.Engines.modules.splunk import (
+    connect_splunk,
+    cron_to_timeframe,
+    create_query,
+    splunk_timerange,
+)
+from Core.Engines.modules.framework import (
+    get_value_metaschema,
+    techniques_resolver,
+    get_vocab_entry,
+)
+from Core.Engines.modules.deployment import fetch_config_envvar, Proxy
+from Core.Engines.modules.logging import log
+from Core.Engines.modules.tide import DataTide
+from Core.Engines.modules.plugins import DeployMDR
+
+
+class SplunkDeploy(DeployMDR):
+
+    def __init__(self):
+
+        if (
+            os.environ.get("DEBUG") == "True"
+            or os.environ.get("TERM_PROGRAM") == "vscode"
+        ):
+            self.DEBUG = True  # Killswitch for all debug behaviours
+            log("INFO", "DEBUG Mode is activated")
+        else:
+            self.DEBUG = False
+
+        self.DEBUG_STEP = False  # Edits parameters in the saved search object to check which one fails
+        self.DEBUG_FILES_UUID = [
+            "701b9c83-15f9-411d-bf3f-d11597b62f8b"
+        ]  # Target a specific file to pickup
+
+        self.DEPLOYER_IDENTIFIER = "splunk"
+        SPLUNK_CONFIG = DataTide.Configurations.Systems.Splunk
+        self.DEFAULT_CONFIG = SPLUNK_CONFIG.defaults
+        SPLUNK_SETUP = fetch_config_envvar(SPLUNK_CONFIG.setup)
+        SPLUNK_SECRETS = fetch_config_envvar(SPLUNK_CONFIG.secrets)
+
+        self.SPLUNK_URL = SPLUNK_SETUP["url"]
+        self.SPLUNK_PORT = SPLUNK_SETUP["port"]
+        self.SPLUNK_APP = SPLUNK_SETUP["app"]
+        self.SPLUNK_TOKEN = SPLUNK_SECRETS["token"]
+
+        if SPLUNK_SETUP["proxy"]:
+            Proxy.set_proxy()
+        else:
+            Proxy.unset_proxy()
+
+        self.CORRELATION_SEARCHES = SPLUNK_SETUP["correlation_searches"]
+        self.SPLUNK_ACTIONS = SPLUNK_SETUP["actions_enabled"]
+        self.SPLUNK_DEFAULT_ACTIONS = SPLUNK_SETUP.get("default_actions") or []
+        self.TIMERANGE_MODE = SPLUNK_SETUP["frequency_scheduling"]
+        self.SPLUNK_SUBSCHEMA = DataTide.TideSchemas.subschemas["systems"][
+            self.DEPLOYER_IDENTIFIER
+        ]["properties"]
+
+        self.ALERT_SEVERITY_MAPPING = {
+            "Informational": 2,
+            "Low": 3,
+            "Medium": 4,
+            "High": 5,
+            "Critical": 6,
+        }
+
+        # Skewing Setup
+        SKEWING = SPLUNK_SETUP.get("allow_skew")
+        self.SKEWING_VALUE: int | float
+        if SKEWING:
+            self.SKEWING_VALUE = float(
+                SKEWING.replace("%", "e-2")
+            )  # Converts skewing into 2 decimal equivalent
+        else:
+            self.SKEWING_VALUE = 0
+        # Optional added offset
+        self.OFFSET = SPLUNK_SETUP.get("schedule_offset") or 0
+
+    def config_mdr(self, mdr):
+        """
+        Compiled the configuration that will be written to the saved search object.
+        """
+
+        config = dict()
+
+        # Before processing MDR data, adding config configuration
+        uuid = mdr["uuid"]
+        name = mdr["name"]
+        description = mdr["description"]
+        mdr_splunk = mdr["configurations"]["splunk"]
+        advanced_config = mdr_splunk.pop(
+            "advanced", None
+        )  # Remove advanced config and keep it separate
+
+        # Exception for risk, as is a particular data structure in Splunk
+        risk = mdr_splunk.get("risk")
+        if risk:
+            risk = mdr_splunk.pop("risk")
+
+        mdr_splunk = pd.json_normalize(mdr_splunk, sep="|").to_dict(orient="records")[0]
+        for key in mdr_splunk.copy():  # Avoids dict mutation errors
+            new_key = str(key).split("|")[
+                -1
+            ]  # type:ignore Keep only the string after the last separator
+            mdr_splunk[new_key] = mdr_splunk.pop(key)
+
+        for key in mdr_splunk:
+            param_name = get_value_metaschema(
+                key, self.SPLUNK_SUBSCHEMA, "tide.mdr.parameter"
+            )
+            data = mdr_splunk[key]
+
+            if key == "lookback":
+                data = splunk_timerange(
+                    data, skewing=self.SKEWING_VALUE, offset=self.OFFSET
+                )
+
+            if key == "duration":
+                config["alert.suppress"] = "true"
+
+            if key == "frequency":
+                # If there is no cron expression, we assign the parameter of cron on it which will deploy
+                if "cron" not in mdr_splunk:
+                    custom_time = mdr_splunk.get(
+                        "custom_time"
+                    )  # Check if there is a custom time the rule should trigger at
+                    if custom_time:
+                        data = cron_to_timeframe(
+                            data, mode="custom", custom_time=custom_time
+                        )
+                    else:
+                        data = cron_to_timeframe(data, mode=self.TIMERANGE_MODE)
+                    param_name = get_value_metaschema(
+                        "cron", self.SPLUNK_SUBSCHEMA, "tide.mdr.parameter"
+                    )
+
+            # Splunk mostly expects comma separated list when multiple values are present
+            if type(data) == list:
+                data = ", ".join(data)
+
+            if type(data) == str:
+                data = data.strip()
+
+            if param_name:
+                config[param_name] = data
+
+        # Disabled Check
+        status = mdr_splunk["status"]
+        if status == "DISABLED":
+            config["disabled"] = "true"
+            log("INFO", "🔕 Configuring saved search as disabled")
+
+        # Alert Severity Configuration
+        config["alert.severity"] = self.ALERT_SEVERITY_MAPPING[
+            mdr["response"]["alert_severity"]
+        ]
+
+        # Risk action has a specific implementation in Splunk where it fully relies on a
+        # single flattened JSON string to represent the entire risk configuration. This is
+        # unique in Splunk and is most likely explained by the fact that risk is a list of dictionaries,
+        # which can't be represented in the flat key:value structure of savedsearches.conf
+        if risk:
+            risk_config = []
+            risk_param = get_value_metaschema(
+                "risk", self.SPLUNK_SUBSCHEMA, "tide.mdr.parameter"
+            )
+            risk_objects_config = []
+            threat_objects_config = []
+            risk_message = risk.get("message")
+            if ro := risk.get("risk_objects"):
+                for risk_object in ro:
+                    risk_object_paramed = {}
+                    for key in risk_object:
+                        risk_object_paramed[
+                            get_value_metaschema(
+                                key,
+                                self.SPLUNK_SUBSCHEMA,
+                                "tide.mdr.parameter",
+                                scope="risk_objects",
+                            )
+                        ] = risk_object[key]
+                    risk_objects_config.append(risk_object_paramed)
+
+            if to := risk.get("threat_objects"):
+                for threat_object in to:
+                    threat_object_paramed = {}
+                    for key in threat_object:
+                        threat_object_paramed[
+                            get_value_metaschema(
+                                key,
+                                self.SPLUNK_SUBSCHEMA,
+                                "tide.mdr.parameter",
+                                scope="threat_objects",
+                            )
+                        ] = threat_object[key]
+                    threat_objects_config.append(threat_object_paramed)
+
+            risk_config = risk_objects_config + threat_objects_config
+            if risk_config:
+                config[risk_param] = json.dumps(risk_config)
+            if risk_message:
+                config[
+                    get_value_metaschema(
+                        "message",
+                        self.SPLUNK_SUBSCHEMA,
+                        "tide.mdr.parameter",
+                        scope="risk",
+                    )
+                ] = risk_message
+
+        # If there are advanced configurations, add it to the otherall config
+        if advanced_config:
+            for adv in advanced_config:
+                config[adv] = advanced_config[adv]
+
+        # Add ManagedBy and set to responders
+        responders = mdr.get("response", {}).get("responders") or ""
+        config["alert.managedBy"] = responders
+
+        # Add correlation search setup
+        if self.CORRELATION_SEARCHES:
+            config["action.correlationsearch.enabled"] = "true"
+            config["action.correlationsearch.label"] = name
+            techniques = techniques_resolver(uuid)
+            if techniques:
+                config["action.correlationsearch.annotations.mitre_attack"] = ", ".join(
+                    techniques
+                )
+
+        # Human readable description
+        config["description"] = description
+        return config
+
+    def deploy_mdr(self, mdr, service):
+        """
+        Deployment routine, connecting to the platform and combining base and custom configurations
+        """
+
+        # Generate saved search configuration
+        mdr_config = self.config_mdr(mdr)
+
+        # Fetch name for the saved search
+        name: str = mdr["name"].strip()
+        mdr_splunk: dict = mdr["configurations"]["splunk"]
+        status: str = mdr_splunk["status"]
+        query = create_query(mdr)
+
+        # Add status specific parameters
+        status_configuration = get_vocab_entry("status", status, "configurations") or {}
+        status_configuration = status_configuration.get(self.DEPLOYER_IDENTIFIER) or {}  # type: ignore
+        status_parameters = status_configuration.get("parameters")  # type: ignore
+
+        # Routine to safely separate the case where allowed_actions is not present, and the case
+        # where it is set to None.
+        if "allowed_actions" in status_configuration:
+            # If explicitely set to False, we blank the actions allowed
+            if status_configuration["allowed_actions"] == False:  # type: ignore
+                status_allowed_actions = []
+            else:
+                status_allowed_actions = status_configuration["allowed_actions"]  # type: ignore
+
+        # By default, status allows all the actions supported by the global config
+        else:
+            status_allowed_actions = self.SPLUNK_ACTIONS
+
+        if status_parameters:
+            mdr_config.update(status_parameters)
+
+        actions_config = {}
+
+        # Add allowed splunk actions once the entire MDR is configured
+        if self.SPLUNK_ACTIONS:
+            # We enable the action only when a configuration has been set related to this action
+            # For example, we may allow action.email, but will only configure it as enabled
+            # if some parameter in the config related to it were configured
+            triggered_actions = []
+            for action in self.SPLUNK_ACTIONS:
+                for param in mdr_config:
+                    if "action." + action in param:
+                        if action in status_allowed_actions:
+                            triggered_actions.append(action)
+                            actions_config["action." + action] = (
+                                1  # Turning on the action
+                            )
+                            break
+
+            if not triggered_actions:
+                # Allowing default actions if they are not denied at status config level
+                triggered_actions = [
+                    a
+                    for a in self.SPLUNK_DEFAULT_ACTIONS
+                    if a in status_allowed_actions
+                ]
+
+            if triggered_actions:
+                actions_config["actions"] = ", ".join(triggered_actions)
+
+                if "notable" in triggered_actions:
+                    # Assign default notable title if not specified in mdr config
+                    if "action.notable.param.rule_title" not in mdr_config:
+                        actions_config["action.notable.param.rule_title"] = name
+                        actions_config["action.notable.param.rule_description"] = (
+                            mdr.get("description") or ""
+                        )
+                        actions_config["action.notable.param.severity"] = mdr[
+                            "response"
+                        ]["alert_severity"].lower()
+                if "risk" in triggered_actions:
+                    # Explicitely set _risk_score to 0 since it is set to 1 by the platform
+                    # as a way to show a default GUI, but interferes with automation.
+                    # All risk configuration are carried by action.notable.param._risk in a JSON bundle
+                    actions_config["action.risk.param._risk_score"] = 0
+
+        deploy_config = self.DEFAULT_CONFIG.copy()
+        deploy_config.update(mdr_config)
+        deploy_config.update(actions_config)
+        deploy_config["search"] = query
+
+        if self.DEBUG:
+            log("DEBUG", "The following configuration was compiled")
+            print(json.dumps(deploy_config, indent=1, sort_keys=True))
+
+        # In Splunk, some configurations are coupled with others. The update()
+        # method of saved_searches objects does not resolve this, and depending on the
+        # order of the attrributes in the kwargs passed may hit blocks.
+        #
+        # This workaround lifts some of those identified blockers and will roll them out
+        # after their dependencies, which are deployed first.
+
+        second_stage_attributes = [
+            "alert.suppress",  # needs alert.suppress.period to be set first
+            "is_scheduled",  # needs alert_comparator to be set first
+            "actions",  # requires other action namespace item to be set first
+            "search",  # empirical testing show that the search don't update properly if not last
+        ]
+        second_stage = dict()
+
+        for attribute in second_stage_attributes:
+            if attribute in deploy_config:
+                second_stage[attribute] = deploy_config.pop(attribute)
+
+        if not self.DEBUG:
+            # Check if saved search already exists or create a new one
+            search_exists = False
+            try:
+                selected_search = service.saved_searches[name]
+                search_exists = True
+            except:
+                selected_search = service.saved_searches.create(name, search=query)
+
+            if search_exists:
+                log("INFO", "✨ Found existing saved search")
+            else:
+                log("ONGOING", "🆕 Creating a new search...")
+
+            if mdr_splunk["status"] == "REMOVED":
+                if search_exists:
+                    service.saved_searches.delete(name)
+                    log("WARNING", f"🗑️ Deleted splunk alert: {name}")
+                    return None
+
+                else:
+                    log(
+                        "SKIP", f"🗑️ [INFO] Saved search {name} was already non existent"
+                    )
+
+            # Debugging output; sets attribute one by one
+            if self.DEBUG_STEP:
+                for k, v in deploy_config.items():
+                    log("DEBUG", f"Updating value {k} with {v}")
+                    selected_search.update(**{k: v})
+
+                if second_stage:
+                    for k, v in second_stage.items():
+                        log("DEBUG", f"Updating value {k} with {v}")
+                        selected_search.update(**{k: v})
+
+            else:
+                selected_search.update(**deploy_config)
+
+                # Rolling out attributes with dependencies that will block the deployment if out of order.
+                if second_stage:
+                    selected_search.update(**second_stage)
+        log("SUCCESS", "Deployed on Splunk", name)
+
+        return True
+
+    def deploy(self, deployment: list[str]):
+
+        deployment = self.DEBUG_FILES_UUID if not deployment else deployment
+
+        if not deployment:
+            raise Exception("DEPLOYMENT NOT FOUND")
+
+        if not self.DEBUG:
+            service = connect_splunk(
+                host=self.SPLUNK_URL,
+                port=self.SPLUNK_PORT,
+                token=self.SPLUNK_TOKEN,
+                app=self.SPLUNK_APP,
+            )
+        else:
+            service = "DEBUG"
+
+        # Start deployment routine
+        for mdr in deployment:
+            mdr_data = DataTide.Models.mdr[mdr]
+
+            # Check if modified MDR contains a platform entry (by safety, but should not happen since
+            # the orchestrator will filter for the platform)
+            if self.DEPLOYER_IDENTIFIER in mdr_data["configurations"].keys():
+                # Connection routine, if not connected yet.
+                log("ONGOING", f"🔥 Currently deploying MDR {mdr_data['name']}...")
+                self.deploy_mdr(mdr_data, service)
+            else:
+                log(
+                    "SKIP",
+                    f"🛑 Skipping {mdr_data.get('name')} as does not contain a Splunk rule",
+                )
+
+
+def declare():
+    return SplunkDeploy()

@@ -1,0 +1,91 @@
+name: Strategic Objectives
+field: objectives
+stix: attack-motivation-ov
+description: Purpose of presence in cyberspace by the adversary, and the end goal of the exploitation of targets.
+reference: https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_dmb1khqsn650
+icon: 📌
+keys:
+  - id: SGO0001
+    name: Disruption
+    icon: 💥
+    description: Temporary or permanent loss of service components, with impact on operations relying on its continuity.
+  - id: SGO0002
+    name: Defacement
+    icon: 🫠
+    description: Alteration of publicly visible organizational asset, for ideological reasons or to damage the reputation of the organization.
+  - id: SGO0003
+    name: Psychological Operations
+    icon: 🎭
+    description: Military and intelligence techniques to convey selected information and indicators to audiences to influence their emotions, motives, and objective reasoning, and ultimately the behavior of governments, organizations, groups, and individuals.
+  - id: SGO0004
+    name: Confidential Information Theft
+    icon: 🔐   
+    description: Attacks aim at acquiring undisclosed, private and valuable data from the target.
+  - id: SGO0005
+    name: Identity Theft/Impersonation
+    icon: 🥸
+    description: The adversary aims at stealing identities, typically to allow further malicious operations or for resale on black markets. 
+  - id: SGO0006
+    name: Financial Gain
+    icon: 🤑
+    stix: personal-gain
+    description: "The desire to improve one\u2019s own financial status.\n\nAdversaries\
+      \ motivated by a selfish desire for personal gain are often out for gains that\
+      \ come from financial fraud, hacking for hire, or intellectual property theft.\n\
+      \nWhile a Threat Actor or Intrusion Set may be seeking personal gain, this does\
+      \ not mean they are acting alone. Individuals can band together solely to maximize\
+      \ their own personal profits."
+  - id: SGO007
+    name: Organizational Gain
+    icon: 💰
+    stix: organizational-gain
+    description: 'Seeking advantage over a competing organization, including a military
+      organization.
+
+
+      Adversaries motivated by increased profit or other gains through an unfairly obtained
+      competitive advantage are often seeking theft of intellectual property, business
+      processes, or supply chain agreements and thus accelerating their position in
+      a market or capability.'
+  - id: SGO0008
+    name: Sabotage
+    icon: 💣
+    description: Deliberate and malicious disruption of services with the goal to deny processes, and inflict material or tangible damage.
+  - id: SGO0009
+    name: Incapacitation
+    icon: 🩼
+    description: Full disablement of key functions of an organization, typically for the purpose of national interest, political belief or terrorism.
+  - id: SGO0010
+    name: Espionage
+    icon: 👀
+    description: Intelligence techniques applied to cyberspace, where the adversaries will work toward nation-state goals through continuous observation and monitoring of confidential information.
+  - id: SGO0011
+    name: Ideology
+    icon: ⛩️
+    stix: ideology
+    description: Adversaries who act for ideological reasons (e.g., political, religious, human rights, environmental, desire to cause chaos/anarchy, etc.) are not usually motivated primarily by the desire for profit; they are acting on their own sense of morality, justice, or political loyalty.
+  - id: SGO0012
+    name: Unpredictable
+    icon: 🤪
+    stix: unpredictable
+    description: Unpredictable is not a miscellaneous or default category. Unpredictable means a truly random and likely bizarre event, which seems to have no logical purpose to the victims.
+  - id: SGO0013
+    name: Coercion
+    icon: 🤕
+    stix: coercion
+    description: "Being forced to act on someone else's behalf.\n\nAdversaries who are\
+      \ motivated by coercion are often forced through intimidation or blackmail to\
+      \ act illegally for someone else\u2019s benefit. Unlike the other motivations,\
+      \ a coerced person does not act for personal gain, but out of fear of incurring\
+      \ a loss."
+  - id: SGO0014
+    name: Dominance
+    icon: 👺
+    stix: dominance
+    description: 'A desire to assert superiority over someone or something else.
+
+
+      Adversaries who are seeking dominance over a target are focused on using their
+      power to force their target into submission or irrelevance. Dominance may be found
+      with ideology in some state-sponsored attacks and with notoriety in some cyber
+      vandalism-based attacks.'

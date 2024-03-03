@@ -1,0 +1,51 @@
+name: Detection Maturity Level (DML-8)
+field: maturity
+description: The Detection Maturity Level (DML) model is a capability maturity model for referencing ones maturity in detecting cyber attacks. It’s designed for organizations who perform intel-driven detection and response and who put an emphasis on having a mature detection program.
+reference: http://ryanstillions.blogspot.com/2014/04/the-dml-model_21.html
+icon: 💪
+keys:
+  - id: DML0000
+    name: None or Unknown
+    icon: 🚫
+    misp: DML:0
+    description: For organizations who either don’t operate at DML-1 or higher, or they don’t even know where they operate on this scale, we have Detection Maturity Level - 0.
+  - id: DML0001
+    name: Atomic IOCs
+    icon: 🏹
+    misp: DML:1
+    description: These are the atomic particles that make up Host & Network artifacts. If you’re detecting at Detection Maturity Level 1, it means you are probably taking "feeds of intel" from various sharing organizations and vendors in the form of lists, like domains and IP addresses, and feeding them into your detection technologies.
+  - id: DML0002
+    name: Host & Network Artifacts
+    icon: 🏺
+    misp: DML:2
+    description: DML-2 is where most organizations spend too much of their resources; attempting to collect what they call "threat intelligence" in the form of Host & Network Artifacts. The reality is, these are merely just indicators that are observed either during or after the attack.
+  - id: DML0003
+    name: Tools
+    icon: 🧰
+    misp: DML:3
+    description: Being able to detect at DML-3 means you can reliably detect the adversary’s tools, regardless of minor functionality changes to the tool, or the Artifacts or Atomic Indicators it may leave behind. Detecting tools falls into two main areas. The first is detecting the transfer and presence of the tool. This includes being able to observe the tool being transferred over the network, being able to locate it sitting at rest on a file system, or being able to identify it loaded in memory. The second, and more important area of tool detection, is detecting the tool reliably by functionality.
+  - id: DML0004
+    name: Procedures
+    icon: ⚙️
+    misp: DML:4
+    description: Given today’s detection technology, and readily available correlation and analytics techniques, it’s amazing that more organizations haven’t reached Detection Maturity Level 4 for most of their adversaries. Procedures are one of the most effective ways of detecting adversary activity and can really inflict the most pain against lesser experienced "B-teams". In it’s most simple form, detecting a procedure is as simple as detecting a sequence of two or more of the individual steps employed by the actor. The goal here is to isolate activities that the adversary appears to perform methodically, two or more times during an incident.
+  - id: DML0005
+    name: Techniques
+    icon: 🥊
+    misp: DML:5
+    description: From a maturity perspective, being able to detect an adversary’s techniques is superior to being able to detect their procedures. The primary difference being techniques are specific to an individual. So when respecting this distinction, the ability to detect a specific actor operating within your environment by technique exclusively is an advantage.
+  - id: DML0006
+    name: Tactics
+    icon: ♟️
+    misp: DML:6
+    description: To successfully operate at DML-6, one must be able to reliably detect a tactic being employed regardless of the Technique or Procedure used by the adversary, the Tools they chose to use, or the Artifacts and Atomic Indicators left behind as a result of employing the tactic. Tactics become known only after observation of multiple activities in aggregate, with respect to time and circumstance. As a result, detection of tactics are usually done by skilled analysts, rather than technical correlation or analytics systems.
+  - id: DML0007
+    name: Strategy
+    icon: 🏁
+    misp: DML:7
+    description: The important distinguishing factor about Goals (DML-8) and Strategy (DML-7) is that they are largely subjective in nature.  They are very non-technical, and are often reflective of the adversary's (or their handler's) true intentions (and strategies for fulfilling those intentions).  They represent what the adversary wants.  For these reasons, they are not easily detectable via conventional cyber means for most private organizations.
+  - id: DML0008
+    name: Goals
+    icon: 🏆
+    misp: DML:8
+    description: If the actor is part of a larger organized operation they may be receiving their goals from a higher level source or handler. Depending on how organized and sophisticated the adversary’s campaigns are, these goals may not even be shared with the operator(s) themselves. In cases of non-targeted threat actors, this may be much less organized or distributed. Short of that, it’s guessing at what the adversary’s true intentions were based on behavioral observations made at lower DMLs (e.g. data stolen, directories listed, employees or programs targeted, etc).

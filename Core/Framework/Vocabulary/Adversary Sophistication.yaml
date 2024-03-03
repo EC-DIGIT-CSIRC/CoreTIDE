@@ -1,0 +1,96 @@
+name: Adversary Sophistication
+field: sophistication
+stix: threat-actor-sophistication-ov
+description: Threat actor sophistication vocabulary captures the skill level of a threat actor. It ranges from "none", which describes a complete novice, to "strategic", which describes an attacker who is able to influence supply chains to introduce vulnerabilities. 
+reference: https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_8jm676xbnggg
+icon: ✨
+keys:
+  - id: SOP0000
+    name: None
+    icon: 🤷
+    stix: none
+    description: "Can carry out random acts of disruption or destruction by running\
+      \ tools they do not understand. Actors in this category have average computer\
+      \ skills.\n\nExample Roles: Average User\n\nThese actors:\n   - can not launch\
+      \ targeted attacks"
+  - id: SOP0001
+    name: Minimal
+    icon: 🤏
+    stix: minimal
+    description: "Can minimally use existing and frequently well known and easy-to-find\
+      \ techniques and programs or scripts to search for and exploit weaknesses in other\
+      \ computers. Commonly referred to as a script-kiddie.\n\nThese actors rely on\
+      \ others to develop the malicious tools, delivery mechanisms, and execution strategy\
+      \ and often do not fully understand the tool they are using or how they work.\
+      \ They also lack the ability to conduct their own reconnaissance and targeting\
+      \ research.\n\nExample Roles: Script-Kiddie\n\nThese actors:\n  - attack known\
+      \ weaknesses;\n  - use well known scripts and tools; and\n  - have minimal knowledge\
+      \ of the tools."
+  - id: SOP0002
+    name: Intermediate
+    icon: 👨🏻‍🔧
+    stix: intermediate
+    description: "Can proficiently use existing attack frameworks and toolkits to search\
+      \ for and exploit vulnerabilities in computers or systems. Actors in this category\
+      \ have computer skills equivalent to an IT professional and typically have a working\
+      \ knowledge of networks, operating systems, and possibly even defensive techniques\
+      \ and will typically exhibit some operational security.\n\nThese actors rely others\
+      \ to develop the malicious tools and delivery mechanisms but are able to plan\
+      \ their own execution strategy. They are proficient in the tools they are using\
+      \ and how they work and can even make minimal modifications as needed.\n\nExample\
+      \ Roles: Toolkit User\n\nThese actors:\n  -\_attack known vulnerabilities;\n \
+      \ - use attack frameworks and toolkits; and\n  - have proficient knowledge of\
+      \ the tools."
+  - id: SOP0003
+    name: Advanced
+    icon: 👷
+    stix: advanced
+    description: "Can develop their own tools or scripts from publicly known vulnerabilities\
+      \ to target systems and users. Actors in this category are very adept at IT systems\
+      \ and have a background in software development along with a solid understanding\
+      \ of defensive techniques and operational security.\n\nThese actors rely on others\
+      \ to find and identify weaknesses and vulnerabilities in systems, but are able\
+      \ to create their own tools, delivery mechanisms, and execution strategies.\n\n\
+      Example Roles: Toolkit Developer\n\nThese actors:\n  - attack known vulnerabilities;\n\
+      \  - can create their own tools; and\n  - have proficient knowledge of the tools."
+  - id: SOP0004
+    name: Expert
+    icon: 👩‍🔬
+    stix: expert
+    description: "Can focus on the discovery and use of unknown malicious code, are\
+      \ is adept at installing user and kernel mode rootkits, frequently use data mining\
+      \ tools, target corporate executives and key users (government and industry) for\
+      \ the purpose of stealing personal and corporate data. Actors in this category\
+      \ are very adept at IT systems and software development and are experts with security\
+      \ systems, defensive techniques, attack methods, and operational security.\n\n\
+      Example Roles: Vulnerability Researcher, Reverse Engineer, Threat Researcher,\
+      \ Malware Creator\n\nThese actors:\n  - attack unknown and known vulnerabilities;\n\
+      \  - can create their own tools from scratch; and\n  - have proficient knowledge\
+      \ of the tools."
+  - id: SOP0005
+    name: Innovator
+    icon: 💡
+    stix: innovator
+    description: "Typically, criminal or state actors who are organized, highly technical,\
+      \ proficient, well-funded professionals working in teams to discover new vulnerabilities\
+      \ and develop exploits.\n\nDemonstrates sophisticated capability. An innovator\
+      \ has the ability to create and script unique programs and codes targeting virtually\
+      \ any form of technology. At this level, this actor has a deep knowledge of networks,\
+      \ operating systems, programming languages, firmware, and infrastructure topologies\
+      \ and will demonstrate operational security when conducting his activities. Innovators\
+      \ are largely responsible for the discovery of 0-day vulnerabilities and the development\
+      \ of new attack techniques.\n\nExample Roles: Toolkit Innovator, 0-Day Exploit\
+      \ Author\n\nThese actors:\n  - attack unknown and known vulnerabilities;\n  -\
+      \ create attacks against 0-Day exploits from scratch; and\n  - create new and\
+      \ innovative attacks and toolkits."
+  - id: SOP0006
+    name: Strategic
+    icon: ♟️
+    stix: strategic
+    description: "State actors who create vulnerabilities through an active program\
+      \ to \"influence\" commercial products and services during design, development\
+      \ or manufacturing, or with the ability to impact products while in the supply\
+      \ chain to enable exploitation of networks and systems of interest.\n\nThese actors:\n\
+      \  - can create or use entire supply chains to launch an attack;\n  - can create\
+      \ and design attacks for any systems, software package, or device; and\n  - are\
+      \ responsible for APT-level attacks."

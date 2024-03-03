@@ -1,0 +1,45 @@
+name: Vector Viability
+field: viability
+description: Described with estimative language (likelyhood probability), describes how likely the analyst believes the vector to actually be realized on the organization infrastructure. Estimative language describes quality and credibility of underlying sources, data, and methodologies based Intelligence Community Directive 203 (ICD 203) and JP 2-0, Joint Intelligence.
+reference: https://www.dni.gov/files/documents/ICD/ICD%20203%20Analytic%20Standards.pdf
+icon: 🎲
+keys:
+  - id: VIA0000
+    name: Environment dependent
+    icon: ♻️
+    description: Depends 
+  - id: VIA0001
+    name: Almost no chance
+    icon: 🙅‍♀️
+    misp: estimative-language:likelihood-probability="almost-no-chance"
+    description: Remote - 01-05%
+  - id: VIA0002
+    name: Very Unlikely
+    icon: 😅
+    misp: estimative-language:likelihood-probability="very-unlikely"
+    description: Highly improbable - 05-20%
+  - id: VIA0003
+    name: Unlikely 
+    icon: 🤔
+    misp: estimative-language:likelihood-probability="unlikely"
+    description: Improbable (improbably) - 20-45%
+  - id: VIA0004
+    name: Roughly even chance
+    icon: 🤷‍♀️
+    misp: estimative-language:likelihood-probability="roughly-even-chance"
+    description: Roughly even odds - 45-55%
+  - id: VIA0005
+    name: Likely 
+    icon: 🧐
+    misp: estimative-language:likelihood-probability="likely"
+    description: Probable (probably) - 55-80%
+  - id: VIA0006
+    name: Very Likely
+    icon: 😰
+    misp: estimative-language:likelihood-probability="very-likely"
+    description: Highly probable - 80-95%
+  - id: VIA0006
+    name: Almost certain
+    icon: 😱
+    misp: estimative-language:likelihood-probability="almost-certain"
+    description: Nearly certain - 95-99%

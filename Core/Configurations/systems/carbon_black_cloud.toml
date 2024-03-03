@@ -1,0 +1,22 @@
+[tide]
+enabled = true
+identifier = "carbon_black_cloud"
+name = "Carbon Black Cloud Enterprise EDR"
+subschema = "CBC EDR Sub Schema"
+description = """VMware Carbon Black Enterprise EDR is an advanced threat hunting
+and incident response solution delivering continuous visibility for top security
+operations centers (SOCs) and incident response (IR) teams."""
+
+[setup]
+proxy = true
+url = "$CBC_URL"
+watchlist = "DIGIT.ESS.CSM-Advanced_Threats" #Can be overriden by MDR schema
+#Default organizations the MDR can deploy to. Can be overriden by MDR schema
+organizations = ["dwp", "dev"] 
+
+[secrets]
+# For every organization, add org.org_key and org.token
+dwp.org_key = "$CBC_ORG_KEY_DWP"
+dwp.token = "$CBC_TOKEN_DWP"
+dev.org_key = "$CBC_ORG_KEY_DEV"
+dev.token = "$CBC_TOKEN_DEV"
