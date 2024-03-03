@@ -1,0 +1,18 @@
+🗡️ Att&ck Navigator Layer:
+  stage: 📝 Reporting
+  script:
+  - cd ./Core/Engines/framework/
+  - python attack_layer_builder.py
+  - git add -A
+  - if ! git diff-index --quiet HEAD; then
+  -   git commit -m "[Reporting] Update Navigator Layer"
+  -   git push $TIDE_REPO_ACCESS HEAD:$CI_COMMIT_REF_NAME
+  - fi
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: manual
+      allow_failure: true
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+      when: manual
+      allow_failure: true
+    - if: $CI_PIPELINE_SOURCE == "schedule"

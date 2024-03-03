@@ -1,0 +1,14 @@
+🧪 Data Mutation Toolchain:
+  stage: 🧬 Mutation
+  script:
+  - cd ./Core/Orchestration/
+  - python mutate.py
+  - git add -A
+  - if ! git diff-index --quiet HEAD; then
+  -   git commit -m "[Mutated] $CI_COMMIT_MESSAGE"
+  -   git rebase origin/$CI_DEFAULT_BRANCH
+  -   git push $TIDE_REPO_ACCESS HEAD:$CI_COMMIT_REF_NAME
+  - fi
+  rules:
+    - if:  $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+  resource_group: mutation
