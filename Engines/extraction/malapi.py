@@ -11,7 +11,7 @@ from datetime import datetime
 
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
-from Engines.modules.logging import log
+from Engines.modules.logs import log
 from Engines.modules.tide import DataTide
 
 

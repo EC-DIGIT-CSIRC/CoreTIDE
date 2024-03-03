@@ -6,7 +6,7 @@ toolchain_start_time = datetime.now()
 
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
-from Engines.modules.logging import tidemec_intro, Colors
+from Engines.modules.logs import tidemec_intro, Colors
 
 # This trick caches a special version of the index which will seek
 # and reconcile the staging index for MDRs which are in a Merge Request

@@ -10,7 +10,7 @@ from pathlib import Path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.dont_write_bytecode = True  # Prevents pycache
 
-from Engines.modules.logging import log
+from Engines.modules.logs import log
 
 ROOT = Path(str(git.Repo(".", search_parent_directories=True).working_dir))
 

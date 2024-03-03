@@ -18,7 +18,7 @@ from Engines.modules.documentation import (
 )
 from Engines.modules.files import safe_file_name
 from Engines.templates.mdr import TEMPLATEv2 as TEMPLATE
-from Engines.modules.logging import log
+from Engines.modules.logs import log
 from Engines.modules.tide import DataTide
 
 ROOT = Path(str(git.Repo(".", search_parent_directories=True).working_dir))

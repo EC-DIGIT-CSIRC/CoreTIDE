@@ -10,7 +10,7 @@ from pathlib import Path
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.modules.deployment import system_scope, lookup_scope, diff_calculation
-from Engines.modules.logging import log, Colors, tidemec_intro
+from Engines.modules.logs import log, Colors, tidemec_intro
 from Engines.modules.tide import DataTide
 from Engines.modules.plugins import DeployTide
 

@@ -9,7 +9,7 @@ toolchain_start_time = datetime.now()
 
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
-from Engines.modules.logging import log, Colors, tidemec_intro
+from Engines.modules.logs import log, Colors, tidemec_intro
 from Engines.mutation import (
     file_name,
     reports,

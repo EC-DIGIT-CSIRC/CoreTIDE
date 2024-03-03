@@ -10,8 +10,9 @@ from pprint import pprint
 
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
-from Engines.modules.files import absolute_paths
-from Engines.modules.logging import log
+from Engines.modules.files import resolve_paths, resolve_configurations
+from Engines.modules.logs import log
+
 def indexer(write_index=False) -> dict:
     ROOT = Path(str(git.Repo(".", search_parent_directories=True).working_dir))
     TIDE_CONFIG = toml.load(
@@ -19,7 +20,7 @@ def indexer(write_index=False) -> dict:
     )
     SKIPS = ["logsources", "ram", "mdrv2", "lookup_metadata"]
     
-    PATHS = absolute_paths()
+    PATHS = resolve_paths()
     log("INFO", "Loaded all paths")
     pprint(PATHS)
     VOCAB_PATH = PATHS["vocabularies"]
@@ -92,24 +93,24 @@ def indexer(write_index=False) -> dict:
     index["json_schemas"] = json_index
 
     # Config Indexer
-    config_index = dict()
-    for entry in os.listdir(CONFIGURATIONS_PATH):
-        # If there are loose top level files, indexes them
-        if os.path.isfile(CONFIGURATIONS_PATH / entry):
-            config_index[entry.removesuffix(".toml")] = toml.load(
-                open(CONFIGURATIONS_PATH / entry, encoding="utf-8")
-            )
-        # Some configurations, especially for recomposition, are namespaced within folders.
-        elif os.path.isdir(CONFIGURATIONS_PATH / entry):
-            config_index[entry] = dict()
-            for config in os.listdir(CONFIGURATIONS_PATH / entry):
-                configuration = toml.load(
-                    open(CONFIGURATIONS_PATH / entry / config, encoding="utf-8")
-                )
-                config = configuration.get("tide", {}).get(
-                    "identifier"
-                ) or config.removesuffix(".toml")
-                config_index[entry][config] = configuration
+    config_index = resolve_configurations()
+    #for entry in os.listdir(CONFIGURATIONS_PATH):
+    #    # If there are loose top level files, indexes them
+    #    if os.path.isfile(CONFIGURATIONS_PATH / entry):
+    #        config_index[entry.removesuffix(".toml")] = toml.load(
+    #            open(CONFIGURATIONS_PATH / entry, encoding="utf-8")
+    #        )
+    #    # Some configurations, especially for recomposition, are namespaced within folders.
+    #    elif os.path.isdir(CONFIGURATIONS_PATH / entry):
+    #        config_index[entry] = dict()
+    #        for config in os.listdir(CONFIGURATIONS_PATH / entry):
+    #            configuration = toml.load(
+    #                open(CONFIGURATIONS_PATH / entry / config, encoding="utf-8")
+    #            )
+    #            config = configuration.get("tide", {}).get(
+    #                "identifier"
+    #            ) or config.removesuffix(".toml")
+    #            config_index[entry][config] = configuration
 
     index["configurations"] = config_index
 

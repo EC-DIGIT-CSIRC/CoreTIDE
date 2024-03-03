@@ -6,7 +6,7 @@ from pathlib import Path
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.modules.framework import get_value_metaschema
-from Engines.modules.logging import log
+from Engines.modules.logs import log
 from Engines.modules.tide import DataTide
 
 # Configuration settings fetching routine

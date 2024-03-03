@@ -8,8 +8,8 @@ import sys
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.modules.documentation import get_icon
-from Engines.modules.logging import log
-from Engines.modules.files import absolute_paths
+from Engines.modules.logs import log
+from Engines.modules.files import resolve_paths
 
 ROOT = Path(str(git.Repo(".", search_parent_directories=True).working_dir))
 
@@ -17,7 +17,7 @@ TIDE_CONFIG = toml.load(open(ROOT / "Configurations/global.toml", encoding="utf-
 METASCHEMAS = TIDE_CONFIG["metaschemas"]
 SKIPS = ["logsources", "ram", "mdrv2", "lookup_metadata"]
 
-PATHS = absolute_paths()
+PATHS = resolve_paths()
 
 duplicates = list()
 registry = dict()

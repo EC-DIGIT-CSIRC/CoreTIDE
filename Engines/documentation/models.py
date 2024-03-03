@@ -35,7 +35,7 @@ from Engines.modules.documentation_components import (
 from Engines.modules.files import safe_file_name
 from Engines.modules.graphs import relationships_graph, chaining_graph
 from Engines.modules.tide import DataTide
-from Engines.modules.logging import log
+from Engines.modules.logs import log
 from Engines.modules.deployment import Proxy
 from Engines.templates.models import MODEL_DOC_TEMPLATE
 

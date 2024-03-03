@@ -8,7 +8,7 @@ from typing import Literal
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.modules.tide import DataTide
-from Engines.modules.logging import log
+from Engines.modules.logs import log
 
 DEFINITIONS_INDEX = DataTide.TideSchemas.definitions
 VOCAB_INDEX = DataTide.Vocabularies.Index

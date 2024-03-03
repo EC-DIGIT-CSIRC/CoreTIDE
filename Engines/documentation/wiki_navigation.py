@@ -17,7 +17,7 @@ from Engines.modules.documentation import (
     make_json_table,
 )
 from Engines.templates.wiki_navigation import NAV_INDEX_TEMPLATE
-from Engines.modules.logging import log
+from Engines.modules.logs import log
 from Engines.modules.tide import DataTide
 
 GLFM = DataTide.Configurations.Documentation.glfm_doc_target

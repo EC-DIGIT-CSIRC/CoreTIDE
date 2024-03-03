@@ -17,7 +17,7 @@ from Engines.modules.sentinel import (
 )
 from Engines.modules.framework import get_vocab_entry, techniques_resolver
 from Engines.modules.deployment import fetch_config_envvar, Proxy
-from Engines.modules.logging import log
+from Engines.modules.logs import log
 from Engines.modules.tide import DataTide
 from Engines.modules.plugins import DeployMDR
 

@@ -8,7 +8,7 @@ import sys
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.modules.tide import DataTide
-from Engines.modules.logging import log
+from Engines.modules.logs import log
 
 JSONSCHEMAS_INDEX = DataTide.JsonSchemas.Index
 MODELS_INDEX = DataTide.Models.Index

@@ -29,7 +29,7 @@ from Engines.modules.documentation_components import (
     relations_table,
 )
 from Engines.modules.tide import DataTide
-from Engines.modules.logging import log
+from Engines.modules.logs import log
 
 ROOT = Path(str(git.Repo(".", search_parent_directories=True).working_dir))
 

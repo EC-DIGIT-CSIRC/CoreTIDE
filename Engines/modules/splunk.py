@@ -12,7 +12,7 @@ from typing import Literal
 
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
-from Engines.modules.logging import log
+from Engines.modules.logs import log
 
 
 def splunk_timerange(time: str, skewing: float | int = 1, offset: int = 0) -> str:

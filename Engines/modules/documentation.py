@@ -12,7 +12,7 @@ from Engines.modules.framework import (
     get_value_metaschema,
     get_vocab_entry,
 )
-from Engines.modules.logging import log
+from Engines.modules.logs import log
 from Engines.modules.tide import DataTide
 
 VOCAB_INDEX = DataTide.Vocabularies.Index

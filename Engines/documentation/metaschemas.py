@@ -12,7 +12,7 @@ start_time = time.time()
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.modules.documentation import get_icon, name_subschema_doc
-from Engines.modules.logging import log
+from Engines.modules.logs import log
 from Engines.modules.tide import DataTide
 
 ROOT = Path(str(git.Repo(".", search_parent_directories=True).working_dir))

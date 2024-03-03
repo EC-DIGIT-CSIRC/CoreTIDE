@@ -14,7 +14,7 @@ from Engines.modules.framework import techniques_resolver
 from Engines.modules.deployment import fetch_config_envvar, Proxy
 from Engines.modules.tide import DataTide
 from Engines.modules.plugins import DeployMetadata
-from Engines.modules.logging import log
+from Engines.modules.logs import log
 
 class SplunkMetadataDeploy(DeployMetadata):
     def __init__(self):

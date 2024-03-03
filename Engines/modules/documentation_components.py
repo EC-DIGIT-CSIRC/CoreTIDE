@@ -33,7 +33,7 @@ from Engines.modules.documentation import (
     make_vocab_link,
     GitlabMarkdown,
 )
-from Engines.modules.logging import log
+from Engines.modules.logs import log
 
 GET_CVE_DETAILS = CONFIG.Documentation.cve["retrieve_details"]
 CVE_DB_LINK = CONFIG.Documentation.cve["default_db_link"]

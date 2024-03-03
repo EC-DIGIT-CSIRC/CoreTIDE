@@ -7,7 +7,7 @@ from urllib.parse import quote_plus
 
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
-from Engines.modules.logging import log
+from Engines.modules.logs import log
 from Engines.modules.tide import DataTide
 
 VOCABS_FOLDER = Path(DataTide.Configurations.Global.paths["vocabularies"])

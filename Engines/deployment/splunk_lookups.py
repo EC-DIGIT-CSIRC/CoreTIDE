@@ -13,7 +13,7 @@ start_time = time.time()
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.modules.splunk import connect_splunk
-from Engines.modules.logging import log
+from Engines.modules.logs import log
 from Engines.modules.deployment import fetch_config_envvar, Proxy
 from Engines.modules.tide import DataTide
 from Engines.modules.plugins import DeployLookups

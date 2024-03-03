@@ -12,6 +12,7 @@ lookups = "Lookups/"
 analytics = "Analytics/"
 vscode = ".vscode/"
 json_schemas = "Schemas/"
+custom_configurations = "Configurations/"
 
 [paths.core]
 staging_index_output = "staging_index.json"

@@ -10,7 +10,7 @@ sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.modules.documentation import make_json_table
 from Engines.modules.documentation_components import tlp_doc
-from Engines.modules.logging import log
+from Engines.modules.logs import log
 from Engines.modules.files import safe_file_name
 from Engines.modules.deployment import system_scope
 from Engines.modules.tide import DataTide

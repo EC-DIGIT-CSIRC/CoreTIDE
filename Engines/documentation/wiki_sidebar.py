@@ -18,7 +18,7 @@ from Engines.modules.documentation import (
 from Engines.modules.files import safe_file_name
 from Engines.modules.deployment import system_scope
 from Engines.modules.tide import DataTide
-from Engines.modules.logging import log
+from Engines.modules.logs import log
 
 METASCHEMAS_INDEX = DataTide.TideSchemas.Index
 SUBSCHEMAS_INDEX = DataTide.TideSchemas.subschemas

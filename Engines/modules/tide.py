@@ -10,7 +10,7 @@ from dataclasses import dataclass
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.indexing.indexer import indexer
-from Engines.modules.logging import log
+from Engines.modules.logs import log
 
 ROOT = Path(str(git.Repo(".", search_parent_directories=True).working_dir))
 TIDEMEC_AS_SUBMODULE = True

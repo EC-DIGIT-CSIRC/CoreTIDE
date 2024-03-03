@@ -13,12 +13,12 @@ import toml
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.modules.validation import indicator_validation
-from Engines.modules.logging import Colors, log
-from Engines.modules.files import absolute_paths
+from Engines.modules.logs import Colors, log
+from Engines.modules.files import resolve_paths
 
 ROOT = Path(str(git.Repo(".", search_parent_directories=True).working_dir))
 CONFIG = toml.load(open(ROOT / "Configurations/global.toml", encoding="utf-8"))
-PATHS = absolute_paths()
+PATHS = resolve_paths()
 
 JSONSCHEMAS_PATHS = PATHS["json_schemas"]
 LOOKUPS_METADATA_JSONSCHEMA_PATH = (
