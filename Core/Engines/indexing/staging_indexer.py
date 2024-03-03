@@ -21,7 +21,7 @@ TIDE_CONFIG = toml.load(
 )
 
 PROJECT_NAME = os.getenv("CI_PROJECT_NAME")
-STG_INDEX_PATH = ROOT / TIDE_CONFIG["staging_index_output"]
+STG_INDEX_PATH = ROOT / TIDE_CONFIG["paths"]["core"]["staging_index_output"]
 
 DEPLOYMENT_PLAN = os.getenv("DEPLOYMENT_PLAN")
 # STATUS_STAGING_FORBIDDEN = os.getenv("STATUS_STAGING_FORBIDDEN") or ["PRODUCTION", "DISABLED", "REMOVED", "6-PRODUCTION", "8-DISABLED", "9-REMOVED"]

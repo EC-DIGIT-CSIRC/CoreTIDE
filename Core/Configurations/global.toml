@@ -1,6 +1,4 @@
 models = [ "tam", "tvm", "cdm", "bdr", "mdr" ]
-index_output = "index.json"
-staging_index_output = "staging_index.json"
 
 [paths.tide]
 tam = "Models Library/Threat Actor Models/"
@@ -15,6 +13,8 @@ analytics = "Analytics/"
 vscode = ".vscode/"
 
 [paths.core]
+staging_index_output = "staging_index.json"
+index_output = "index.json"
 vocabularies = "Core/Framework/Vocabulary/"
 configurations = "Core/Configurations/"
 metaschemas = "Core/Framework/Meta Schemas/"
@@ -28,8 +28,6 @@ lookup_docs = "Core/Engines/documentation/wiki/Lookups/"
 schemas_docs_folder = "Core/Engines/documentation/wiki/Specifications/"
 vocabularies_docs = "Core/Engines/documentation/wiki/Vocabularies/"
 resources = "Core/External/"
-
-
 
 [metaschemas]
 tam = "TAM Meta Schema.yaml"
@@ -50,7 +48,6 @@ cdm = "CDM Schema.json"
 mdr = "MDR Schema.json"
 bdr = "BDR Schema.json"
 lookup_metadata = "Lookup Metadata Schema.json"
-
 
 [models_vocabularies]
 tam = "Threat Actors.yaml"
@@ -73,7 +70,7 @@ mdr = "MDR TEMPLATE.yaml"
 bdr = "BDR TEMPLATE.yaml"
 lookup_metadata = "LOOKUP METADATA TEMPLATE.yaml"
 
-#This section can be simplified
+#This section can be made programatically
 [snippets]
 file = "Model Templates.code-snippets"
 

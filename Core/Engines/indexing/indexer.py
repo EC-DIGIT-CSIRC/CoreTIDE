@@ -3,10 +3,13 @@ import git
 import yaml
 import json
 from pathlib import Path
-import time
+import sys
 import toml
 import git
 
+sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
+
+from Core.Engines.modules.files import absolute_paths
 
 def indexer(write_index=False) -> dict:
     ROOT = Path(str(git.Repo(".", search_parent_directories=True).working_dir))
@@ -14,11 +17,8 @@ def indexer(write_index=False) -> dict:
         open(ROOT / "Core/Configurations/global.toml", encoding="utf-8")
     )
     SKIPS = ["logsources", "ram", "mdrv2", "lookup_metadata"]
-    
-    TIDE_PATHS = {k: (ROOT.parent / path) for k, path in TIDE_CONFIG["paths"]["tide"].items()}
-    CORE_PATHS = {k: (ROOT / path) for k, path in TIDE_CONFIG["paths"]["core"].items()}
-    
-    PATHS = TIDE_PATHS | CORE_PATHS
+        
+    PATHS = absolute_paths()
     
     VOCAB_PATH = PATHS["vocabularies"]
     CONFIGURATIONS_PATH = PATHS["configurations"]
@@ -33,7 +33,7 @@ def indexer(write_index=False) -> dict:
     TEMPLATES = TIDE_CONFIG["templates"]
     LOOKUPS_PATH = PATHS["lookups"]
 
-    OUTPUT_PATH = ROOT / TIDE_CONFIG["index_output"]
+    OUTPUT_PATH = PATHS["index_output"]
     # Controls whether the index should keep in memory or export to a file
     # In-memory is helpful when index is used to accelerate functions, like
     # for example to enrich deployment tags.
