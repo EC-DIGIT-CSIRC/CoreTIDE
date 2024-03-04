@@ -84,22 +84,25 @@ def indexer(write_index=False) -> dict:
 
             voc_body = yaml.safe_load(open(folder / voc_file, encoding="utf-8"))
 
-            voc_meta = {i: voc_body[i] for i in voc_body if i not in ["field", "keys"]}
-            voc_data = dict()
-            for k in voc_body["keys"]:
-                # If model modifier, we index using the id instead since we want to reference it.
-                if voc_meta.get("model"):
-                    voc_name = k.get("id")
-                    voc_data[voc_name] = {i: k[i] for i in k if i != "id"}
-                else:
-                    voc_name = k.get("name")
-                    voc_data[voc_name] = {i: k[i] for i in k if i != "name"}
+            if not voc_body:
+                log("WARNING", "Could not find data in vocabulary/index", voc_file)
+            else:
+                voc_meta = {i: voc_body[i] for i in voc_body if i not in ["field", "keys"]}
+                voc_data = dict()
+                for k in voc_body["keys"]:
+                    # If model modifier, we index using the id instead since we want to reference it.
+                    if voc_meta.get("model"):
+                        voc_name = k.get("id")
+                        voc_data[voc_name] = {i: k[i] for i in k if i != "id"}
+                    else:
+                        voc_name = k.get("name")
+                        voc_data[voc_name] = {i: k[i] for i in k if i != "name"}
 
-            voc_entry = dict()
-            voc_entry["metadata"] = voc_meta
-            voc_entry["entries"] = voc_data
+                voc_entry = dict()
+                voc_entry["metadata"] = voc_meta
+                voc_entry["entries"] = voc_data
 
-            voc_index[voc_body["field"]] = voc_entry
+                voc_index[voc_body["field"]] = voc_entry
 
     index["vocabs"] = voc_index
 
