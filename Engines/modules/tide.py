@@ -84,7 +84,7 @@ class IndexUtils:
     @staticmethod
     def reconcile_staging(index):
         log("INFO", "Entering staging index reconciliation routine")
-        EXPECTED_STAGING_INDEX_PATH = ROOT / "stg_index.json"
+        EXPECTED_STAGING_INDEX_PATH = ROOT / "staging_index.json"
         STAGING_INDEX_PATH = os.getenv("STG_INDEX_PATH") or EXPECTED_STAGING_INDEX_PATH
 
         if not os.path.exists(STAGING_INDEX_PATH):
