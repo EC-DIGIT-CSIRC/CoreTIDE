@@ -28,7 +28,6 @@ def indexer(write_index=False) -> dict:
     PATHS = TIDE_PATHS | CORE_PATHS
     
     log("DEBUG", "Loaded all paths")
-    pprint(PATHS)
     VOCABULARIES_PATH = PATHS["vocabularies"]
     METASCHEMA_PATH = PATHS["metaschemas"]
     METASCHEMAS = TIDE_CONFIG["metaschemas"]
@@ -103,7 +102,7 @@ def indexer(write_index=False) -> dict:
                 voc_entry["entries"] = voc_data
 
                 voc_index[voc_body["field"]] = voc_entry
-
+    print(voc_index.keys())
     index["vocabs"] = voc_index
 
     # JSON Schemas Indexer

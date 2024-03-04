@@ -120,7 +120,6 @@ def run():
             cdm_file = dict(cdm_file)
             log("INFO", "Writing vocabulary entry for model type", model)
             from pprint import pprint
-            pprint(cdm_file)
             with open(out_file_path, "w+", encoding="utf-8") as cdm_bdr_index:
                 yaml.dump(
                     cdm_file,

@@ -29,7 +29,7 @@ class IndexTide:
     def __post_init__(self):
         self.Index = self._cache_index()
 
-    def _cache_index(self, reset=False, reconcile_staging=False) -> Dict[str, dict]:
+    def _cache_index(self) -> Dict[str, dict]:
         """
         To ensure that we are not reindexing the repository on every call
         to the index, `_cache_index()` uses a global variable `TIDE_INDEX`to preserve
@@ -39,41 +39,20 @@ class IndexTide:
         but passing `reset=True` will reindex the repository imperatively.
         """
 
-        if "TIDE_INDEX" in globals().keys():
-            if reset:  # Regenerate the index
-                NEW_INDEX = indexer()
-
-                if reconcile_staging:
-                    log(
-                        "INFO",
-                        "Initializing reconciliation routine after regenerating the index",
-                    )
-                    NEW_INDEX = IndexUtils.reconcile_staging(NEW_INDEX)
-
-                globals()["TIDE_INDEX"] = NEW_INDEX
-
-            if reconcile_staging:
-                log("INFO", "Initializing reconciliation routine on existing index")
-                globals()["TIDEINDEX"] = IndexUtils.reconcile_staging(
-                    globals()["TIDE_INDEX"]
-                )
-
+        if "TIDE_INDEX" in globals().keys():                
             return globals()["TIDE_INDEX"]
 
         global TIDE_INDEX  # INDEX will be written to the global scope
         print("📂 Index not found in memory, first seeking index file...")
         if os.path.isfile(self.INDEX_PATH):
             TIDE_INDEX = json.load(open(self.INDEX_PATH))
-            if reconcile_staging:
-                log("INFO", "Initializing reconciliation routine for new index")
-                TIDE_INDEX = IndexUtils.reconcile_staging(TIDE_INDEX)
+            TIDE_INDEX = IndexUtils.reconcile_staging(TIDE_INDEX)
             return TIDE_INDEX
         else:
             # Generate index in memory
             print("💽 Could not find index file, generating it in memory")
             TIDE_INDEX = indexer()
-            if reconcile_staging:
-                TIDE_INDEX = IndexUtils.reconcile_staging(TIDE_INDEX)
+            TIDE_INDEX = IndexUtils.reconcile_staging(TIDE_INDEX)
             if not TIDE_INDEX:
                 raise Exception("INDEX COULD NOT BE LOADED IN MEMORY")
             return TIDE_INDEX
