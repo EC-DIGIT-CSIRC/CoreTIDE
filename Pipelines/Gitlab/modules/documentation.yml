@@ -9,7 +9,7 @@
     - pwd 
   
     # Generate index. Stores a copy in wiki for Staging documentation
-    - cd /Engines/indexing/
+    - cd Engines/indexing/
     - export GENERATE_INDEX_FILE=True
     - python ./indexer.py # Index generates in the root of the repo
     - cd ../../ #Back within the Core Root directory
@@ -21,7 +21,7 @@
     - fi
 
     # Execute documentation toolchain
-    - cd /$TIDE_CORE_REPO/Orchestration
+    - cd $TIDE_CORE_REPO/Orchestration
     - python document.py
     - cd ../../ #Back within the Core Root directory
     - cp -fr wiki/. ../$TIDE_WIKI #Copy content of wiki to top level directory

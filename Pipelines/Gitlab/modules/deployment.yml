@@ -29,8 +29,8 @@
     - cd $TIDE_CORE_REPO/Orchestration/
     - python deploy.py
     - cd ../../ # Back into Tide Repo, if needs commit
-    - git add -A
     - rm -rf $TIDE_CORE_REPO
+    - git add -A
     - if ! git diff-index --quiet HEAD; then
     -   git commit -m "[MDR STATUS PROMOTION] $CI_COMMIT_MESSAGE"
     -   git rebase origin/$CI_DEFAULT_BRANCH
