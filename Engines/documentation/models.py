@@ -65,7 +65,7 @@ def documentation(model):
     elif DOCUMENTATION_TYPE == "GLFM":
         frontmatter = ""
 
-    model_datafield = DataTide.Configurations.Global.datafields[model_type]
+    model_datafield = DataTide.Configurations.Global.data_fields[model_type]
     title = f"# {get_icon(get_type(model_id))} {model_id} : {model['name']}"
     criticality = criticality_doc(model["criticality"])
     metadata = model.get("metadata") or model.get("meta") or {}

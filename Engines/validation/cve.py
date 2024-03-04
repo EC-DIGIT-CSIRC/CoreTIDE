@@ -10,7 +10,7 @@ from Engines.modules.logs import log
 from Engines.modules.tide import DataTide
 from Engines.modules.deployment import Proxy
 
-TVM_MODEL_FIELD = DataTide.Configurations.Global.datafields["tvm"]
+TVM_MODEL_FIELD = DataTide.Configurations.Global.data_fields["tvm"]
 
 
 def run():
