@@ -94,7 +94,7 @@ def log(
         advice = f"💡 {CYAN}{UNDERLINE}{advice}{STOP}"
 
     message = " " + message + " "
-    log_message = header + icon + message + highlight + advice
+    log_message = str(header) + str(icon) + str(message) + str(highlight) + str(advice)
 
     if category == "DEBUG":
         if (
