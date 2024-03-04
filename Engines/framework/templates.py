@@ -103,8 +103,6 @@ def gen_template(metaschema, required):
                 template = gen_template(
                     {key.replace("#", ""): temp}, required=temp.get("required", [])
                 )
-                print(key)
-                print(template)
                 template = (
                     template.get(key)
                     or template.get(key.replace("#", ""))

@@ -6,7 +6,7 @@
     - python ./generate.py
     - cd ../../
     - pwd
-    - rm -rf $TIDE_CORE_ACCESS #Delete injected Core
+    - rm -rf $TIDE_CORE_REPO #Delete injected Core
     - git add -A
     - if ! git diff-index --quiet HEAD; then
     -   git commit -m "TIDE Data Model Automation"
