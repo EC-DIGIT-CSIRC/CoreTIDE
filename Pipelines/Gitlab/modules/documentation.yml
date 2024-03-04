@@ -49,7 +49,6 @@
     - git rebase origin/$CI_DEFAULT_BRANCH #Allows to pull latest mutation if there are
     - cd $TIDE_CORE_REPO
     - git clone $TIDE_WIKI_ACCESS
-    - cp $TIDE_WIKI/index.json 
     - pwd 
 
     # Extract the staging index to Core Root for reconciliation
