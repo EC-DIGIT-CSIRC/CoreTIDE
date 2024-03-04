@@ -285,7 +285,7 @@ class DataTide:
             metaschemas = dict(Index["metaschemas"])
             recomposition = dict(Index["recomposition"])
             json_schemas = dict(Index["json_schemas"])
-            datafields = dict(Index["datafields"])
+            data_fields = dict(Index["data_fields"])
             templates = dict(Index["templates"])
             models_vocabularies = dict(Index["models_vocabularies"])
 
