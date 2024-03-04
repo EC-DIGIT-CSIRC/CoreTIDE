@@ -13,7 +13,7 @@ keys:
       when it is followed by a high rate of subsequent resource access and modification. '
     criticality: Low
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0001%5D-Account-manipulation-in-AD
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0001%5D-Account-manipulation-in-AD
   - id: CDM0002
     name: Track M365 for high risk role creation
     description: 'Monitor the Microsoft 365 tenant for the creation of new Management
@@ -22,7 +22,7 @@ keys:
       role.  '
     criticality: Severe
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0002%5D-Track-M365-for-high-risk-role-creation
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0002%5D-Track-M365-for-high-risk-role-creation
   - id: CDM0003
     name: Identify critical partner operations with delegated permissions
     description: 'The Azure AD sign-in logs record sign-ins by partners who have been
@@ -33,7 +33,7 @@ keys:
       critical  actions and operations on key infrastructure. '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0003%5D-Identify-critical-partner-operations-with-delegated-permissions
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0003%5D-Identify-critical-partner-operations-with-delegated-permissions
   - id: CDM0004
     name: Detect adversary signed SAML Tokens
     description: 'Search for any logins to service providers using SAML SSO, which
@@ -45,7 +45,7 @@ keys:
       with pipe named ''"\microsoft##wid\tsql\query"''. '
     criticality: Emergency
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0004%5D-Detect-adversary-signed-SAML-Tokens
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0004%5D-Detect-adversary-signed-SAML-Tokens
   - id: CDM0005
     name: Malicious ADFS trust modification
     description: 'Monitor creation of new ADFS trusts, by monitoring Windows Security
@@ -56,7 +56,7 @@ keys:
       IssuanceAuthority" where "Property Value" references an unfamiliar Domain. '
     criticality: Severe
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0005%5D-Malicious-ADFS-trust-modification
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0005%5D-Malicious-ADFS-trust-modification
   - id: CDM0006
     name: Detect Abuse of trusted third-party services
     description: 'Monitor for communication from/to trusted cloud hosting plarforms
@@ -66,7 +66,7 @@ keys:
       are similar to a C2 server. '
     criticality: Medium
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0006%5D-Detect-Abuse-of-trusted-third-party-services
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0006%5D-Detect-Abuse-of-trusted-third-party-services
   - id: CDM0007
     name: Detect malicious scripts hiding in registry
     description: 'Monitor for new registry keys added by processes and command-line
@@ -75,7 +75,7 @@ keys:
       as ones ending with ''\Software\Microsoft\Windows\ CurrentVersion\Run'' or ''\Software\Microsoft\Windows\CurrentVersion\RunOnce''. '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0007%5D-Detect-malicious-scripts-hiding-in-registry
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0007%5D-Detect-malicious-scripts-hiding-in-registry
   - id: CDM0008
     name: Detect malicious execution of rundll32
     description: 'Look for rundll32 execution , especially when called from another
@@ -86,7 +86,7 @@ keys:
       and hide in system paths, such as system32. '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0008%5D-Detect-malicious-execution-of-rundll32
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0008%5D-Detect-malicious-execution-of-rundll32
   - id: CDM0009
     name: Compromised FaaS instances
     description: 'Monitor for functions that contain obfuscated and/or compiled code.
@@ -97,7 +97,7 @@ keys:
       the cloud.  '
     criticality: Medium
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0009%5D-Compromised-FaaS-instances
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0009%5D-Compromised-FaaS-instances
   - id: CDM0010
     name: Signins from VPN Providers
     description: 'Detect sign-in or connection attempts from unknown VPN providers.
@@ -105,7 +105,7 @@ keys:
       retrieved from their API or other intelligence listing regularly updated.  '
     criticality: Medium
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0010%5D-Signins-from-VPN-Providers
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0010%5D-Signins-from-VPN-Providers
   - id: CDM0011
     name: EC2 Instances using IMDSv1
     description: 'Detection can be performed on logs using MetadataNoToken (Counts
@@ -117,7 +117,7 @@ keys:
       IMDSv1 is present. '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0011%5D-EC2-Instances-using-IMDSv1
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0011%5D-EC2-Instances-using-IMDSv1
   - id: CDM0012
     name: EC2 Credential Exfiltration
     description: 'Identify when credentials exclusively used for an EC2 instance are
@@ -129,7 +129,7 @@ keys:
       AWS or from the outside. '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0012%5D-EC2-Credential-Exfiltration
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0012%5D-EC2-Credential-Exfiltration
   - id: CDM0013
     name: External IMDS Requests
     description: 'IMDS is exposed through an API which can be queried only from the
@@ -140,7 +140,7 @@ keys:
       exploitation alerts.  '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0013%5D-External-IMDS-Requests
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0013%5D-External-IMDS-Requests
   - id: CDM0014
     name: Compromised cloud accounts
     description: 'Monitor for use of credentials at unusual times or to unusual systems
@@ -151,7 +151,7 @@ keys:
       access patterns to identify. '
     criticality: Severe
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0014%5D-Compromised-cloud-accounts
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0014%5D-Compromised-cloud-accounts
   - id: CDM0015
     name: Cloud network plane lateral movement
     description: 'Detect a high rate of unusual traffic flow from cloud instances
@@ -163,7 +163,7 @@ keys:
       low to high security network planes, such as from a VPC to on premises.   '
     criticality: Medium
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0015%5D-Cloud-network-plane-lateral-movement
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0015%5D-Cloud-network-plane-lateral-movement
   - id: CDM0016
     name: Monitor Actions performed with recently assumed role
     description: 'Newly added role may be indicative of privilege escalation leading
@@ -173,7 +173,7 @@ keys:
       typically don''t assume roles.  '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0016%5D-Monitor-Actions-performed-with-recently-assumed-role
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0016%5D-Monitor-Actions-performed-with-recently-assumed-role
   - id: CDM0017
     name: Monitor for Web Shell Attacks
     description: 'Several strategies might be used:  ## anomalies in the type of method
@@ -193,7 +193,7 @@ keys:
       for unusual and priviledged process spawning. '
     criticality: Medium
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0017%5D-Monitor-for-Web-Shell-Attacks
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0017%5D-Monitor-for-Web-Shell-Attacks
   - id: CDM0018
     name: Detect non-approved container image deployed
     description: 'Monitor (for example in Sysdig) for images being deployed that do
@@ -205,7 +205,7 @@ keys:
       Monitor for deployment of remote shells and outbound network connectivity '
     criticality: High
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0018%5D-Detect-non-approved-container-image-deployed
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0018%5D-Detect-non-approved-container-image-deployed
   - id: CDM0019
     name: Detect Cryptominer running in container
     description: 'Detection of a cryptominer can be achieved in many ways - through
@@ -221,7 +221,7 @@ keys:
       wallet. '
     criticality: High
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0019%5D-Detect-Cryptominer-running-in-container
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0019%5D-Detect-Cryptominer-running-in-container
   - id: CDM0020
     name: Changes in SSH authorized_key file
     description: 'The Secure Shell (SSH) authorized_keys file specifies  which users
@@ -233,7 +233,7 @@ keys:
       files. '
     criticality: Medium
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0020%5D-Changes-in-SSH-authorized_key-file
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0020%5D-Changes-in-SSH-authorized_key-file
   - id: CDM0021
     name: Identify Emotet Trojan Artefacts
     description: 'Some registers in Windows can be scanned.  Possible scan tool: FRST
@@ -246,7 +246,7 @@ keys:
       refine the analytic, you can also look for the format indexes {0} and {1}. '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0021%5D-Identify-Emotet-Trojan-Artefacts
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0021%5D-Identify-Emotet-Trojan-Artefacts
   - id: CDM0022
     name: Detection of IIS extensions quietly open persistent backdoors into servers
     description: 'The atacker is installing an IIS backdoor to use it as a covert  channel
@@ -275,7 +275,7 @@ keys:
       2996064437621bfecd159a3f71166e8c6468225e1c0189238068118deeabaa3d '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0022%5D-Detection-of-IIS-extensions-quietly-open-persistent-backdoors-into-servers
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0022%5D-Detection-of-IIS-extensions-quietly-open-persistent-backdoors-into-servers
   - id: CDM0023
     name: SQL Commands in Web Request
     description: 'HTTP transaction would contain URL-encoded SQL fragments, corresponding
@@ -287,7 +287,7 @@ keys:
       injection may be revealed. '
     criticality: Severe
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0023%5D-SQL-Commands-in-Web-Request
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0023%5D-SQL-Commands-in-Web-Request
   - id: CDM0024
     name: Detect Suspicious Redirections in URL
     description: '2023-05-01 This detction objective is cancelled.   Within EC this
@@ -305,7 +305,7 @@ keys:
       which may contain many expected redirections across many websites. '
     criticality: Low
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0024%5D-Detect-Suspicious-Redirections-in-URL
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0024%5D-Detect-Suspicious-Redirections-in-URL
   - id: CDM0025
     name: Identify Path Traversal in Web Requests
     description: 'Analyze and alert on URLs containing "dot-dot-slash" sequences,
@@ -320,7 +320,7 @@ keys:
       /etc in *NIX OS, /windows for Windows server etc. '
     criticality: Medium
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0025%5D-Identify-Path-Traversal-in-Web-Requests
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0025%5D-Identify-Path-Traversal-in-Web-Requests
   - id: CDM0026
     name: Detect Confluence RCE (CVE-2021-26084)
     description: 'To detect exploitation, you should monitor all HTTP traffic requests
@@ -335,7 +335,7 @@ keys:
       and an attack exploiting this vulnerability is likely underway. '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0026%5D-Detect-Confluence-RCE-%28CVE-2021-26084%29
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0026%5D-Detect-Confluence-RCE-%28CVE-2021-26084%29
   - id: CDM0027
     name: Detect Abnormal Traffic to Web Servers
     description: 'Identify clients generating large amount of HTTP errors, POST requests,
@@ -345,7 +345,7 @@ keys:
       for example to identify DDoS types of attacks or data exfiltration. '
     criticality: Medium
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0027%5D-Detect-Abnormal-Traffic-to-Web-Servers
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0027%5D-Detect-Abnormal-Traffic-to-Web-Servers
   - id: CDM0028
     name: Monitor Web Vulnerability Scanner Behaviours
     description: 'Common scanners can be identified by their user agents, which will
@@ -363,7 +363,7 @@ keys:
       they correspond to other malicious attacks. '
     criticality: Medium
     tlp: amber
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0028%5D-Monitor-Web-Vulnerability-Scanner-Behaviours
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0028%5D-Monitor-Web-Vulnerability-Scanner-Behaviours
   - id: CDM0029
     name: Obfuscated Query String in Web Request
     description: 'Analyze if URL query string parameters contains distinct signs of
@@ -385,7 +385,7 @@ keys:
       threat criticality. '
     criticality: Medium
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0029%5D-Obfuscated-Query-String-in-Web-Request
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0029%5D-Obfuscated-Query-String-in-Web-Request
   - id: CDM0030
     name: Suspicious Requests URL
     description: 'Certain part of the webservers should typically not be attempted
@@ -395,7 +395,7 @@ keys:
       on unexpected access to these resources.  '
     criticality: Medium
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0030%5D-Suspicious-Requests-URL
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0030%5D-Suspicious-Requests-URL
   - id: CDM0031
     name: Detect brute-force attacks against EULOGIN IdP
     description: 'Identify clients generating large amount of failed EULOGIN login
@@ -405,7 +405,7 @@ keys:
       successful/unsuccessful vertical bruteforces '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0031%5D-Detect-brute-force-attacks-against-EULOGIN-IdP
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0031%5D-Detect-brute-force-attacks-against-EULOGIN-IdP
   - id: CDM0032
     name: (CVE-2020-0688) Confluence VIEWSTATE query parameter
     description: 'As highlighted in TVM0054, a number of pages are targeted and the
@@ -415,7 +415,7 @@ keys:
       that''s the case. '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0032%5D-%28CVE-2020-0688%29-Confluence-VIEWSTATE-query-parameter
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0032%5D-%28CVE-2020-0688%29-Confluence-VIEWSTATE-query-parameter
   - id: CDM0033
     name: XSS Payload in Web Request
     description: 'Adversaries will likely attempt multiple XSS injection to evade
@@ -431,7 +431,7 @@ keys:
       before they add in their own script.  '
     criticality: Medium
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0033%5D-XSS-Payload-in-Web-Request
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0033%5D-XSS-Payload-in-Web-Request
   - id: CDM0034
     name: Detect creation of a new AWS Amplify website
     description: 'Any SOC will have to react to the creation of any amplify site,
@@ -443,7 +443,7 @@ keys:
       as a potential incident. '
     criticality: Low
     tlp: amber+strict
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0034%5D-Detect-creation-of-a-new-AWS-Amplify-website
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0034%5D-Detect-creation-of-a-new-AWS-Amplify-website
   - id: CDM0035
     name: Detect changes to existing AWS Amplify website
     description: 'Any SOC will have to react to the modification of any amplify site,
@@ -459,7 +459,7 @@ keys:
       until analyzed, this would be more secure. '
     criticality: Low
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0035%5D-Detect-changes-to-existing-AWS-Amplify-website
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0035%5D-Detect-changes-to-existing-AWS-Amplify-website
   - id: CDM0036
     name: Monitor User and Machine Active Directory Certificate Enrollments
     description: 'From a blueteam perspective, several behaviors can be detected when  exploiting
@@ -473,7 +473,7 @@ keys:
       see references  https://z4ksec.github.io/posts/masky-release-v0.0.3/#detection-vectors '
     criticality: Medium
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0036%5D-Monitor-User-and-Machine-Active-Directory-Certificate-Enrollments
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0036%5D-Monitor-User-and-Machine-Active-Directory-Certificate-Enrollments
   - id: CDM0037
     name: CrackMapExec related artifacts on endpoints
     description: 'For this detection, it''s the goal to detect the presence of known
@@ -489,7 +489,7 @@ keys:
       data on disk. '
     criticality: High
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0037%5D-CrackMapExec-related-artifacts-on-endpoints
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0037%5D-CrackMapExec-related-artifacts-on-endpoints
   - id: CDM0038
     name: Traffic to customervoice.microsoft.com
     description: 'Any outbound traffic to, or DNS requests looking up the subdomain
@@ -500,7 +500,7 @@ keys:
       code 302 '
     criticality: Low
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0038%5D-Traffic-to-customervoice.microsoft.com
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0038%5D-Traffic-to-customervoice.microsoft.com
   - id: CDM0039
     name: Accepted AWS VPC peering requests
     description: 'A VPC peering request is a request to connect one network (subnet)
@@ -515,7 +515,7 @@ keys:
       an illicit peering acceptance. '
     criticality: Medium
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0039%5D-Accepted-AWS-VPC-peering-requests
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0039%5D-Accepted-AWS-VPC-peering-requests
   - id: CDM0040
     name: Detect running container images with exploitable vulnerabilities
     description: 'Use runtime scanner to analyze running container images to provide
@@ -523,7 +523,7 @@ keys:
       just registries may not catch containers deployed from other sources. '
     criticality: Medium
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0040%5D-Detect-running-container-images-with-exploitable-vulnerabilities
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0040%5D-Detect-running-container-images-with-exploitable-vulnerabilities
   - id: CDM0041
     name: Windows environment lateral movement via SMB protocol
     description: 'Example guidelines found below. This is not necessarily the only
@@ -556,7 +556,7 @@ keys:
       (schedule tasks)  or winexesvc.exe (services) processes. '
     criticality: High
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0041%5D-Windows-environment-lateral-movement-via-SMB-protocol
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0041%5D-Windows-environment-lateral-movement-via-SMB-protocol
   - id: CDM0042
     name: Sentinel connector impaired
     description: 'Any true positive of an alert from a MDR built from this CDM would
@@ -585,7 +585,7 @@ keys:
       connector '
     criticality: High
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0042%5D-Sentinel-connector-impaired
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0042%5D-Sentinel-connector-impaired
   - id: CDM0043
     name: Detection for duplication of access token in a new process to elevate privileges
     description: 'Threat actors can create a new access token with the duplication
@@ -628,7 +628,7 @@ keys:
       query information. '
     criticality: High
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0043%5D-Detection-for-duplication-of-access-token-in-a-new-process-to-elevate-privileges
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0043%5D-Detection-for-duplication-of-access-token-in-a-new-process-to-elevate-privileges
   - id: CDM0044
     name: Azure Microsoft.GuestConfiguration resource provider registration
     description: 'An Azure resource provider is a collection of REST operations that
@@ -649,7 +649,7 @@ keys:
       of the Microsoft.GuestConfiguration resource provider. '
     criticality: Medium
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0044%5D-Azure-Microsoft.GuestConfiguration-resource-provider-registration
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0044%5D-Azure-Microsoft.GuestConfiguration-resource-provider-registration
   - id: CDM0045
     name: Detection of Linux kernel module loading
     description: 'Monitor the Linux host for kernel module load attempts by monitoring
@@ -658,7 +658,7 @@ keys:
       by  external tool like auditd. Detectecion can be performed with Falco or  Tracee. '
     criticality: High
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0045%5D-Detection-of-Linux-kernel-module-loading
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0045%5D-Detection-of-Linux-kernel-module-loading
   - id: CDM0046
     name: VPC peering requests received from inside own AWS organization
     description: 'A VPC peering request is a request to connect one network (subnet)
@@ -670,13 +670,13 @@ keys:
       peering request was expected behaviour and is not malicious. '
     criticality: Low
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0046%5D-VPC-peering-requests-received-from-inside-own-AWS-organization
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0046%5D-VPC-peering-requests-received-from-inside-own-AWS-organization
   - id: CDM0047
     name: Detect Container Breakout Exploit via runc vulnerablity
     description: 'Detect linking and writing to /proc/self/exe '
     criticality: High
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0047%5D-Detect-Container-Breakout-Exploit-via-runc-vulnerablity
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0047%5D-Detect-Container-Breakout-Exploit-via-runc-vulnerablity
   - id: CDM0048
     name: Detect secrets embedded in container images
     description: 'Detection may be possible by using a regular expression engine with
@@ -685,7 +685,7 @@ keys:
       code repositories,  container registries and on running containers.  '
     criticality: High
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0048%5D-Detect-secrets-embedded-in-container-images
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0048%5D-Detect-secrets-embedded-in-container-images
   - id: CDM0049
     name: Public AWS S3 bucket
     description: 'Detect changes to S3 buckets that make either files or whole buckets
@@ -695,7 +695,7 @@ keys:
       buckets and files. '
     criticality: High
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0049%5D-Public-AWS-S3-bucket
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0049%5D-Public-AWS-S3-bucket
   - id: CDM0050
     name: DNS activity related to potential malicious server
     description: 'The objective is 2-fold: - To detect a DNS resolution from a server
@@ -709,7 +709,7 @@ keys:
       and the reputation of both hostnames and IPs  (MISP, virustotal, RiskIQ) '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0050%5D-DNS-activity-related-to-potential-malicious-server
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0050%5D-DNS-activity-related-to-potential-malicious-server
   - id: CDM0051
     name: TCP or UDP outbound traffic to an unusual destination or port
     description: 'The objective is to detect outbound connection attempts from servers
@@ -718,7 +718,7 @@ keys:
       IPs over the attempts '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0051%5D-TCP-or-UDP-outbound-traffic-to-an-unusual-destination-or-port
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0051%5D-TCP-or-UDP-outbound-traffic-to-an-unusual-destination-or-port
   - id: CDM0052
     name: Customervoice.microsoft.com link in email or other message history
     description: 'Any email or messaging history mentioning in any way the subdomain  customervoice.microsoft.com
@@ -726,7 +726,7 @@ keys:
       that could result in new proxy blocks, or  new detections being built.   '
     criticality: Low
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0052%5D-Customervoice.microsoft.com-link-in-email-or-other-message-history
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0052%5D-Customervoice.microsoft.com-link-in-email-or-other-message-history
   - id: CDM0053
     name: Honeytoken accessed from private AWS S3 bucket
     description: 'The goal of this detection objective is to use honeytokens to detect  abnormal
@@ -743,7 +743,7 @@ keys:
       by '
     criticality: High
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0053%5D-Honeytoken-accessed-from-private-AWS-S3-bucket
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0053%5D-Honeytoken-accessed-from-private-AWS-S3-bucket
   - id: CDM0054
     name: Azure infrastructure modifications to a different resource group
     description: 'Azure CLI has a wide reach, and can be used from any deployed compute
@@ -756,7 +756,7 @@ keys:
       false positives.  '
     criticality: High
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0054%5D-Azure-infrastructure-modifications-to-a-different-resource-group
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0054%5D-Azure-infrastructure-modifications-to-a-different-resource-group
   - id: CDM0055
     name: Changes in Azure to Microsoft Policy Remediations
     description: 'Detection of threat actor persistence efforts through Azure Automated  Machine
@@ -767,7 +767,7 @@ keys:
       with the teams  involved.  '
     criticality: High
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0055%5D-Changes-in-Azure-to-Microsoft-Policy-Remediations
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0055%5D-Changes-in-Azure-to-Microsoft-Policy-Remediations
   - id: CDM0056
     name: Detect protocol DDoS
     description: 'Protocol attacks look to exhaust resources of a server or those
@@ -784,7 +784,7 @@ keys:
       for too many responses. '
     criticality: High
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0056%5D-Detect-protocol-DDoS
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0056%5D-Detect-protocol-DDoS
   - id: CDM0057
     name: Detect use of msiexec to establish remote connection over http(s)
     description: 'The objective is to detect remote connection over http(s) by using
@@ -794,7 +794,7 @@ keys:
       actions has been seen. '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0057%5D-Detect-use-of-msiexec-to-establish-remote-connection-over-http%28s%29
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0057%5D-Detect-use-of-msiexec-to-establish-remote-connection-over-http%28s%29
   - id: CDM0058
     name: SMB connection attempt to unusual or external SMB share
     description: 'Using various threat vectors, attacker may trigger a connection
@@ -806,7 +806,7 @@ keys:
       plain http, inspect http header to find "Authorization: NTLM" string.  '
     criticality: High
     tlp: amber
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0058%5D-SMB-connection-attempt-to-unusual-or-external-SMB-share
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0058%5D-SMB-connection-attempt-to-unusual-or-external-SMB-share
   - id: CDM0059
     name: SSH access attempt to C3 ESXi console
     description: 'DIGIT C3 has set a policy to have SSH service disabled on ESXi servers.
@@ -815,7 +815,7 @@ keys:
       as  this indicates that the SSH service is running. '
     criticality: Severe
     tlp: amber+strict
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0059%5D-SSH-access-attempt-to-C3-ESXi-console
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0059%5D-SSH-access-attempt-to-C3-ESXi-console
   - id: CDM0060
     name: unusual SSH connections on server
     description: 'SSH sessions between stations and servers or between non-management
@@ -826,7 +826,7 @@ keys:
       DIGIT C3 PAM service  - access policy for SSH sessions '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0060%5D-unusual-SSH-connections-on-server
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0060%5D-unusual-SSH-connections-on-server
   - id: CDM0061
     name: Hashicorp vault admin connects from unexpected clients
     description: 'Hashicorp Vault platform is used to deliverr SAM service at EC.  Privileged
@@ -836,7 +836,7 @@ keys:
       Hashicorp vault admin console from PAM service. '
     criticality: Severe
     tlp: amber+strict
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0061%5D-Hashicorp-vault-admin-connects-from-unexpected-clients
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0061%5D-Hashicorp-vault-admin-connects-from-unexpected-clients
   - id: CDM0062
     name: Hashicorp vault admin reads secrets
     description: 'Hashicorp Vault platform is used to deliverr SAM service at EC.  A
@@ -847,7 +847,7 @@ keys:
       Vault are recorded in audit logs and those logs collected on the SIEM  '
     criticality: Severe
     tlp: amber+strict
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0062%5D-Hashicorp-vault-admin-reads-secrets
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0062%5D-Hashicorp-vault-admin-reads-secrets
   - id: CDM0063
     name: Detect changes to repository visibility
     description: 'Private repositories should not be exposed to the public. Detecting
@@ -865,7 +865,7 @@ keys:
       in the action field of the event payload. '
     criticality: Medium
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0063%5D-Detect-changes-to-repository-visibility
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0063%5D-Detect-changes-to-repository-visibility
   - id: CDM0064
     name: Changes in the build plan
     description: "Detection of an change to the branch protection configuration is\
@@ -882,7 +882,7 @@ keys:
       \ logs from the SCM / CI/CD platforms should be collected and stored in SIEM. "
     criticality: Medium
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0064%5D-Changes-in-the-build-plan
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0064%5D-Changes-in-the-build-plan
   - id: CDM0065
     name: Detect modified branch protection
     description: 'Branch protection rules are in place as a safety mechanism for accidental
@@ -905,7 +905,7 @@ keys:
       SCM platforms should be collected and stored in a SIEM. '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0065%5D-Detect-modified-branch-protection
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0065%5D-Detect-modified-branch-protection
   - id: CDM0066
     name: Detect non-authorized access to security or network appliances
     description: '### Detect unauthorised access to out-of-band management interface
@@ -944,7 +944,7 @@ keys:
       audit logs may reveal changes on configuration which are out of regular procedures. '
     criticality: Severe
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0066%5D-Detect-non-authorized-access-to-security-or-network-appliances
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0066%5D-Detect-non-authorized-access-to-security-or-network-appliances
   - id: CDM0067
     name: Disabling or modifying security tools
     description: 'Monitor audit or security logs for any changes aiming to disable
@@ -958,7 +958,7 @@ keys:
       Lack of expected log events may be suspicious. '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0067%5D-Disabling-or-modifying-security-tools
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0067%5D-Disabling-or-modifying-security-tools
   - id: CDM0068
     name: Detect fake SSL certificates
     description: 'An attacker will performs an SSL MITM attack to decrypt the HTTPS
@@ -968,7 +968,7 @@ keys:
       is not secure " warning in the browser.   '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0068%5D-Detect-fake-SSL-certificates
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0068%5D-Detect-fake-SSL-certificates
   - id: CDM0069
     name: Detect non-authorized access to endpoint management appliances
     description: 'Endpoint management appliances are critical devices for an organisation.    They
@@ -984,14 +984,14 @@ keys:
       or first seen new client (geolocation, new  account, etc.) '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0069%5D-Detect-non-authorized-access-to-endpoint-management-appliances
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0069%5D-Detect-non-authorized-access-to-endpoint-management-appliances
   - id: CDM0070
     name: Script interpreters launched via office applications
     description: 'Monitoring script interpreters launched with an Mirosoft Office
       application as parent process '
     criticality: High
     tlp: amber+strict
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0070%5D-Script-interpreters-launched-via-office-applications
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0070%5D-Script-interpreters-launched-via-office-applications
   - id: CDM0071
     name: LOLBins Execution Related to Accounts or Group Discovery
     description: 'Detect execution of LOLBins related to discovery (or reconnaissance)
@@ -1005,7 +1005,7 @@ keys:
       - LOLBins leave traces in command line execution logs, and process events '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0071%5D-LOLBins-Execution-Related-to-Accounts-or-Group-Discovery
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0071%5D-LOLBins-Execution-Related-to-Accounts-or-Group-Discovery
   - id: CDM0072
     name: Outbound HTTP Proxy traffic from user endpoint towards suspicious site
     description: 'The objective is to detect successful outbound HTTP proxy traffic
@@ -1019,7 +1019,7 @@ keys:
       to communicate with a C2 server. '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0072%5D-Outbound-HTTP-Proxy-traffic-from-user-endpoint-towards-suspicious-site
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0072%5D-Outbound-HTTP-Proxy-traffic-from-user-endpoint-towards-suspicious-site
   - id: CDM0073
     name: Spyware app detected on mobile device
     description: '## Apps installed outside official stores app:    ### Android. When
@@ -1053,7 +1053,7 @@ keys:
       Focus.  '
     criticality: High
     tlp: amber
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0073%5D-Spyware-app-detected-on-mobile-device
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0073%5D-Spyware-app-detected-on-mobile-device
   - id: CDM0074
     name: Abnormal Scheduled Tasks Activity on Windows
     description: 'Monitor non-legitimate or unknown Scheduled Tasks on Windows hosts
@@ -1071,7 +1071,7 @@ keys:
       CDM). '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0074%5D-Abnormal-Scheduled-Tasks-Activity-on-Windows
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0074%5D-Abnormal-Scheduled-Tasks-Activity-on-Windows
   - id: CDM0075
     name: Hashicorp vault admin changes policy
     description: 'Hashicorp Vault platform is used to deliver the ​​​**S**ecure **A**ccess  **M**anagement
@@ -1082,7 +1082,7 @@ keys:
       collected on the SIEM. '
     criticality: Severe
     tlp: amber+strict
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0075%5D-Hashicorp-vault-admin-changes-policy
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0075%5D-Hashicorp-vault-admin-changes-policy
   - id: CDM0076
     name: Detect ransomware running on devices
     description: 'There are different ways to detect Ransomware, either through tools
@@ -1108,7 +1108,7 @@ keys:
       unusual destinations  couldD be a way to detect ransoware running on a device. '
     criticality: High
     tlp: amber
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0076%5D-Detect-ransomware-running-on-devices
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0076%5D-Detect-ransomware-running-on-devices
   - id: CDM0077
     name: Detection of M365 illicit application consent grant attacks
     description: 'There are various options and approaches accessible for detecting
@@ -1138,7 +1138,7 @@ keys:
       Application '
     criticality: High
     tlp: amber
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0077%5D-Detection-of-M365-illicit-application-consent-grant-attacks
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0077%5D-Detection-of-M365-illicit-application-consent-grant-attacks
   - id: CDM0078
     name: Detect email attachments that could be linked to spearphishing campaign
     description: 'Spearphishing campaigns with suspicious attachments, often come
@@ -1165,7 +1165,7 @@ keys:
       detection, which would trigger alerts or quarantines. '
     criticality: High
     tlp: amber
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0078%5D-Detect-email-attachments-that-could-be-linked-to-spearphishing-campaign
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0078%5D-Detect-email-attachments-that-could-be-linked-to-spearphishing-campaign
   - id: CDM0079
     name: Detect spear phishing campaign using specific patterns or keywords in email
       metadata
@@ -1199,7 +1199,7 @@ keys:
       the user to click on it". '
     criticality: High
     tlp: amber
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0079%5D-Detect-spear-phishing-campaign-using-specific-patterns-or-keywords-in-email-metadata
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0079%5D-Detect-spear-phishing-campaign-using-specific-patterns-or-keywords-in-email-metadata
   - id: CDM0080
     name: Detect AWS Cross-Account IAM Activity
     description: 'The goal is to monitor and detecte `AssumeRole` events where an
@@ -1216,7 +1216,7 @@ keys:
       requests privileges of another account for which it hasn''t requested before. '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0080%5D-Detect-AWS-Cross-Account-IAM-Activity
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0080%5D-Detect-AWS-Cross-Account-IAM-Activity
   - id: CDM0081
     name: Scheduled Tasks and COM Hijacking
     description: 'The objective is to detect a scheduled task with Custom Handler
@@ -1224,7 +1224,7 @@ keys:
       to run as legitimate process based on the class ID. '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0081%5D-Scheduled-Tasks-and-COM-Hijacking
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0081%5D-Scheduled-Tasks-and-COM-Hijacking
   - id: CDM0082
     name: Application connecting to a SMB network share
     description: 'Threat actor uses specially crafted email messages to bypass the
@@ -1253,7 +1253,7 @@ keys:
       traffic is essential to avoid potential payloads retrievals. '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0082%5D-Application-connecting-to-a-SMB-network-share
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0082%5D-Application-connecting-to-a-SMB-network-share
   - id: CDM0083
     name: Detect unusual web requests that could be related to C2
     description: 'A web request related to a C2 it’s any kind of communication done
@@ -1280,7 +1280,7 @@ keys:
       ports) '
     criticality: Medium
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0083%5D-Detect-unusual-web-requests-that-could-be-related-to-C2
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0083%5D-Detect-unusual-web-requests-that-could-be-related-to-C2
   - id: CDM0084
     name: RDP sessions outside PAM or Central Helpdesk service
     description: '## RDP session management First implement effective RDP management
@@ -1312,7 +1312,7 @@ keys:
       this information with server logs to identify the users involved. '
     criticality: High
     tlp: amber
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0084%5D-RDP-sessions-outside-PAM-or-Central-Helpdesk-service
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0084%5D-RDP-sessions-outside-PAM-or-Central-Helpdesk-service
   - id: CDM0085
     name: detect ICS activity to restricted resources not linked to valid authentication
     description: 'The objective is to detect access to resources on Ivanti Pulse Secure  appliances
@@ -1321,7 +1321,7 @@ keys:
       exploit of a vulnerability that allows  to bypass authentication '
     criticality: Severe
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0085%5D-detect-ICS-activity-to-restricted-resources-not-linked-to-valid-authentication
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0085%5D-detect-ICS-activity-to-restricted-resources-not-linked-to-valid-authentication
   - id: CDM0086
     name: ICS detect outbound network activity
     description: 'search for outbound traffic from ICS appliance (traffic initiated
@@ -1329,7 +1329,7 @@ keys:
       lateral movement  between ICS appliances or management consoles. '
     criticality: Severe
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0086%5D-ICS-detect-outbound-network-activity
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0086%5D-ICS-detect-outbound-network-activity
   - id: CDM0087
     name: ICS logging tampering
     description: '- Search for stop or gaps in log collection from Ivanti Pulse Connect
@@ -1337,28 +1337,28 @@ keys:
       deleted, etc. '
     criticality: Severe
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0087%5D-ICS-logging-tampering
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0087%5D-ICS-logging-tampering
   - id: CDM0088
     name: ICS detect path traversal requests
     description: 'Detect path traversal attempts on Ivanti Pulse Connect (ICS) web
       components. '
     criticality: Severe
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0088%5D-ICS-detect-path-traversal-requests
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0088%5D-ICS-detect-path-traversal-requests
   - id: CDM0089
     name: Detect command injection on ICS Ivanti Connect Secure in URL
     description: 'Detect presence of commands in the URL request (GET POST or other
       methods).    requests can be HTML or base64 encoded in order to evade detection. '
     criticality: Severe
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0089%5D-Detect-command-injection-on-ICS-Ivanti-Connect-Secure-in-URL
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0089%5D-Detect-command-injection-on-ICS-Ivanti-Connect-Secure-in-URL
   - id: CDM0090
     name: Detect Ivanti Connect Secure ICS system modifications
     description: '- Search for reports from internal integrity checks - search for
       change in number of files for a given version '
     criticality: Severe
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0090%5D-Detect-Ivanti-Connect-Secure-ICS-system-modifications
+    link: Engines\documentation\wiki\Knowledge-GraphDetection-Models%F0%9F%9B%A1%EF%B8%8F-%5BCDM0090%5D-Detect-Ivanti-Connect-Secure-ICS-system-modifications
   - id: BDR0001
     name: EC Central Logging and Monitoring Standard
     description: 'The SOC must perform a meta monitoring of lacking log sources against
@@ -1366,7 +1366,7 @@ keys:
       as intended. '
     criticality: High
     tlp: amber
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphBusiness-Requests%F0%9F%8F%9B%EF%B8%8F-%5BBDR0001%5D-EC-Central-Logging-and-Monitoring-Standard
+    link: Engines\documentation\wiki\Knowledge-GraphBusiness-Requests%F0%9F%8F%9B%EF%B8%8F-%5BBDR0001%5D-EC-Central-Logging-and-Monitoring-Standard
   - id: BDR0002
     name: DIGIT C3 PAM service - access policy for RDP sessions
     description: 'The SOC must monitor RDP access to servers and investigate deviations
@@ -1376,7 +1376,7 @@ keys:
       SOC, case will be reopen and investigated. '
     criticality: High
     tlp: amber
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphBusiness-Requests%F0%9F%8F%9B%EF%B8%8F-%5BBDR0002%5D-DIGIT-C3-PAM-service---access-policy-for-RDP-sessions
+    link: Engines\documentation\wiki\Knowledge-GraphBusiness-Requests%F0%9F%8F%9B%EF%B8%8F-%5BBDR0002%5D-DIGIT-C3-PAM-service---access-policy-for-RDP-sessions
   - id: BDR0003
     name: DIGIT C3 PAM service - access policy for SSH sessions
     description: 'The SOC must monitor SSH access to servers and investigate deviations
@@ -1386,7 +1386,7 @@ keys:
       SOC, the case will be reopen and investigated by SOC analysts. '
     criticality: High
     tlp: amber
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphBusiness-Requests%F0%9F%8F%9B%EF%B8%8F-%5BBDR0003%5D-DIGIT-C3-PAM-service---access-policy-for-SSH-sessions
+    link: Engines\documentation\wiki\Knowledge-GraphBusiness-Requests%F0%9F%8F%9B%EF%B8%8F-%5BBDR0003%5D-DIGIT-C3-PAM-service---access-policy-for-SSH-sessions
   - id: BDR0004
     name: ESS CBC activity initiated from outside EC or vetted IP ranges
     description: 'SOC must monitor any activity initiated from outside EC or vetted
@@ -1400,14 +1400,14 @@ keys:
       the email - USER@EMAIL.ADDRESS" '
     criticality: High
     tlp: amber
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphBusiness-Requests%F0%9F%8F%9B%EF%B8%8F-%5BBDR0004%5D-ESS-CBC-activity-initiated-from-outside-EC-or-vetted-IP-ranges
+    link: Engines\documentation\wiki\Knowledge-GraphBusiness-Requests%F0%9F%8F%9B%EF%B8%8F-%5BBDR0004%5D-ESS-CBC-activity-initiated-from-outside-EC-or-vetted-IP-ranges
   - id: BDR0005
     name: ESS CBC High Privileged activity
     description: 'CATCH must monitor any high privileged activity and notify the tenant
       point of contact related to security monitoring. '
     criticality: High
     tlp: amber
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphBusiness-Requests%F0%9F%8F%9B%EF%B8%8F-%5BBDR0005%5D-ESS-CBC-High-Privileged-activity
+    link: Engines\documentation\wiki\Knowledge-GraphBusiness-Requests%F0%9F%8F%9B%EF%B8%8F-%5BBDR0005%5D-ESS-CBC-High-Privileged-activity
   - id: BDR0006
     name: JRC IES top failed Windows authentication reporting
     description: 'Weekly release a report on failed authentication accounts (descending
@@ -1417,7 +1417,7 @@ keys:
       CSV (comma-separated values) attachment to JRC LISO.'
     criticality: Medium
     tlp: amber+strict
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphBusiness-Requests%F0%9F%8F%9B%EF%B8%8F-%5BBDR0006%5D-JRC-IES-top-failed-Windows-authentication-reporting
+    link: Engines\documentation\wiki\Knowledge-GraphBusiness-Requests%F0%9F%8F%9B%EF%B8%8F-%5BBDR0006%5D-JRC-IES-top-failed-Windows-authentication-reporting
   - id: BDR0007
     name: SHS CLIMA - Non compliance monitoring and alerting on accesss and usage
       of CLIMA DBMS
@@ -1432,7 +1432,7 @@ keys:
       hours - DB-04 - DB Console Access from non-authorized host '
     criticality: High
     tlp: amber
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphBusiness-Requests%F0%9F%8F%9B%EF%B8%8F-%5BBDR0007%5D-SHS-CLIMA---Non-compliance-monitoring-and-alerting-on-accesss-and-usage-of-CLIMA-DBMS
+    link: Engines\documentation\wiki\Knowledge-GraphBusiness-Requests%F0%9F%8F%9B%EF%B8%8F-%5BBDR0007%5D-SHS-CLIMA---Non-compliance-monitoring-and-alerting-on-accesss-and-usage-of-CLIMA-DBMS
   - id: BDR0008
     name: ESS CBC User not signed in for the last 6 months
     description: 'CATCH must monitor when a valid account has not signed in for the
@@ -1441,7 +1441,7 @@ keys:
       signed in for last 6 months with the data of last signed in. '
     criticality: High
     tlp: amber
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphBusiness-Requests%F0%9F%8F%9B%EF%B8%8F-%5BBDR0008%5D-ESS-CBC-User-not-signed-in-for-the-last-6-months
+    link: Engines\documentation\wiki\Knowledge-GraphBusiness-Requests%F0%9F%8F%9B%EF%B8%8F-%5BBDR0008%5D-ESS-CBC-User-not-signed-in-for-the-last-6-months
   - id: BDR0009
     name: DIGIT S2 CATCH CSOC integrations via ES_SPLUNK
     description: 'A CSOC integration processes correlated alerts coming from one or
@@ -1458,7 +1458,7 @@ keys:
       cross-checks and enrichment. '
     criticality: High
     tlp: amber
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphBusiness-Requests%F0%9F%8F%9B%EF%B8%8F-%5BBDR0009%5D-DIGIT-S2-CATCH-CSOC-integrations-via-ES_SPLUNK
+    link: Engines\documentation\wiki\Knowledge-GraphBusiness-Requests%F0%9F%8F%9B%EF%B8%8F-%5BBDR0009%5D-DIGIT-S2-CATCH-CSOC-integrations-via-ES_SPLUNK
   - id: BDR0010
     name: ESS CBC lack of CBC audit logs
     description: 'CATCH must monitor that VMware CBC audit logs arrive properly to
@@ -1466,14 +1466,14 @@ keys:
       case they do not arrive to Splunk. '
     criticality: Emergency
     tlp: amber
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphBusiness-Requests%F0%9F%8F%9B%EF%B8%8F-%5BBDR0010%5D-ESS-CBC-lack-of-CBC-audit-logs
+    link: Engines\documentation\wiki\Knowledge-GraphBusiness-Requests%F0%9F%8F%9B%EF%B8%8F-%5BBDR0010%5D-ESS-CBC-lack-of-CBC-audit-logs
   - id: BDR0011
     name: ESS EDRT integration settings changed
     description: 'CATCH must monitor when the EDRT integration settings are modified  and
       notify EC DIGIT ESS Functional Mailbox.   '
     criticality: Emergency
     tlp: amber
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphBusiness-Requests%F0%9F%8F%9B%EF%B8%8F-%5BBDR0011%5D-ESS-EDRT-integration-settings-changed
+    link: Engines\documentation\wiki\Knowledge-GraphBusiness-Requests%F0%9F%8F%9B%EF%B8%8F-%5BBDR0011%5D-ESS-EDRT-integration-settings-changed
   - id: BDR0012
     name: ESS CBC lack of CBC alerts
     description: 'CATCH must monitor that VMware CBC tenant alerts arrive properly
@@ -1481,7 +1481,7 @@ keys:
       not arrive to Splunk. '
     criticality: Emergency
     tlp: amber
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphBusiness-Requests%F0%9F%8F%9B%EF%B8%8F-%5BBDR0012%5D-ESS-CBC-lack-of-CBC-alerts
+    link: Engines\documentation\wiki\Knowledge-GraphBusiness-Requests%F0%9F%8F%9B%EF%B8%8F-%5BBDR0012%5D-ESS-CBC-lack-of-CBC-alerts
   - id: BDR0013
     name: DIGIT C3 PAM service - access policy for Super User sessions
     description: 'The SOC must monitor PAM super user (sroot) access to servers and
@@ -1494,7 +1494,7 @@ keys:
       SOC, case will be reopen and investigated. '
     criticality: High
     tlp: amber
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphBusiness-Requests%F0%9F%8F%9B%EF%B8%8F-%5BBDR0013%5D-DIGIT-C3-PAM-service---access-policy-for-Super-User-sessions
+    link: Engines\documentation\wiki\Knowledge-GraphBusiness-Requests%F0%9F%8F%9B%EF%B8%8F-%5BBDR0013%5D-DIGIT-C3-PAM-service---access-policy-for-Super-User-sessions
   - id: BDR0014
     name: DIGIT protected RPM - access policy violation
     description: 'Detect access attempts (success and failure) to the protected RPMs
@@ -1513,7 +1513,7 @@ keys:
       the moment the mapping is limited to ES-SPLUNK  SOC_LT_189_IAM_authorised_user_ES-SPLUNK-exclude.csv '
     criticality: High
     tlp: amber
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphBusiness-Requests%F0%9F%8F%9B%EF%B8%8F-%5BBDR0014%5D-DIGIT-protected-RPM---access-policy-violation
+    link: Engines\documentation\wiki\Knowledge-GraphBusiness-Requests%F0%9F%8F%9B%EF%B8%8F-%5BBDR0014%5D-DIGIT-protected-RPM---access-policy-violation
   - id: BDR0015
     name: EC-related ServiceNow local account advanced monitoring
     description: 'The purposes of this BDR is to deploy additional detection rules
@@ -1525,7 +1525,7 @@ keys:
       with.  '
     criticality: High
     tlp: amber
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphBusiness-Requests%F0%9F%8F%9B%EF%B8%8F-%5BBDR0015%5D-EC-related-ServiceNow-local-account-advanced-monitoring
+    link: Engines\documentation\wiki\Knowledge-GraphBusiness-Requests%F0%9F%8F%9B%EF%B8%8F-%5BBDR0015%5D-EC-related-ServiceNow-local-account-advanced-monitoring
   - id: BDR0016
     name: Forensic data configuration for mobile devices
     description: 'Each time a new MobileIron MDM group is created and added into Zimperium
@@ -1540,4 +1540,4 @@ keys:
       deactive the feature.   '
     criticality: High
     tlp: amber
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphBusiness-Requests%F0%9F%8F%9B%EF%B8%8F-%5BBDR0016%5D-Forensic-data-configuration-for-mobile-devices
+    link: Engines\documentation\wiki\Knowledge-GraphBusiness-Requests%F0%9F%8F%9B%EF%B8%8F-%5BBDR0016%5D-Forensic-data-configuration-for-mobile-devices

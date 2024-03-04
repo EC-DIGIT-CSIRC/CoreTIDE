@@ -8,7 +8,7 @@ sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 from Engines.modules.logs import log
 from Engines.modules.tide import DataTide
 
-ANALYTICS_PATH = DataTide.Configurations.Global.paths["analytics"]
+ANALYTICS_PATH = DataTide.Configurations.Global.Paths.Tide.ana
 
 
 def run():

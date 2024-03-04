@@ -11,9 +11,9 @@ sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.indexing.indexer import indexer
 from Engines.modules.logs import log
+from Engines.modules.files import resolve_paths
 
 ROOT = Path(str(git.Repo(".", search_parent_directories=True).working_dir))
-TIDEMEC_AS_SUBMODULE = True
 
 
 @dataclass
@@ -138,7 +138,7 @@ class IndexUtils:
         if (glfm := os.environ.get("DOCUMENTATION_TYPE")) == "GLFM":
             documentation_type = glfm
             raw_md_doc_target = False
-            glfm_doc_target = True
+            glfm_doc_targvet = True
             print("🦊 Configured to use Gitlab Flavored Markdown")
 
         else:
@@ -164,19 +164,13 @@ class IndexUtils:
         return chain
 
     @staticmethod
-    def compute_paths(paths_index: dict, submodule=True) -> Dict[str, Path]:
-        """
-        Returns an index of absolute paths for internal
-        """
-
-        full_paths_index = dict()
-        for path in paths_index:
-            if submodule:
-                full_paths_index[path] = ROOT.parent / paths_index[path]
-            else:
-                full_paths_index[path] = ROOT / paths_index[path]
-
-        return full_paths_index
+    def return_paths(tier: Literal["all", "core", "tide"]) -> dict[str, Path]:
+        if tier == "all":
+            return IndexTide().Index["paths"]
+        if tier == "core":
+            return IndexTide().Index["paths"]["core"]
+        if tier == "tide":
+            return IndexTide().Index["paths"]["tide"]
 
 
 @dataclass(frozen=True)
@@ -232,15 +226,15 @@ class DataTide:
         """
 
         Index = dict(IndexTide().Index["json_schemas"])
-        tam = dict(Index["tam"])
+        tam = dict(Index.get("tam", {}))
         """Threat Actor Model JSON Schema"""
-        tvm = dict(Index["tvm"])
+        tvm = dict(Index.get("tvm", {}))
         """Threat Vector Model JSON Schema"""
-        cdm = dict(Index["cdm"])
+        cdm = dict(Index.get("cdm", {}))
         """Cyber Detection Model JSON Schema"""
-        mdr = dict(Index["mdr"])
+        mdr = dict(Index.get("mdr", {}))
         """Managed Detection Rule JSON Schema"""
-        bdr = dict(Index["bdr"])
+        bdr = dict(Index.get("bdr", {}))
         """Business Detection Request JSON Schema"""
 
     @dataclass(frozen=True)
@@ -250,15 +244,15 @@ class DataTide:
         """
 
         Index = dict(IndexTide().Index["templates"])
-        tam = str(Index["tam"])
+        tam = str(Index.get("tam"))
         """Threat Actor Model Object Template"""
-        tvm = str(Index["tvm"])
+        tvm = str(Index.get("tvm"))
         """Threat Vector Model Object Template"""
-        cdm = str(Index["cdm"])
+        cdm = str(Index.get("cdm"))
         """Cyber Detection Model Object Template"""
-        mdr = str(Index["mdr"])
+        mdr = str(Index.get("mdr"))
         """Managed Detection Rule Object Template"""
-        bdr = str(Index["bdr"])
+        bdr = str(Index.get("bdr"))
         """Business Detection Request Object Template"""
 
     @dataclass(frozen=True)
@@ -302,56 +296,65 @@ class DataTide:
         @dataclass(frozen=True)
         class Global:
             Index = dict(IndexTide().Index["configurations"]["global"])
-            paths = {**IndexUtils.compute_paths(
-                Index["paths"]["tide"], submodule=TIDEMEC_AS_SUBMODULE
-            ), **IndexUtils.compute_paths(Index["paths"]["core"])}
             models = Index["models"]
             metaschemas = dict(Index["metaschemas"])
             recomposition = dict(Index["recomposition"])
             json_schemas = dict(Index["json_schemas"])
             datafields = dict(Index["datafields"])
             templates = dict(Index["templates"])
-            snippets = dict(Index["snippets"])
             models_vocabularies = dict(Index["models_vocabularies"])
 
-            # TODO Edit submodule flag to have the proper nested infrastructure if we go submodule
             @dataclass(frozen=True)
             class Paths:
+                Index = IndexUtils.return_paths(tier="all")
+                _raw = dict(IndexTide().Index["paths"]["raw"])
+                """Paths without the proper absolute calculation.
+                Only use for specific use cases, for any others prefer
+                the other attributes which are precomputed"""
 
                 @dataclass(frozen=True)
                 class Core:
-                    Index = IndexUtils.compute_paths(
-                        IndexTide().Index["configurations"]["global"]["paths"]["core"]
-                    )
+                    """Paths to Tide Internals"""
+
+                    Index = IndexUtils.return_paths(tier="core")
+                    _raw = dict(IndexTide().Index["paths"]["raw"]["core"])
+                    """Paths without the proper absolute calculation.
+                    Only use for specific use cases, for any others prefer
+                    the other attributes which are precomputed"""
                     vocabularies = Index["vocabularies"]
                     configurations = Index["configurations"]
                     metaschemas = Index["configurations"]
                     subschemas = Index["subschemas"]
                     definitions = Index["definitions"]
-                    json_schemas = Index["json_schemas"]
-                    templates = Index["templates"]
                     wiki_docs_folder = Index["wiki_docs_folder"]
                     models_docs_folder = Index["models_docs_folder"]
                     lookup_docs = Index["lookup_docs"]
                     schemas_docs_folder = Index["schemas_docs_folder"]
+                    vocabularies_docs = Index["vocabularies_docs"]
+                    resources = Index["resources"]
 
                 @dataclass(frozen=True)
                 class Tide:
                     """Paths to Tide Content, Models, and Artifacts at
                     the top level directory"""
 
-                    Index = IndexUtils.compute_paths(
-                        IndexTide().Index["configurations"]["global"]["paths"]["tide"],
-                        submodule=TIDEMEC_AS_SUBMODULE,
-                    )
+                    Index = IndexUtils.return_paths(tier="tide")
+                    _raw = dict(IndexTide().Index["paths"]["raw"]["tide"])
+                    """Paths without the proper absolute calculation.
+                    Only use for specific use cases, for any others prefer
+                    the other attributes which are precomputed"""
+                    
                     tam = Index["tam"]
                     tvm = Index["tvm"]
                     cdm = Index["cdm"]
                     mdr = Index["mdr"]
                     bdr = Index["bdr"]
-                    lookups = Index["lookups"]
                     reports = Index["reports"]
-                    vscode = Index["vscode"]
+                    lookups = Index["lookups"]
+                    analytics = Index["analytics"]
+                    snippet_file = Index["snippet_file"]
+                    json_schemas = Index["json_schemas"]
+                    templates = Index["templates"]
 
         @dataclass(frozen=True)
         class Systems:

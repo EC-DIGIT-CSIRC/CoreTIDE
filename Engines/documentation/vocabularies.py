@@ -22,7 +22,7 @@ GLFM = DataTide.Configurations.Documentation.glfm_doc_target
 VOCAB_INDEX = DataTide.Vocabularies.Index
 ICONS = DataTide.Configurations.Documentation.icons
 DOCUMENTATION_TYPE = DataTide.Configurations.Documentation.documentation_type
-VOCAB_DOCS_PATH = DataTide.Configurations.Global.paths["vocabularies_docs"]
+VOCAB_DOCS_PATH = DataTide.Configurations.Global.Paths.Core.vocabularies_docs
 SKIP_VOCABS = DataTide.Configurations.Documentation.skip_vocabularies
 
 

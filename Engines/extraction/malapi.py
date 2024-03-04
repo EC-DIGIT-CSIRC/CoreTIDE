@@ -24,7 +24,7 @@ class IndentFullDumper(yaml.Dumper):
 DEBUG = False
 
 VOCAB_FILE_PATH = Path(
-    DataTide.Configurations.Global.paths["vocabularies"] / "MalAPI.yaml"
+    DataTide.Configurations.Global.Paths.Core.vocabularies / "MalAPI.yaml"
 )
 
 API_DETAILS_FIELD_MAPPING = {

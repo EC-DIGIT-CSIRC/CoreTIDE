@@ -11,7 +11,7 @@ sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 from Engines.modules.logs import log
 from Engines.modules.tide import DataTide
 
-VOCABS_FOLDER = Path(DataTide.Configurations.Global.paths["vocabularies"])
+VOCABS_FOLDER = Path(DataTide.Configurations.Global.Paths.Core.vocabularies)
 ICONS = DataTide.Configurations.Documentation.icons
 WIKI_PATH = (
     str(DataTide.Configurations.Documentation.models_docs_folder)

@@ -53,7 +53,7 @@ keys:
       National Committee starting in the summer of 2015. '
     criticality: Emergency
     tlp: red
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0001%5D-APT29
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0001%5D-APT29
   - id: TAM0002
     aliases:
       - CONTI Group
@@ -98,7 +98,7 @@ keys:
       hack  the independent news outlet "Bellingcat" '
     criticality: High
     tlp: red
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0002%5D-Wizard-Spider
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0002%5D-Wizard-Spider
   - id: TAM0003
     aliases:
       - FSB 16th Center
@@ -139,7 +139,7 @@ keys:
       scripts - PowerPunch - Pteranodon - QuietSieve '
     criticality: High
     tlp: red
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0003%5D-Gamaredon-Group
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0003%5D-Gamaredon-Group
   - id: TAM0004
     aliases:
       - REAPER
@@ -176,7 +176,7 @@ keys:
       \ CVE-2016-4117 - ROKRAT - KEVDROID - BabyShark - KimJongRAT - GOLDBACKDOOR "
     criticality: Baseline - Negligible
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0004%5D-APT37
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0004%5D-APT37
   - id: TAM0005
     aliases:
       - DEV-0537
@@ -199,7 +199,7 @@ keys:
       targets. '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0005%5D-LAPSUS%24
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0005%5D-LAPSUS%24
   - id: TAM0006
     aliases:
       - TA416
@@ -239,7 +239,7 @@ keys:
       - NBTscan - PlugX - PoisonIvy - RCSession '
     criticality: Medium
     tlp: red
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0006%5D-Mustang-Panda
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0006%5D-Mustang-Panda
   - id: TAM0007
     aliases:
       - Unknown Aliases
@@ -251,7 +251,7 @@ keys:
       extortion or sale. '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0007%5D-UNC2903
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0007%5D-UNC2903
   - id: TAM0008
     aliases:
       - Unknown Aliases
@@ -263,7 +263,7 @@ keys:
       known to go for financial gain abusing low hanging fruit '
     criticality: Medium
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0008%5D-TeamTNT
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0008%5D-TeamTNT
   - id: TAM0009
     aliases:
       - Sofacy
@@ -316,7 +316,7 @@ keys:
       unit 26165. This group has been active since at least 2004. '
     criticality: Severe
     tlp: red
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0009%5D-APT28
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0009%5D-APT28
   - id: TAM0010
     aliases:
       - Unknown
@@ -331,7 +331,7 @@ keys:
       data exfiltration from the compromised networks. '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0010%5D-GELSEMIUM
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0010%5D-GELSEMIUM
   - id: TAM0011
     aliases:
       - Unknown
@@ -342,7 +342,7 @@ keys:
       and public institutions.  '
     criticality: Medium
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0011%5D-NWGEN
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0011%5D-NWGEN
   - id: TAM0012
     aliases:
       - Lazarus
@@ -388,7 +388,7 @@ keys:
       and Kimsuky. '
     criticality: High
     tlp: red
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0012%5D-Lazarus-Group
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0012%5D-Lazarus-Group
   - id: TAM0013
     aliases:
       - None
@@ -399,7 +399,7 @@ keys:
       espionage campaigns as well as  exfiltration of data.  '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0013%5D-XakNet
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0013%5D-XakNet
   - id: TAM0014
     aliases:
       - Unit 74455
@@ -436,7 +436,7 @@ keys:
       - PsExec - GCat - Delphocy - Zebrocy - Zekapab '
     criticality: High
     tlp: red
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0014%5D-Sandworm-Team
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0014%5D-Sandworm-Team
   - id: TAM0015
     aliases:
       - Unknown
@@ -447,7 +447,7 @@ keys:
       a lot of DDoS attacks globally.  '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0015%5D-Legion
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0015%5D-Legion
   - id: TAM0016
     aliases:
       - APT41
@@ -462,7 +462,7 @@ keys:
       is related to the recent Zoho ManageEngine zero-day vulnerability. (CVE-2020-10189) '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0016%5D-WICKED-PANDA
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0016%5D-WICKED-PANDA
   - id: TAM0017
     aliases:
       - Unknown
@@ -483,7 +483,7 @@ keys:
       more specifically targeted. '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0017%5D-KillNet
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0017%5D-KillNet
   - id: TAM0018
     aliases:
       - Ghostwriter
@@ -495,7 +495,7 @@ keys:
       spoof  legitimate websites to steal victim credentials.  '
     criticality: Medium
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0018%5D-UNC1151
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0018%5D-UNC1151
   - id: TAM0019
     aliases:
       - UNC2420
@@ -509,7 +509,7 @@ keys:
       of the malware most commonly  known as Emotet or Geodo.  '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0019%5D-MUMMY-SPIDER
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0019%5D-MUMMY-SPIDER
   - id: TAM0020
     aliases:
       - Energetic Bear
@@ -541,7 +541,7 @@ keys:
       to infect the systems.  '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0020%5D-Dragonfly
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0020%5D-Dragonfly
   - id: TAM0021
     aliases:
       - ATK233
@@ -555,7 +555,7 @@ keys:
       to Exchange zero-day exploits and  Azure Sentinel exploit activities.  '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0021%5D-HAFNIUM
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0021%5D-HAFNIUM
   - id: TAM0022
     aliases:
       - APT35
@@ -622,7 +622,7 @@ keys:
       \ downloader (registry.ps1) - POSHC2 backdoor - Various different keyloggers "
     criticality: Medium
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0022%5D-Magic-Hound
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0022%5D-Magic-Hound
   - id: TAM0023
     aliases:
       - Unknown
@@ -634,7 +634,7 @@ keys:
       Chrome  or Microsoft Edge extension called “SHARPEXT”  '
     criticality: Medium
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0023%5D-SharpTongue
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0023%5D-SharpTongue
   - id: TAM0024
     aliases:
       - APT27
@@ -679,7 +679,7 @@ keys:
       - HttpBrowser - Hunter - ASPXTool - wce - gsecdump - nbtscan - htran '
     criticality: High
     tlp: red
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0024%5D-Emissary-Panda
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0024%5D-Emissary-Panda
   - id: TAM0025
     aliases:
       - STOLEN PENCIL
@@ -699,7 +699,7 @@ keys:
       Win7Elevate to  bypass UAC (User Account Control) controls.   '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0025%5D-Kimsuky
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0025%5D-Kimsuky
   - id: TAM0026
     aliases:
       - DSIRF
@@ -720,7 +720,7 @@ keys:
       shell and download plug-ins  from Knotweed''s C2 server. '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0026%5D-KNOTWEED
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0026%5D-KNOTWEED
   - id: TAM0027
     aliases:
       - Cobalt Gang
@@ -740,7 +740,7 @@ keys:
       the malware Carbanak and the  group Carbanak, Anunak. '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0027%5D-Cobalt-Group
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0027%5D-Cobalt-Group
   - id: TAM0028
     aliases:
       - APT10
@@ -773,7 +773,7 @@ keys:
       a backdoor - StoneNetLoader - IEChecker '
     criticality: High
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0028%5D-menuPass
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0028%5D-menuPass
   - id: TAM0029
     aliases:
       - BRONZE WALKER
@@ -789,7 +789,7 @@ keys:
       and custom malware  as Trojan.Nibatad '
     criticality: Medium
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0029%5D-Whitefly
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0029%5D-Whitefly
   - id: TAM0030
     aliases:
       - Earth Akhlut
@@ -809,7 +809,7 @@ keys:
       C2 (Command and Control) server. '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0030%5D-Tonto-Team
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0030%5D-Tonto-Team
   - id: TAM0031
     aliases:
       - Unknown
@@ -820,7 +820,7 @@ keys:
       industry in Taiwan and  targeting personal and email accounts. '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0031%5D-Chimera
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0031%5D-Chimera
   - id: TAM0032
     aliases:
       - XENOTIME
@@ -834,7 +834,7 @@ keys:
       as Cryptcat, Mimikatz, NetExec, PsExec, SecHack, Wii and others. '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0032%5D-TEMP.Veles
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0032%5D-TEMP.Veles
   - id: TAM0034
     aliases:
       - NICKEL GLADSTONE
@@ -854,7 +854,7 @@ keys:
       and rundll32.exe execute binaries scripts. '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0034%5D-APT38
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0034%5D-APT38
   - id: TAM0035
     aliases:
       - Chafer
@@ -883,7 +883,7 @@ keys:
       - SSH Tunnels to Windows Servers '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0035%5D-APT39
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0035%5D-APT39
   - id: TAM0036
     aliases:
       - Thrip
@@ -903,7 +903,7 @@ keys:
       - NETEAGLE - XSControl '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0036%5D-Naikon
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0036%5D-Naikon
   - id: TAM0037
     aliases:
       - Operation Soft Cell
@@ -921,7 +921,7 @@ keys:
       (WCE), WinRAR  Their operations rely on low cost and easy to replace infrastructure. '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0037%5D-GALLIUM
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0037%5D-GALLIUM
   - id: TAM0038
     aliases:
       - Unknown
@@ -935,7 +935,7 @@ keys:
       during their activities. '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0038%5D-Blue-Mockingbird
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0038%5D-Blue-Mockingbird
   - id: TAM0039
     aliases:
       - CloudComputating
@@ -953,7 +953,7 @@ keys:
       - SMBTouch - DoublePulsar - EternalBlue - EternalRocks - EternalSynergy '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0039%5D-BackdoorDiplomacy
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0039%5D-BackdoorDiplomacy
   - id: TAM0040
     aliases:
       - Comment Crew
@@ -983,7 +983,7 @@ keys:
       delivered by spear phish '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0040%5D-APT1
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0040%5D-APT1
   - id: TAM0041
     aliases:
       - APT8
@@ -1000,7 +1000,7 @@ keys:
       - COOKIECLOG - CETTRA - Mimikatz - netstat - PowerSploit '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0041%5D-Violin-Panda
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0041%5D-Violin-Panda
   - id: TAM0042
     aliases:
       - SeaLotus
@@ -1031,7 +1031,7 @@ keys:
       - OSX_OCEANLOTUS.D '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0042%5D-APT32
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0042%5D-APT32
   - id: TAM0043
     aliases:
       - Magecart Group 6
@@ -1074,7 +1074,7 @@ keys:
       (Point-of-Sale theft) - HARDTACK (Downloader) - SHIPBREAD (Downloader) '
     criticality: High
     tlp: red
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0043%5D-FIN6
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0043%5D-FIN6
   - id: TAM0044
     aliases:
       - Mirage
@@ -1117,7 +1117,7 @@ keys:
       modifications '
     criticality: High
     tlp: red
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0044%5D-Ke3chang
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0044%5D-Ke3chang
   - id: TAM0045
     aliases:
       - TEMP.Zagros
@@ -1163,7 +1163,7 @@ keys:
       organizations and governments) '
     criticality: High
     tlp: red
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0045%5D-MuddyWater
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0045%5D-MuddyWater
   - id: TAM0047
     aliases:
       - Turla Team
@@ -1218,7 +1218,7 @@ keys:
       - TinyTurla - Uroburos '
     criticality: High
     tlp: red
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0047%5D-Turla-Group
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0047%5D-Turla-Group
   - id: TAM0048
     aliases:
       - Cutting Kitten
@@ -1239,7 +1239,7 @@ keys:
       and netstat commands - POWRUNER - PsExec - RGDoor - SideTwist - Systeminfo '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0048%5D-Oilrig
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0048%5D-Oilrig
   - id: TAM0049
     aliases:
       - REDBALDKNIGHT
@@ -1263,7 +1263,7 @@ keys:
       PsExec - ABK Downloader - avirra Downloader - RoyalRoad RTF Weaponizer '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0049%5D-BRONZE-BUTLER
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0049%5D-BRONZE-BUTLER
   - id: TAM0050
     aliases:
       - Pitty Panda
@@ -1291,7 +1291,7 @@ keys:
       - Mimikatz - PoisonIvy - CT RAT '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0050%5D-Pitty-Tiger
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0050%5D-Pitty-Tiger
   - id: TAM0051
     aliases:
       - Threat Group 2889
@@ -1320,7 +1320,7 @@ keys:
       - SynFlooder - SysKit - TinyZBot - WndTest - zhCat - zhMimikatz '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0051%5D-Cutting-Kitten
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0051%5D-Cutting-Kitten
   - id: TAM0052
     aliases:
       - Flash Kitten
@@ -1351,7 +1351,7 @@ keys:
       - Mimikatz - PsExec - Process Doppelgänging '
     criticality: High
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0052%5D-Leafminer
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0052%5D-Leafminer
   - id: TAM0053
     aliases:
       - HOLMIUM
@@ -1378,7 +1378,7 @@ keys:
       - NANOCORE (RAT tool) - NETWIRE (RAT, backdoor tool) - ALFA Shell (PHP web shell) '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0053%5D-APT33
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0053%5D-APT33
   - id: TAM0054
     aliases:
       - Carbanak
@@ -1399,7 +1399,7 @@ keys:
       .NET RAT) '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0054%5D-FIN7
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0054%5D-FIN7
   - id: TAM0055
     aliases:
       - Slayer Kitten
@@ -1431,7 +1431,7 @@ keys:
       Sqlmap '
     criticality: High
     tlp: red
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0055%5D-CopyKittens
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0055%5D-CopyKittens
   - id: TAM0056
     aliases:
       - Unknown
@@ -1448,7 +1448,7 @@ keys:
       in Russia for further extortion purposes and exposure of  the data in public. '
     criticality: Medium
     tlp: amber+strict
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0056%5D-Beregini
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0056%5D-Beregini
   - id: TAM0057
     aliases:
       - Aggah
@@ -1469,7 +1469,7 @@ keys:
       citizens. '
     criticality: Medium
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0057%5D-Gorgon-Group
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0057%5D-Gorgon-Group
   - id: TAM0058
     aliases:
       - UNC757
@@ -1507,7 +1507,7 @@ keys:
       ransomware - FRPC - Ngrok '
     criticality: Medium
     tlp: red
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0058%5D-Fox-Kitten
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0058%5D-Fox-Kitten
   - id: TAM0059
     aliases:
       - Indrik Spider
@@ -1552,7 +1552,7 @@ keys:
       Trojan (stealer) - WastedLocker - Remote Manipulator System '
     criticality: Medium
     tlp: red
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0059%5D-TA505
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0059%5D-TA505
   - id: TAM0060
     aliases:
       - SeaLotus
@@ -1594,7 +1594,7 @@ keys:
       - Goopy - OSX_OCEANLOTUS.D - Net and netsh utilities - .Net DLL links and payloads '
     criticality: Medium
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0060%5D-APT32
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0060%5D-APT32
   - id: TAM0061
     aliases:
       - G0143
@@ -1615,7 +1615,7 @@ keys:
       (it''s a Cobalt Strike framefork) '
     criticality: Medium
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0061%5D-Aquatic-Panda
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0061%5D-Aquatic-Panda
   - id: TAM0062
     aliases:
       - APT-C-39
@@ -1645,7 +1645,7 @@ keys:
       archives - uname system information discovery '
     criticality: High
     tlp: red
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0062%5D-Rattlesnake
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0062%5D-Rattlesnake
   - id: TAM0063
     aliases:
       - Equation Group
@@ -1675,7 +1675,7 @@ keys:
       Gauss - Bvp47 Covert Hacking Tool - IRATEMONK malicious hard-drive program '
     criticality: High
     tlp: red
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0063%5D-Equation
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0063%5D-Equation
   - id: TAM0064
     aliases:
       - NSO group
@@ -1707,7 +1707,7 @@ keys:
       collecting information from the device. '
     criticality: Medium
     tlp: red
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0064%5D-NSO-GROUP
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0064%5D-NSO-GROUP
   - id: TAM0065
     aliases:
       - Saaiwc Group
@@ -1735,7 +1735,7 @@ keys:
       KamiKakaBot ().NET version of TelePowerBot) '
     criticality: Medium
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0065%5D-Dark-Pink
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0065%5D-Dark-Pink
   - id: TAM0066
     aliases:
       - MUDCARP
@@ -1785,7 +1785,7 @@ keys:
       utility - Windows Credential Editor (WCE) '
     criticality: Medium
     tlp: red
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0066%5D-Leviathan
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0066%5D-Leviathan
   - id: TAM0067
     aliases:
       - Hurricane Panda
@@ -1822,7 +1822,7 @@ keys:
       RAT - Trochilus RAT '
     criticality: Medium
     tlp: red
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0067%5D-ZIRCONIUM
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0067%5D-ZIRCONIUM
   - id: TAM0068
     aliases:
       - Shell Crew
@@ -1867,4 +1867,4 @@ keys:
       - Derusbi - Scanbox Framework - Many Webshells including China Chopper - WCE '
     criticality: Medium
     tlp: red
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0068%5D-APT19
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Actors%F0%9F%91%BA-%5BTAM0068%5D-APT19

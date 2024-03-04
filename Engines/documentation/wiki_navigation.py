@@ -26,7 +26,7 @@ METASCHEMAS_INDEX = DataTide.TideSchemas.Index
 ICONS = DataTide.Configurations.Documentation.icons
 
 DOCUMENTATION_TYPE = "GLFM"
-PATHS_CONFIG = DataTide.Configurations.Global.paths
+PATHS_CONFIG = DataTide.Configurations.Global.Paths.Index
 
 WIKI_PATH = PATHS_CONFIG["wiki_docs_folder"]
 OUT_PATH = WIKI_PATH / "home.md"

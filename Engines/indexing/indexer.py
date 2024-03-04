@@ -14,14 +14,20 @@ from Engines.modules.files import resolve_paths, resolve_configurations
 from Engines.modules.logs import log
 
 def indexer(write_index=False) -> dict:
-    ROOT = Path(str(git.Repo(".", search_parent_directories=True).working_dir))
-    TIDE_CONFIG = toml.load(
-        open(ROOT / "Configurations/global.toml", encoding="utf-8")
-    )
     SKIPS = ["logsources", "ram", "mdrv2", "lookup_metadata"]
+    RESOLVED_CONFIGURATIONS = resolve_configurations()
     
-    PATHS = resolve_paths()
-    log("INFO", "Loaded all paths")
+    TIDE_CONFIG = RESOLVED_CONFIGURATIONS["global"]
+    
+    
+    RAW_TIDE_PATHS = TIDE_CONFIG["paths"]["tide"]
+    RAW_CORE_PATHS = TIDE_CONFIG["paths"]["core"]
+    RAW_PATHS = RAW_CORE_PATHS | RAW_TIDE_PATHS
+    
+    TIDE_PATHS, CORE_PATHS = resolve_paths(separate=True)
+    PATHS = TIDE_PATHS | CORE_PATHS
+    
+    log("DEBUG", "Loaded all paths")
     pprint(PATHS)
     VOCAB_PATH = PATHS["vocabularies"]
     METASCHEMA_PATH = PATHS["metaschemas"]
@@ -46,6 +52,23 @@ def indexer(write_index=False) -> dict:
     print("\n" + "Global Indexer".center(80, "=") + "\n")
 
     # Vocab Indexer
+
+    log("INFO", "Resolving and indexing", "paths")
+    index["paths"] = PATHS
+    index["paths"]["tide"] = TIDE_PATHS
+    index["paths"]["core"] = CORE_PATHS
+    index["paths"]["raw"] = RAW_PATHS
+    index["paths"]["raw"]["tide"] = RAW_TIDE_PATHS
+    index["paths"]["raw"]["core"] = RAW_CORE_PATHS
+    
+
+    log("INFO", "Resolving and index", "configurations")
+    # Config Indexer
+    # Configurations resolve by merging the default Core configs
+    # with custom ones defined in the user space
+
+    index["configurations"] = RESOLVED_CONFIGURATIONS
+
 
     print("📒 Indexing Vocabularies...")
 
@@ -91,11 +114,6 @@ def indexer(write_index=False) -> dict:
 
     index["json_schemas"] = json_index
 
-    # Config Indexer
-    # Configurations resolve by merging the default Core configs
-    # with custom ones defined in the user space
-
-    index["configurations"] = resolve_configurations()
 
     # Metaschema Indexer
     print("🛠️ Indexing Metaschemas...")
@@ -155,20 +173,19 @@ def indexer(write_index=False) -> dict:
         recomp_data = index["configurations"][recomp]
 
         for data in recomp_data:
-            if recomp_data[data].get("tide", {}).get("enabled"):
-                obj_counter += 1
-                sub_name = recomp_data[data]["tide"]["name"]
-                subschema_name = recomp_data[data]["tide"]["subschema"]
+            obj_counter += 1
+            sub_name = recomp_data[data]["tide"]["name"]
+            subschema_name = recomp_data[data]["tide"]["subschema"]
 
-                sub_body = yaml.safe_load(
-                    open(subchemas_path / (subschema_name + ".yaml"), encoding="utf-8")
-                )
-                subschemas_index[recomp][data] = sub_body
+            sub_body = yaml.safe_load(
+                open(subchemas_path / (subschema_name + ".yaml"), encoding="utf-8")
+            )
+            subschemas_index[recomp][data] = sub_body
 
-                template_body = open(
-                    sub_templates_path / (sub_name + " Template.yaml"), encoding="utf-8"
-                ).read()
-                template_index[recomp][data] = template_body
+            template_body = open(
+                sub_templates_path / (sub_name + " Template.yaml"), encoding="utf-8"
+            ).read()
+            template_index[recomp][data] = template_body
 
     index["templates"] = template_index
     index["subschemas"] = subschemas_index

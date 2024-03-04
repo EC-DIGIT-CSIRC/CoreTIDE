@@ -11,7 +11,7 @@ from typing import Literal
 
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
-from Engines.modules.deployment import system_scope, modified_mdr_files, Proxy
+from Engines.modules.deployment import enabled_systems, modified_mdr_files, Proxy
 from Engines.modules.logs import log, Colors, tidemec_intro
 from Engines.modules.tide import DataTide
 from Engines.mutation import promotion
@@ -27,7 +27,7 @@ os.environ["INDEX_OUTPUT"] = "cache"
 
 SUPPORTED_PLANS = ["STAGING", "PRODUCTION"]
 DEPLOYMENT_PLAN = str(os.getenv("DEPLOYMENT_PLAN")) or ""
-SYSTEMS_DEPLOYMENT = system_scope()
+SYSTEMS_DEPLOYMENT = enabled_systems()
 
 deployment_plan = {"splunk": ["701b9c83-15f9-411d-bf3f-d11597b62f8b"],
                    "sentinel": ["701b9c83-15f9-411d-bf3f-d11597b62f8b"],

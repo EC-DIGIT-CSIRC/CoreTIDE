@@ -8,13 +8,13 @@ from pathlib import Path
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 from Engines.modules.tide import DataTide
 
-ATTACK_PATH = Path(DataTide.Configurations.Global.paths["att&ck"])
+ATTACK_PATH = Path(DataTide.Configurations.Global.Paths.Index["att&ck"])
 ATTACK_RESOURCES = DataTide.Configurations.Resources.attack
 enterprise = ATTACK_PATH / ATTACK_RESOURCES["enterprise"]
 mobile = ATTACK_PATH / ATTACK_RESOURCES["mobile"]
 ics = ATTACK_PATH / ATTACK_RESOURCES["ics"]
 
-vocab_folder = Path(DataTide.Configurations.Global.paths["vocabularies"])
+vocab_folder = Path(DataTide.Configurations.Global.Paths.Core.vocabularies)
 techniques_vocab = r"ATT&CK Techniques.yaml"
 datasources_vocab = r"ATT&CK Data Sources.yaml"
 mitigations_vocab = r"ATT&CK Mitigations.yaml"

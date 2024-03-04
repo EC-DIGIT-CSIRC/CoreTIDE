@@ -8,7 +8,7 @@ import pandas as pd
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 from Engines.modules.tide import DataTide
 
-RESOURCES = Path(DataTide.Configurations.Global.paths["resources"])
+RESOURCES = Path(DataTide.Configurations.Global.Paths.Core.resources)
 
 D3FEND_COUNTERMEASURES_PATH = DataTide.Configurations.Resources.d3fend[
     "countermeasures"
@@ -17,7 +17,7 @@ D3FEND_COUNTERMEASURES_PATH = DataTide.Configurations.Resources.d3fend[
 # Used to create links to the countermeasure page
 COUNTERMEASURES_LINK = "https://d3fend.mitre.org/technique/"
 
-VOCABS_PATH = Path(DataTide.Configurations.Global.paths["vocabularies"])
+VOCABS_PATH = Path(DataTide.Configurations.Global.Paths.Core.vocabularies)
 OUT_NAME = "D3FEND Countermeasures.yaml"
 
 D3FEND_COUNTERMEASURES = (

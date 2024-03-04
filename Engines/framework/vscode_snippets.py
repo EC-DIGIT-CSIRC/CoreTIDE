@@ -10,13 +10,11 @@ from Engines.modules.tide import DataTide
 
 # Config fetch routine
 ICONS = DataTide.Configurations.Documentation.icons
-PATHS = DataTide.Configurations.Global.paths
-SNIPPETS_PATH = (
-    DataTide.Configurations.Global.paths["vscode"]
-    / DataTide.Configurations.Global.snippets["file"]
-)
+PATHS = DataTide.Configurations.Global.Paths.Index
+SNIPPETS_PATH = DataTide.Configurations.Global.Paths.Tide.snippet_file
+
 RECOMPOSITION = DataTide.Configurations.Global.recomposition
-SUBSCHEMAS_FOLDER = Path(DataTide.Configurations.Global.paths["subschemas"])
+SUBSCHEMAS_FOLDER = Path(DataTide.Configurations.Global.Paths.Core.subschemas)
 CONFIG_INDEX = DataTide.Configurations.Index
 
 

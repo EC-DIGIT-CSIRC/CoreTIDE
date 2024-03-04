@@ -9,7 +9,7 @@ from pathlib import Path
 
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
-from Engines.modules.deployment import system_scope, lookup_scope, diff_calculation
+from Engines.modules.deployment import enabled_systems, enabled_lookup_systems, diff_calculation
 from Engines.modules.logs import log, Colors, tidemec_intro
 from Engines.modules.tide import DataTide
 from Engines.modules.plugins import DeployTide
@@ -38,9 +38,9 @@ if DEBUG:
         "Will only target lookup files starting with DEBUG",
     )
 
-SYSTEMS_DEPLOYMENT = system_scope()
+SYSTEMS_DEPLOYMENT = enabled_systems()
 
-LOOKUPS_DEPLOYMENT = [s for s in lookup_scope() if s in SYSTEMS_DEPLOYMENT]
+LOOKUPS_DEPLOYMENT = [s for s in enabled_lookup_systems() if s in SYSTEMS_DEPLOYMENT]
 log("DEBUG", "Current systems enabled : ", ",".join(SYSTEMS_DEPLOYMENT))
 log("DEBUG", "Current lookups enabled : ", ",".join(LOOKUPS_DEPLOYMENT))
 
@@ -57,7 +57,7 @@ def lookup_deployment_plan(plan: str) -> dict:
     deploy_lookups = dict()
 
     if plan == "FULL":
-        LOOKUP_PATH = Path(DataTide.Configurations.Global.paths["lookups"])
+        LOOKUP_PATH = Path(DataTide.Configurations.Global.Paths.Tide.lookups)
         for system in os.listdir(LOOKUP_PATH):
             for lookup in os.listdir(LOOKUP_PATH / system):
                 if lookup.endswith(".csv"):

@@ -22,7 +22,7 @@ SUBSCHEMAS_INDEX = DataTide.TideSchemas.subschemas
 TEMPLATES_INDEX = DataTide.Templates.Index
 
 # Configuration settings fetching routine
-SCHEMA_DOCS_PATH = DataTide.Configurations.Global.paths["schemas_docs_folder"]
+SCHEMA_DOCS_PATH = DataTide.Configurations.Global.Paths.Core.schemas_docs_folder
 DOC_TITLES = DataTide.Configurations.Documentation.titles
 ICONS = DataTide.Configurations.Documentation.icons
 GLFM = DataTide.Configurations.Documentation.glfm_doc_target

@@ -11,8 +11,8 @@ sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 from Engines.modules.logs import log
 from Engines.modules.tide import DataTide
 
-VOCABS_PATH = DataTide.Configurations.Global.paths["vocabularies"]
-REPORTS_FOLDER = Path(DataTide.Configurations.Global.paths["reports"])
+VOCABS_PATH = DataTide.Configurations.Global.Paths.Core.vocabularies
+REPORTS_FOLDER = Path(DataTide.Configurations.Global.Paths.Tide.reports
 REPORTS_VOCAB = Path(VOCABS_PATH) / "Reports.yaml"
 
 class IndentFullDumper(yaml.Dumper):

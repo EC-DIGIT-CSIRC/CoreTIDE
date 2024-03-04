@@ -16,7 +16,7 @@ from Engines.modules.documentation import (
     name_subschema_doc,
 )
 from Engines.modules.files import safe_file_name
-from Engines.modules.deployment import system_scope
+from Engines.modules.deployment import enabled_lookup_systems
 from Engines.modules.tide import DataTide
 from Engines.modules.logs import log
 
@@ -35,18 +35,20 @@ ICONS = DOCUMENTATION_CONFIG.icons
 NAV_INDEX_NAMES = DOCUMENTATION_CONFIG.indexes
 MODELS_SCOPE = DOCUMENTATION_CONFIG.scope
 MODELS_SCOPE.append("mdr")
-PATHS_CONFIG = DataTide.Configurations.Global.paths
+PATHS_CONFIG = DataTide.Configurations.Global.Paths.Index
 DOCUMENTATION_TYPE = os.getenv("DOCUMENTATION_TYPE") or "GLFM"
-METASCHEMAS = Path(PATHS_CONFIG["metaschemas"])
-# Adding those path changes as the sidebar is a layer up from the documentation subfolders, which these
-# variables are also used to output the doc to.
-WIKI = Path(os.path.basename(Path(PATHS_CONFIG["models_docs_folder"])))
-SPECS = Path(os.path.basename(Path(PATHS_CONFIG["schemas_docs_folder"])))
-LOOKUP_DOCS_FOLDER = Path(PATHS_CONFIG["lookup_docs"])
-GLFM = False  # DataTide.Configurations.Documentation.glfm_doc_target
+
+WIKI = PATHS_CONFIG["models_docs_folder"].as_posix()
+GLFM = DataTide.Configurations.Documentation.glfm_doc_target
+RAW_PATHS = DataTide.Configurations.Global.Paths._raw.copy()
+print(RAW_PATHS)
+RAW_WIKI_PATH = RAW_PATHS["wiki_docs_folder"]
+LOOKUP_DOCS_FOLDER = Path(str(RAW_PATHS["lookup_docs"]).removeprefix(RAW_WIKI_PATH))
+SPECS = Path(str(RAW_PATHS["schemas_docs_folder"]).removeprefix(RAW_WIKI_PATH))
+
 
 DOC_TITLES = DOCUMENTATION_CONFIG.titles
-VOCABS_DOCS = Path(os.path.basename(Path(PATHS_CONFIG["vocabularies_docs"])))
+VOCABS_DOCS = PATHS_CONFIG["vocabularies_docs"]
 SKIP_VOCABS = DOCUMENTATION_CONFIG.skip_vocabularies
 WIKI_PATH = PATHS_CONFIG["wiki_docs_folder"]
 OUT_PATH = WIKI_PATH / "_sidebar.md"
@@ -103,9 +105,7 @@ def sidebar_link(model_id):
     model = MODELS_INDEX[model_type][model_id]
     icon = ICONS[model_type]
 
-    # Main change from normal backlink - to be considered in future we want to make
-    # a common library of functions
-    doc_path = str(WIKI) + "/" + DOCUMENTATION_CONFIG.object_names[model_type]
+    doc_path = "/" + DOCUMENTATION_CONFIG.object_names[model_type]
 
     if model_type == "mdr":
         model_name = model.get("name") or model.get("title").split("$")[0].strip()
@@ -201,42 +201,36 @@ def run():
 
     data_model = HTML_FOLDABLE.format(**locals())
 
-    # Lookups
-    SYSTEMS = system_scope()
-
-    lookup_content = str()
+    lookup_content = []
 
     for system in LOOKUPS_INDEX:
         system_content = list()
         if LOOKUPS_INDEX[system]:
-            if system in SYSTEMS:
-                for lookup in LOOKUPS_INDEX[system]:
-                    if lookup in LOOKUPS_METADATA_INDEX:
-                        metadata = LOOKUPS_METADATA_INDEX[lookup]
-                        file_name = metadata["name"]
-                    else:
-                        file_name = lookup
+            for lookup in LOOKUPS_INDEX[system]:
+                if lookup in LOOKUPS_METADATA_INDEX:
+                    metadata = LOOKUPS_METADATA_INDEX[lookup]
+                    file_name = metadata["name"]
+                else:
+                    file_name = lookup
 
-                    file_path = (
-                        LOOKUP_DOCS_FOLDER
-                        / system
-                        / (safe_file_name(file_name) + ".md")
-                    )
-                    if GLFM:
-                        file_path = "/" + file_path.as_posix().replace(" ", "-")
-                    else:
-                        file_path = (
-                            "./" + file_path.as_posix().replace(" ", "%20") + ".md"
-                        )
+                file_path = (
+                    LOOKUP_DOCS_FOLDER / system / (safe_file_name(file_name))
+                )
+                if GLFM:
+                    file_path = "/" + str(file_path.as_posix()).replace(
+                        " ", "-"
+                    ).removesuffix(".md")
+                else:
+                    file_path = "./" + file_path.as_posix().replace(" ", "%20")
 
-                    system_content.append(f"[{lookup}]({file_path})")
+                system_content.append(f"[{lookup}]({file_path})")
 
-                content = {system.capitalize(): system_content}
-                lookup_content += pd.DataFrame(content).to_markdown(index=False)
-
+            content = {system.capitalize(): system_content}
+            lookup_content.append(pd.DataFrame(content).to_markdown(index=False))
+        
     cat_icon = get_icon("lookups")
     category = "Lookups"
-    content = lookup_content
+    content = "\n\n".join(lookup_content)
 
     lookups = HTML_FOLDABLE.format(**locals())
 

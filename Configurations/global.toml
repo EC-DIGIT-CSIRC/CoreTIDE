@@ -9,8 +9,9 @@ bdr = "Models/Business Detection Requests/"
 reports = "Reports/"
 lookups = "Lookups/"
 analytics = "Analytics/"
-vscode = ".vscode/"
+snippet_file = ".vscode/Model Templates.code-snippets"
 json_schemas = "Schemas/"
+templates = "Schemas/Templates/"
 custom_configurations = "Configurations/"
 
 [paths.core]
@@ -21,12 +22,11 @@ configurations = "Configurations/"
 metaschemas = "Framework/Meta Schemas/"
 subschemas = "Framework/Meta Schemas/Sub Schemas/"
 definitions = "Framework/Meta Schemas/Definitions/"
-templates = "Framework/Templates/"
-wiki_docs_folder = "/wiki/"
-models_docs_folder = "Engines/documentation/wiki/Knowledge Graph/"
-lookup_docs = "Engines/documentation/wiki/Lookups/"
-schemas_docs_folder = "Engines/documentation/wiki/Specifications/"
-vocabularies_docs = "Engines/documentation/wiki/Vocabularies/"
+wiki_docs_folder = "wiki/"
+models_docs_folder = "wiki/Knowledge Graph/"
+lookup_docs = "wiki/Lookups/"
+schemas_docs_folder = "wiki/Specifications/"
+vocabularies_docs = "dwiki/Vocabularies/"
 resources = "External/"
 
 [metaschemas]
@@ -69,32 +69,3 @@ cdm = "CDM TEMPLATE.yaml"
 mdr = "MDR TEMPLATE.yaml"
 bdr = "BDR TEMPLATE.yaml"
 lookup_metadata = "LOOKUP METADATA TEMPLATE.yaml"
-
-#This section can be made programatically
-[snippets]
-file = "Model Templates.code-snippets"
-
-[snippets.models.tam]
-keyword = "TAM template"
-description = "Generates TAM template"
-
-[snippets.models.tvm]
-keyword = "TVM template"
-description = "Generates TVM template"
-
-[snippets.models.cdm]
-keyword = "Generate CDM template"
-description = "Generates CDM template"
-
-[snippets.models.mdr]
-keyword = "Generate MDR template"
-description = "Generates MDR template"
-
-[snippets.models.bdr]
-keyword = "Generate BDR template"
-description = "Generates BDR template"
-
-[snippets.models.lookup_metadata]
-keyword = "Generate Lookup Metadata"
-description = "Create a lookup metadata companion file"
-

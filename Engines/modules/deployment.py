@@ -148,22 +148,22 @@ def diff_calculation(stage: Literal["STAGING", "PRODUCTION"]) -> list:
     return scope
 
 
-def lookup_scope() -> list[str]:
-    lookup_scope = list()
+def enabled_lookup_systems() -> list[str]:
+    enabled_lookup_systems = list()
     for system in SYSTEMS_CONFIGS_INDEX:
         if SYSTEMS_CONFIGS_INDEX[system].get("lookups", {}).get("enabled") is True:
-            lookup_scope.append(system)
+            enabled_lookup_systems.append(system)
 
-    return lookup_scope
+    return enabled_lookup_systems
 
 
-def system_scope() -> list[str]:
-    system_scope = list()
+def enabled_systems() -> list[str]:
+    enabled_systems = list()
     for system in SYSTEMS_CONFIGS_INDEX:
         if SYSTEMS_CONFIGS_INDEX[system]["tide"].get("enabled") is True:
-            system_scope.append(system)
+            enabled_systems.append(system)
 
-    return system_scope
+    return enabled_systems
 
 
 class Proxy:

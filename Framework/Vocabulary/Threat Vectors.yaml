@@ -20,7 +20,7 @@ keys:
       well as individual  IP addresses. '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0001%5D-Conti-Ransomeware-Families-Campaigns
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0001%5D-Conti-Ransomeware-Families-Campaigns
   - id: TVM0002
     name: Work from Home Traffic Manipulation
     description: The actor compromised residential facility routers to prevent VPN
@@ -35,7 +35,7 @@ keys:
       leading to sniffing.
     criticality: Medium
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0002%5D-Work-from-Home-Traffic-Manipulation
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0002%5D-Work-from-Home-Traffic-Manipulation
   - id: TVM0003
     name: Addition of credentials to OAuth applications and service principals
     description: The actor has been observed adding credentials (x509 keys or password
@@ -48,7 +48,7 @@ keys:
       (e.g.  Mail.Read, Mail.ReadWrite).
     criticality: Emergency
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0003%5D-Addition-of-credentials-to-OAuth-applications-and-service-principals
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0003%5D-Addition-of-credentials-to-OAuth-applications-and-service-principals
   - id: TVM0004
     name: Targeting of Delegated Administrative Priviledges
     description: Adversaries may target privileged accounts of service providers  to
@@ -59,7 +59,7 @@ keys:
       which will be exploited first, before moving to their clients.
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0004%5D-Targeting-of-Delegated-Administrative-Priviledges
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0004%5D-Targeting-of-Delegated-Administrative-Priviledges
   - id: TVM0005
     name: Modify Azure federation trust to accept externally signed tokens
     description: Once they acquired sufficient priviledges,attackers add their own
@@ -72,7 +72,7 @@ keys:
       server.
     criticality: Emergency
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0005%5D-Modify-Azure-federation-trust-to-accept-externally-signed-tokens
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0005%5D-Modify-Azure-federation-trust-to-accept-externally-signed-tokens
   - id: TVM0006
     name: Golden SAML
     description: 'With sufficient priviledges, the attackers access and extract the
@@ -84,13 +84,13 @@ keys:
       certificate '
     criticality: Emergency
     tlp: amber
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0006%5D-Golden-SAML
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0006%5D-Golden-SAML
   - id: TVM0007
     name: Usage of trusted cloud services to host malware stages
     description: Adversaries may use trusted cloud storage to host malware payloads.
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0007%5D-Usage-of-trusted-cloud-services-to-host-malware-stages
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0007%5D-Usage-of-trusted-cloud-services-to-host-malware-stages
   - id: TVM0008
     name: Modify Mailbox Folder Permissions
     description: By assigning read privileges to the Default user, an attacker can  then
@@ -103,7 +103,7 @@ keys:
       the Add-MailboxFolderPermission or Set-MailboxFolderPermission cmdlets.
     criticality: Medium
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0008%5D-Modify-Mailbox-Folder-Permissions
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0008%5D-Modify-Mailbox-Folder-Permissions
   - id: TVM0009
     name: Hijack Azure AD Applications
     description: Hijacking an application (by adding a rogue secret or certificate)
@@ -118,7 +118,7 @@ keys:
       Applications that had the mail.read and files.read permission.
     criticality: Severe
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0009%5D-Hijack-Azure-AD-Applications
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0009%5D-Hijack-Azure-AD-Applications
   - id: TVM0010
     name: Exchange Application Impersonation
     description: Impersonation grants an account the ability to access a mailbox and
@@ -132,7 +132,7 @@ keys:
       thus can access any mailbox in the tenant through impersonation.
     criticality: Medium
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0010%5D-Exchange-Application-Impersonation
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0010%5D-Exchange-Application-Impersonation
   - id: TVM0011
     name: Malicious Software Dependencies Faking Known Packages
     description: Adversaries maymimick known and trusted software packages and distributors,
@@ -143,7 +143,7 @@ keys:
       theft, command and control etc.
     criticality: Medium
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0011%5D-Malicious-Software-Dependencies-Faking-Known-Packages
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0011%5D-Malicious-Software-Dependencies-Faking-Known-Packages
   - id: TVM0012
     name: Malicious Script impersonating legitimate Windows Services and Tasks
     description: Adversary may try to impersonate a legitimate task or service in
@@ -155,7 +155,7 @@ keys:
       ultimately.
     criticality: Severe
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0012%5D-Malicious-Script-impersonating-legitimate-Windows-Services-and-Tasks
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0012%5D-Malicious-Script-impersonating-legitimate-Windows-Services-and-Tasks
   - id: TVM0013
     name: DDoS and MitM with IP Spoofing
     description: IP spoofing is the creation of Internet Protocol (IP) packets which
@@ -171,7 +171,7 @@ keys:
       of packets is a core vulnerability exploited by many DDoS attacks.
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0013%5D-DDoS-and-MitM-with-IP-Spoofing
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0013%5D-DDoS-and-MitM-with-IP-Spoofing
   - id: TVM0014
     name: SSL Certificate trust attack to achieve MitM
     description: There are several ways a bad actor can break the trust SSL/TLS establishes
@@ -185,7 +185,7 @@ keys:
       to fake banking web sites, where sensitive information can be easily stolen.
     criticality: Severe
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0014%5D-SSL-Certificate-trust-attack-to-achieve-MitM
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0014%5D-SSL-Certificate-trust-attack-to-achieve-MitM
   - id: TVM0015
     name: Clickjacking enterprise application users
     description: 'Clickjacking, also known as a "UI redress attack", is when an attacker
@@ -199,7 +199,7 @@ keys:
       account, but are instead typing into an invisible frame controlled by the attacker. '
     criticality: Medium
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0015%5D-Clickjacking-enterprise-application-users
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0015%5D-Clickjacking-enterprise-application-users
   - id: TVM0016
     name: Access path to unsecure bash history
     description: Adversaries may search the bash command history on compromised systems
@@ -210,7 +210,7 @@ keys:
       simple directory access over HTTP requests, or other injection attacks.
     criticality: Severe
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0016%5D-Access-path-to-unsecure-bash-history
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0016%5D-Access-path-to-unsecure-bash-history
   - id: TVM0017
     name: Generic SQL injection to Web Services
     description: A SQL injection attack consists of insertion or "injection" of a
@@ -226,7 +226,7 @@ keys:
       effect if the vulnerable application is mission-critical.
     criticality: Medium
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0017%5D-Generic-SQL-injection-to-Web-Services
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0017%5D-Generic-SQL-injection-to-Web-Services
   - id: TVM0018
     name: Function-as-code malwares
     description: 'A malware can run in a lambda function, which is an on-demand runtime
@@ -237,7 +237,7 @@ keys:
       operations, but may also be a pivot for other C2 orchestration tasks. '
     criticality: Medium
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0018%5D-Function-as-code-malwares
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0018%5D-Function-as-code-malwares
   - id: TVM0019
     name: Persistence with Azure Automanage Machine Configuration
     description: 'Azure Policy enables administrators to define, enforce and remediate
@@ -251,7 +251,7 @@ keys:
       additional  access there. '
     criticality: Medium
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0019%5D-Persistence-with-Azure-Automanage-Machine-Configuration
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0019%5D-Persistence-with-Azure-Automanage-Machine-Configuration
   - id: TVM0020
     name: Exposed data in public cloud storage
     description: 'Threat actors use tools to systematically and automatically scan
@@ -263,7 +263,7 @@ keys:
       or writes.  '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0020%5D-Exposed-data-in-public-cloud-storage
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0020%5D-Exposed-data-in-public-cloud-storage
   - id: TVM0021
     name: Usage of VPN providers to evade impossible travels
     description: 'Adversaries are aware of impossible travel detection and may try
@@ -273,7 +273,7 @@ keys:
       at detecting and protecting account abuses (for example with) geo-whitelisting. '
     criticality: Medium
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0021%5D-Usage-of-VPN-providers-to-evade-impossible-travels
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0021%5D-Usage-of-VPN-providers-to-evade-impossible-travels
   - id: TVM0022
     name: Cloud Instance Metadata Abuse
     description: 'AWS Instance Metadata Service (IMDS) is a cloud service which exposes
@@ -289,7 +289,7 @@ keys:
       to be possible. '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0022%5D-Cloud-Instance-Metadata-Abuse
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0022%5D-Cloud-Instance-Metadata-Abuse
   - id: TVM0023
     name: Cloud IAM role assumption
     description: Once adversaries gained a set of creentials, they will try to discover
@@ -301,7 +301,7 @@ keys:
       roles are leveraged.
     criticality: Severe
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0023%5D-Cloud-IAM-role-assumption
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0023%5D-Cloud-IAM-role-assumption
   - id: TVM0024
     name: Leverage open cloud traffic paths
     description: Adversaries may attempt to use open traffic paths between cloud resources
@@ -314,7 +314,7 @@ keys:
       into moving in the network plane.
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0024%5D-Leverage-open-cloud-traffic-paths
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0024%5D-Leverage-open-cloud-traffic-paths
   - id: TVM0025
     name: Web Shell Attacks
     description: Adversaries may backdoor web servers with web shells to establish
@@ -324,7 +324,7 @@ keys:
       or a command-line interface on the system that hosts the Web server.
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0025%5D-Web-Shell-Attacks
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0025%5D-Web-Shell-Attacks
   - id: TVM0026
     name: Non-Approved container image deployed to run cryptominer
     description: A threat actor can gain access to deployment workflows and pipelines
@@ -333,7 +333,7 @@ keys:
       a clean image first and then a cryptominer and C2 Infrastructure
     criticality: High
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0026%5D-Non-Approved-container-image-deployed-to-run-cryptominer
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0026%5D-Non-Approved-container-image-deployed-to-run-cryptominer
   - id: TVM0027
     name: Allow-listing of all actions in an AWS account via Exception Authority
     description: A threat actor that gains access to perform changes to the exception  authority
@@ -342,7 +342,7 @@ keys:
       part of an on-going compromise
     criticality: High
     tlp: red
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0027%5D-Allow-listing-of-all-actions-in-an-AWS-account-via-Exception-Authority
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0027%5D-Allow-listing-of-all-actions-in-an-AWS-account-via-Exception-Authority
   - id: TVM0028
     name: Follina backdoor delivered through malicious Office documents
     description: 'In May 2022, Microsoft published an advisory about CVE-2022-30190,
@@ -361,7 +361,7 @@ keys:
       details of  Rozena and its shellcode. Description source:  https://www.fortinet.com/blog/threat-research/follina-rozena-leveraging-discord-to-distribute-a-backdoor'
     criticality: Emergency
     tlp: red
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0028%5D-Follina-backdoor-delivered-through-malicious-Office-documents
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0028%5D-Follina-backdoor-delivered-through-malicious-Office-documents
   - id: TVM0029
     name: Gain initial access through Mitel VOIP application
     description: The threat actor performs a remote code execution (RCE)  exploit
@@ -374,7 +374,7 @@ keys:
       parameter and can be opened by multiple  processes for reading or writing purposes.
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0029%5D-Gain-initial-access-through-Mitel-VOIP-application
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0029%5D-Gain-initial-access-through-Mitel-VOIP-application
   - id: TVM0030
     name: Emotet Trojan Families Campaigns
     description: 'Emotet is an advanced polymorphic banking trojan.  Adversaries may
@@ -384,7 +384,7 @@ keys:
       self-cutomized module.  '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0030%5D-Emotet-Trojan-Families-Campaigns
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0030%5D-Emotet-Trojan-Families-Campaigns
   - id: TVM0031
     name: Leaky Access Tokens in AWS exposes user's data
     description: 'AWS tokens can be exposed by mistake and an attacker can accessed
@@ -393,7 +393,7 @@ keys:
       This may allow external application to access  the customer data.  '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0031%5D-Leaky-Access-Tokens-in-AWS-exposes-user%27s-data
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0031%5D-Leaky-Access-Tokens-in-AWS-exposes-user%27s-data
   - id: TVM0032
     name: authentication bypass on Ivanti Connect Secure appliances
     description: 'Attackers may exploit vulnerabilities CVE-2023-46805 and CVE-2024-21893
@@ -403,7 +403,7 @@ keys:
       following exploitation of CVE-2024-21887  enables full compromise of the appliance. '
     criticality: Severe
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0032%5D-authentication-bypass-on-Ivanti-Connect-Secure-appliances
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0032%5D-authentication-bypass-on-Ivanti-Connect-Secure-appliances
   - id: TVM0033
     name: Use Valid Accounts to logon with SSH session
     description: 'Adversaries may use Valid Accounts to log into remote  machines
@@ -413,7 +413,7 @@ keys:
       drop auxiliary customised modules of malware. '
     criticality: Medium
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0033%5D-Use-Valid-Accounts-to-logon-with-SSH-session
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0033%5D-Use-Valid-Accounts-to-logon-with-SSH-session
   - id: TVM0034
     name: Discover and access exposed Kubernetes API
     description: Kubernetes API is a service used to administer a cluster. If exposed,
@@ -425,7 +425,7 @@ keys:
       such as an unpatched vulnerability or a 0day.
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0034%5D-Discover-and-access-exposed-Kubernetes-API
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0034%5D-Discover-and-access-exposed-Kubernetes-API
   - id: TVM0035
     name: Jenkins Gitlab plugin exploitation to compromise code resources
     description: Jenkins GitLab Plugin 1.5.34 and earlier does not  escape multiple
@@ -439,7 +439,7 @@ keys:
       validation methods.
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0035%5D-Jenkins-Gitlab-plugin-exploitation-to-compromise-code-resources
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0035%5D-Jenkins-Gitlab-plugin-exploitation-to-compromise-code-resources
   - id: TVM0036
     name: Raspberry Robin worm in Windows networks
     description: 'Once the USB device is attached and the user clicks the link,  the
@@ -451,7 +451,7 @@ keys:
       leverage  it to deliver malware '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0036%5D-Raspberry-Robin-worm-in-Windows-networks
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0036%5D-Raspberry-Robin-worm-in-Windows-networks
   - id: TVM0037
     name: Adversary in the Middle phishing sites to bypass MFA
     description: Threat actors use malicious attachments to send the users  to redirection
@@ -459,7 +459,7 @@ keys:
       flow by interfacing with the legitimate IdP, and captures valid accounts
     criticality: Medium
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0037%5D-Adversary-in-the-Middle-phishing-sites-to-bypass-MFA
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0037%5D-Adversary-in-the-Middle-phishing-sites-to-bypass-MFA
   - id: TVM0038
     name: Ransomware masquerading encrypted files with double extensions
     description: 'A threat actor can add a custom extension  to the encrypted files,
@@ -468,7 +468,7 @@ keys:
       is used for masquerading in  ransomware campaigns.  '
     criticality: Medium
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0038%5D-Ransomware-masquerading-encrypted-files-with-double-extensions
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0038%5D-Ransomware-masquerading-encrypted-files-with-double-extensions
   - id: TVM0039
     name: Abuse specific file formats to subvert Mark-of-the-Web (MOTW) controls
     description: Mark-of-the-Web (MOTW) bypass controls technique is working  on the
@@ -484,7 +484,7 @@ keys:
       them may be treated as local files  on disk and run without protections.
     criticality: Medium
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0039%5D-Abuse-specific-file-formats-to-subvert-Mark-of-the-Web-%28MOTW%29-controls
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0039%5D-Abuse-specific-file-formats-to-subvert-Mark-of-the-Web-%28MOTW%29-controls
   - id: TVM0040
     name: Brute Ratel C4 used in adversarial operations
     description: 'Brute Ratel C4 is a red team tool that is effective in defeating  modern
@@ -496,7 +496,7 @@ keys:
       a LNK file using a OneDrive executable to launch  a malicious DLL Version.dll '
     criticality: High
     tlp: amber
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0040%5D-Brute-Ratel-C4-used-in-adversarial-operations
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0040%5D-Brute-Ratel-C4-used-in-adversarial-operations
   - id: TVM0041
     name: Malicious container image deployed
     description: 'Threat actors plant malicious code into container images which  execute
@@ -504,14 +504,14 @@ keys:
       and as a persistence technique. '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0041%5D-Malicious-container-image-deployed
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0041%5D-Malicious-container-image-deployed
   - id: TVM0042
     name: Secrets embedded into container image used to access services
     description: 'Threat actors are scanning accessible container images for embedded
       secrets and use them to access services running on container or external ones. '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0042%5D-Secrets-embedded-into-container-image-used-to-access-services
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0042%5D-Secrets-embedded-into-container-image-used-to-access-services
   - id: TVM0043
     name: Malicious Helm chart deployed
     description: 'Malicious Helm charts can be used modify Kubernetes authentication  and
@@ -520,7 +520,7 @@ keys:
       attacker''s code. '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0043%5D-Malicious-Helm-chart-deployed
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0043%5D-Malicious-Helm-chart-deployed
   - id: TVM0044
     name: Cryptomining activity in container
     description: 'Containerized environments are targeted by cryptominers to the ease  of
@@ -528,7 +528,7 @@ keys:
       by deploying or compromising multiple containers  within an environment or cluster. '
     criticality: Medium
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0044%5D-Cryptomining-activity-in-container
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0044%5D-Cryptomining-activity-in-container
   - id: TVM0045
     name: Resource exhaustion DoS in CoP
     description: 'When to many Cloud on Prem resources are requested by one of the
@@ -536,7 +536,7 @@ keys:
       limited capacity. '
     criticality: Low
     tlp: amber
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0045%5D-Resource-exhaustion-DoS-in-CoP
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0045%5D-Resource-exhaustion-DoS-in-CoP
   - id: TVM0046
     name: Unauthorized access to CMP or K8s API in CoP
     description: 'As management interfaces are exposed to all Commission workstations,  vulnerability
@@ -544,7 +544,7 @@ keys:
       workstation or malicious internal actor. '
     criticality: High
     tlp: amber
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0046%5D-Unauthorized-access-to-CMP-or-K8s-API-in-CoP
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0046%5D-Unauthorized-access-to-CMP-or-K8s-API-in-CoP
   - id: TVM0047
     name: Passing SeDebugPrivilege to AdjustTokenPrivilege API elevating privileges
       of a running process
@@ -562,7 +562,7 @@ keys:
       tokens for further account access and malicious purposes.  '
     criticality: Medium
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0047%5D-Passing-SeDebugPrivilege-to-AdjustTokenPrivilege-API-elevating-privileges-of-a-running-process
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0047%5D-Passing-SeDebugPrivilege-to-AdjustTokenPrivilege-API-elevating-privileges-of-a-running-process
   - id: TVM0048
     name: Microsoft Exchange server backdoor Session Manager
     description: 'A malware, dubbed SessionManager is a malicious  native-code module
@@ -576,7 +576,7 @@ keys:
       and a legitimate  Avast memory dump tool. '
     criticality: Medium
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0048%5D-Microsoft-Exchange-server-backdoor-Session-Manager
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0048%5D-Microsoft-Exchange-server-backdoor-Session-Manager
   - id: TVM0049
     name: Create a process with a token
     description: 'Adversaries may create a new process with a different token  to
@@ -589,7 +589,7 @@ keys:
       user. '
     criticality: High
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0049%5D-Create-a-process-with-a-token
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0049%5D-Create-a-process-with-a-token
   - id: TVM0050
     name: Web Path Traversal Attack
     description: 'Directory traversal (also known as file path traversal) is a web
@@ -601,7 +601,7 @@ keys:
       system files. '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0050%5D-Web-Path-Traversal-Attack
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0050%5D-Web-Path-Traversal-Attack
   - id: TVM0051
     name: Cross Site Scripting (XSS)
     description: Cross-Site Scripting (XSS) attacks are a type of injection, in which
@@ -618,7 +618,7 @@ keys:
       with that site. These scripts can even rewrite the content of the HTML page.
     criticality: Medium
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0051%5D-Cross-Site-Scripting-%28XSS%29
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0051%5D-Cross-Site-Scripting-%28XSS%29
   - id: TVM0052
     name: Web Application Login Bruteforcing
     description: 'A brute force attack can manifest itself in many different ways,
@@ -632,7 +632,7 @@ keys:
       approximately how long it will take to submit all chosen predetermined values. '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0052%5D-Web-Application-Login-Bruteforcing
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0052%5D-Web-Application-Login-Bruteforcing
   - id: TVM0053
     name: URL Redirection Attacks
     description: '##EC DIGIT S position EC DIGIT SECURITY ASSURANCE provided the results
@@ -657,7 +657,7 @@ keys:
       they would normally not be able to access. '
     criticality: Baseline - Negligible
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0053%5D-URL-Redirection-Attacks
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0053%5D-URL-Redirection-Attacks
   - id: TVM0054
     name: Confluence Server Webwork OGNL injection
     description: 'CVE-2021-26084 is a vulnerability in Confluence. It originates from
@@ -677,7 +677,7 @@ keys:
       /ecp/Customize/Regional.aspx /ecp/MyGroups/SearchAllGroups.slab /ecp/Security/BlockOrAllow.aspx '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0054%5D-Confluence-Server-Webwork-OGNL-injection
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0054%5D-Confluence-Server-Webwork-OGNL-injection
   - id: TVM0055
     name: Microsoft Exchange Validation Key RCE
     description: A remote code execution vulnerability exists in Microsoft Exchange
@@ -688,7 +688,7 @@ keys:
       system compromise, meaning all emails and potentially Active Directory.
     criticality: Severe
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0055%5D-Microsoft-Exchange-Validation-Key-RCE
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0055%5D-Microsoft-Exchange-Validation-Key-RCE
   - id: TVM0056
     name: Web Vulnerability Scanner Usage
     description: 'Adversaries may scan web applications for vulnerabilities in an
@@ -705,7 +705,7 @@ keys:
       a set of automated manoeuvers, typically injection patterns.'
     criticality: Medium
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0056%5D-Web-Vulnerability-Scanner-Usage
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0056%5D-Web-Vulnerability-Scanner-Usage
   - id: TVM0057
     name: Log4Shell RCE exploit in Apache Log4j
     description: 'Log4j2 vulnerability gives an attacker remote code capabilities
@@ -729,7 +729,7 @@ keys:
       spoof legitimate domains. '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0057%5D-Log4Shell-RCE-exploit-in-Apache-Log4j
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0057%5D-Log4Shell-RCE-exploit-in-Apache-Log4j
   - id: TVM0058
     name: Container privilege escalation via Kubernetes service account
     description: 'Overly permissive Kubernetes service account mounted into Kubernetes
@@ -739,7 +739,7 @@ keys:
       manipulate Kubernetes authorization. '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0058%5D-Container-privilege-escalation-via-Kubernetes-service-account
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0058%5D-Container-privilege-escalation-via-Kubernetes-service-account
   - id: TVM0059
     name: Kubernetes user privilege escalation via misconfigured RBAC policies
     description: 'Misconfigured RBAC policies can be exploited via multiple vectors.
@@ -750,21 +750,21 @@ keys:
       if  the user has rights to use them.  '
     criticality: Medium
     tlp: amber+strict
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0059%5D-Kubernetes-user-privilege-escalation-via-misconfigured-RBAC-policies
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0059%5D-Kubernetes-user-privilege-escalation-via-misconfigured-RBAC-policies
   - id: TVM0060
     name: Kubernetes privilege escalation via misconfigured PSP policies
     description: 'Unhardened Pod Security Policies may be abused to escalate privileges
       in Kubernetes environment.  '
     criticality: High
     tlp: amber
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0060%5D-Kubernetes-privilege-escalation-via-misconfigured-PSP-policies
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0060%5D-Kubernetes-privilege-escalation-via-misconfigured-PSP-policies
   - id: TVM0061
     name: Container privilege escalation via cloud API metadata access
     description: 'Query cloud metadata API accessible from container for credentials
       or use it in privilege escalation attacks. '
     criticality: High
     tlp: amber
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0061%5D-Container-privilege-escalation-via-cloud-API-metadata-access
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0061%5D-Container-privilege-escalation-via-cloud-API-metadata-access
   - id: TVM0062
     name: Container privilege escalation via network service accessible to container
     description: 'Insufficient network restrictions set on container may lead to exploitation
@@ -774,7 +774,7 @@ keys:
       to privilege escalation.  '
     criticality: High
     tlp: amber
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0062%5D-Container-privilege-escalation-via-network-service-accessible-to-container
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0062%5D-Container-privilege-escalation-via-network-service-accessible-to-container
   - id: TVM0063
     name: DoS via malicious Sysdig policies
     description: 'Sysdig runtime policies can be configured to pause, stop or restart
@@ -785,7 +785,7 @@ keys:
       by Sysdig. '
     criticality: High
     tlp: amber+strict
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0063%5D-DoS-via-malicious-Sysdig-policies
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0063%5D-DoS-via-malicious-Sysdig-policies
   - id: TVM0064
     name: Secrets exposed by Sysdig capture file
     description: 'Sysdig Capture files may contain sensitive data. This data can be
@@ -794,7 +794,7 @@ keys:
       lead to sensitive data leak.  '
     criticality: High
     tlp: amber+strict
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0064%5D-Secrets-exposed-by-Sysdig-capture-file
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0064%5D-Secrets-exposed-by-Sysdig-capture-file
   - id: TVM0065
     name: Threat actors creating AWS Amplify website for data exfiltration
     description: 'AWS Amplify is a service that allows you to build websites quickly
@@ -806,7 +806,7 @@ keys:
       of this being detected at all by the blue team. '
     criticality: High
     tlp: amber+strict
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0065%5D-Threat-actors-creating-AWS-Amplify-website-for-data-exfiltration
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0065%5D-Threat-actors-creating-AWS-Amplify-website-for-data-exfiltration
   - id: TVM0066
     name: M365 illicit application consent grant attacks
     description: 'After the illicit application has been granted consent, it has account-level
@@ -820,7 +820,7 @@ keys:
       accessing data like Mails, Notes, Files from OneDrive and others. '
     criticality: High
     tlp: amber
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0066%5D-M365-illicit-application-consent-grant-attacks
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0066%5D-M365-illicit-application-consent-grant-attacks
   - id: TVM0067
     name: Adversaries may modify runtime policies of a compromised Sysdig server
     description: 'A threat actor, who has managed to obtain valid admin credentials
@@ -831,7 +831,7 @@ keys:
       be meant to gather information, lateral movement, or to  cause disruptions. '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0067%5D-Adversaries-may-modify-runtime-policies-of-a-compromised-Sysdig-server
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0067%5D-Adversaries-may-modify-runtime-policies-of-a-compromised-Sysdig-server
   - id: TVM0068
     name: Addition of new admin users on a compromised Sysdig instance
     description: 'A threat actor, who has managed to obtain valid admin credentials
@@ -842,7 +842,7 @@ keys:
       compromised Sysdig backend admin user account. '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0068%5D-Addition-of-new-admin-users-on-a-compromised-Sysdig-instance
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0068%5D-Addition-of-new-admin-users-on-a-compromised-Sysdig-instance
   - id: TVM0069
     name: CrackMapExec (CME) on endpoints or being downloaded
     description: 'CrackMapExec is a post-compromise tool that contains a number of
@@ -851,7 +851,7 @@ keys:
       itself, plus the usage of the tool is an important baseline security detection. '
     criticality: High
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0069%5D-CrackMapExec-%28CME%29-on-endpoints-or-being-downloaded
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0069%5D-CrackMapExec-%28CME%29-on-endpoints-or-being-downloaded
   - id: TVM0070
     name: Usage of CrackMapExec module Masky on compromised endpoint
     description: 'CrackMapExec is a post-compromise tool that contains a number of
@@ -869,7 +869,7 @@ keys:
       enabled, will be very noisy and detectable. '
     criticality: High
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0070%5D-Usage-of-CrackMapExec-module-Masky-on-compromised-endpoint
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0070%5D-Usage-of-CrackMapExec-module-Masky-on-compromised-endpoint
   - id: TVM0071
     name: Use of customervoice.microsoft.com to host Phishing domains
     description: 'This threat vector is based on real phishing domains built and utilized
@@ -878,7 +878,7 @@ keys:
       legit reasons to have traffic to this, and legit traffic going there. '
     criticality: Low
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0071%5D-Use-of-customervoice.microsoft.com-to-host-Phishing-domains
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0071%5D-Use-of-customervoice.microsoft.com-to-host-Phishing-domains
   - id: TVM0072
     name: Pass the hash using impersonation within an existing process
     description: 'Adversaries may use a particular flavor of pass the hash - to leverage  an
@@ -899,7 +899,7 @@ keys:
       known NTLM based procedures. '
     criticality: High
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0072%5D-Pass-the-hash-using-impersonation-within-an-existing-process
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0072%5D-Pass-the-hash-using-impersonation-within-an-existing-process
   - id: TVM0073
     name: Modification of Windows Audit Policies to evade detection
     description: 'Adversaries may use "auditpol" and its sub-commands in a command
@@ -924,7 +924,7 @@ keys:
       for example disabling of SACL list for auditing of user''s access control. '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0073%5D-Modification-of-Windows-Audit-Policies-to-evade-detection
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0073%5D-Modification-of-Windows-Audit-Policies-to-evade-detection
   - id: TVM0074
     name: Container privilege escalation via kernel or container runtime exploit
     description: 'Vulnerabilities in container runtime (Docker, containerd, etc.)
@@ -933,7 +933,7 @@ keys:
       depending on vulnerability type.  '
     criticality: High
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0074%5D-Container-privilege-escalation-via-kernel-or-container-runtime-exploit
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0074%5D-Container-privilege-escalation-via-kernel-or-container-runtime-exploit
   - id: TVM0075
     name: Mimikatz execution on compromised endpoint
     description: 'Mimikatz is a very versatile tool that comes with a lot of  options
@@ -943,7 +943,7 @@ keys:
       trying  to EoP and move laterally.  '
     criticality: Emergency
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0075%5D-Mimikatz-execution-on-compromised-endpoint
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0075%5D-Mimikatz-execution-on-compromised-endpoint
   - id: TVM0076
     name: Sudo vulnerability allows attackers to gain root privileges
     description: 'Sudo vulnerability (CVE-2021-3156) allows users to perform commands
@@ -967,7 +967,7 @@ keys:
       run, just that the shell flag is set. This inconsistency is what makes the bug  exploitable. '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0076%5D-Sudo-vulnerability-allows-attackers-to-gain-root-privileges
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0076%5D-Sudo-vulnerability-allows-attackers-to-gain-root-privileges
   - id: TVM0077
     name: SpringShell (Spring4Shell) Zero-Day Vulnerability
     description: 'SpringShell or Spring4Shell—can be exploited when an attacker sends
@@ -985,7 +985,7 @@ keys:
       pattern, suffix, directory and prefix. '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0077%5D-SpringShell-%28Spring4Shell%29-Zero-Day-Vulnerability
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0077%5D-SpringShell-%28Spring4Shell%29-Zero-Day-Vulnerability
   - id: TVM0078
     name: Pass the hash attack to elevate privileges
     description: 'Elevating privileges on Windows to System allows a threat actor
@@ -1002,7 +1002,7 @@ keys:
       thehacker.recipes. '
     criticality: High
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0078%5D-Pass-the-hash-attack-to-elevate-privileges
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0078%5D-Pass-the-hash-attack-to-elevate-privileges
   - id: TVM0079
     name: Illicit VPC peering requests
     description: 'Threat actors may attempt to gain initial access to EC AWS environments
@@ -1017,7 +1017,7 @@ keys:
       different services to communicate to each others. '
     criticality: Low
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0079%5D-Illicit-VPC-peering-requests
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0079%5D-Illicit-VPC-peering-requests
   - id: TVM0080
     name: Adversary abuses sudo elevation control mechanism
     description: 'Sudo is a command-line utility for Unix and Linux-based systems
@@ -1048,7 +1048,7 @@ keys:
       pkexec /bin/sh '
     criticality: High
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0080%5D-Adversary-abuses-sudo-elevation-control-mechanism
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0080%5D-Adversary-abuses-sudo-elevation-control-mechanism
   - id: TVM0081
     name: Collect credentials from text files in Windows using automated dumping tools
     description: 'Malicious actors are using extraction automation tools like Seatbelt
@@ -1078,7 +1078,7 @@ keys:
       winpeas_wiindowscreds.txt '
     criticality: High
     tlp: red
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0081%5D-Collect-credentials-from-text-files-in-Windows-using-automated-dumping-tools
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0081%5D-Collect-credentials-from-text-files-in-Windows-using-automated-dumping-tools
   - id: TVM0082
     name: Scheduled tasks created with PowerShell
     description: 'A threat actor can use PowerShell to create tasks for nefarious
@@ -1088,7 +1088,7 @@ keys:
       persistence or to execute binaries. '
     criticality: Medium
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0082%5D-Scheduled-tasks-created-with-PowerShell
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0082%5D-Scheduled-tasks-created-with-PowerShell
   - id: TVM0083
     name: Scheduled tasks created with command line
     description: 'Adversaries can use  Windows Command Shell (cmd.exe) to execute
@@ -1116,7 +1116,7 @@ keys:
       account.  /QUERY — displays all the system tasks. '
     criticality: Medium
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0083%5D-Scheduled-tasks-created-with-command-line
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0083%5D-Scheduled-tasks-created-with-command-line
   - id: TVM0084
     name: Scheduled tasks to connect to adversarial infrastructure
     description: 'A scheduled task is a task that is set to run automatically at a
@@ -1129,7 +1129,7 @@ keys:
       for connecting to it. '
     criticality: Medium
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0084%5D-Scheduled-tasks-to-connect-to-adversarial-infrastructure
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0084%5D-Scheduled-tasks-to-connect-to-adversarial-infrastructure
   - id: TVM0085
     name: Scheduled tasks created with taskschlr.exe
     description: 'A threat actor can use the Task Scheduler to create tasks for nefarious
@@ -1154,7 +1154,7 @@ keys:
       </Task> '
     criticality: Medium
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0085%5D-Scheduled-tasks-created-with-taskschlr.exe
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0085%5D-Scheduled-tasks-created-with-taskschlr.exe
   - id: TVM0086
     name: Scheduled tasks to maintain persistence in registry
     description: 'A threat actor can successfully maintain persistence on a compromised
@@ -1177,7 +1177,7 @@ keys:
       automatically every time the system starts up, or until discovered  and deleted. '
     criticality: Medium
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0086%5D-Scheduled-tasks-to-maintain-persistence-in-registry
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0086%5D-Scheduled-tasks-to-maintain-persistence-in-registry
   - id: TVM0087
     name: Deletion of Security Descriptor (SD) value in registry for scheduled task
     description: 'A Security Descriptor (SD) is a data structure that specifies the
@@ -1200,7 +1200,7 @@ keys:
       well as other forms of malware that use security descriptors for defense evasion. '
     criticality: Medium
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0087%5D-Deletion-of-Security-Descriptor-%28SD%29-value-in-registry-for-scheduled-task
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0087%5D-Deletion-of-Security-Descriptor-%28SD%29-value-in-registry-for-scheduled-task
   - id: TVM0088
     name: Deletion of Tasks or Tree registry keys in scheduled task hives
     description: 'Threat actors are using deletion of tree registry keys to remove
@@ -1225,7 +1225,7 @@ keys:
       -Name "MyValue"  rm "HKLM:\Software\MyKey" '
     criticality: Medium
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0088%5D-Deletion-of-Tasks-or-Tree-registry-keys-in-scheduled-task-hives
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0088%5D-Deletion-of-Tasks-or-Tree-registry-keys-in-scheduled-task-hives
   - id: TVM0089
     name: Scheduled tasks to execute binaries
     description: 'A threat actor can use scheduled tasks to execute binaries such
@@ -1241,7 +1241,7 @@ keys:
       protect against this type of attack. '
     criticality: Medium
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0089%5D-Scheduled-tasks-to-execute-binaries
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0089%5D-Scheduled-tasks-to-execute-binaries
   - id: TVM0090
     name: Switching off forced signed commits for GitHub repository
     description: 'Development and DevOps teams may turn on signed commits to ensure
@@ -1252,7 +1252,7 @@ keys:
       unless the attacker turns off the forced  commit policy.  '
     criticality: High
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0090%5D-Switching-off-forced-signed-commits-for-GitHub-repository
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0090%5D-Switching-off-forced-signed-commits-for-GitHub-repository
   - id: TVM0091
     name: AWS Compute instance deployed in unusual region
     description: 'Certain threat actors will try to launch AWS compute instances  (EC2,
@@ -1266,7 +1266,7 @@ keys:
       purposes than the 2 listed above. '
     criticality: Medium
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0091%5D-AWS-Compute-instance-deployed-in-unusual-region
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0091%5D-AWS-Compute-instance-deployed-in-unusual-region
   - id: TVM0092
     name: Use of a malicious lambda layer in AWS account lambda function
     description: 'A Lambda layer is an archive containing additional code, such as
@@ -1283,7 +1283,7 @@ keys:
       credentials to deploy or update lambda  functions. '
     criticality: Low
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0092%5D-Use-of-a-malicious-lambda-layer-in-AWS-account-lambda-function
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0092%5D-Use-of-a-malicious-lambda-layer-in-AWS-account-lambda-function
   - id: TVM0093
     name: Scheduled task created on remote endpoint
     description: 'Adversaries with access to the right credentials can create scheduled
@@ -1301,7 +1301,7 @@ keys:
       User". '
     criticality: Medium
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0093%5D-Scheduled-task-created-on-remote-endpoint
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0093%5D-Scheduled-task-created-on-remote-endpoint
   - id: TVM0094
     name: Modify Microsoft Sentinel Data Connector to impair Detections
     description: 'A threat actor may want to disable, remove or update the configuration
@@ -1312,7 +1312,7 @@ keys:
       using the Azure CLI or directly on the portal itself via a browser. '
     criticality: Severe
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0094%5D-Modify-Microsoft-Sentinel-Data-Connector-to-impair-Detections
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0094%5D-Modify-Microsoft-Sentinel-Data-Connector-to-impair-Detections
   - id: TVM0095
     name: Duplicate an access token in a new process to elevate privileges
     description: 'An adversary can use automated solutions like CobaltStrike framework
@@ -1334,7 +1334,7 @@ keys:
       (token duplication) '
     criticality: High
     tlp: red
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0095%5D-Duplicate-an-access-token-in-a-new-process-to-elevate-privileges
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0095%5D-Duplicate-an-access-token-in-a-new-process-to-elevate-privileges
   - id: TVM0096
     name: Scheduled task creation using Azure CloudShell
     description: 'Threat actors can use Azure CloudShell, which is accessible via
@@ -1350,7 +1350,7 @@ keys:
       "My Task" -Trigger $Trigger -Action $Action -RunLevel Highest '
     criticality: Medium
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0096%5D-Scheduled-task-creation-using-Azure-CloudShell
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0096%5D-Scheduled-task-creation-using-Azure-CloudShell
   - id: TVM0097
     name: Windows credential dumping through Local Security Authority (LSA) Secrets
     description: 'Adversaries may attempt to dump credentials to obtain account login
@@ -1371,7 +1371,7 @@ keys:
       Mimikatz. PowerShell scripts also can contain credential LSA dumping functionality. '
     criticality: High
     tlp: amber
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0097%5D-Windows-credential-dumping-through-Local-Security-Authority-%28LSA%29-Secrets
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0097%5D-Windows-credential-dumping-through-Local-Security-Authority-%28LSA%29-Secrets
   - id: TVM0098
     name: Deletion of Windows Scheduled Task XML file
     description: 'When a scheduled task is created, different artifacts related to
@@ -1392,7 +1392,7 @@ keys:
       programs or delete any files that were associated with the task. '
     criticality: Medium
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0098%5D-Deletion-of-Windows-Scheduled-Task-XML-file
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0098%5D-Deletion-of-Windows-Scheduled-Task-XML-file
   - id: TVM0099
     name: Capturing user input using a software-based keylogger
     description: 'Keyloggers are often software programs that record every keystroke
@@ -1424,7 +1424,7 @@ keys:
       with a process identifier (PID): 2572 '
     criticality: High
     tlp: red
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0099%5D-Capturing-user-input-using-a-software-based-keylogger
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0099%5D-Capturing-user-input-using-a-software-based-keylogger
   - id: TVM0100
     name: Usage of 'netdom query' on command line to discover Active Directory domain
       information
@@ -1462,7 +1462,7 @@ keys:
       /d:test WORKSTATION host called home, sent: 67 bytes '
     criticality: Medium
     tlp: red
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0100%5D-Usage-of-%27netdom-query%27-on-command-line-to-discover-Active-Directory-domain-information
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0100%5D-Usage-of-%27netdom-query%27-on-command-line-to-discover-Active-Directory-domain-information
   - id: TVM0101
     name: Abusing Lolbins to Enumerate Local and Domain Accounts and Groups
     description: "Adversaries may attempt to enumerate the environment and list all\
@@ -1498,7 +1498,7 @@ keys:
       \ - finger          #  user information lookup command  "
     criticality: High
     tlp: red
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0101%5D-Abusing-Lolbins-to-Enumerate-Local-and-Domain-Accounts-and-Groups
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0101%5D-Abusing-Lolbins-to-Enumerate-Local-and-Domain-Accounts-and-Groups
   - id: TVM0102
     name: Enumerate EC2 instance data using AWS metadata service
     description: 'Threat actors collect AWS IDs from EC instances by using AWS metadata
@@ -1533,7 +1533,7 @@ keys:
       $ echo INSTANCEID '
     criticality: Medium
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0102%5D-Enumerate-EC2-instance-data-using-AWS-metadata-service
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0102%5D-Enumerate-EC2-instance-data-using-AWS-metadata-service
   - id: TVM0103
     name: Disabling of Windows event logging through registry entries
     description: 'Threat actors can disable Windows event logs by adding, deleting
@@ -1562,7 +1562,7 @@ keys:
       00 means success auditing - 02 00 means failure auditing - 03 00 means all auditing '
     criticality: Medium
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0103%5D-Disabling-of-Windows-event-logging-through-registry-entries
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0103%5D-Disabling-of-Windows-event-logging-through-registry-entries
   - id: TVM0104
     name: Change the audit policy to disable Windows event logging
     description: 'A threat actor may change an audit policy setting with the purpose
@@ -1598,7 +1598,7 @@ keys:
       Settings\Advanced Audit Policy Configuration to modify advanced policy settings. '
     criticality: Medium
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0104%5D-Change-the-audit-policy-to-disable-Windows-event-logging
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0104%5D-Change-the-audit-policy-to-disable-Windows-event-logging
   - id: TVM0105
     name: Disable Windows event logging through PowerShell
     description: 'Threat actors can use PowerShell to disable Windows event logging.
@@ -1629,7 +1629,7 @@ keys:
       the threat actor wants to disable. '
     criticality: Medium
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0105%5D-Disable-Windows-event-logging-through-PowerShell
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0105%5D-Disable-Windows-event-logging-through-PowerShell
   - id: TVM0106
     name: Linux kernel module injection from container
     description: 'Loadable Kernel Modules (LKM) can be used by adversaries to deliver  sophisticated
@@ -1640,7 +1640,7 @@ keys:
       and  for hiding their presence on a system. '
     criticality: High
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0106%5D-Linux-kernel-module-injection-from-container
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0106%5D-Linux-kernel-module-injection-from-container
   - id: TVM0107
     name: Changes to Azure infrastructure deployed through Azure CLI
     description: 'A threat actor in control of the prerequisites may attempt to use
@@ -1651,7 +1651,7 @@ keys:
       of, barring usage of a vulnerability in Azure to allow more than that. '
     criticality: Baseline - Negligible
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0107%5D-Changes-to-Azure-infrastructure-deployed-through-Azure-CLI
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0107%5D-Changes-to-Azure-infrastructure-deployed-through-Azure-CLI
   - id: TVM0108
     name: Named pipe creation using a predictable naming convention
     description: 'A threat actor may deploy named pipes are part of an automation
@@ -1664,7 +1664,7 @@ keys:
       name) '
     criticality: Medium
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0108%5D-Named-pipe-creation-using-a-predictable-naming-convention
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0108%5D-Named-pipe-creation-using-a-predictable-naming-convention
   - id: TVM0109
     name: Credential dumping using an extracted NTDS.dit file from Active Directory
     description: 'NTDS.dit is the main AD database file and stands for New Technologies
@@ -1701,7 +1701,7 @@ keys:
       (external tool)     Download link: https://github.com/zcgonvh/NTDSDumpEx/releases '
     criticality: High
     tlp: red
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0109%5D-Credential-dumping-using-an-extracted-NTDS.dit-file-from-Active-Directory
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0109%5D-Credential-dumping-using-an-extracted-NTDS.dit-file-from-Active-Directory
   - id: TVM0110
     name: Volumetric Distributed denial of service (DDoS) attack
     description: 'Threat actors may wish to cause business disruption, media/public
@@ -1712,7 +1712,7 @@ keys:
       entries are overwritten. '
     criticality: Emergency
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0110%5D-Volumetric-Distributed-denial-of-service-%28DDoS%29-attack
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0110%5D-Volumetric-Distributed-denial-of-service-%28DDoS%29-attack
   - id: TVM0111
     name: Manipulation of credentials stored in GPP XML files
     description: "Group Policy Preferences (GPP) are tools that allow administrators\
@@ -1760,7 +1760,7 @@ keys:
       \ system.  "
     criticality: High
     tlp: red
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0111%5D-Manipulation-of-credentials-stored-in-GPP-XML-files
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0111%5D-Manipulation-of-credentials-stored-in-GPP-XML-files
   - id: TVM0112
     name: Using a Windows command prompt for credential manipulation
     description: 'Threat actors may use Windows commad prompt commands to search for,
@@ -1797,7 +1797,7 @@ keys:
       /passwordreq:no '
     criticality: Medium
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0112%5D-Using-a-Windows-command-prompt-for-credential-manipulation
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0112%5D-Using-a-Windows-command-prompt-for-credential-manipulation
   - id: TVM0113
     name: PowerShell usage for credential manipulation
     description: 'Threat actors are using different methods to manipulate user''s
@@ -1824,7 +1824,7 @@ keys:
       <password_in_clear_text> '
     criticality: Medium
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0113%5D-PowerShell-usage-for-credential-manipulation
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0113%5D-PowerShell-usage-for-credential-manipulation
   - id: TVM0114
     name: Credential manipulation of domain accounts with SPNs
     description: 'A service principal name (SPN) is a unique indentifier of a service
@@ -1858,7 +1858,7 @@ keys:
       <python_script_name>.py wordlist.txt <sql_instance_name>.local.test '
     criticality: High
     tlp: red
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0114%5D-Credential-manipulation-of-domain-accounts-with-SPNs
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0114%5D-Credential-manipulation-of-domain-accounts-with-SPNs
   - id: TVM0115
     name: Script execution on Windows for credential manipulation
     description: 'One example of script execution for credential manipulation is the
@@ -1902,7 +1902,7 @@ keys:
       and propagate to additional systems in the network. '
     criticality: Medium
     tlp: red
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0115%5D-Script-execution-on-Windows-for-credential-manipulation
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0115%5D-Script-execution-on-Windows-for-credential-manipulation
   - id: TVM0116
     name: Credential manipulation on local Windows endpoint
     description: 'Credential manipulation on a local Windows endpoint refers to an
@@ -1935,7 +1935,7 @@ keys:
       - Hibernation Files '
     criticality: Medium
     tlp: red
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0116%5D-Credential-manipulation-on-local-Windows-endpoint
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0116%5D-Credential-manipulation-on-local-Windows-endpoint
   - id: TVM0117
     name: Protocol based DDoS attack
     description: Threat actors may wish to cause business disruption, media/public
@@ -1946,7 +1946,7 @@ keys:
       are overwritten.
     criticality: Emergency
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0117%5D-Protocol-based-DDoS-attack
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0117%5D-Protocol-based-DDoS-attack
   - id: TVM0118
     name: Manipulation of credentials stored in plain text files
     description: 'Threat actors are searching for credentials stored in plain text,
@@ -1980,7 +1980,7 @@ keys:
       = ''xxxxxxxxx'' # exception you want to filter exception_path = ["snapshot"] '
     criticality: Medium
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0118%5D-Manipulation-of-credentials-stored-in-plain-text-files
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0118%5D-Manipulation-of-credentials-stored-in-plain-text-files
   - id: TVM0119
     name: Manipulation of credentials stored in LSASS
     description: 'Credentials can be stored in the Local Security Authority Subsystem
@@ -2018,7 +2018,7 @@ keys:
       in LSASS memory.  Example for a DWORD in the registry:   HKEY_LOCAL_MACHINE/SYSTEM/CurrentControlSet/Control/SecurityProviders/WDigest/UseLogonCredentia '
     criticality: Medium
     tlp: red
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0119%5D-Manipulation-of-credentials-stored-in-LSASS
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0119%5D-Manipulation-of-credentials-stored-in-LSASS
   - id: TVM0120
     name: Password hash cracking on Windows
     description: 'Threat actors often extract valid credentials from target systems.
@@ -2045,7 +2045,7 @@ keys:
       "?d" --hash-type $number $hashes_file "file" '
     criticality: Medium
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0120%5D-Password-hash-cracking-on-Windows
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0120%5D-Password-hash-cracking-on-Windows
   - id: TVM0121
     name: Credential manipulation on remote Windows endpoint
     description: 'Threat actors can perform credential manipulation on a remote Windows
@@ -2065,7 +2065,7 @@ keys:
       LOCAL '
     criticality: Medium
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0121%5D-Credential-manipulation-on-remote-Windows-endpoint
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0121%5D-Credential-manipulation-on-remote-Windows-endpoint
   - id: TVM0122
     name: Windows credential dumping using DCSync
     description: 'The DCSync attack is a well-known credential dumping technique that
@@ -2105,7 +2105,7 @@ keys:
       dumping of hashes with Metaspoit:  dcsync_ntlm krbtgt dcsync krbtgt '
     criticality: High
     tlp: red
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0122%5D-Windows-credential-dumping-using-DCSync
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0122%5D-Windows-credential-dumping-using-DCSync
   - id: TVM0123
     name: Abnormal Windows service creation attempt
     description: 'A threat actor may attempt to create Windows services in order to
@@ -2119,14 +2119,14 @@ keys:
       For example  "WinHTTP Web Proxy Auto-Discovery" or  "TCP/IP NetBIOS Help" [CRN-01]  '
     criticality: Medium
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0123%5D-Abnormal-Windows-service-creation-attempt
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0123%5D-Abnormal-Windows-service-creation-attempt
   - id: TVM0124
     name: Deletion of canary tokens in cloud storage
     description: 'A threat actor may accidentally delete a canary token in cloud storage,
       or  may purposely delete it to avoid triggering it. '
     criticality: High
     tlp: amber+strict
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0124%5D-Deletion-of-canary-tokens-in-cloud-storage
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0124%5D-Deletion-of-canary-tokens-in-cloud-storage
   - id: TVM0125
     name: NTLM credentials dumping via SMB connection
     description: ' ### Attack vector related to Outlook vulnerability CVE-2023-23397  **key
@@ -2145,7 +2145,7 @@ keys:
       link in message body or in an attachment. '
     criticality: High
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0125%5D-NTLM-credentials-dumping-via-SMB-connection
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0125%5D-NTLM-credentials-dumping-via-SMB-connection
   - id: TVM0126
     name: Spearphishing Link
     description: 'Adversaries may send spearphishing emails with a malicious link
@@ -2163,7 +2163,7 @@ keys:
       or verify the receipt of an email (i.e. web bugs/web beacons). '
     criticality: Medium
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0126%5D-Spearphishing-Link
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0126%5D-Spearphishing-Link
   - id: TVM0127
     name: Hashicorp compromised vault admin account
     description: 'An attacker already inside the organisation may get credentials
@@ -2174,7 +2174,7 @@ keys:
       Vault platform. '
     criticality: Severe
     tlp: amber+strict
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0127%5D-Hashicorp-compromised-vault-admin-account
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0127%5D-Hashicorp-compromised-vault-admin-account
   - id: TVM0128
     name: malware to establish persistence on VMware ESXi
     description: 'Attacker may use a novel set of malware impacting VMware ESXi,  Linux
@@ -2205,7 +2205,7 @@ keys:
       on thesame host. '
     criticality: Severe
     tlp: amber
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0128%5D-malware-to-establish-persistence-on-VMware-ESXi
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0128%5D-malware-to-establish-persistence-on-VMware-ESXi
   - id: TVM0129
     name: Email with an extended MAPI property containing UNC path
     description: 'An attacker sends an email with an extended MAPI property, with
@@ -2218,7 +2218,7 @@ keys:
       with it in any way. '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0129%5D-Email-with-an-extended-MAPI-property-containing-UNC-path
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0129%5D-Email-with-an-extended-MAPI-property-containing-UNC-path
   - id: TVM0130
     name: Exposed private repositories
     description: 'Exposed repositories with sensitive information inside of them can
@@ -2240,7 +2240,7 @@ keys:
       human error or malicious insider intent. '
     criticality: Medium
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0130%5D-Exposed-private-repositories
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0130%5D-Exposed-private-repositories
   - id: TVM0131
     name: Direct poisoned pipeline execution
     description: 'An attacker with an existing access to a code repository could modify
@@ -2249,7 +2249,7 @@ keys:
       file essentialy the attacker can run those malicious commands on the build node. '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0131%5D-Direct-poisoned-pipeline-execution
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0131%5D-Direct-poisoned-pipeline-execution
   - id: TVM0132
     name: Indirect poisoned pipeline execution
     description: 'Several commands are run as part of the pipeline automated test
@@ -2259,7 +2259,7 @@ keys:
       and executed on the build nodes. '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0132%5D-Indirect-poisoned-pipeline-execution
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0132%5D-Indirect-poisoned-pipeline-execution
   - id: TVM0133
     name: Resource deletion
     description: 'An attacker with unauthorized access to CI/CD resources, repositories,
@@ -2269,7 +2269,7 @@ keys:
       of service. '
     criticality: Low
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0133%5D-Resource-deletion
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0133%5D-Resource-deletion
   - id: TVM0134
     name: Configured webhooks
     description: 'Attacker could use an exposed configured werbhook to bypass organization
@@ -2279,7 +2279,7 @@ keys:
       running old and  vulnerable software versions which could be exploited. '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0134%5D-Configured-webhooks
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0134%5D-Configured-webhooks
   - id: TVM0135
     name: Reconfigure branch protection
     description: 'Branch protection tools and mechanisms allow an organization to
@@ -2289,7 +2289,7 @@ keys:
       may lead to an introduction of malicious code into the environment. '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0135%5D-Reconfigure-branch-protection
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0135%5D-Reconfigure-branch-protection
   - id: TVM0136
     name: Spearphishing Attachment
     description: 'Spearphishing messages are often crafted using pernicious social
@@ -2321,7 +2321,7 @@ keys:
       the real file  extension with the file name. '
     criticality: Medium
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0136%5D-Spearphishing-Attachment
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0136%5D-Spearphishing-Attachment
   - id: TVM0137
     name: OneNote documents abuse for malware delivery
     description: 'While the message subjects and senders vary, nearly all campaigns
@@ -2336,7 +2336,7 @@ keys:
       malware. '
     criticality: Medium
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0137%5D-OneNote-documents-abuse-for-malware-delivery
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0137%5D-OneNote-documents-abuse-for-malware-delivery
   - id: TVM0138
     name: access to management plane of security, network, or endpoint management
       appliances
@@ -2382,7 +2382,7 @@ keys:
       against a limited number of customers.   '
     criticality: Severe
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0138%5D-access-to-management-plane-of-security%2C-network%2C-or-endpoint-management-appliances
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0138%5D-access-to-management-plane-of-security%2C-network%2C-or-endpoint-management-appliances
   - id: TVM0139
     name: Files retrieved via SMB connection
     description: ' ### The SMB Protocol SMB stands for Server Message Block. It is
@@ -2411,7 +2411,7 @@ keys:
       payloads, posing a severe risk to the overall security of the network. '
     criticality: High
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0139%5D-Files-retrieved-via-SMB-connection
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0139%5D-Files-retrieved-via-SMB-connection
   - id: TVM0140
     name: RTF file embedded in Office Documents to perform outbound connections
     description: 'A threat actor creates an office file, possibly from different type
@@ -2424,7 +2424,7 @@ keys:
       code as a second stage. '
     criticality: High
     tlp: amber+strict
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0140%5D-RTF-file-embedded-in-Office-Documents-to-perform-outbound-connections
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0140%5D-RTF-file-embedded-in-Office-Documents-to-perform-outbound-connections
   - id: TVM0141
     name: JavaScript Code execution over Rundll32
     description: 'From a security point of view, executing JavaScript through Rundll32
@@ -2443,7 +2443,7 @@ keys:
       writing any file on the file system. '
     criticality: Severe
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0141%5D-JavaScript-Code-execution-over-Rundll32
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0141%5D-JavaScript-Code-execution-over-Rundll32
   - id: TVM0142
     name: Abusing Office OLE Stream to launch scripts interpreters
     description: 'An OLE file can be seen as a mini file system or a Zip archive:  It
@@ -2457,7 +2457,7 @@ keys:
       load and launch various hosted file on a server. '
     criticality: High
     tlp: amber+strict
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0142%5D-Abusing-Office-OLE-Stream-to-launch-scripts-interpreters
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0142%5D-Abusing-Office-OLE-Stream-to-launch-scripts-interpreters
   - id: TVM0143
     name: DLL Execution over Rundll32
     description: 'Rundll32.exe is a powerful asset for adversaries to proxy execution
@@ -2473,7 +2473,7 @@ keys:
       to obtain credentials. '
     criticality: Severe
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0143%5D-DLL-Execution-over-Rundll32
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0143%5D-DLL-Execution-over-Rundll32
   - id: TVM0144
     name: Social engineering attack using Microsoft Teams
     description: 'Adversaries are using compromised Microsoft 365 tenants to create
@@ -2499,7 +2499,7 @@ keys:
       devices only. '
     criticality: Medium
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0144%5D-Social-engineering-attack-using-Microsoft-Teams
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0144%5D-Social-engineering-attack-using-Microsoft-Teams
   - id: TVM0145
     name: Lateral movement abusing Azure Cross-Tenant Synchronization
     description: 'When configuring CTS, an Azure source tenant will be synchronized
@@ -2515,7 +2515,7 @@ keys:
       threat actor to achieve lateral movement without requiring new user credentials. '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0145%5D-Lateral-movement-abusing-Azure-Cross-Tenant-Synchronization
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0145%5D-Lateral-movement-abusing-Azure-Cross-Tenant-Synchronization
   - id: TVM0146
     name: Sensitive data exfiltration over Synology DiskStation Manager
     description: 'Synology NAS is a multi-functional Network-Attached Storage server,
@@ -2536,7 +2536,7 @@ keys:
       exfiltration. '
     criticality: Medium
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0146%5D-Sensitive-data-exfiltration-over-Synology-DiskStation-Manager
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0146%5D-Sensitive-data-exfiltration-over-Synology-DiskStation-Manager
   - id: TVM0147
     name: Mobile device compromised by spyware app
     description: 'Earlier versions of spyware apps were installed on smartphones through
@@ -2560,7 +2560,7 @@ keys:
       without the permission or knowledge of the user.   '
     criticality: High
     tlp: amber
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0147%5D-Mobile-device-compromised-by-spyware-app
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0147%5D-Mobile-device-compromised-by-spyware-app
   - id: TVM0148
     name: Pass-the-hash on SMB network shares
     description: 'In a **Pass-the-Hash attack (PtH)**, Attackers may use offensive
@@ -2575,7 +2575,7 @@ keys:
       open or to execute. '
     criticality: High
     tlp: amber+strict
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0148%5D-Pass-the-hash-on-SMB-network-shares
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0148%5D-Pass-the-hash-on-SMB-network-shares
   - id: TVM0149
     name: Lateral movement using RDP
     description: 'Upon gaining foothold on a system (via stolen legitimate credentials,
@@ -2604,7 +2604,7 @@ keys:
       key management and authentication services. '
     criticality: High
     tlp: amber
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0149%5D-Lateral-movement-using-RDP
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0149%5D-Lateral-movement-using-RDP
   - id: TVM0150
     name: Reverse shell or remote session from compromised station
     description: 'A reverse shell is a technique that refers to a situation where
@@ -2626,7 +2626,7 @@ keys:
       according to their goals.   '
     criticality: High
     tlp: amber
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0150%5D-Reverse-shell-or-remote-session-from-compromised-station
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0150%5D-Reverse-shell-or-remote-session-from-compromised-station
   - id: TVM0151
     name: ACL removed from AWS S3 bucket
     description: 'The absence of an ACL within an AWS S3 bucket, or the creation of
@@ -2641,7 +2641,7 @@ keys:
       that the data is properly safeguarded.  '
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0151%5D-ACL-removed-from-AWS-S3-bucket
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0151%5D-ACL-removed-from-AWS-S3-bucket
   - id: TVM0152
     name: Malicious configuration profile delivered to mobile devices
     description: 'Configuration profiles are created with Apple iPhone Configuration
@@ -2666,7 +2666,7 @@ keys:
       into the  mobile devices. '
     criticality: High
     tlp: amber
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0152%5D-Malicious-configuration-profile-delivered-to-mobile-devices
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0152%5D-Malicious-configuration-profile-delivered-to-mobile-devices
   - id: TVM0153
     name: Tampering system or configuration on mobile devices
     description: Mobile phone tampering refers to the unauthorized modification of
@@ -2684,7 +2684,7 @@ keys:
       blocked for users.
     criticality: High
     tlp: amber
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0153%5D-Tampering-system-or-configuration-on-mobile-devices
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0153%5D-Tampering-system-or-configuration-on-mobile-devices
   - id: TVM0154
     name: Bruteforcing using Powershell via SMB
     description: The goal is to be able to mount a network restricted share '\\TARGET\Admin$'
@@ -2697,7 +2697,7 @@ keys:
       to avoid any massive attempts that might triggers security alerts.
     criticality: High
     tlp: green
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0154%5D-Bruteforcing-using-Powershell-via-SMB
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0154%5D-Bruteforcing-using-Powershell-via-SMB
   - id: TVM0155
     name: Move laterally with SMB by abusing WMI
     description: Windows management instrumentation (WMI) is a tool that is implemented
@@ -2716,7 +2716,7 @@ keys:
       named pipe is then used to move laterally with the protocol.
     criticality: High
     tlp: amber+strict
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0155%5D-Move-laterally-with-SMB-by-abusing-WMI
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0155%5D-Move-laterally-with-SMB-by-abusing-WMI
   - id: TVM0156
     name: Command execution with RPC over SMB
     description: 'In the dynamic landscape of cybersecurity, threat actors are wielding
@@ -2740,7 +2740,7 @@ keys:
       actors. '
     criticality: Medium
     tlp: amber+strict
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0156%5D-Command-execution-with-RPC-over-SMB
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0156%5D-Command-execution-with-RPC-over-SMB
   - id: TVM0157
     name: Externally controlled Azure credentials added to an Enterprise app or its
       SPN
@@ -2750,7 +2750,7 @@ keys:
       vector could be used for many other types of leverage. '
     criticality: Medium
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0157%5D-Externally-controlled-Azure-credentials-added-to-an-Enterprise-app-or-its-SPN
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0157%5D-Externally-controlled-Azure-credentials-added-to-an-Enterprise-app-or-its-SPN
   - id: TVM0158
     name: Anomalous data transfer from user devices to public network
     description: 'Anomalous data transfer refers to data transfer activity that significantly  deviates
@@ -2791,7 +2791,7 @@ keys:
       the affected system. '
     criticality: High
     tlp: amber
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0158%5D-Anomalous-data-transfer-from-user-devices-to-public-network
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0158%5D-Anomalous-data-transfer-from-user-devices-to-public-network
   - id: TVM0159
     name: Malicious HTML injection
     description: 'Just like cross-site scripting, an HTML injection happens when adversaries
@@ -2831,7 +2831,7 @@ keys:
       two hours of the initial breach. '
     criticality: High
     tlp: amber
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0159%5D-Malicious-HTML-injection
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0159%5D-Malicious-HTML-injection
   - id: TVM0160
     name: Use of DDOSia tool
     description: 'DDoSia is a Distributed Denial of Service (DDoS) attack toolkit,
@@ -2853,7 +2853,7 @@ keys:
       education platform created by the Ukrainian  government to face COVID restrictions. '
     criticality: High
     tlp: amber
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0160%5D-Use-of-DDOSia-tool
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0160%5D-Use-of-DDOSia-tool
   - id: TVM0161
     name: Command injection on web components of Ivanti Connect Secure appliances
     description: 'Attackers may manage to have access to an Ivanti Connect Secure
@@ -2865,7 +2865,7 @@ keys:
       or to move  laterally to other appliances or corporate resources. '
     criticality: Severe
     tlp: clear
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0161%5D-Command-injection-on-web-components-of-Ivanti-Connect-Secure-appliances
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0161%5D-Command-injection-on-web-components-of-Ivanti-Connect-Secure-appliances
   - id: TVM0162
     name: Abuse of web form to send spam emails
     description: 'A type of cyber attack in which adversaries exploits vulnerabilities
@@ -2888,7 +2888,7 @@ keys:
       executing hands-on-keyboard attacks. '
     criticality: High
     tlp: amber
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0162%5D-Abuse-of-web-form-to-send-spam-emails
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0162%5D-Abuse-of-web-form-to-send-spam-emails
   - id: TVM0163
     name: Conhost abuse to obfuscate command interpreters
     description: 'Adversaries may abuse utilities that allow for command execution
@@ -2907,4 +2907,4 @@ keys:
       hosting, allowing cryptocurrency payments, add further intricacy.  '
     criticality: High
     tlp: amber
-    link: https://git.s.cec.eu.int/catch/ec-tide/-/wikisCore\Engines\documentation\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0163%5D-Conhost-abuse-to-obfuscate-command-interpreters
+    link: Engines\documentation\wiki\Knowledge-GraphThreat-Vectors%E2%98%A3%EF%B8%8F-%5BTVM0163%5D-Conhost-abuse-to-obfuscate-command-interpreters

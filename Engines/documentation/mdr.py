@@ -30,6 +30,7 @@ from Engines.modules.documentation_components import (
 )
 from Engines.modules.tide import DataTide
 from Engines.modules.logs import log
+from Engines.modules.deployment import enabled_systems
 
 ROOT = Path(str(git.Repo(".", search_parent_directories=True).working_dir))
 
@@ -231,6 +232,14 @@ def documentation(mdr):
 
         table = pd.DataFrame(config_data).to_markdown(index=False)
 
+        if s not in enabled_systems():
+            system_name.append("[DISABLED]")
+            banner = "This system is not enabled in your System Configurations, "\
+                "this documentation is only informational"
+            if GLFM:
+                banner = f"[- {banner} -]"
+            table = banner + "\n\n" + table
+                
         fold = FOLD.format(system_name, table)
 
         configurations += fold

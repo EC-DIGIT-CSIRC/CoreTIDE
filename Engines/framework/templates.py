@@ -11,7 +11,8 @@ from Engines.modules.tide import DataTide
 
 # Configuration settings fetching routine
 CONFIG_INDEX = DataTide.Configurations.Index
-PATHS = DataTide.Configurations.Global.paths
+PATHS = DataTide.Configurations.Global.Paths.Index
+
 METASCHEMAS_FOLDER = Path(PATHS["metaschemas"])
 SUBSCHEMAS_FOLDER = Path(PATHS["subschemas"])
 RECOMPOSITION = DataTide.Configurations.Global.recomposition

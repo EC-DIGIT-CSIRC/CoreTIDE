@@ -9,9 +9,9 @@ import unicodedata
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 from Engines.modules.tide import DataTide
 
-RESOURCES = Path(DataTide.Configurations.Global.paths["resources"])
+RESOURCES = DataTide.Configurations.Global.Paths.Core.resources
 NIST_DATA = DataTide.Configurations.Resources.nist["data"]
-VOCABS_PATH = Path(DataTide.Configurations.Global.paths["vocabularies"])
+VOCABS_PATH = DataTide.Configurations.Global.Paths.Core.vocabularies
 
 nist_vocab = r"NIST Cybersecurity Framework.yaml"
 

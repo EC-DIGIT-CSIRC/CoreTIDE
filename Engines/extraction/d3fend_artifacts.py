@@ -9,13 +9,13 @@ sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 from Engines.modules.tide import DataTide
 
 
-RESOURCES = Path(DataTide.Configurations.Global.paths["resources"])
+RESOURCES = Path(DataTide.Configurations.Global.Paths.Core.resources)
 
 D3FEND_ONTOLOGY_PATH = DataTide.Configurations.Resources.d3fend["ontology"]
 D3FEND_COUNTERMEASURES_PATH = DataTide.Configurations.Resources.d3fend[
     "countermeasures"
 ]
-VOCABS_PATH = Path(DataTide.Configurations.Global.paths["vocabularies"])
+VOCABS_PATH = Path(DataTide.Configurations.Global.Paths.Core.vocabularies)
 # Used to create links to the artifact page
 DAOLINK = "https://d3fend.mitre.org/dao/artifact/"
 # Used by some artifacts "see also" entries

@@ -28,7 +28,7 @@ SPLUNK_IDENTIFIER = "splunk"
 SENTINEL_IDENTIFIER = "sentinel"
 CBC_IDENTIFIER = "carbonblackcloud"
 
-SYSTEMS_SCOPE = [SPLUNK_IDENTIFIER, SENTINEL_IDENTIFIER, CBC_IDENTIFIER]
+enabled_systems = [SPLUNK_IDENTIFIER, SENTINEL_IDENTIFIER, CBC_IDENTIFIER]
 
 TOKEN_SPACES = [
     "meta",
@@ -98,7 +98,7 @@ TEMPLATES_SYSTEMS = dict()
 
 # for s in CONFIG["systems"]:
 #    identifier = s["identifier"]
-#    if identifier in SYSTEMS_SCOPE:
+#    if identifier in enabled_systems:
 #        template_path = SUB_TEMPLATES_PATH / (s["name"] + " Template.yaml")
 #        TEMPLATES_SYSTEMS[identifier] = yaml.load(open(template_path, encoding='utf-8'))
 
@@ -179,10 +179,10 @@ def mdr_migrator(mdrv2):
     queries = dict()
     throttling_fields = list()
 
-    systems_scope = mdrv2["rule"]["alert"].keys()
+    enabled_systems = mdrv2["rule"]["alert"].keys()
     status = STATUS_MAPPING[mdrv2["status"]]
 
-    for sys in systems_scope:
+    for sys in enabled_systems:
         queries[sys] = mdrv2["rule"]["alert"][sys]
 
     detection_model = mdrv2.get("tags", {}).get("tidemec")
@@ -245,12 +245,12 @@ def mdr_migrator(mdrv2):
 
     mdrv3["configurations"] = {}
 
-    for sys in SYSTEMS_SCOPE:
-        if sys not in systems_scope:
+    for sys in enabled_systems:
+        if sys not in enabled_systems:
             mdrv3["configurations"][sys] = "blank"
             dynamic_comments.append(sys)
 
-    if "splunk" in systems_scope:
+    if "splunk" in enabled_systems:
         splunk_config = dict()
         splunk_config["status"] = status
         splunk_config["contributors"] = ["blank"]
@@ -312,7 +312,7 @@ def mdr_migrator(mdrv2):
 
         mdrv3["configurations"]["splunk"] = splunk_config
 
-    if "sentinel" in systems_scope:
+    if "sentinel" in enabled_systems:
         sentinel_config = dict()
         sentinel_config["status"] = status
         sentinel_config["contributors"] = ["blank"]
@@ -332,7 +332,7 @@ def mdr_migrator(mdrv2):
 
         mdrv3["configurations"]["sentinel"] = sentinel_config
 
-    if "carbonblackcloud" in systems_scope:
+    if "carbonblackcloud" in enabled_systems:
         cbc_config = dict()
         cbc_config["status"] = status
         cbc_config["contributors"] = ["blank"]

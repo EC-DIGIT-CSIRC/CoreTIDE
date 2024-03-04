@@ -4,6 +4,7 @@ import os
 import toml
 from pathlib import Path
 from collections.abc import MutableMapping as Map
+from typing import overload, Tuple
 
 
 def resolve_configurations() -> dict[str, dict]:
@@ -47,28 +48,41 @@ def resolve_configurations() -> dict[str, dict]:
 
         return config_index
 
-    PATHS = resolve_paths()
-    core_configs = fetch_configs(PATHS["configurations"])
+    ROOT = Path(str(git.Repo(".", search_parent_directories=True).working_dir))
+
+    # We need to hardcode these paths as they aer static, and must be 
+    # used as a final reference point to prevent circular executions 
+    CORE_CONFIGURATION_PATH = ROOT / "Configurations"
+    CUSTOM_CONFIGURATIONS_PATH = ROOT.parent / "Configurations"
+    
+    core_configs = fetch_configs(CORE_CONFIGURATION_PATH)
     unified_configs = (
         core_configs.copy()
     )  # Copy since deep merge modifies the dict in place
-    custom_configs = fetch_configs(PATHS["custom_configurations"])
+    custom_configs = fetch_configs(CUSTOM_CONFIGURATIONS_PATH)
 
     deep_merge(unified_configs, custom_configs)
 
     return unified_configs
 
-
-def resolve_paths() -> dict[str, Path]:
+@overload
+def resolve_paths(separate=True) -> Tuple[dict[str, Path], dict[str, Path]]:
+    ...
+def resolve_paths(separate=False) -> dict[str, Path]:
     ROOT = Path(str(git.Repo(".", search_parent_directories=True).working_dir))
-    TIDE_CONFIG = toml.load(open(ROOT / "Configurations/global.toml", encoding="utf-8"))
+    # Fetch configs, as paths may have been modified by the custom config
+    CONFIGS = resolve_configurations()
+    TIDE_CONFIG = CONFIGS["global"]
 
     TIDE_PATHS = {
         k: (ROOT.parent / path) for k, path in TIDE_CONFIG["paths"]["tide"].items()
     }
     CORE_PATHS = {k: (ROOT / path) for k, path in TIDE_CONFIG["paths"]["core"].items()}
 
-    return TIDE_PATHS | CORE_PATHS
+    if separate:
+        return TIDE_PATHS, CORE_PATHS
+    else:
+        return TIDE_PATHS | CORE_PATHS
 
 
 def safe_file_name(string: str, safe_mode: bool = True) -> str:
@@ -105,3 +119,8 @@ def safe_file_name(string: str, safe_mode: bool = True) -> str:
                     cleaned_string += char
 
     return cleaned_string
+
+import json 
+
+with open("config_out.json", "w+") as DEBUG:
+    json.dump(resolve_configurations(), DEBUG, indent=4)
