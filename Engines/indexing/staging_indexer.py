@@ -37,13 +37,7 @@ print("\n ⚙️" + SCRIPT_DESCRIPTION + "\n")
 log("TITLE", "Staging Index Reconcilier")
 log("INFO", "Loads a version of the index which adds data from mdr in staging.")
 
-if DEPLOYMENT_PLAN == "STAGING":
-    mdr_to_index = modified_mdr_files("STAGING")
-else:
-    print(
-        "🛑 Aborting, this job should only be executed in a Staging Deployment context"
-    )
-    exit()
+mdr_to_index = modified_mdr_files("STAGING")
 
 if len(mdr_to_index) == 0:  # In case of no deployments possible
     try:
