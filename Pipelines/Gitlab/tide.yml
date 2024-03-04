@@ -8,9 +8,9 @@ stages:
   - 🚀 Deployment
 
 include: 
-  - local: '/Pipeline/Gitlab/modules/reporting.yml'
-  - local: '/Pipeline/Gitlab/modules/mutation.yml'
-  - local: '/Pipeline/Gitlab/modules/validation.yml'
-  - local: '/Pipeline/Gitlab/modules/documentation.yml'
-  - local: '/Pipeline/Gitlab/modules/framework.yml'
-  - local: '/Pipeline/Gitlab/modules/deployment.yml'
+  - local: '/Pipelines/Gitlab/modules/reporting.yml'
+  - local: '/Pipelines/Gitlab/modules/mutation.yml'
+  - local: '/Pipelines/Gitlab/modules/validation.yml'
+  - local: '/Pipelines/Gitlab/modules/documentation.yml'
+  - local: '/Pipelines/Gitlab/modules/framework.yml'
+  - local: '/Pipelines/Gitlab/modules/deployment.yml'
