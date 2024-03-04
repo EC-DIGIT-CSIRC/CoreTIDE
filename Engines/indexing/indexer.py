@@ -19,7 +19,8 @@ def indexer(write_index=False) -> dict:
     
     TIDE_CONFIG = RESOLVED_CONFIGURATIONS["global"]
     
-    
+    DATA_FIELD = TIDE_CONFIG["data_fields"]
+
     RAW_TIDE_PATHS = TIDE_CONFIG["paths"]["tide"]
     RAW_CORE_PATHS = TIDE_CONFIG["paths"]["core"]
     RAW_PATHS = RAW_CORE_PATHS | RAW_TIDE_PATHS
@@ -39,7 +40,6 @@ def indexer(write_index=False) -> dict:
     TEMPLATES_PATH = PATHS["templates"]
     TEMPLATES = TIDE_CONFIG["templates"]
     LOOKUPS_PATH = PATHS["lookups"]
-    TIDE_INDEXES_PATH = PATHS["tide_indexes"]
 
     OUTPUT_PATH = PATHS["index_output"]
     # Controls whether the index should keep in memory or export to a file
@@ -74,10 +74,9 @@ def indexer(write_index=False) -> dict:
     
     # Data structures like the vocabularies, but need to be
     # indexed from different locations
-    VOCAB_LIKE_INDEXES = [VOCABULARIES_PATH, TIDE_INDEXES_PATH]
     
     voc_index = dict()
-    for folder in VOCAB_LIKE_INDEXES:
+    for folder in VOCABULARIES_PATH:
         for voc_file in os.listdir(folder):
             obj_counter += 1
 
@@ -223,6 +222,12 @@ def indexer(write_index=False) -> dict:
             models_index[meta_name] = model_cat_index
 
     index["models"] = models_index
+
+    # Indexing model index
+    tide_index_models = dict()
+    #for model_type in models_index:
+    #    tide_index_model_type = dict()
+    #    for 
 
     # Lookups indexer
 
