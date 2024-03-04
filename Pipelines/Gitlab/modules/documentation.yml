@@ -8,7 +8,7 @@
     - git clone $TIDE_WIKI_ACCESS
   
     # Generate index. Stores a copy in wiki for Staging documentation
-    - cd $TIDE_WIKI/$TIDE_CORE_REPO/Engines/indexing/
+    - cd /Engines/indexing/
     - export GENERATE_INDEX_FILE=True
     - python ./indexer.py # Index generates in the root of the repo
     - cd ../../ #Back within the Core Root directory
