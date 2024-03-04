@@ -55,7 +55,7 @@
   script:
     - git rebase origin/$CI_DEFAULT_BRANCH #Allows to pull latest mutation if there are
     - cd $TIDE_CORE_REPO/Orchestration/
-    - python lookups.py
+    - python deploy_lookups.py
   rules:
     - if: $TIDE_DEPLOYMENT == "DISABLED"
       when: never
