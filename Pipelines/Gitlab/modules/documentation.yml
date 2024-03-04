@@ -27,6 +27,7 @@
     - cd ../../
     - cp -fr wiki/. ../ #Copy content of wiki to top level directory
     - git add -A
+    - rm -rf $TIDE_CORE_ACCESS #Delete injected Core
     #Graceful exit when there is nothing to commit
     - if ! git diff-index --quiet HEAD; then
     -   git commit -m "$CI_COMMIT_MESSAGE"
@@ -54,19 +55,13 @@
     # Inject Index and CoreTIDE into the wiki for generation
     - cp -rf stg_index.json ./$TIDE_WIKI/stg_index.json
     - cd $TIDE_WIKI
-    # If Core repo does not exist, clone, else pull
-    - if [ ! -d $LOCALREPO_VC_DIR ]
-    -   then
-    -       git clone $TIDE_CORE_ACCESS
-    -   else
-    -       cd $LOCALREPO
-    -       git pull $TIDE_CORE_ACCESS
-    -       cd ..
-    -   fi    
+    - git clone $TIDE_CORE_ACCESS
+
     - cd $TIDE_CORE_REPO/Orchestration
     - python document.py
     - cd ../../
     - cp -fr wiki/. ../ #Copy content of wiki to top level directory
+    - rm -rf $TIDE_CORE_ACCESS #Delete injected Core
     - git add -A
     #Graceful exit when there is nothing to commit
     - if ! git diff-index --quiet HEAD; then

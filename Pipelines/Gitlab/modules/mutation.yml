@@ -5,6 +5,7 @@
   - python mutate.py
   - cd ../../ #Back in Tide Repo
   - pwd
+  - rm -rf $TIDE_CORE_REPO #Delete injected Core
   - git add -A
   - if ! git diff-index --quiet HEAD; then
   -   git commit -m "[Mutated] $CI_COMMIT_MESSAGE"
