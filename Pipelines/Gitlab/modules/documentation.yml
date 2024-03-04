@@ -1,7 +1,7 @@
 🗃️ Documentation Toolchain:
   stage: 📖 Documentation
   script:
-    # Clone Wiki in injected core > Copy Stg_index out for computation
+    # Clone Wiki in injected core > Copy Index in for future STG computation
     # > Paste the output to the Wiki 
     - git rebase origin/$CI_DEFAULT_BRANCH #Allows to pull latest mutation if there are
     - cd $TIDE_CORE_REPO
@@ -46,22 +46,37 @@
 🚧 MDR Staging Documentation:
   stage: 📖 Documentation
   script:
-    # Generate Index in new location
-    - cd $TIDE_CORE_REPO/Engines/indexing/
-    - export GENERATE_INDEX_FILE=True
-    - python ./staging_indexer.py #Staging Index generates in the root of the repo
-    - cd ../../ #Back within the Core Root directory
-    - echo $TIDE_WIKI
+    - git rebase origin/$CI_DEFAULT_BRANCH #Allows to pull latest mutation if there are
+    - cd $TIDE_CORE_REPO
     - git clone $TIDE_WIKI_ACCESS
-    # Inject Index and CoreTIDE into the wiki for generation
-    - cp -rf stg_index.json ./$TIDE_WIKI/stg_index.json
-    - cd $TIDE_WIKI
-    - git clone $TIDE_CORE_ACCESS
+    - cp $TIDE_WIKI/index.json 
+    - pwd 
 
-    - cd $TIDE_CORE_REPO/Orchestration
+    # Extract the staging index to Core Root for reconciliation
+    - if [ -e $TIDE_WIKI/stg_index.json ]
+    -  then cp $TIDE_WIKI/stg_index.json ./
+    - fi
+
+    # Extract the staging index to Core Root for reconciliation
+    - if [ -e $TIDE_WIKI/index.json ]
+    -  then cp $TIDE_WIKI/index.json ./
+    - fi
+
+    # Import staging index, run staging_indexer to update it, copy
+    # it back into the wiki for future computations
+    - cd Engines/indexing/
+    - export GENERATE_INDEX_FILE=True
+    - python ./staging_indexer.py # Index generates in the root of the repo
+    - cd ../../ #Back within the Core Root directory
+    - cp stg_index.json $TIDE_WIKI/
+
+    - ls -lah
+    # Execute documentation toolchain
+    - cd Orchestration/
     - python document.py
-    - cd ../../
-    - cp -fr wiki/. ../ #Copy content of wiki to top level directory
+    - cd ../ #Back within the Core Root directory
+    - cp -fr wiki/. ../$TIDE_WIKI #Copy content of wiki to top level directory
+    - cd $TIDE_WIKI
     - git add -A
     #Graceful exit when there is nothing to commit
     - if ! git diff-index --quiet HEAD; then
@@ -69,6 +84,8 @@
     -   git rebase
     -   git push $TIDE_WIKI_ACCESS
     - fi
+    - cd ../ #Back if Tide Repo Root
+    - rm -rf $TIDE_CORE_REPO # Remove injected Core
   rules:
     - if: '$CI_MERGE_REQUEST_LABELS =~ /🛑 Do Not Deploy/'
       when: never
