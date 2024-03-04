@@ -138,7 +138,7 @@ class IndexUtils:
         if (glfm := os.environ.get("DOCUMENTATION_TYPE")) == "GLFM":
             documentation_type = glfm
             raw_md_doc_target = False
-            glfm_doc_targvet = True
+            glfm_doc_target = True
             print("🦊 Configured to use Gitlab Flavored Markdown")
 
         else:

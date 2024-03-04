@@ -24,10 +24,10 @@ from Engines.modules.deployment import fetch_config_envvar, Proxy
 from Engines.modules.logs import log
 from Engines.modules.tide import DataTide
 
-# from Engines.modules.plugins import DeployMDR
+from Engines.modules.plugins import DeployMDR
 
 
-class SplunkDeploy:
+class SplunkDeploy(DeployMDR):
 
     def __init__(self):
 
@@ -452,6 +452,3 @@ class SplunkDeploy:
 
 def declare():
     return SplunkDeploy()
-
-
-SplunkDeploy().deploy([])
