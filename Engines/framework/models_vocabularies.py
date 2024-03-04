@@ -10,8 +10,9 @@ sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.modules.logs import log
 from Engines.modules.tide import DataTide
+from Engines.templates.tide_indexes import fetch_tide_index_template
 
-VOCABS_FOLDER = Path(DataTide.Configurations.Global.Paths.Core.vocabularies)
+TIDE_INDEXES = Path(DataTide.Configurations.Global.Paths.Tide.tide_indexes)
 ICONS = DataTide.Configurations.Documentation.icons
 WIKI_PATH = (
     str(DataTide.Configurations.Documentation.models_docs_folder)
@@ -100,53 +101,59 @@ def run():
     for model in (n := DataTide.Configurations.Global.models_vocabularies):
 
         output_file_name = n[model]
-        out_file_path = VOCABS_FOLDER / output_file_name
+        out_file_path = TIDE_INDEXES / output_file_name
         keys = []
-
-        # Edge case : for actors specifically it is often possible that no
-        # attribution is possible, but it needs to be put full verbose rather than
-        # making actors an optional field.
-        if output_file_name == "Threat Actors.yaml":
-            unknown_field = {}
-            unknown_field["id"] = "Unknown"
-            unknown_field["name"] = "Field to be used when no attribution is possible"
-            keys.append(unknown_field)
 
         # Loops through every file in the current model folder
         for object in (i := DataTide.Models.Index[model]):
             output = gen_lib_model_keys(i[object], model_type=model)
             keys.append(output)
 
-        # Updating the keys to the output file, as designated by the
-        # folders_to_lib_file dictionary for the current folder.
-        out_file_body = yaml.safe_load(
-            open(out_file_path, encoding="utf-8", errors="ignore")
-        )
-
-        # bdr can be referenced by MDR alongside CDMs
         if model == "bdr":
-            out_file_body["keys"] += keys
+            cdm_file = yaml.safe_load(open(out_file_path, "r", encoding="utf-8"))
+            cdm_file["keys"] += keys
+            # Reordering keys as per standard to improve readibility
+            cdm_file = OrderedDict(cdm_file)
+            key_order = ["name", "field", "model", "keys"]
+            for k in key_order:
+                cdm_file.move_to_end(k)
+            cdm_file = dict(cdm_file)
+            log("INFO", "Writing vocabulary entry for model type", model)
+            from pprint import pprint
+            pprint(cdm_file)
+            with open(out_file_path, "w+", encoding="utf-8") as cdm_bdr_index:
+                yaml.dump(
+                    cdm_file,
+                    cdm_bdr_index,
+                    sort_keys=False,
+                    Dumper=IndentFullDumper,
+                    allow_unicode=True,
+                    )
+
         else:
-            out_file_body["keys"] = keys
+            # Updating the keys to the output file, as designated by the
+            # folders_to_lib_file dictionary for the current folder.
+            tide_index = fetch_tide_index_template(model)
+            tide_index["keys"] = keys
 
-        # Reordering keys as per standard to improve readibility
-        out_file_body = OrderedDict(out_file_body)
-        key_order = ["name", "field", "model", "keys"]
-        for k in key_order:
-            out_file_body.move_to_end(k)
+            # Reordering keys as per standard to improve readibility
+            tide_index = OrderedDict(tide_index)
+            key_order = ["name", "field", "model", "keys"]
+            for k in key_order:
+                tide_index.move_to_end(k)
 
-        ordered_output = dict(out_file_body)
+            ordered_output = dict(tide_index)
 
-        log("INFO", "Writing vocabulary entry for model type", model)
-        # Writes the file
-        with open(out_file_path, "w+", encoding="utf-8") as output:
-            yaml.dump(
-                ordered_output,
-                output,
-                sort_keys=False,
-                Dumper=IndentFullDumper,
-                allow_unicode=True,
-            )
+            log("INFO", "Writing vocabulary entry for model type", model)
+            # Writes the file
+            with open(out_file_path, "w+", encoding="utf-8") as output:
+                yaml.dump(
+                    ordered_output,
+                    output,
+                    sort_keys=False,
+                    Dumper=IndentFullDumper,
+                    allow_unicode=True,
+                )
 
     log("SUCCESS", "Finished indexing all models as vocabularies")
 

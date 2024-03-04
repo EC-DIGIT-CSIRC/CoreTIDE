@@ -29,7 +29,7 @@ def indexer(write_index=False) -> dict:
     
     log("DEBUG", "Loaded all paths")
     pprint(PATHS)
-    VOCAB_PATH = PATHS["vocabularies"]
+    VOCABULARIES_PATH = PATHS["vocabularies"]
     METASCHEMA_PATH = PATHS["metaschemas"]
     METASCHEMAS = TIDE_CONFIG["metaschemas"]
     JSONSCHEMAS_PATH = PATHS["json_schemas"]
@@ -40,6 +40,7 @@ def indexer(write_index=False) -> dict:
     TEMPLATES_PATH = PATHS["templates"]
     TEMPLATES = TIDE_CONFIG["templates"]
     LOOKUPS_PATH = PATHS["lookups"]
+    TIDE_INDEXES_PATH = PATHS["tide_indexes"]
 
     OUTPUT_PATH = PATHS["index_output"]
     # Controls whether the index should keep in memory or export to a file
@@ -71,30 +72,34 @@ def indexer(write_index=False) -> dict:
 
 
     print("📒 Indexing Vocabularies...")
-
+    
+    # Data structures like the vocabularies, but need to be
+    # indexed from different locations
+    VOCAB_LIKE_INDEXES = [VOCABULARIES_PATH, TIDE_INDEXES_PATH]
+    
     voc_index = dict()
+    for folder in VOCAB_LIKE_INDEXES:
+        for voc_file in os.listdir(folder):
+            obj_counter += 1
 
-    for voc_file in os.listdir(VOCAB_PATH):
-        obj_counter += 1
+            voc_body = yaml.safe_load(open(folder / voc_file, encoding="utf-8"))
 
-        voc_body = yaml.safe_load(open(VOCAB_PATH / voc_file, encoding="utf-8"))
+            voc_meta = {i: voc_body[i] for i in voc_body if i not in ["field", "keys"]}
+            voc_data = dict()
+            for k in voc_body["keys"]:
+                # If model modifier, we index using the id instead since we want to reference it.
+                if voc_meta.get("model"):
+                    voc_name = k.get("id")
+                    voc_data[voc_name] = {i: k[i] for i in k if i != "id"}
+                else:
+                    voc_name = k.get("name")
+                    voc_data[voc_name] = {i: k[i] for i in k if i != "name"}
 
-        voc_meta = {i: voc_body[i] for i in voc_body if i not in ["field", "keys"]}
-        voc_data = dict()
-        for k in voc_body["keys"]:
-            # If model modifier, we index using the id instead since we want to reference it.
-            if voc_meta.get("model"):
-                voc_name = k.get("id")
-                voc_data[voc_name] = {i: k[i] for i in k if i != "id"}
-            else:
-                voc_name = k.get("name")
-                voc_data[voc_name] = {i: k[i] for i in k if i != "name"}
+            voc_entry = dict()
+            voc_entry["metadata"] = voc_meta
+            voc_entry["entries"] = voc_data
 
-        voc_entry = dict()
-        voc_entry["metadata"] = voc_meta
-        voc_entry["entries"] = voc_data
-
-        voc_index[voc_body["field"]] = voc_entry
+            voc_index[voc_body["field"]] = voc_entry
 
     index["vocabs"] = voc_index
 

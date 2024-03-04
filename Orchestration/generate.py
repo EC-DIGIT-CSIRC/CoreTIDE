@@ -5,6 +5,7 @@ import sys
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.modules.logs import log, Colors, tidemec_intro
+from Engines.modules.tide import IndexTide
 from Engines.framework import (
     models_vocabularies,
     reports_vocabulary,
@@ -29,8 +30,16 @@ riptide = rf"""
 
 print(riptide)
 
+log("TITLE", "TIDE Indexes Generation")
+log(
+    "INFO",
+    "Generate entries in Tide namespace containing model data supportive of other generation routines",
+)
 models_vocabularies.run()
 reports_vocabulary.run()
+log("TITLE", "Re-indexation")
+log("INFO", "Fetch the latest model data after Tide Indexes were generated")
+IndexTide()._cache_index(reset=True)
 json_schemas.run()
 templates.run()
 vscode_snippets.run()

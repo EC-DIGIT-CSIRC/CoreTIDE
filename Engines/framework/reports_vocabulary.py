@@ -10,16 +10,16 @@ sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.modules.logs import log
 from Engines.modules.tide import DataTide
+from Engines.templates.tide_indexes import fetch_tide_index_template
 
-VOCABS_PATH = DataTide.Configurations.Global.Paths.Core.vocabularies
+TIDE_INDEXES = DataTide.Configurations.Global.Paths.Tide.tide_indexes
 REPORTS_FOLDER = DataTide.Configurations.Global.Paths.Tide.reports
-REPORTS_VOCAB = VOCABS_PATH / "Reports.yaml"
+REPORTS_VOCAB = TIDE_INDEXES / "Reports.yaml"
 
 class IndentFullDumper(yaml.Dumper):
 
     def increase_indent(self, flow=False, indentless=False):
         return super(IndentFullDumper, self).increase_indent(flow, False)
-
 
 def pdf_description(pdf: Path) -> str:
 
@@ -71,7 +71,7 @@ def run():
 
     print(report_index)
 
-    content = yaml.safe_load(open(REPORTS_VOCAB, "r", encoding="utf-8"))
+    content = fetch_tide_index_template("report")
     content["keys"] = report_index
     with open(REPORTS_VOCAB, "w+", encoding="utf-8") as export:
         yaml.dump(

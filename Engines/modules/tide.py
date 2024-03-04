@@ -361,6 +361,7 @@ class DataTide:
                     snippet_file = Index["snippet_file"]
                     json_schemas = Index["json_schemas"]
                     templates = Index["templates"]
+                    tide_indexes = Index["tide_indexes"]
 
         @dataclass(frozen=True)
         class Systems:
