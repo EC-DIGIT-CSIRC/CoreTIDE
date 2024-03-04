@@ -5,19 +5,21 @@ from pathlib import Path
 import yaml
 import toml
 
+### TO REMOVE FROM OPEN SOURCE
 
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.modules.logs import log
-
+from Engines.modules.files import resolve_paths
 
 ROOT = Path(str(git.Repo(".", search_parent_directories=True).working_dir))
 
-CONFIG = toml.load(open(ROOT / "Configurations/global.toml", encoding="utf-8"))
+PATHS = resolve_paths()
 MODELS_SCOPE = ["tam", "tvm", "cdm", "bdr", "mdr"]
 MODELS_FOLDER = dict()
+
 for model in MODELS_SCOPE:
-    MODELS_FOLDER[model] = ROOT / CONFIG["paths"]["tide"][model]
+    MODELS_FOLDER[model] = ROOT / PATHS["tide"][model]
 PRIVATE_DOMAIN = "s.cec.eu.int"
 REF_TEMPLATE = """#references:
   #public:

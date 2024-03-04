@@ -7,17 +7,14 @@ from pathlib import Path
 import yaml
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-sys.dont_write_bytecode = True  # Prevents pycache
 
 from Engines.modules.logs import log
-from Engines.modules.files import safe_file_name
+from Engines.modules.files import safe_file_name, resolve_configurations, resolve_paths
 
 ROOT = Path(str(git.Repo(".", search_parent_directories=True).working_dir))
-CONFIG = toml.load(open(ROOT / "Configurations/global.toml", encoding="utf-8"))
-MODEL_TYPES = CONFIG["models"]
-
-MODEL_PATHS = {model: ROOT / CONFIG["paths"]["tide"][model] for model in MODEL_TYPES}
-
+CONFIGURATIONS = resolve_configurations()
+MODEL_PATHS = resolve_paths()["tide"]
+MODELS_TYPES = CONFIGURATIONS["global"]["models"]
 
 def assign_id(file_path, new_id):
 
@@ -45,8 +42,8 @@ def run():
         " ID if missing (non-MDR objects only)",
     )
 
-    MODEL_TYPES.remove("mdr")
-    for model in MODEL_TYPES:
+    MODELS_TYPES.remove("mdr")
+    for model in MODELS_TYPES:
         highest_id = 0
         files_to_assign = []
         for file in sorted(os.listdir(MODEL_PATHS[model])):

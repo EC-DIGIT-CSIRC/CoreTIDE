@@ -7,12 +7,11 @@ import sys
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.modules.logs import log
+from Engines.modules.files import resolve_paths
 
 
-ROOT = Path(str(git.Repo(".", search_parent_directories=True).working_dir))
-
-CONFIG = toml.load(open(ROOT / "Configurations/global.toml", encoding="utf-8"))
-REPORTS_FOLDER = ROOT / CONFIG["paths"]["tide"]["reports"]
+PATHS = resolve_paths()
+REPORTS_FOLDER = PATHS["tide"]["reports"]
 
 DEFAULT_TLP_LEVEL = "[TLP AMBER+STRICT]"
 

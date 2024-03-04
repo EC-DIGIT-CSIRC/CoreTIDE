@@ -8,6 +8,7 @@ from pathlib import Path
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.modules.logs import log
+from Engines.modules.files import resolve_paths
 
 removal = """
 #validation:
@@ -19,8 +20,8 @@ removal = """
 
 ROOT = Path(str(git.Repo(".", search_parent_directories=True).working_dir))
 
-CONFIG = toml.load(open(ROOT / "Configurations/global.toml", encoding="utf-8"))
-CDM_FOLDER = ROOT / CONFIG["paths"]["tide"]["cdm"]
+PATHS = resolve_paths()
+CDM_FOLDER = PATHS["tide"]["cdm"]
 
 
 def run():

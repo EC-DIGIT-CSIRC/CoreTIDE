@@ -8,21 +8,21 @@ import ast
 from pathlib import Path
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-sys.dont_write_bytecode = True  # Prevents pycache
 
 from Engines.modules.logs import log
+from Engines.modules.files import resolve_configurations, resolve_paths
 
 ROOT = Path(str(git.Repo(".", search_parent_directories=True).working_dir))
 
-CONFIG = toml.load(open(ROOT / "Configurations/global.toml", encoding="utf-8"))
-DEPLOYMENT_CONFIG = toml.load(
-    open(ROOT / "Configurations/deployment.toml", encoding="utf-8")
-)
+CONFIGURATIONS = resolve_configurations()
+PATHS = resolve_paths()
+
+DEPLOYMENT_CONFIG = CONFIGURATIONS["deployment"]
 PRODUCTION_STATUSES = DEPLOYMENT_CONFIG["status"]["production"]
 PROMOTION_ENABLED = DEPLOYMENT_CONFIG["promotion"].get("enabled")
 PROMOTION_TARGET = DEPLOYMENT_CONFIG["promotion"].get("promotion_target")
 STATUS_VOCAB = yaml.safe_load(
-    open(ROOT / CONFIG["paths"]["core"]["vocabularies"] / "MDR Status.yaml", encoding="utf-8")
+    open(PATHS["core"]["vocabularies"] / "MDR Status.yaml", encoding="utf-8")
 )
 VALID_STATUSES = [k["id"] for k in STATUS_VOCAB["keys"]]
 
@@ -75,7 +75,7 @@ def run():
             exit()
 
         if DEBUG:
-            MDR_FOLDER = ROOT / CONFIG["paths"]["tide"]["mdr"]
+            MDR_FOLDER = ROOT / PATHS["tide"]["mdr"]
             deployment = [MDR_FOLDER / mdr for mdr in sorted(os.listdir(MDR_FOLDER))]
 
         else:

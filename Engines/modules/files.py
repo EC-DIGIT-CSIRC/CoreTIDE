@@ -8,6 +8,12 @@ from typing import overload, Tuple
 
 
 def resolve_configurations() -> dict[str, dict]:
+    """
+    Interface to provide a single point of truth for all configurations in the
+    Tide infrastructure. Custom configurations at the top level are seeked and merged
+    into the base configurations using a deep merge algorithm.
+    """
+    
     def deep_merge(source_dict, merge_dict):
         """
         Recursive dict merge. Mitigation for dict.update() which will not resolve
@@ -69,6 +75,12 @@ def resolve_configurations() -> dict[str, dict]:
 def resolve_paths(separate=True) -> Tuple[dict[str, Path], dict[str, Path]]:
     ...
 def resolve_paths(separate=False) -> dict[str, Path]:
+    """
+    Interface to provide absolute paths from configurations, after reconciling the
+    them. Tide Paths are directed at the top level instance into which Tide
+    is injected. Core Paths are internal paths to the Tide repo.
+    """
+    
     ROOT = Path(str(git.Repo(".", search_parent_directories=True).working_dir))
     # Fetch configs, as paths may have been modified by the custom config
     CONFIGS = resolve_configurations()
