@@ -10,6 +10,8 @@
     - cd ../../../ #Back within the Repo Root directory
     - echo $TIDE_WIKI
     - git clone $TIDE_WIKI_ACCESS
+    - pwd
+    - ls -lah
     # Inject Index and CoreTIDE into the wiki for generation
     - cp -rf index.json ./$TIDE_WIKI/index.json
     - cd $TIDE_WIKI
