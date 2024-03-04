@@ -11,7 +11,7 @@ from Engines.modules.files import resolve_paths
 
 
 PATHS = resolve_paths()
-REPORTS_FOLDER = PATHS["tide"]["reports"]
+REPORTS_FOLDER = PATHS["reports"]
 
 DEFAULT_TLP_LEVEL = "[TLP AMBER+STRICT]"
 

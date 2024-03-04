@@ -22,7 +22,7 @@ PRODUCTION_STATUSES = DEPLOYMENT_CONFIG["status"]["production"]
 PROMOTION_ENABLED = DEPLOYMENT_CONFIG["promotion"].get("enabled")
 PROMOTION_TARGET = DEPLOYMENT_CONFIG["promotion"].get("promotion_target")
 STATUS_VOCAB = yaml.safe_load(
-    open(PATHS["core"]["vocabularies"] / "MDR Status.yaml", encoding="utf-8")
+    open(PATHS["vocabularies"] / "MDR Status.yaml", encoding="utf-8")
 )
 VALID_STATUSES = [k["id"] for k in STATUS_VOCAB["keys"]]
 
@@ -75,7 +75,7 @@ def run():
             exit()
 
         if DEBUG:
-            MDR_FOLDER = ROOT / PATHS["tide"]["mdr"]
+            MDR_FOLDER = ROOT / PATHS["mdr"]
             deployment = [MDR_FOLDER / mdr for mdr in sorted(os.listdir(MDR_FOLDER))]
 
         else:

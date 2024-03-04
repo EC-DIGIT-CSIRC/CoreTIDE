@@ -79,6 +79,8 @@ def resolve_paths(separate=False) -> dict[str, Path]:
     Interface to provide absolute paths from configurations, after reconciling the
     them. Tide Paths are directed at the top level instance into which Tide
     is injected. Core Paths are internal paths to the Tide repo.
+
+    When `separate=False`, returns a flattened dict of all paths for easier consumption
     """
     
     ROOT = Path(str(git.Repo(".", search_parent_directories=True).working_dir))

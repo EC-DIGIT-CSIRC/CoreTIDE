@@ -21,7 +21,7 @@ removal = """
 ROOT = Path(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 PATHS = resolve_paths()
-CDM_FOLDER = PATHS["tide"]["cdm"]
+CDM_FOLDER = PATHS["cdm"]
 
 
 def run():

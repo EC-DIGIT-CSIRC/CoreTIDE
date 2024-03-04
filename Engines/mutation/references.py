@@ -19,7 +19,7 @@ MODELS_SCOPE = ["tam", "tvm", "cdm", "bdr", "mdr"]
 MODELS_FOLDER = dict()
 
 for model in MODELS_SCOPE:
-    MODELS_FOLDER[model] = ROOT / PATHS["tide"][model]
+    MODELS_FOLDER[model] = PATHS["tide"][model]
 PRIVATE_DOMAIN = "s.cec.eu.int"
 REF_TEMPLATE = """#references:
   #public:
