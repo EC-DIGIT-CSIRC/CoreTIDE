@@ -49,7 +49,7 @@ DOC_TITLES = DOCUMENTATION_CONFIG.titles
 VOCABS_DOCS = PATHS_CONFIG["vocabularies_docs"]
 SKIP_VOCABS = DOCUMENTATION_CONFIG.skip_vocabularies
 WIKI_PATH = PATHS_CONFIG["wiki_docs_folder"]
-OUT_PATH = WIKI_PATH / "_sidebar.md"
+OUT_PATH = Path(WIKI_PATH) / "_sidebar.md"
 
 HTML_FOLDABLE = """<details><summary>{cat_icon}{category}</summary>
 
