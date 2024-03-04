@@ -52,8 +52,8 @@
     - pwd 
 
     # Extract the staging index to Core Root for reconciliation
-    - if [ -e $TIDE_WIKI/stg_index.json ]
-    -  then cp $TIDE_WIKI/stg_index.json ./
+    - if [ -e $TIDE_WIKI/staging_index.json ]
+    -  then cp $TIDE_WIKI/staging_index.json ./
     - fi
 
     # Extract the staging index to Core Root for reconciliation
@@ -67,7 +67,7 @@
     - export GENERATE_INDEX_FILE=True
     - python ./staging_indexer.py # Index generates in the root of the repo
     - cd ../../ #Back within the Core Root directory
-    - cp stg_index.json $TIDE_WIKI/
+    - cp staging_index.json $TIDE_WIKI/
 
     - ls -lah
     # Execute documentation toolchain
