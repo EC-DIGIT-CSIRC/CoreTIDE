@@ -16,7 +16,6 @@ from Engines.modules.documentation import (
     name_subschema_doc,
 )
 from Engines.modules.files import safe_file_name
-from Engines.modules.deployment import enabled_lookup_systems
 from Engines.modules.tide import DataTide
 from Engines.modules.logs import log
 
@@ -38,7 +37,6 @@ MODELS_SCOPE.append("mdr")
 PATHS_CONFIG = DataTide.Configurations.Global.Paths.Index
 DOCUMENTATION_TYPE = os.getenv("DOCUMENTATION_TYPE") or "GLFM"
 
-WIKI = PATHS_CONFIG["models_docs_folder"].as_posix()
 GLFM = DataTide.Configurations.Documentation.glfm_doc_target
 RAW_PATHS = DataTide.Configurations.Global.Paths._raw.copy()
 print(RAW_PATHS)
