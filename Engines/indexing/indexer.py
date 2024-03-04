@@ -76,7 +76,7 @@ def indexer(write_index=False) -> dict:
     # indexed from different locations
     
     voc_index = dict()
-    for folder in VOCABULARIES_PATH:
+    for folder in os.listdir(VOCABULARIES_PATH):
         for voc_file in os.listdir(folder):
             obj_counter += 1
 
