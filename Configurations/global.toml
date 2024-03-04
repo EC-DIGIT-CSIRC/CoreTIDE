@@ -12,7 +12,6 @@ analytics = "Analytics/"
 snippet_file = ".vscode/Model Templates.code-snippets"
 json_schemas = "Schemas/"
 templates = "Schemas/Templates/"
-tide_indexes = "Schemas/Indexes/"
 custom_configurations = "Configurations/"
 
 [paths.core]
@@ -56,7 +55,7 @@ tvm = "Threat Vectors.yaml"
 cdm = "Detection Models.yaml"
 bdr = "Detection Models.yaml"
 
-[datafields]
+[data_fields]
 tam = "actor"
 tvm = "threat"
 cdm = "detection"
