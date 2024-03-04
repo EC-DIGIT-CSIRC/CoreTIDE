@@ -4,9 +4,10 @@
     - git rebase origin/$CI_DEFAULT_BRANCH #Allows to pull latest mutation if there are
     - cd $TIDE_CORE_REPO/Orchestration/
     - python ./generate.py
+    - cd ../../../
     - git add -A
     - if ! git diff-index --quiet HEAD; then
-    -   git commit -m "TIDeMEC Data Model Automation"
+    -   git commit -m "TIDE Data Model Automation"
     -   git rebase origin/$CI_DEFAULT_BRANCH
     -   git push $TIDE_REPO_ACCESS HEAD:$CI_COMMIT_REF_NAME
     - fi

@@ -10,7 +10,7 @@ visualize your data to quickly act on insights from across your technology lands
 proxy = true
 url = "$SPLUNK_URL"
 port = "$SPLUNK_PORT"
-app = "" # App the searches will be deployed to.
+app = "$SPLUNK_APP" # App the searches will be deployed to.
 correlation_searches = true # Enables or disable saved search also being correlation searches
 #allow_skew = "10%" # Time Skewing Setup
 #schedule_offset = 5
@@ -23,6 +23,21 @@ enabled = true
 
 [secrets]
 token = "$SPLUNK_TOKEN"
+
+[modifiers]
+# Modifiers are used to change the deployment behaviour based on the status of a MDR.
+# Status modifiers are added last in the deployment pipeline, and override the MDR Config. 
+# 
+# Syntax: <MDR STATUS>."<Splunk savedsearches.conf attribute>"" = value
+#                        |-> Keep double quotes if attribute contains dots
+#
+# Using <MDR STATUS>.allowed_actions, you can deny all actions by setting it to false, 
+# Or only specify specific actions (which must be a subset of actions_enabled). By default,
+# all the actions enabled under actions_enabled will be allocated by the deployer, 
+# if the MDR Config contains
+DEVELOPMENT.allowed_actions = false # false or [] , list of actions allowed for this status
+DEVELOPMENT.alert_severity = 1
+IMPROVEMENT.alert_severity = 1
 
 [defaults]
 # Be mindful that dotted (.) strings in TOML are significant and represent a dict nesting.

@@ -9,30 +9,17 @@ keys:
     name: In Design
     icon: ✍
     description: Under active functional design, without technical translation yet
-    legacy: 2-DESIGN
   - id: DEVELOPMENT
     name: Under Active Development
     icon: 👩‍💻
     description: Under active technical implementation, going in exploratory rounds
-    legacy: 3-DEV
-    configurations:
-      splunk:
-        parameters:
-          alert.severity : 1 # Alert set to 1-debug severity 
-        allowed_actions : False
   - id: IMPROVING
     name: Ongoing Improvement
     icon: 🏗️
-    legacy: 4-IMPROVING
     description: Rule is qualified functionally, but is undergoing refinment rounds
-    configurations:
-      splunk:
-        parameters:
-          alert.severity : 1 # Alert set to 1-debug severity
   - id: STAGING
     name: Staging
     icon: 🚧
-    legacy: 5-STAGING
     description: Deployed in staging environment for operational testing
   - id: PRODUCTION
     name: In Production
@@ -48,10 +35,8 @@ keys:
   - id: DISABLED
     name: Disabled Rule
     icon: 🛑
-    legacy: 8-DISABLED
     description: Rule is still accessible, but not active in any environment
   - id: REMOVED
     name: Removed from Platforms
     icon: 🗑️
     description: Rule is fully deprecated, and only flagged under this status for archival purposes
-    legacy: 9-REMOVED

@@ -367,7 +367,8 @@ class DataTide:
                 setup = dict(Index["setup"])
                 secrets = dict(Index["secrets"])
                 defaults = dict(Index["defaults"])
-                lookups = dict(Index["lookups"])
+                lookups = dict(Index.get("lookups"))
+                modifiers = dict(Index.get("modifiers"))
 
             @dataclass(frozen=True)
             class Sentinel:

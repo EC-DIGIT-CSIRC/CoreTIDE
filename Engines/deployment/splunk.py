@@ -23,10 +23,11 @@ from Engines.modules.framework import (
 from Engines.modules.deployment import fetch_config_envvar, Proxy
 from Engines.modules.logs import log
 from Engines.modules.tide import DataTide
-from Engines.modules.plugins import DeployMDR
+
+# from Engines.modules.plugins import DeployMDR
 
 
-class SplunkDeploy(DeployMDR):
+class SplunkDeploy:
 
     def __init__(self):
 
@@ -62,6 +63,7 @@ class SplunkDeploy(DeployMDR):
 
         self.CORRELATION_SEARCHES = SPLUNK_SETUP["correlation_searches"]
         self.SPLUNK_ACTIONS = SPLUNK_SETUP["actions_enabled"]
+        self.STATUS_MODIFIERS = SPLUNK_CONFIG.modifiers
         self.SPLUNK_DEFAULT_ACTIONS = SPLUNK_SETUP.get("default_actions") or []
         self.TIMERANGE_MODE = SPLUNK_SETUP["frequency_scheduling"]
         self.SPLUNK_SUBSCHEMA = DataTide.TideSchemas.subschemas["systems"][
@@ -257,26 +259,39 @@ class SplunkDeploy(DeployMDR):
         status: str = mdr_splunk["status"]
         query = create_query(mdr)
 
-        # Add status specific parameters
-        status_configuration = get_vocab_entry("status", status, "configurations") or {}
-        status_configuration = status_configuration.get(self.DEPLOYER_IDENTIFIER) or {}  # type: ignore
-        status_parameters = status_configuration.get("parameters")  # type: ignore
-
-        # Routine to safely separate the case where allowed_actions is not present, and the case
-        # where it is set to None.
-        if "allowed_actions" in status_configuration:
-            # If explicitely set to False, we blank the actions allowed
-            if status_configuration["allowed_actions"] == False:  # type: ignore
-                status_allowed_actions = []
-            else:
-                status_allowed_actions = status_configuration["allowed_actions"]  # type: ignore
-
         # By default, status allows all the actions supported by the global config
-        else:
-            status_allowed_actions = self.SPLUNK_ACTIONS
+        status_allowed_actions = self.SPLUNK_ACTIONS
 
-        if status_parameters:
-            mdr_config.update(status_parameters)
+        # Add status specific parameters
+        status_modifiers = self.STATUS_MODIFIERS.get(status) or {}
+
+        if status_modifiers:
+            if "allowed_actions" in status_modifiers:
+                allowed_actions_config = status_modifiers.pop("allowed_actions")
+                # If explicitely set to False, we blank the actions allowed
+                if allowed_actions_config in [False, None]:
+                    log(
+                        "INFO",
+                        "This MDR will not have any action enabled in Splunk, as actions_enabled is set to False",
+                        status,
+                    )
+                    status_allowed_actions = []
+                else:
+                    log(
+                        "INFO",
+                        "The enabled actions for this MDR will be constrained by the status modifier actions_enabled",
+                        allowed_actions_config,
+                    )
+                    status_allowed_actions = allowed_actions_config
+
+            # We pop out allowed_actions, remainder are attributes
+            if status_modifiers:
+                log(
+                    "INFO",
+                    f"Applying status modifiers for {status}",
+                    str(status_modifiers),
+                )
+                mdr_config.update(status_modifiers)
 
         actions_config = {}
 
@@ -299,14 +314,15 @@ class SplunkDeploy(DeployMDR):
             if not triggered_actions:
                 # Allowing default actions if they are not denied at status config level
                 triggered_actions = [
-                    a
-                    for a in self.SPLUNK_DEFAULT_ACTIONS
-                    if a in status_allowed_actions
+                    action
+                    for action in self.SPLUNK_DEFAULT_ACTIONS
+                    if action in status_allowed_actions
                 ]
 
             if triggered_actions:
                 actions_config["actions"] = ", ".join(triggered_actions)
 
+                # Actions modifiers which automate certain attributes bound to the action being allocated
                 if "notable" in triggered_actions:
                     # Assign default notable title if not specified in mdr config
                     if "action.notable.param.rule_title" not in mdr_config:
@@ -322,6 +338,9 @@ class SplunkDeploy(DeployMDR):
                     # as a way to show a default GUI, but interferes with automation.
                     # All risk configuration are carried by action.notable.param._risk in a JSON bundle
                     actions_config["action.risk.param._risk_score"] = 0
+
+            else:
+                actions_config["actions"] = ""
 
         deploy_config = self.DEFAULT_CONFIG.copy()
         deploy_config.update(mdr_config)
@@ -433,3 +452,6 @@ class SplunkDeploy(DeployMDR):
 
 def declare():
     return SplunkDeploy()
+
+
+SplunkDeploy().deploy([])

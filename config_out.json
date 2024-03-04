@@ -333,7 +333,7 @@
                 "proxy": false,
                 "url": "$SPLUNK_URL",
                 "port": "$SPLUNK_PORT",
-                "app": "",
+                "app": "$SPLUNK_APP",
                 "correlation_searches": true,
                 "frequency_scheduling": "random",
                 "actions_enabled": [
@@ -348,6 +348,15 @@
             },
             "secrets": {
                 "token": "$MY_CUSTOM_SECRET"
+            },
+            "modifiers": {
+                "DEVELOPMENT": {
+                    "allowed_actions": false,
+                    "alert_severity": 1
+                },
+                "IMPROVEMENT": {
+                    "alert_severity": 1
+                }
             },
             "defaults": {
                 "request.ui_dispatch_app": "SplunkEnterpriseSecuritySuite",
