@@ -46,7 +46,7 @@ SPECS = Path(str(RAW_PATHS["schemas_docs_folder"]).removeprefix(RAW_WIKI_PATH))
 
 
 DOC_TITLES = DOCUMENTATION_CONFIG.titles
-VOCABS_DOCS = PATHS_CONFIG["vocabularies_docs"]
+VOCABS_DOCS = Path(PATHS_CONFIG["vocabularies_docs"])
 SKIP_VOCABS = DOCUMENTATION_CONFIG.skip_vocabularies
 WIKI_PATH = PATHS_CONFIG["wiki_docs_folder"]
 OUT_PATH = Path(WIKI_PATH) / "_sidebar.md"
