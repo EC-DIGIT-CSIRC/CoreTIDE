@@ -57,7 +57,7 @@ QUERY_FOLD = """
 MDR_METASCHEMA = DataTide.TideSchemas.mdr["properties"]
 
 
-WIKI = ROOT / Path(DataTide.Configurations.Documentation.models_docs_folder)
+WIKI = Path(DataTide.Configurations.Global.Paths.Core.models_docs_folder)
 MDR_WIKI_PATH = WIKI / DataTide.Configurations.Documentation.object_names["mdr"]
 
 MARKDOWN = False
