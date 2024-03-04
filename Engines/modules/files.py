@@ -136,5 +136,6 @@ def safe_file_name(string: str, safe_mode: bool = True) -> str:
 
 import json 
 
-with open("config_out.json", "w+") as DEBUG:
-    json.dump(resolve_configurations(), DEBUG, indent=4)
+# DEBUG Check resulting configuration
+#with open("config_out.json", "w+") as DEBUG:
+#    json.dump(resolve_configurations(), DEBUG, indent=4)
