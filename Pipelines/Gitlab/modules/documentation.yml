@@ -16,8 +16,8 @@
     - cp index.json $TIDE_WIKI/
 
     # Extract the staging index to Core Root for reconciliation
-    - if [ -e $TIDE_WIKI/stg_index.json ]
-    -  then cp $TIDE_WIKI/stg_index.json ./
+    - if [ -e $TIDE_WIKI/staging_index.json ]
+    -  then cp $TIDE_WIKI/staging_index.json ./
     - fi
     - ls -lah
     # Execute documentation toolchain
