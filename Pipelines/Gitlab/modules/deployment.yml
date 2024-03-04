@@ -11,8 +11,8 @@
     - if: $TIDE_DEPLOYMENT == "DISABLED"
       when: never
     - if: ($CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH) && ($TIDE_DEPLOYMENT == "ENABLED")
-      #changes: 
-      #  - Models Library/Managed Detection Rules/*.yaml
+      changes: 
+        - Models Library/Managed Detection Rules/*.yaml
   needs:
     - 🔮 Staging Validation Toolchain
   retry: 2 # Retrying twice helps with certain systems, like CBC which has random issues
