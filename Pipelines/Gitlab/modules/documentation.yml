@@ -1,27 +1,21 @@
 🗃️ Documentation Toolchain:
   stage: 📖 Documentation
   script:
+    # Clone Wiki > Inject Core > Copy out wiki folder to Wiki 
     - git rebase origin/$CI_DEFAULT_BRANCH #Allows to pull latest mutation if there are
+    - git clone $TIDE_WIKI_ACCESS
     
+    # Inject Core
+    - cp -rf $TIDE_CORE_REPO ./$TIDE_WIKI/
     # Generate Index in new location
-    - cd $TIDE_CORE_REPO/Engines/indexing/
+    - cd $TIDE_WIKI/$TIDE_CORE_REPO/Engines/indexing/
     - export GENERATE_INDEX_FILE=True
     - python ./indexer.py #Staging Index generates in the root of the repo
     - cd ../../ #Back within the Core Root directory
-    - echo $TIDE_WIKI
-    - git clone $TIDE_WIKI_ACCESS
-    - pwd
-    - ls -lah
-    # Inject Index and CoreTIDE into the wiki for generation
-    - cp -rf index.json ./$TIDE_WIKI/index.json
-    - cd $TIDE_WIKI
-
     - cd /$TIDE_CORE_REPO/Orchestration
     - python document.py
-    - cd ../../
+    - cd ../../ #Back within the Core Root directory
     - cp -fr wiki/. ../ #Copy content of wiki to top level directory
-    - git add -A
-    - rm -rf $TIDE_CORE_ACCESS #Delete injected Core
     - git add -A
     #Graceful exit when there is nothing to commit
     - if ! git diff-index --quiet HEAD; then
@@ -56,7 +50,6 @@
     - python document.py
     - cd ../../
     - cp -fr wiki/. ../ #Copy content of wiki to top level directory
-    - rm -rf $TIDE_CORE_ACCESS #Delete injected Core
     - git add -A
     #Graceful exit when there is nothing to commit
     - if ! git diff-index --quiet HEAD; then
