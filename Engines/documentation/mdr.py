@@ -233,7 +233,7 @@ def documentation(mdr):
         table = pd.DataFrame(config_data).to_markdown(index=False)
 
         if s not in enabled_systems():
-            system_name.append("[DISABLED]")
+            system_name += "[DISABLED]"
             banner = "This system is not enabled in your System Configurations, "\
                 "this documentation is only informational"
             if GLFM:

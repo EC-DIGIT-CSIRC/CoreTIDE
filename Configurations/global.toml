@@ -26,7 +26,7 @@ wiki_docs_folder = "wiki/"
 models_docs_folder = "wiki/Knowledge Graph/"
 lookup_docs = "wiki/Lookups/"
 schemas_docs_folder = "wiki/Specifications/"
-vocabularies_docs = "dwiki/Vocabularies/"
+vocabularies_docs = "wiki/Vocabularies/"
 resources = "External/"
 
 [metaschemas]

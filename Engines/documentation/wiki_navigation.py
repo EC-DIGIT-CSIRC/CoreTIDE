@@ -3,6 +3,7 @@ import os
 import git
 import time
 import sys
+from pathlib import Path
 
 start_time = time.time()
 
@@ -29,7 +30,7 @@ DOCUMENTATION_TYPE = "GLFM"
 PATHS_CONFIG = DataTide.Configurations.Global.Paths.Index
 
 WIKI_PATH = PATHS_CONFIG["wiki_docs_folder"]
-OUT_PATH = WIKI_PATH / "home.md"
+OUT_PATH = Path(WIKI_PATH) / "home.md"
 
 CHARS_CLIP = 150
 NAV_INDEX_FIELDS = {

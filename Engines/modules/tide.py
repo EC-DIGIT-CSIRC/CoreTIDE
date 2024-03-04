@@ -95,11 +95,13 @@ class IndexUtils:
         STG_INDEX = json.load(open(Path(STAGING_INDEX_PATH)))
         MDR_INDEX = RECONCILED_INDEX
         BANNER_MESSAGE = "⚠️ This documentation reflects the latest staging deployment from this MDR. Production status on mainline is, but staging deployment is currently overriding it"
+        added_mdr = list()
+        updated_mdr = list()
 
         for mdr in STG_INDEX:
             if mdr not in MDR_INDEX:
                 MDR_INDEX[mdr] = STG_INDEX[mdr]
-
+                added_mdr.append(mdr)
             else:
                 main_mdr_metadata = (
                     MDR_INDEX[mdr].get("meta") or MDR_INDEX[mdr]["metadata"]
@@ -122,6 +124,7 @@ class IndexUtils:
                         f" staging : v{stg_version})"
                     )
 
+                    updated_mdr = list()
                     MDR_INDEX[mdr] = STG_INDEX[mdr]
                     if MDR_INDEX[mdr].get("meta"):
                         MDR_INDEX[mdr]["metadata"] = MDR_INDEX[mdr].pop(
@@ -130,7 +133,10 @@ class IndexUtils:
                     global TIDE_MDR_STAGING_BANNER
                     TIDE_MDR_STAGING_BANNER = dict()
                     TIDE_MDR_STAGING_BANNER[mdr] = BANNER_MESSAGE.format(**locals())
-
+        
+        log("SUCCESS", "Finalized Staging Reconciliation Routine")
+        log("INFO", "Updated MDRs from Production Index with Staging Data", len(updated_mdr))
+        log("INFO", "New MDR added from Staging Data ", len(added_mdr))
         return RECONCILED_INDEX
 
     @staticmethod
