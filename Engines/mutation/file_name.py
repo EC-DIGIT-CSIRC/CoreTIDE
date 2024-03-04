@@ -13,7 +13,7 @@ from Engines.modules.files import safe_file_name, resolve_configurations, resolv
 
 ROOT = Path(str(git.Repo(".", search_parent_directories=True).working_dir))
 CONFIGURATIONS = resolve_configurations()
-MODEL_PATHS = resolve_paths()["tide"]
+PATHS = resolve_paths()
 MODELS_TYPES = CONFIGURATIONS["global"]["models"]
 
 def assign_id(file_path, new_id):
@@ -46,8 +46,8 @@ def run():
     for model in MODELS_TYPES:
         highest_id = 0
         files_to_assign = []
-        for file in sorted(os.listdir(MODEL_PATHS[model])):
-            data = yaml.safe_load(open(MODEL_PATHS[model] / file, encoding="utf-8"))
+        for file in sorted(os.listdir(PATHS[model])):
+            data = yaml.safe_load(open(PATHS[model] / file, encoding="utf-8"))
             model_name = data["name"]
             model_id = data.get("id")
 
@@ -76,12 +76,12 @@ def run():
                     # Renaming goes through a temp file to still rename in case-insensitive OSs
                     # when the only difference is capitalization
                     os.rename(
-                        MODEL_PATHS[model] / file,
-                        MODEL_PATHS[model] / (standard_name + ".tmp"),
+                        PATHS[model] / file,
+                        PATHS[model] / (standard_name + ".tmp"),
                     )
                     os.rename(
-                        MODEL_PATHS[model] / (standard_name + ".tmp"),
-                        MODEL_PATHS[model] / standard_name,
+                        PATHS[model] / (standard_name + ".tmp"),
+                        PATHS[model] / standard_name,
                     )
                     log("SUCCESS", f"Alligned file name with model data", standard_name)
 
@@ -89,7 +89,7 @@ def run():
         if files_to_assign:
             for file in files_to_assign:
                 log("INFO", "Re-aligning file name with model_data", file)
-                file_name = MODEL_PATHS[model] / file
+                file_name = PATHS[model] / file
                 data = yaml.safe_load(open(file_name, encoding="utf-8"))
                 highest_id += 1
                 model_name = data["name"]
@@ -98,7 +98,7 @@ def run():
                 log("INFO", "Reassigning ID to", model_id)
 
                 assign_id(file_name, model_id)
-                os.rename(file_name, MODEL_PATHS[model] / standard_name)
+                os.rename(file_name, PATHS[model] / standard_name)
                 log(
                     "SUCCESS",
                     "Successfully assigned new id and updated file name",
