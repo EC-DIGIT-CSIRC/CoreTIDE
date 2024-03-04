@@ -224,7 +224,7 @@ def indexer(write_index=False) -> dict:
     index["models"] = models_index
 
     # Indexing model index
-    tide_index_models = dict()
+    #tide_index_models = dict()
     #for model_type in models_index:
     #    tide_index_model_type = dict()
     #    for 
