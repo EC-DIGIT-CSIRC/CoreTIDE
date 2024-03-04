@@ -173,6 +173,9 @@ if MDR_METADATA_LOOKUPS_CONFIG["enabled"]:
             raise (Exception("METADATA DEPLOYMENT ENGINE NOT FOUND"))
 
 for system in deployment_plan:
+    log("TITLE", "MDR Deployment")
+    log("INFO", "Deploy MDR onto the system they target, if allowed at the instance level and deployment context")
+
     if system in DeployTide.mdr:
         log("ONGOING", "Deploying MDR for target system", system)
         DeployTide.mdr[system].deploy(deployment=deployment_plan[system])

@@ -19,11 +19,6 @@ def fetch_config_envvar(config_secrets: dict) -> dict:
     for sec in config_secrets.copy():
         if type(config_secrets[sec]) == str:
             if config_secrets[sec][0] == "$":
-                log(
-                    "INFO",
-                    f"Expecting to find variable {sec} as envvar",
-                    config_secrets[sec],
-                )
                 if config_secrets[sec].removeprefix("$") in os.environ:
                     env_variable = str(config_secrets.pop(sec)).removeprefix("$")
                     config_secrets[sec] = os.environ.get(env_variable)
