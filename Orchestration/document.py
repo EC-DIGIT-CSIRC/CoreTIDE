@@ -13,7 +13,6 @@ from Engines.modules.logs import tidemec_intro, Colors
 from Engines.documentation import (
     mdr,
     lookups,
-    mdrv2,
     metaschemas,
     models,
     vocabularies,
@@ -38,7 +37,6 @@ metaschemas.run()
 lookups.run()
 models.run()
 mdr.run()
-mdrv2.run()
 wiki_navigation.run()
 wiki_sidebar.run()
 
