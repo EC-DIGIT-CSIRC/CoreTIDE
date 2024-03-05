@@ -49,7 +49,7 @@ def modified_mdr_files(stage: Literal["STAGING", "PRODUCTION"])->list[Path]:
     ]
 
     mdr_files = [(MDR_PATH / f) for f in mdr_files]
-    log("INFO", "Computed modified MDR Files", ", ".join(mdr_files))
+    log("INFO", "Computed modified MDR Files", str(mdr_files))
     return mdr_files
 
 
