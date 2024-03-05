@@ -124,8 +124,8 @@ class IndexTide:
                     TIDE_MDR_STAGING_BANNER[mdr] = BANNER_MESSAGE.format(**locals())
         
         log("SUCCESS", "Finalized Staging Reconciliation Routine")
-        log("INFO", "Updated MDRs from Production Index with Staging Data", len(updated_mdr))
-        log("INFO", "New MDR added from Staging Data ", len(added_mdr))
+        log("INFO", "Updated MDRs from Production Index with Staging Data", str(len(updated_mdr)))
+        log("INFO", "New MDR added from Staging Data ", str(len(added_mdr)))
         return RECONCILED_INDEX
 
     @staticmethod
@@ -381,8 +381,8 @@ class DataTide:
                 setup = dict(Index["setup"])
                 secrets = dict(Index["secrets"])
                 defaults = dict(Index["defaults"])
-                lookups = dict(Index.get("lookups"))
-                modifiers = dict(Index.get("modifiers"))
+                lookups = dict(Index.get("lookups", {}))
+                modifiers = dict(Index.get("modifiers", {}))
 
             @dataclass(frozen=True)
             class Sentinel:
@@ -411,7 +411,7 @@ class DataTide:
             skip_model_keys = list(Index["skip_model_keys"])
             skip_vocabularies = list(Index["skip_model_keys"])
             cve = dict(Index["cve"])
-            wiki = dict(Index.get("wiki"))
+            wiki = dict(Index.get("wiki",{}))
             object_names = dict(Index["object_names"])
             titles = dict(Index["titles"])
             icons = dict(Index["icons"])

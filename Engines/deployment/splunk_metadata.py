@@ -48,7 +48,7 @@ class SplunkMetadataDeploy(DeployMetadata):
         if os.getenv("TIDE_WIKI_GENERATION") == "GITLAB_WIKI":
             WIKI_URL = f"{os.getenv('CI_SERVER_URL')}/{os.getenv('CI_PROJECT_PATH')}/_/wikis/"
         else:
-            WIKI_URL = DataTide.Configurations.Documentation.wiki.get("wiki_link")
+            WIKI_URL = DataTide.Configurations.Documentation.wiki.get("wiki_link", "")
 
         self.GITWIKI = WIKI_URL
         self.GITWIKI += str(

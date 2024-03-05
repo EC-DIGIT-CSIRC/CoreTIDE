@@ -56,7 +56,8 @@ def indexer(write_index=False) -> dict:
     # Vocab Indexer
 
     log("INFO", "Resolving and indexing", "paths")
-    index["paths"] = PATHS
+    index["paths"] = dict()
+    index["paths"].update(PATHS)
     index["paths"]["tide"] = TIDE_PATHS
     index["paths"]["core"] = CORE_PATHS
     index["paths"]["raw"] = RAW_PATHS

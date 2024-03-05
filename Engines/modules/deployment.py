@@ -15,14 +15,14 @@ from Engines.modules.tide import DataTide
 SYSTEMS_CONFIGS_INDEX = DataTide.Configurations.Systems.Index
 
 
-def fetch_config_envvar(config_secrets: dict) -> dict:
+def fetch_config_envvar(config_secrets: dict[str,str]) -> dict[str,str]:
     # Replace placeholder variables with environment
     for sec in config_secrets.copy():
         if type(config_secrets[sec]) == str:
             if config_secrets[sec][0] == "$":
                 if config_secrets[sec].removeprefix("$") in os.environ:
                     env_variable = str(config_secrets.pop(sec)).removeprefix("$")
-                    config_secrets[sec] = os.environ.get(env_variable)
+                    config_secrets[sec] = os.environ.get(env_variable, "")
                     log("SUCCESS", "Fetched environment secret", env_variable)
                 else:
                     log(

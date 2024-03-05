@@ -14,6 +14,15 @@ sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.modules.logs import log
 
+def correct_timerange_mode(timerange:str)->Literal["random", "current", "custom"]:
+    corrected_timerange:Literal["random", "current", "custom"]
+    if timerange not in ["random", "current", "custom"]:
+        log("WARNING", "The frequency_scheduling setting was not correct set",
+            "hard setting it to current", "Expected values are random, current, or custom")
+        corrected_timerange = "current"
+    else:
+        corrected_timerange = timerange #type: ignore
+    return corrected_timerange
 
 def splunk_timerange(time: str, skewing: float | int = 1, offset: int = 0) -> str:
     """

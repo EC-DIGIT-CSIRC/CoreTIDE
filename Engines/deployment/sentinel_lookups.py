@@ -21,7 +21,6 @@ from azure.mgmt.securityinsight import SecurityInsights
 
 class SentinelLookupsDeploy(DeployLookups):
     def __init__(self):
-        DEPLOYER_IDENTIFIER = "sentinel"
         DEBUG = True
 
         self.LOOKUPS_METADATA_INDEX = DataTide.Lookups.metadata

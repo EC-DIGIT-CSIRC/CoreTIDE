@@ -1,9 +1,8 @@
 import os
 import git
 import sys
-import yaml
 import json
-from pathlib import Path
+from typing import Literal
 
 import pandas as pd
 
@@ -14,6 +13,7 @@ from Engines.modules.splunk import (
     cron_to_timeframe,
     create_query,
     splunk_timerange,
+    correct_timerange_mode
 )
 from Engines.modules.framework import (
     get_value_metaschema,
@@ -64,8 +64,9 @@ class SplunkDeploy(DeployMDR):
         self.CORRELATION_SEARCHES = SPLUNK_SETUP["correlation_searches"]
         self.SPLUNK_ACTIONS = SPLUNK_SETUP["actions_enabled"]
         self.STATUS_MODIFIERS = SPLUNK_CONFIG.modifiers
-        self.SPLUNK_DEFAULT_ACTIONS = SPLUNK_SETUP.get("default_actions") or []
-        self.TIMERANGE_MODE = SPLUNK_SETUP["frequency_scheduling"]
+        self.SPLUNK_DEFAULT_ACTIONS = SPLUNK_SETUP.get("default_actions") or []        
+        
+        self.TIMERANGE_MODE = correct_timerange_mode(SPLUNK_SETUP.get("frequency_scheduling", ""))
         self.SPLUNK_SUBSCHEMA = DataTide.TideSchemas.subschemas["systems"][
             self.DEPLOYER_IDENTIFIER
         ]["properties"]
@@ -88,7 +89,7 @@ class SplunkDeploy(DeployMDR):
         else:
             self.SKEWING_VALUE = 0
         # Optional added offset
-        self.OFFSET = SPLUNK_SETUP.get("schedule_offset") or 0
+        self.OFFSET = int(SPLUNK_SETUP.get("schedule_offset", 0)) 
 
     def config_mdr(self, mdr):
         """
@@ -448,7 +449,6 @@ class SplunkDeploy(DeployMDR):
                     "SKIP",
                     f"🛑 Skipping {mdr_data.get('name')} as does not contain a Splunk rule",
                 )
-
 
 def declare():
     return SplunkDeploy()
