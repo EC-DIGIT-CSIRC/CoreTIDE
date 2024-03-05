@@ -13,11 +13,6 @@ required:
   - configurations
   - metadata
 
-
-anyOf:
-  - required:
-    - 
-
 properties:
 
   name:
