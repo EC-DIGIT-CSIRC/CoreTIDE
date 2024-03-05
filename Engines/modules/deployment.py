@@ -37,7 +37,7 @@ def fetch_config_envvar(config_secrets: dict) -> dict:
 
 def modified_mdr_files(stage: Literal["STAGING", "PRODUCTION"])->list[Path]:
 
-    MDR_PATH = DataTide.Configurations.Global.Paths.Tide.mdr
+    MDR_PATH = Path(DataTide.Configurations.Global.Paths.Tide.mdr)
     MDR_PATH_RAW = DataTide.Configurations.Global.Paths.Tide._raw["mdr"]
     MDR_PATH_RAW = MDR_PATH_RAW.replace(r"/", r"\/")
 
