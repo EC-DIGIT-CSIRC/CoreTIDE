@@ -134,7 +134,6 @@ def safe_file_name(string: str, safe_mode: bool = True) -> str:
 
     return cleaned_string
 
-import json 
 
 # DEBUG Check resulting configuration
 #with open("config_out.json", "w+") as DEBUG:

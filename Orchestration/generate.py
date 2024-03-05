@@ -6,14 +6,8 @@ sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.modules.logs import log, Colors, tidemec_intro
 from Engines.modules.tide import IndexTide
-from Engines.framework import (
-    models_vocabularies,
-    reports_vocabulary,
-    json_schemas,
-    templates,
-    vscode_snippets,
-)
-
+from Engines.indexing import models_indexer, reports_indexer
+from Engines.framework import templates
 print(tidemec_intro())
 
 toolchain_start_time = datetime.now()
@@ -35,13 +29,15 @@ log(
     "INFO",
     "Generate entries in Tide namespace containing model data supportive of other generation routines",
 )
-models_vocabularies.run()
-reports_vocabulary.run()
-log("TITLE", "Re-indexation")
-log("INFO", "Fetch the latest model data after Tide Indexes were generated")
-IndexTide()._cache_index(reset=True)
-json_schemas.run()
+
+models_indexer.run()
+reports_indexer.run()
 templates.run()
+
+IndexTide.reload()
+from Engines.framework import json_schemas, vscode_snippets
+
+json_schemas.run()
 vscode_snippets.run()
 
 

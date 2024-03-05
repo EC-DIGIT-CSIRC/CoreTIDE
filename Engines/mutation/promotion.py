@@ -29,108 +29,99 @@ VALID_STATUSES = [k["id"] for k in STATUS_VOCAB["keys"]]
 DEBUG = True
 
 
-def promote_mdr(mdr_path, status_to_promote):
+class PromoteMDR:
+    def edit_mdr_statuses(self, mdr_path, status_to_promote):
 
-    # We modify the file as text instead of loading and dumping the yaml
-    # as formatting or comments are not always preserved, for small
-    # modifications such as this one it's preferable to do in this way.
+        # We modify the file as text instead of loading and dumping the yaml
+        # as formatting or comments are not always preserved, for small
+        # modifications such as this one it's preferable to do in this way.
 
-    with open(mdr_path, "r", encoding="utf-8") as file:
-        buffer = []
-        crossed = False
-        for line in file:
+        with open(mdr_path, "r", encoding="utf-8") as file:
+            buffer = []
+            crossed = False
+            for line in file:
 
-            # Ensure that only data after crossing the configurations point is modified
-            # in rare cases where the description contains some mentions of the status,
-            # and may introduce confusion if mistakenly modified.
-            if "configurations" in line:
-                crossed = True
+                # Ensure that only data after crossing the configurations point is modified
+                # in rare cases where the description contains some mentions of the status,
+                # and may introduce confusion if mistakenly modified.
+                if "configurations" in line:
+                    crossed = True
 
-            if crossed:
-                for word in status_to_promote:
-                    if word in line:
-                        line = line.replace(word, PROMOTION_TARGET)
-            buffer.append(line)
+                if crossed:
+                    for word in status_to_promote:
+                        if word in line:
+                            line = line.replace(word, PROMOTION_TARGET)
+                buffer.append(line)
 
-    with open(mdr_path, "w", encoding="utf-8") as file:
-        for line in buffer:
-            file.write(line)
+        with open(mdr_path, "w", encoding="utf-8") as file:
+            for line in buffer:
+                file.write(line)
 
-    log("SUCCESS", f"Successfully promoted MDR to {PROMOTION_TARGET}")
+        log("SUCCESS", f"Successfully promoted MDR to {PROMOTION_TARGET}")
 
 
-def run():
-    log("TITLE", "MDR Status Promotion")
-    log("INFO", "Promotes the status of modified MDR files according to configuration")
+    def promote(self, deployment:list[Path]):
+        log("TITLE", "MDR Status Promotion")
+        log("INFO", "Promotes the status of modified MDR files according to configuration")
 
-    if PROMOTION_ENABLED:
+        if PROMOTION_ENABLED:
 
-        if PROMOTION_TARGET not in VALID_STATUSES:
-            log(
-                "FAILURE",
-                "The target status defined in the config is not a valid status",
-                PROMOTION_TARGET,
-                f"Valid statuses are in the MDR Status vocabulary file : {', '.join(VALID_STATUSES)}",
-            )
-            exit()
-
-        if DEBUG:
-            MDR_FOLDER = ROOT / PATHS["mdr"]
-            deployment = [MDR_FOLDER / mdr for mdr in sorted(os.listdir(MDR_FOLDER))]
-
-        else:
-            # Fetch MDR in the deployment diff calculation
-            deployment = os.getenv(
-                "PRE_DEPLOYMENT"
-            )  # Returns string expression into list object
-            if deployment:
-                deployment = ast.literal_eval(
-                    deployment
-                )  # Returns string expression into list object
-            else:
+            if PROMOTION_TARGET not in VALID_STATUSES:
                 log(
                     "FAILURE",
-                    "Found nothing to deploy in PRE_DEPLOYMENT environment variable",
+                    "The target status defined in the config is not a valid status",
+                    PROMOTION_TARGET,
+                    f"Valid statuses are in the MDR Status vocabulary file : {', '.join(VALID_STATUSES)}",
                 )
                 exit()
 
-        for mdr in deployment:
-            system_promotion = {}
-            data = yaml.safe_load(open(mdr, encoding="utf-8"))
-            mdr_name = data["name"]
+            if DEBUG:
+                MDR_FOLDER = ROOT / PATHS["mdr"]
+                deployment = [MDR_FOLDER / mdr for mdr in sorted(os.listdir(MDR_FOLDER))]
 
-            for system in (conf := data["configurations"]):
-                system_status = conf[system]["status"]
+            else:
+                # Fetch MDR in the deployment diff calculation
+                  # Returns string expression into list object
+                if not deployment:
+                    log(
+                        "SKIP",
+                        "Found nothing to deploy in PRE_DEPLOYMENT environment variable",
+                    )
+                    return
 
-                if system_status not in PRODUCTION_STATUSES:
-                    system_promotion[system] = system_status
+            for mdr in deployment:
+                system_promotion = {}
+                data = yaml.safe_load(open(mdr, encoding="utf-8"))
+                mdr_name = data["name"]
 
-            if system_promotion:
-                log(
-                    "INFO",
-                    "Detected statuses needing promotion for the following MDR",
-                    mdr_name,
-                )
-                log(
-                    "ONGOING",
-                    "Promoting the following systems statuses",
-                    ", ".join(
-                        f"{key} : {value}" for key, value in system_promotion.items()
-                    ),
-                )
-                statuses_to_replace = [system_promotion[s] for s in system_promotion]
-                promote_mdr(mdr, statuses_to_replace)
+                for system in (conf := data["configurations"]):
+                    system_status = conf[system]["status"]
 
-            # else:
-            #    log("SKIP", "Nothing to promote, MDR already in Production status", mdr_name)
+                    if system_status not in PRODUCTION_STATUSES:
+                        system_promotion[system] = system_status
 
-    else:
-        log(
-            "SKIP",
-            "MDR Promotion disabled in config",
-            advice="You can enable MDR Promotion under config>deployment>status>promotion",
-        )
+                if not system_promotion:
+                    log("SKIP", "Nothing to promote, MDR already in Production status", mdr_name)
+                else:
+                    log(
+                        "INFO",
+                        "Detected statuses needing promotion for the following MDR",
+                        mdr_name,
+                    )
+                    log(
+                        "ONGOING",
+                        "Promoting the following systems statuses",
+                        ", ".join(
+                            f"{key} : {value}" for key, value in system_promotion.items()
+                        ),
+                    )
+                    statuses_to_replace = [system_promotion[s] for s in system_promotion]
+                    self.edit_mdr_statuses(mdr, statuses_to_replace)
 
+        else:
+            log(
+                "SKIP",
+                "MDR Promotion disabled in config",
+                advice="You can enable MDR Promotion under config>deployment>status>promotion",
+            )
 
-if __name__ == "__main__":
-    run()

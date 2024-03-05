@@ -12,6 +12,7 @@ analytics = "Analytics/"
 snippet_file = ".vscode/Model Templates.code-snippets"
 json_schemas = "Schemas/"
 templates = "Schemas/Templates/"
+tide_indexes = "Schemas/Indexes/"
 custom_configurations = "Configurations/"
 
 [paths.core]
@@ -34,7 +35,6 @@ tam = "TAM Meta Schema.yaml"
 tvm = "TVM Meta Schema.yaml"
 cdm = "CDM Meta Schema.yaml"
 mdr = "MDR Meta Schema.yaml"
-mdrv2 = "MDRv2 Meta Schema.yaml"
 bdr = "BDR Meta Schema.yaml"
 lookup_metadata = "Lookup Metadata Meta Schema.yaml"
 

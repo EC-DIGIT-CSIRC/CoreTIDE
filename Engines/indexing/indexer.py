@@ -12,22 +12,24 @@ sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.modules.files import resolve_paths, resolve_configurations
 from Engines.modules.logs import log
+from Engines.templates.tide_indexes import fetch_tide_index_template
+
 
 def indexer(write_index=False) -> dict:
     SKIPS = ["logsources", "ram", "mdrv2", "lookup_metadata"]
     RESOLVED_CONFIGURATIONS = resolve_configurations()
-    
+
     TIDE_CONFIG = RESOLVED_CONFIGURATIONS["global"]
-    
+
     DATA_FIELD = TIDE_CONFIG["data_fields"]
 
     RAW_TIDE_PATHS = TIDE_CONFIG["paths"]["tide"]
     RAW_CORE_PATHS = TIDE_CONFIG["paths"]["core"]
     RAW_PATHS = RAW_CORE_PATHS | RAW_TIDE_PATHS
-    
+
     TIDE_PATHS, CORE_PATHS = resolve_paths(separate=True)
     PATHS = TIDE_PATHS | CORE_PATHS
-    
+
     log("DEBUG", "Loaded all paths")
     VOCABULARIES_PATH = PATHS["vocabularies"]
     METASCHEMA_PATH = PATHS["metaschemas"]
@@ -40,7 +42,7 @@ def indexer(write_index=False) -> dict:
     TEMPLATES_PATH = PATHS["templates"]
     TEMPLATES = TIDE_CONFIG["templates"]
     LOOKUPS_PATH = PATHS["lookups"]
-
+    TIDE_INDEXES_PATH = PATHS["tide_indexes"]
     OUTPUT_PATH = PATHS["index_output"]
     # Controls whether the index should keep in memory or export to a file
     # In-memory is helpful when index is used to accelerate functions, like
@@ -49,8 +51,8 @@ def indexer(write_index=False) -> dict:
     index = dict()
     obj_counter = 0
 
-    print("\n" + "Global Indexer".center(80, "=") + "\n")
-
+    log("TITLE", "Tide Indexer")
+    log("INFO", "Seeks all Tide related data and stores it for direct access")
     # Vocab Indexer
 
     log("INFO", "Resolving and indexing", "paths")
@@ -60,7 +62,6 @@ def indexer(write_index=False) -> dict:
     index["paths"]["raw"] = RAW_PATHS
     index["paths"]["raw"]["tide"] = RAW_TIDE_PATHS
     index["paths"]["raw"]["core"] = RAW_CORE_PATHS
-    
 
     log("INFO", "Resolving and index", "configurations")
     # Config Indexer
@@ -69,12 +70,11 @@ def indexer(write_index=False) -> dict:
 
     index["configurations"] = RESOLVED_CONFIGURATIONS
 
-
     print("📒 Indexing Vocabularies...")
-    
+
     # Data structures like the vocabularies, but need to be
     # indexed from different locations
-    
+
     voc_index = dict()
     for voc_file in os.listdir(VOCABULARIES_PATH):
         obj_counter += 1
@@ -118,7 +118,6 @@ def indexer(write_index=False) -> dict:
             obj_counter += 1
 
     index["json_schemas"] = json_index
-
 
     # Metaschema Indexer
     print("🛠️ Indexing Metaschemas...")
@@ -222,12 +221,34 @@ def indexer(write_index=False) -> dict:
 
     index["models"] = models_index
 
-    # Indexing model index
-    #tide_index_models = dict()
-    #for model_type in models_index:
-    #    tide_index_model_type = dict()
-    #    for 
+    # Tide Indexes retrieval (injected into )
+    log("INFO", "Retrieving all Tide Indexes built on the Tide Instance",
+        "Injected onto vocabulary index to be retrieved in generation jobs")
+    
+    if not os.path.exists(TIDE_INDEXES_PATH/"models.json"):
+        log("SKIP", "Not able to find a models.json index in Tide instance",
+            "Should be generated in the next Framework generation pipeline run")
+    else:
+        tide_model_index = json.load(open(TIDE_INDEXES_PATH/"models.json", encoding="utf-8"))
 
+        if tide_model_index:
+            if ("cdm" in tide_model_index) and ("bdr" in tide_model_index):
+                log("INFO", "Appending BDR to CDM in Model index as options")
+                tide_model_index["cdm"]["entries"].update(tide_model_index["bdr"]["entries"])
+            index["vocabs"].update(tide_model_index)
+
+    if not os.path.exists(TIDE_INDEXES_PATH/"reports.json"):
+        log("SKIP", "Not able to find a reports.json index in Tide instance",
+            "Should be generated in the next Framework generation pipeline run")
+    else:
+        tide_reports_index = json.load(open(TIDE_INDEXES_PATH/"reports.json", encoding="utf-8"))
+
+        if tide_reports_index:
+            index["vocabs"].update(tide_reports_index)
+    
+    print("FINAL UPDATED VOCABULARIES INDEX")
+    print(index["vocabs"].keys())
+    
     # Lookups indexer
 
     print("🔎 Indexing Lookups...")

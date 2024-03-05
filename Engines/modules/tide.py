@@ -35,8 +35,8 @@ class IndexTide:
         """
         log("WARNING", "DataTide re-indexation")
         log("INFO", "The repository will be reindexed to update DataTide")
-        del sys.modules["tide"]
-        from tide import DataTide
+        del sys.modules["Engines.modules.tide"]
+        from Engines.modules.tide import DataTide
 
     @cache #Memoization as load() is called multiple times as DataTide initializes
     @staticmethod
@@ -167,6 +167,20 @@ class IndexTide:
         if tier == "tide":
             return IndexTide.load()["paths"]["tide"]
 
+    @staticmethod
+    def is_debug()->bool:
+        """
+        Provides an interface to discover whether the current execution
+        context is considered to be in a debugging scenario.
+        """
+        if (
+            os.environ.get("DEBUG") == True
+            or os.environ.get("TERM_PROGRAM") == "vscode"
+        ):
+            return True
+        else:
+            return False
+
 
 class DataTide:
     """Unified programmatic interface to access all data in the
@@ -288,7 +302,10 @@ class DataTide:
     @dataclass(frozen=True)
     class Configurations:
         Index = dict(IndexTide.load()["configurations"])
-
+        DEBUG = IndexTide.is_debug()
+        """Discovers whether the current execution context is considered
+        to be a debugging one"""
+        
         @dataclass(frozen=True)
         class Global:
             Index = dict(IndexTide.load()["configurations"]["global"])
@@ -351,6 +368,7 @@ class DataTide:
                     snippet_file = Index["snippet_file"]
                     json_schemas = Index["json_schemas"]
                     templates = Index["templates"]
+                    tide_indexes = Index["tide_indexes"]
 
         @dataclass(frozen=True)
         class Systems:

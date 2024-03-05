@@ -1,0 +1,104 @@
+import json
+import git
+import sys
+import os
+from collections import OrderedDict
+from pathlib import Path
+from urllib.parse import quote_plus
+
+sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
+
+from Engines.modules.logs import log
+from Engines.modules.tide import DataTide
+from Engines.templates.tide_indexes import fetch_tide_index_template
+
+TIDE_INDEXES_PATH = Path(DataTide.Configurations.Global.Paths.Tide.tide_indexes)
+ICONS = DataTide.Configurations.Documentation.icons
+WIKI_PATH = (
+    str(DataTide.Configurations.Documentation.models_docs_folder)
+    .replace("../", "")
+    .replace(" ", "-")
+)
+WIKI_MODEL_FOLDER = DataTide.Configurations.Documentation.object_names
+DEBUG = DataTide.Configurations.DEBUG
+
+if os.getenv("TIDE_WIKI_GENERATION") == "GITLAB_WIKI":
+    WIKI_URL = f"{os.getenv('CI_SERVER_URL')}/{os.getenv('CI_PROJECT_PATH')}/_/wikis/"
+else:
+    WIKI_URL = DataTide.Configurations.Documentation.wiki.get("wiki_link")
+
+
+def run():
+
+    log("TITLE", "Generate Vocabularies from Model Data")
+    log(
+        "INFO",
+        "Creates Vocabulary like schema TIDeMEC models, so they can be used within JSON Schema for validation.",
+    )
+
+    MODEL_SCOPE = DataTide.Configurations.Global.models
+    ICONS = DataTide.Configurations.Documentation.icons
+    EXPORT_INDENT = 0
+    if DEBUG:
+        EXPORT_INDENT = 4
+    model_index = {}
+
+    for model_type in MODEL_SCOPE:
+
+        index_name = DataTide.Configurations.Documentation.object_names[model_type]
+        metadata = {
+            "field": model_type,
+            "icon": ICONS[model_type],
+            "name": index_name,
+            "description": index_name
+        }
+        entries = {}
+        registry = DataTide.Models.Index[model_type]
+
+        for model in registry:            
+            
+            model_data = registry[model]
+
+            entry = {}
+            entry["name"] = model_data["name"]
+            
+            entry["tlp"] = model_data["metadata"]["tlp"]
+            entry["criticality"] = model_data.get("criticality")
+            entry["aliases"] = model_data.get("actor", {}).get("aliases")
+            
+            description = str()
+
+            match model_type:
+                case "tam":
+                    description = model_data.get("actor", {}).get("description")
+                case "tvm":
+                    description = model_data.get("threat", {}).get("description")
+                case "cdm":
+                    description = model_data.get("detection", {}).get("guidelines")
+                case "bdr":
+                    description = model_data.get("request", {}).get("description")
+                case "mdr":
+                    description = model_data.get("description") or ""
+
+            entry["description"] = description
+
+            # Filter out None values
+            entry = {k: v for k, v in entry.items() if v is not None}
+            # Replace newlines to improve display
+            entry = {k: v.replace("\n ", " ") if type(v) is str else v for k, v in entry.items()}
+
+            entries[model] = entry
+
+        model_index[model_type] = {}
+        model_index[model_type]["metadata"] = metadata
+        model_index[model_type]["entries"] = entries
+
+    with open(TIDE_INDEXES_PATH/"models.json", "w+", encoding="utf-8") as export:
+        export.write("")
+        json.dump(model_index, export, indent=EXPORT_INDENT)
+
+    log("SUCCESS", "Finished indexing all models as vocabularies")
+
+
+if __name__ == "__main__":
+    run()

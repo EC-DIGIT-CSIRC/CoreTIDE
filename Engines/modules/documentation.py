@@ -148,7 +148,7 @@ def get_icon(
         return str(ICONS[value])
 
     elif value in VOCAB_INDEX.keys():
-        return VOCAB_INDEX[value]["metadata"].get("icon") or ""
+        return VOCAB_INDEX[value].get("metadata", {}).get("icon") or ""
 
     elif vocab and vocab in VOCAB_INDEX.keys():
         vocab_data = VOCAB_INDEX[vocab]["entries"]

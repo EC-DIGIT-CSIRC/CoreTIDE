@@ -6,16 +6,15 @@ from datetime import datetime
 import sys
 import traceback
 from pathlib import Path
-from typing import Literal
+from typing import Literal, Tuple
 
 
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.modules.deployment import enabled_systems, modified_mdr_files, Proxy
 from Engines.modules.logs import log, Colors, tidemec_intro
-from Engines.modules.tide import DataTide
-from Engines.mutation import promotion
-from Engines.modules.plugins import DeployTide
+from Engines.modules.tide import DataTide, IndexTide
+from Engines.mutation.promotion import PromoteMDR
 
 
 toolchain_start_time = datetime.now()
@@ -44,11 +43,14 @@ torrent = rf"""
 print(torrent)
 
 
-def make_deploy_plan(plan: Literal["STAGING", "PRODUCTION"]) -> dict[str, list[str]]:
+def make_deploy_plan(
+    plan: Literal["STAGING", "PRODUCTION"]
+) -> Tuple[dict[str, list[str]], list[Path]]:
 
     log("INFO", "Compiling MDRs to deploy in plan", plan)
     mdr_files = list()
     deploy_mdr = dict()
+    promote_mdr = dict()  # Raw file paths
 
     if plan == "FULL":
         MDR_PATH = Path(DataTide.Configurations.Global.Paths.Tide.mdr)
@@ -75,6 +77,7 @@ def make_deploy_plan(plan: Literal["STAGING", "PRODUCTION"]) -> dict[str, list[s
                 if plan == "PRODUCTION":
                     if platform_status in PRODUCTION_STATUS:
                         deploy_mdr.setdefault(system, []).append(mdr_uuid)
+                        promote_mdr.append(Path(rule))
                         log(
                             "SUCCESS",
                             f"[{system.upper()}][{platform_status}] Identified MDR to deploy in {plan}",
@@ -93,6 +96,7 @@ def make_deploy_plan(plan: Literal["STAGING", "PRODUCTION"]) -> dict[str, list[s
                         and platform_status not in SAFE_STATUS
                     ):
                         deploy_mdr.setdefault(system, []).append(mdr_uuid)
+                        promote_mdr.append(Path(rule))
                         log(
                             "SUCCESS",
                             f"[{system.upper()}][{platform_status}] Identified MDR to deploy in {plan}",
@@ -112,7 +116,7 @@ def make_deploy_plan(plan: Literal["STAGING", "PRODUCTION"]) -> dict[str, list[s
                     name,
                 )
 
-    return deploy_mdr
+    return deploy_mdr, list(set(promote_mdr))
 
 
 if not DEPLOYMENT_PLAN:
@@ -131,16 +135,9 @@ if DEPLOYMENT_PLAN not in SUPPORTED_PLANS:
     )
     raise AttributeError("UNSUPPORTED DEPLOYMENT PLAN")
 
+deployment_list, promotion_list = make_deploy_plan(DEPLOYMENT_PLAN)  # type: ignore
 
-# Pre deployment run, for supporting scripts which are not deploying,
-# But may modify data on the fly.
-if DEPLOYMENT_PLAN == "PRODUCTION":
-    log("TITLE", "Pre-deployment Routine")
-    promotion.run()
-
-deployment_plan = make_deploy_plan(DEPLOYMENT_PLAN)  # type: ignore
-
-if len(deployment_plan) == 0:  # In case of no deployments possible, fail graciously
+if len(deployment_list) == 0:  # In case of no deployments possible, fail graciously
     log(
         "WARNING",
         "Nothing could deploy, no MDR can be addressed within this deployment context",
@@ -149,14 +146,28 @@ if len(deployment_plan) == 0:  # In case of no deployments possible, fail gracio
     sys.exit(19)
 
 
+# Pre deployment run, for supporting scripts which are not deploying,
+# But may modify data on the fly.
+if DEPLOYMENT_PLAN == "PRODUCTION":
+    log("TITLE", "Pre-deployment Routine")
+    PromoteMDR().promote(promotion_list)
+
+# Need reindexation after MDR promotion is complete.
+IndexTide.reload()
+
+# Need to import later so DataTide has been correctly
+# Refreshed post-promotion, and thus can correctly set
+# global modules variables.
+from Engines.modules.plugins import DeployTide
+
 if MDR_METADATA_LOOKUPS_CONFIG["enabled"]:
     log("TITLE", "MDR Metadata Deployment")
     log("INFO", "Continuously update a lookup with the MDR Data as they deploy")
     deployment = []
     lookup_name = MDR_METADATA_LOOKUPS_CONFIG["name"]
     enabled_systems = MDR_METADATA_LOOKUPS_CONFIG["systems"]
-    for system in deployment_plan:
-        deployment.extend(deployment_plan[system])
+    for system in deployment_list:
+        deployment.extend(deployment_list[system])
     deployment = list(set(deployment))  # Dedup, since MDR can have multiple systems
     for system in enabled_systems:
         if system in DeployTide.metadata:
@@ -172,13 +183,16 @@ if MDR_METADATA_LOOKUPS_CONFIG["enabled"]:
             )
             raise (Exception("METADATA DEPLOYMENT ENGINE NOT FOUND"))
 
-for system in deployment_plan:
+for system in deployment_list:
     log("TITLE", "MDR Deployment")
-    log("INFO", "Deploy MDR onto the system they target, if allowed at the instance level and deployment context")
+    log(
+        "INFO",
+        "Deploy MDR onto the system they target, if allowed at the instance level and deployment context",
+    )
 
     if system in DeployTide.mdr:
         log("ONGOING", "Deploying MDR for target system", system)
-        DeployTide.mdr[system].deploy(deployment=deployment_plan[system])
+        DeployTide.mdr[system].deploy(deployment=deployment_list[system])
     else:
         log(
             "FATAL",

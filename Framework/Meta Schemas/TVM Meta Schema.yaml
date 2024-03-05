@@ -12,15 +12,7 @@ required:
   - name
   - criticality
   - threat 
-
-tide.template.force-required:
   - metadata
-
-anyOf:
-  - required:
-    - metadata
-  - required:
-    - meta
 
 properties:
 
@@ -45,23 +37,8 @@ properties:
     description: Objective calculation from severity, impact and sophistication
     example: Emergency
 
-  #references:
-  #  title: Intelligence References
-  #  type: array
-  #  description: Public or internal reference describing the threat
-  #  format: uri
-  #  example: some reports
-  #  items:
-  #    type: string
-  #    format: uri
-
   references:
     tide.meta.definition: true
-
-  meta:
-    tide.template.hide: true
-    tide.meta.deprecation: Use metadata keyword instead
-    tide.meta.definition: metadata
 
   metadata:
     tide.template.spacer: true
@@ -87,7 +64,7 @@ properties:
       actors: 
         title: Threat Actor Model
         type: array
-        tide.vocab: true
+        tide.vocab: tam
         description: Known adversaries that could be the detected subjects, or at least representative
         example: NOBELIUM
 

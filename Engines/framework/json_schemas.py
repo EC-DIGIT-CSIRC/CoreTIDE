@@ -15,9 +15,12 @@ from Engines.modules.logs import log
 from Engines.modules.tide import DataTide
 from Engines.modules.files import resolve_paths
 
+
 GLOBAL_CONFIG = DataTide.Configurations.Global
 
 VOCAB_INDEX = DataTide.Vocabularies.Index
+print("VOCAB INDEX FROM JSON SCHEMA GENERATOR")
+print(VOCAB_INDEX.keys())
 CONFIG_INDEX = DataTide.Configurations.Index
 PATHS = resolve_paths()
 

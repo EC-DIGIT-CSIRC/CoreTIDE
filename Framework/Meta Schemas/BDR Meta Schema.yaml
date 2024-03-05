@@ -12,15 +12,7 @@ required:
   - name
   - criticality
   - request
-
-tide.template.force-required:
   - metadata
-
-anyOf:
-  - required:
-    - metadata
-  - required:
-    - meta
 
 properties:
 
@@ -47,11 +39,6 @@ properties:
 
   references:
     tide.meta.definition: true
-
-  meta:
-    tide.template.hide: true
-    tide.meta.deprecation: Use metadata keyword instead
-    tide.meta.definition: metadata
 
   metadata:
     tide.meta.definition: true

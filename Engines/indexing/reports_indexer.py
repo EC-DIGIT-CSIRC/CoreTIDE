@@ -1,4 +1,4 @@
-import yaml
+import json
 import os
 import git
 import sys
@@ -10,16 +10,12 @@ sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.modules.logs import log
 from Engines.modules.tide import DataTide
-from Engines.templates.tide_indexes import fetch_tide_index_template
 
 TIDE_INDEXES = DataTide.Configurations.Global.Paths.Tide.tide_indexes
 REPORTS_FOLDER = DataTide.Configurations.Global.Paths.Tide.reports
-REPORTS_VOCAB = TIDE_INDEXES / "Reports.yaml"
-
-class IndentFullDumper(yaml.Dumper):
-
-    def increase_indent(self, flow=False, indentless=False):
-        return super(IndentFullDumper, self).increase_indent(flow, False)
+REPORTS_INDEX = TIDE_INDEXES / "reports.json"
+DEBUG = DataTide.Configurations.DEBUG
+ICONS = DataTide.Configurations.Documentation.icons
 
 def pdf_description(pdf: Path) -> str:
 
@@ -41,14 +37,25 @@ def run():
     log("TITLE", "Generate Vocabularies from Reports")
     log("INFO", "Indexes reports and builds vocabulary of reports")
     
-    report_index = list()
-    
-    for report in sorted(os.listdir(REPORTS_FOLDER)):
-        metadata = report.split(" - ")
+    EXPORT_INDENT = 0
+    if DEBUG:
+        EXPORT_INDENT = 4
+    reports_index = dict()
+    field_name = "reports"
+    metadata = {
+        "field": field_name,
+        "icon": ICONS.get(field_name, ""),
+        "name": "Intelligence Reports",
+        "description": "Registry of reports uploaded to this TIDeMEC instance"
+    }
+    entries = {}
 
-        report_id = metadata[0]
+    for report in sorted(os.listdir(REPORTS_FOLDER)):
+        report_metadata = report.split(" - ")
+
+        report_id = report_metadata[0]
         report_tlp = (
-            metadata[1]
+            report_metadata[1]
             .replace("TLP", "")
             .replace("[", "")
             .replace("]", "")
@@ -56,32 +63,24 @@ def run():
             .strip()
             .lower()
         )
-        report_name = metadata[2].replace(".pdf", "")
+        report_name = report_metadata[2].replace(".pdf", "")
         report_description = pdf_description(REPORTS_FOLDER / report)[:500] + "..."
 
         report_entry = {
-            "id": report_id,
             "name": report_name,
             "file_name": report,
             "description": report_description,
             "tlp": report_tlp,
         }
 
-        report_index.append(report_entry)
+        entries[report_id] = report_entry
 
-    print(report_index)
+    reports_index[field_name] = {}
+    reports_index[field_name]["metadata"] = metadata
+    reports_index[field_name]["entries"] = entries
 
-    content = fetch_tide_index_template("report")
-    content["keys"] = report_index
-    with open(REPORTS_VOCAB, "w+", encoding="utf-8") as export:
-        yaml.dump(
-            content,
-            export,
-            sort_keys=False,
-            Dumper=IndentFullDumper,
-            allow_unicode=True,
-        )
-
+    with open(TIDE_INDEXES/(field_name + ".json"), "w+", encoding="utf-8") as export:
+        json.dump(reports_index, export, indent=EXPORT_INDENT)
 
 if __name__ == "__main__":
     run()

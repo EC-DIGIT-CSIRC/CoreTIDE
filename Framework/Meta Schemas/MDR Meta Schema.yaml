@@ -11,15 +11,12 @@ required:
   - response
   - description
   - configurations
-
-tide.template.force-required:
   - metadata
+
 
 anyOf:
   - required:
-    - metadata
-  - required:
-    - meta
+    - 
 
 properties:
 
@@ -58,7 +55,7 @@ properties:
   detection_model: 
     title: TIDeMEC Cyber Detection Model
     type: string
-    tide.vocab: true
+    tide.vocab: cdm
     description: CDM that this detection rule is implementing.
     example: CDM0016
 

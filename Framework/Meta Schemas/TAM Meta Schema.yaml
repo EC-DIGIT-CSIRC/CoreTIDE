@@ -9,15 +9,7 @@ required:
   - name
   - criticality
   - actor
-
-tide.template.force-required:
   - metadata
-
-anyOf:
-  - required:
-    - metadata
-  - required:
-    - meta
 
 properties:
 

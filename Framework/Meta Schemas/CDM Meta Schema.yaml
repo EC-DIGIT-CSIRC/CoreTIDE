@@ -9,15 +9,7 @@ required:
   - name
   - criticality
   - detection
-
-tide.template.force-required:
   - metadata
-
-anyOf:
-  - required:
-    - metadata
-  - required:
-    - meta
 
 properties:
 
@@ -45,11 +37,6 @@ properties:
   references:
     tide.meta.definition: true
 
-  meta:
-    tide.template.hide: true
-    tide.meta.deprecation: Use metadata keyword instead
-    tide.meta.definition: metadata
-
   metadata:
     tide.meta.definition: true
 
@@ -74,7 +61,7 @@ properties:
       vectors: 
         title: Threat Vector Model
         type: array
-        tide.vocab: true
+        tide.vocab: tvm
         description: Threat Vectors that need to be detected
         example: TVM0001
 

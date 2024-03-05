@@ -40,7 +40,7 @@ items:
       icon: ☣️
       description: The target of the relationship the chain is representing 
       type: string
-      tide.vocab: vectors
+      tide.vocab: tvm
 
     description:
       title: Chaining Description

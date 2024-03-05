@@ -58,7 +58,6 @@ properties:
 
   reports:
     title: Reports
-    icon: 📄
     description: |
       Document which have been uploaded onto the TIDeMEC instance, which shareability is dependent
       on the respective TLP rating of the indexed object.
