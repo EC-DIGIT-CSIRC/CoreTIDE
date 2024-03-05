@@ -12,7 +12,7 @@ sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 from Engines.modules.tide import DataTide, IndexTide
 
 CONFIG = DataTide.Configurations
-INDEX = IndexTide().Index
+INDEX = DataTide.Index
 SKIP_KEYS = DataTide.Configurations.Documentation.skip_model_keys
 DOCUMENTATION_TYPE = DataTide.Configurations.Documentation.documentation_type
 DEFINITIONS_INDEX = DataTide.TideSchemas.definitions
