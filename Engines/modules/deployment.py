@@ -48,7 +48,7 @@ def modified_mdr_files(stage: Literal["STAGING", "PRODUCTION"])->list[Path]:
         mdr for mdr in diff_calculation(stage) if re.match(mdr_path_regex, mdr)
     ]
 
-    mdr_files = [(MDR_PATH / + f) for f in mdr_files]
+    mdr_files = [(MDR_PATH / f) for f in mdr_files]
     log("INFO", "Computed modified MDR Files", ", ".join(mdr_files))
     return mdr_files
 
