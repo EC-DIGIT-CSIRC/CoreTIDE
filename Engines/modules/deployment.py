@@ -4,6 +4,7 @@ import git
 from git.repo import Repo
 import re
 from typing import Literal
+from pathlib import Path
 
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
@@ -34,15 +35,20 @@ def fetch_config_envvar(config_secrets: dict) -> dict:
     return config_secrets
 
 
-def modified_mdr_files(stage: Literal["STAGING", "PRODUCTION"]):
-    PROJECT_DIR = os.getenv("CI_PROJECT_DIR") or "./"
+def modified_mdr_files(stage: Literal["STAGING", "PRODUCTION"])->list[Path]:
+
+    MDR_PATH = DataTide.Configurations.Global.Paths.Tide.mdr
+    MDR_PATH_RAW = DataTide.Configurations.Global.Paths.Tide._raw["mdr"]
+    MDR_PATH_RAW = MDR_PATH_RAW.replace(r"/", r"\/")
+
     mdr_path_regex = (
-        r"^.*Models Library\/Managed Detection Rules\/[^\/]+(\.yaml|\.yml)$"
+        rf"^.*{MDR_PATH_RAW}[^\/]+(\.yaml|\.yml)$"
     )
     mdr_files = [
         mdr for mdr in diff_calculation(stage) if re.match(mdr_path_regex, mdr)
     ]
-    mdr_files = [(PROJECT_DIR + "/" + f) for f in mdr_files]
+
+    mdr_files = [(MDR_PATH / + f) for f in mdr_files]
     log("INFO", "Computed modified MDR Files", ", ".join(mdr_files))
     return mdr_files
 

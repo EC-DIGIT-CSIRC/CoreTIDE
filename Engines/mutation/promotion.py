@@ -30,7 +30,11 @@ DEBUG = True
 
 
 class PromoteMDR:
-    def edit_mdr_statuses(self, mdr_path, status_to_promote):
+    """
+    If enabled by config, dynamically re-assigns non-production statuses
+    towards new targets
+    """
+    def edit_mdr_statuses(self, mdr_path:Path, status_to_promote:list):
 
         # We modify the file as text instead of loading and dumping the yaml
         # as formatting or comments are not always preserved, for small

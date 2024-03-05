@@ -45,12 +45,11 @@ print(torrent)
 
 def make_deploy_plan(
     plan: Literal["STAGING", "PRODUCTION"]
-) -> Tuple[dict[str, list[str]], list[Path]]:
+) -> dict[str, list[str]]:
 
     log("INFO", "Compiling MDRs to deploy in plan", plan)
     mdr_files = list()
     deploy_mdr = dict()
-    promote_mdr = dict()  # Raw file paths
 
     if plan == "FULL":
         MDR_PATH = Path(DataTide.Configurations.Global.Paths.Tide.mdr)
@@ -77,7 +76,6 @@ def make_deploy_plan(
                 if plan == "PRODUCTION":
                     if platform_status in PRODUCTION_STATUS:
                         deploy_mdr.setdefault(system, []).append(mdr_uuid)
-                        promote_mdr.append(Path(rule))
                         log(
                             "SUCCESS",
                             f"[{system.upper()}][{platform_status}] Identified MDR to deploy in {plan}",
@@ -96,7 +94,6 @@ def make_deploy_plan(
                         and platform_status not in SAFE_STATUS
                     ):
                         deploy_mdr.setdefault(system, []).append(mdr_uuid)
-                        promote_mdr.append(Path(rule))
                         log(
                             "SUCCESS",
                             f"[{system.upper()}][{platform_status}] Identified MDR to deploy in {plan}",
@@ -116,7 +113,7 @@ def make_deploy_plan(
                     name,
                 )
 
-    return deploy_mdr, list(set(promote_mdr))
+    return deploy_mdr
 
 
 if not DEPLOYMENT_PLAN:
@@ -135,7 +132,18 @@ if DEPLOYMENT_PLAN not in SUPPORTED_PLANS:
     )
     raise AttributeError("UNSUPPORTED DEPLOYMENT PLAN")
 
-deployment_list, promotion_list = make_deploy_plan(DEPLOYMENT_PLAN)  # type: ignore
+
+
+# Status promotion, happening before the main deployment loop
+if DEPLOYMENT_PLAN == "PRODUCTION":
+    pre_deployment = modified_mdr_files(DEPLOYMENT_PLAN)
+    log("TITLE", "Pre-deployment Routine")
+    PromoteMDR().promote(pre_deployment)
+
+
+# Refetches the deployment plan, so it can read the MDR after modification
+# and assess the correct latest status
+deployment_list = make_deploy_plan(DEPLOYMENT_PLAN)  # type: ignore
 
 if len(deployment_list) == 0:  # In case of no deployments possible, fail graciously
     log(
@@ -144,13 +152,6 @@ if len(deployment_list) == 0:  # In case of no deployments possible, fail gracio
     )
     traceback.print_exc()
     sys.exit(19)
-
-
-# Pre deployment run, for supporting scripts which are not deploying,
-# But may modify data on the fly.
-if DEPLOYMENT_PLAN == "PRODUCTION":
-    log("TITLE", "Pre-deployment Routine")
-    PromoteMDR().promote(promotion_list)
 
 # Need reindexation after MDR promotion is complete.
 IndexTide.reload()
