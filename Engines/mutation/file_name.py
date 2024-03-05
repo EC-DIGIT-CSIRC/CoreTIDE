@@ -47,6 +47,8 @@ def run():
         highest_id = 0
         files_to_assign = []
         for file in sorted(os.listdir(PATHS[model])):
+            print("DEBUG", PATHS[model])
+            print("DEBUG", model)
             data = yaml.safe_load(open(PATHS[model] / file, encoding="utf-8"))
             model_name = data["name"]
             model_id = data.get("id")
