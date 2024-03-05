@@ -4,6 +4,7 @@ import sys
 from pathlib import Path
 import json
 from typing import Literal, Dict, Tuple
+from functools import cache
 
 from dataclasses import dataclass
 
@@ -11,60 +12,69 @@ sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.indexing.indexer import indexer
 from Engines.modules.logs import log
-from Engines.modules.files import resolve_paths
 
 ROOT = Path(str(git.Repo(".", search_parent_directories=True).working_dir))
 
-
-@dataclass
 class IndexTide:
     """
-    Common helper class to retrieve the Tide Index
+    Helper class for callable Index related functions. Designed to power
+    `DataTide` initialization routine.
     """
-
-    Index = dict()
-    EXPECTED_INDEX_PATH = ROOT / "index.json"
-    INDEX_PATH = Path(os.getenv("INDEX_PATH") or EXPECTED_INDEX_PATH)
-
-    def __post_init__(self):
-        self.Index = self._cache_index()
-
-    def _cache_index(self) -> Dict[str, dict]:
+    @staticmethod
+    def reload():
         """
-        To ensure that we are not reindexing the repository on every call
-        to the index, `_cache_index()` uses a global variable `TIDE_INDEX`to preserve
-        state, as a form or memoization.
+        Due to the execution model of DataTide, the dataclass gets initialized 
+        immediately with current index, and the class can't be updated dynamically
+        with index changes.
 
-        The state of the repo will usually not change across most operations,
-        but passing `reset=True` will reindex the repository imperatively.
+        Calling this function hard removes the module from `sys.modules` and reimports
+        it in the execution context calling the module. This is intended to be used in 
+        Orchestration chains where the index has to be updated at some point between two steps,
+        for example as framework elements gets updated, and should be reinjected in a later
+        toolchain stage.
         """
+        log("WARNING", "DataTide re-indexation")
+        log("INFO", "The repository will be reindexed to update DataTide")
+        del sys.modules["tide"]
+        from tide import DataTide
 
-        if "TIDE_INDEX" in globals().keys():                
-            return globals()["TIDE_INDEX"]
+    @cache #Memoization as load() is called multiple times as DataTide initializes
+    @staticmethod
+    def load() -> Dict[str, dict]:
+        """
+        Resolves the current index from a local index json or dynamically. 
+        
+        Once DataTide is initialized, it becomes a static object containing all
+        of the Tide Instance data at the time the object is created. To update DataTide,
+        call `IndexTide.reload()` to return the latest DataTide object.
+        """
+        EXPECTED_INDEX_PATH = ROOT / "index.json"
+        INDEX_PATH = Path(os.getenv("INDEX_PATH") or EXPECTED_INDEX_PATH)
 
-        global TIDE_INDEX  # INDEX will be written to the global scope
         print("📂 Index not found in memory, first seeking index file...")
-        if os.path.isfile(self.INDEX_PATH):
-            TIDE_INDEX = json.load(open(self.INDEX_PATH))
-            TIDE_INDEX = IndexUtils.reconcile_staging(TIDE_INDEX)
-            return TIDE_INDEX
+        if os.path.isfile(INDEX_PATH):
+            _tide_index = json.load(open(INDEX_PATH))
+            _tide_index = IndexTide.reconcile_staging(_tide_index)
+            return _tide_index
         else:
             # Generate index in memory
             print("💽 Could not find index file, generating it in memory")
-            TIDE_INDEX = indexer()
-            TIDE_INDEX = IndexUtils.reconcile_staging(TIDE_INDEX)
-            if not TIDE_INDEX:
+            _tide_index = indexer()
+            _tide_index = IndexTide.reconcile_staging(_tide_index)
+            if not _tide_index:
                 raise Exception("INDEX COULD NOT BE LOADED IN MEMORY")
-            return TIDE_INDEX
-
-
-class IndexUtils:
+            return _tide_index
 
     @staticmethod
     def reconcile_staging(index):
+        """
+        Helper function of `IndexTide.load()` designed to seek a staging index
+        and dynamically reconcile in flight.
+        """
+
         log("INFO", "Entering staging index reconciliation routine")
         EXPECTED_STAGING_INDEX_PATH = ROOT / "staging_index.json"
-        STAGING_INDEX_PATH = os.getenv("STG_INDEX_PATH") or EXPECTED_STAGING_INDEX_PATH
+        STAGING_INDEX_PATH = os.getenv("STAGING_INDEX_PATH") or EXPECTED_STAGING_INDEX_PATH
 
         if not os.path.exists(STAGING_INDEX_PATH):
             log("SKIP", "No Staging Index to reconcile")
@@ -151,36 +161,37 @@ class IndexUtils:
     @staticmethod
     def return_paths(tier: Literal["all", "core", "tide"]) -> dict[str, Path]:
         if tier == "all":
-            return IndexTide().Index["paths"]
+            return IndexTide.load()["paths"]
         if tier == "core":
-            return IndexTide().Index["paths"]["core"]
+            return IndexTide.load()["paths"]["core"]
         if tier == "tide":
-            return IndexTide().Index["paths"]["tide"]
+            return IndexTide.load()["paths"]["tide"]
 
 
-@dataclass(frozen=True)
 class DataTide:
     """Unified programmatic interface to access all data in the
     TIDE instance. Calling this class triggers an indexation of the
     entire repository and stores it in memory.
 
-    If the index is already in memory, will directly access this
-    object to maintain high performances.
+    DataTide execution model as a self-initializing dataclass means
+    it will fetch all index data dynamically when the tide module is first
+    imported in the execution environment, then freeze this state. To
+    refresh DataTide, call `IndexTide.reload()` , a new DataTide object
+    will be initialized. 
     """
 
     # Index = _retrieve_index
     """Return the raw index content"""
 
-    Index = IndexTide().Index
-
+    Index = IndexTide.load()
+    
     @dataclass(frozen=True)
     class Models:
         """TIDE Lookups Interface.
 
         Exposes all the configurations of the instance
         """
-
-        Index = dict(IndexTide().Index["models"])
+        Index = dict(IndexTide.load()["models"])
         """All Models Data Index"""
         tam = dict(Index["tam"])
         """Threat Actor Models Data Index"""
@@ -192,7 +203,7 @@ class DataTide:
         """Managed Detection Rules Data Index"""
         bdr = dict(Index["bdr"])
         """Business Detection Rules Data Index"""
-        chaining = IndexUtils.compute_chains(tvm)
+        chaining = IndexTide.compute_chains(tvm)
         """Index of all chaining relationships"""
 
     @dataclass(frozen=True)
@@ -202,7 +213,7 @@ class DataTide:
         Exposes the vocabularies used across the instance
         """
 
-        Index = dict(IndexTide().Index["vocabs"])
+        Index = dict(IndexTide.load()["vocabs"])
 
     @dataclass(frozen=True)
     class JsonSchemas:
@@ -210,7 +221,7 @@ class DataTide:
         Interface to all the JSON Schemas generated from TideS
         """
 
-        Index = dict(IndexTide().Index["json_schemas"])
+        Index = dict(IndexTide.load()["json_schemas"])
         tam = dict(Index.get("tam", {}))
         """Threat Actor Model JSON Schema"""
         tvm = dict(Index.get("tvm", {}))
@@ -228,7 +239,7 @@ class DataTide:
         Interface to all the templates generated from TideSchemas
         """
 
-        Index = dict(IndexTide().Index["templates"])
+        Index = dict(IndexTide.load()["templates"])
         tam = str(Index.get("tam"))
         """Threat Actor Model Object Template"""
         tvm = str(Index.get("tvm"))
@@ -247,10 +258,10 @@ class DataTide:
         Exposes the different schemas used across the instance
         """
 
-        Index = dict(IndexTide().Index["metaschemas"])
-        subschemas = dict(IndexTide().Index["subschemas"])
-        definitions = dict(IndexTide().Index["definitions"])
-        templates = dict(IndexTide().Index["templates"])
+        Index = dict(IndexTide.load()["metaschemas"])
+        subschemas = dict(IndexTide.load()["subschemas"])
+        definitions = dict(IndexTide.load()["definitions"])
+        templates = dict(IndexTide.load()["templates"])
         tam = dict(Index["tam"])
         """Threat Actor Model Tide Schema"""
         tvm = dict(Index["tvm"])
@@ -271,16 +282,16 @@ class DataTide:
         Exposes the lookups data within of the instance
         """
 
-        lookups = dict(IndexTide().Index["lookups"]["lookups"])
-        metadata = dict(IndexTide().Index["lookups"]["metadata"])
+        lookups = dict(IndexTide.load()["lookups"]["lookups"])
+        metadata = dict(IndexTide.load()["lookups"]["metadata"])
 
     @dataclass(frozen=True)
     class Configurations:
-        Index = dict(IndexTide().Index["configurations"])
+        Index = dict(IndexTide.load()["configurations"])
 
         @dataclass(frozen=True)
         class Global:
-            Index = dict(IndexTide().Index["configurations"]["global"])
+            Index = dict(IndexTide.load()["configurations"]["global"])
             models = Index["models"]
             metaschemas = dict(Index["metaschemas"])
             recomposition = dict(Index["recomposition"])
@@ -291,8 +302,8 @@ class DataTide:
 
             @dataclass(frozen=True)
             class Paths:
-                Index = IndexUtils.return_paths(tier="all")
-                _raw = dict(IndexTide().Index["paths"]["raw"])
+                Index = IndexTide.return_paths(tier="all")
+                _raw = dict(IndexTide.load()["paths"]["raw"])
                 """Paths without the proper absolute calculation.
                 Only use for specific use cases, for any others prefer
                 the other attributes which are precomputed"""
@@ -301,8 +312,8 @@ class DataTide:
                 class Core:
                     """Paths to Tide Internals"""
 
-                    Index = IndexUtils.return_paths(tier="core")
-                    _raw = dict(IndexTide().Index["paths"]["raw"]["core"])
+                    Index = IndexTide.return_paths(tier="core")
+                    _raw = dict(IndexTide.load()["paths"]["raw"]["core"])
                     """Paths without the proper absolute calculation.
                     Only use for specific use cases, for any others prefer
                     the other attributes which are precomputed"""
@@ -323,8 +334,8 @@ class DataTide:
                     """Paths to Tide Content, Models, and Artifacts at
                     the top level directory"""
 
-                    Index = IndexUtils.return_paths(tier="tide")
-                    _raw = dict(IndexTide().Index["paths"]["raw"]["tide"])
+                    Index = IndexTide.return_paths(tier="tide")
+                    _raw = dict(IndexTide.load()["paths"]["raw"]["tide"])
                     """Paths without the proper absolute calculation.
                     Only use for specific use cases, for any others prefer
                     the other attributes which are precomputed"""
@@ -343,11 +354,11 @@ class DataTide:
 
         @dataclass(frozen=True)
         class Systems:
-            Index = dict(IndexTide().Index["configurations"]["systems"])
+            Index = dict(IndexTide.load()["configurations"]["systems"])
 
             @dataclass(frozen=True)
             class Splunk:
-                Index = dict(IndexTide().Index["configurations"]["systems"]["splunk"])
+                Index = dict(IndexTide.load()["configurations"]["systems"]["splunk"])
                 tide = dict(Index["tide"])
                 setup = dict(Index["setup"])
                 secrets = dict(Index["secrets"])
@@ -357,7 +368,7 @@ class DataTide:
 
             @dataclass(frozen=True)
             class Sentinel:
-                Index = dict(IndexTide().Index["configurations"]["systems"]["sentinel"])
+                Index = dict(IndexTide.load()["configurations"]["systems"]["sentinel"])
                 tide = dict(Index["tide"])
                 setup = dict(Index["setup"])
                 secrets = dict(Index["secrets"])
@@ -367,7 +378,7 @@ class DataTide:
             @dataclass(frozen=True)
             class CarbonBlackCloud:
                 Index = dict(
-                    IndexTide().Index["configurations"]["systems"]["carbon_black_cloud"]
+                    IndexTide.load()["configurations"]["systems"]["carbon_black_cloud"]
                 )
                 tide = dict(Index["tide"])
                 setup = dict(Index["setup"])
@@ -377,7 +388,7 @@ class DataTide:
         class Documentation:
             """Parameters describing how documentation should be generated."""
 
-            Index = dict(IndexTide().Index["configurations"]["documentation"])
+            Index = dict(IndexTide.load()["configurations"]["documentation"])
             scope = list(Index["scope"])
             skip_model_keys = list(Index["skip_model_keys"])
             skip_vocabularies = list(Index["skip_model_keys"])
@@ -388,10 +399,10 @@ class DataTide:
             icons = dict(Index["icons"])
             indexes = dict(Index["indexes"])
             (documentation_type, glfm_doc_target, raw_md_doc_target) = (
-                IndexUtils.compute_doc_target()
+                IndexTide.compute_doc_target()
             )
             models_docs_folder: Path = Path(
-                IndexTide().Index["configurations"]["global"]["paths"]["core"][
+                IndexTide.load()["configurations"]["global"]["paths"]["core"][
                     "models_docs_folder"
                 ]
             )
@@ -405,7 +416,7 @@ class DataTide:
         class Resources:
             """Parameters pointing to External resources used by engines."""
 
-            Index = dict(IndexTide().Index["configurations"]["resources"])
+            Index = dict(IndexTide.load()["configurations"]["resources"])
             attack = dict(Index["attack"])
             d3fend = dict(Index["d3fend"])
             engage = dict(Index["engage"])
@@ -415,7 +426,7 @@ class DataTide:
         class Deployment:
             """Generic deployment parameters."""
 
-            Index = dict(IndexTide().Index["configurations"]["deployment"])
+            Index = dict(IndexTide.load()["configurations"]["deployment"])
             status = dict(Index["status"])
             promotion = dict(Index["promotion"])
             default_responders = str(Index["default_responders"])
@@ -426,12 +437,12 @@ class DataTide:
         class Lookups:
             """Lookups feature management"""
 
-            Index = dict(IndexTide().Index["configurations"]["lookups"])
+            Index = dict(IndexTide.load()["configurations"]["lookups"])
             validation = dict(Index["validation"])
 
         """TIDE Configuration Interface.
 
         Exposes all the configurations of the instance
         """
-        Index = dict(IndexTide().Index["configurations"])
+        Index = dict(IndexTide.load()["configurations"])
         """Contains all configurations"""
