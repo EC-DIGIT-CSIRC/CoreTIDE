@@ -45,8 +45,10 @@ def modified_mdr_files(stage: Literal["STAGING", "PRODUCTION"])->list[Path]:
         rf"^.*{MDR_PATH_RAW}[^\/]+(\.yaml|\.yml)$"
     )
     mdr_files = [
-        mdr for mdr in diff_calculation(stage) if re.match(mdr_path_regex, mdr)
+        mdr.split("/")[-1] for mdr in diff_calculation(stage) if re.match(mdr_path_regex, mdr)
     ]
+    #Extracting only the file name so it can be appended to MDR_PATH
+    # which is absolute, and thus more reliable
 
     mdr_files = [(MDR_PATH / f) for f in mdr_files]
     log("INFO", "Computed modified MDR Files", str(mdr_files))
