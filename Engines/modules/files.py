@@ -4,7 +4,7 @@ import os
 import toml
 from pathlib import Path
 from collections.abc import MutableMapping as Map
-from typing import overload, Tuple
+from typing import overload, Tuple, Literal
 
 
 def resolve_configurations() -> dict[str, dict]:
@@ -72,9 +72,15 @@ def resolve_configurations() -> dict[str, dict]:
     return unified_configs
 
 @overload
-def resolve_paths(separate=True) -> Tuple[dict[str, Path], dict[str, Path]]:
+def resolve_paths(separate:Literal[True]) -> Tuple[dict[str, Path], dict[str, Path]]:
     ...
-def resolve_paths(separate=False) -> dict[str, Path]:
+@overload
+def resolve_paths(separate:Literal[False]) -> dict[str, Path]:
+    ...
+@overload
+def resolve_paths() -> dict[str, Path]:
+    ...
+def resolve_paths(separate:bool=False):
     """
     Interface to provide absolute paths from configurations, after reconciling the
     them. Tide Paths are directed at the top level instance into which Tide
