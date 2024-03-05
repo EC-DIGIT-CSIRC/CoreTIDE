@@ -13,7 +13,6 @@ from Engines.modules.files import safe_file_name, resolve_configurations, resolv
 ROOT = Path(str(git.Repo(".", search_parent_directories=True).working_dir))
 CONFIGURATIONS = resolve_configurations()
 PATHS = resolve_paths()
-print(PATHS)
 MODELS_TYPES = CONFIGURATIONS["global"]["models"]
 
 def assign_id(file_path, new_id):
@@ -47,8 +46,6 @@ def run():
         highest_id = 0
         files_to_assign = []
         for file in sorted(os.listdir(PATHS[model])):
-            print("DEBUG", PATHS[model])
-            print("DEBUG", model)
             data = yaml.safe_load(open(PATHS[model] / file, encoding="utf-8"))
             model_name = data["name"]
             model_id = data.get("id")
