@@ -25,7 +25,11 @@ STATUS_VOCAB = yaml.safe_load(
     open(PATHS["vocabularies"] / "MDR Status.yaml", encoding="utf-8")
 )
 VALID_STATUSES = [k["id"] for k in STATUS_VOCAB["keys"]]
-
+if (os.environ.get("DEBUG") == True or os.environ.get("TERM_PROGRAM") == "vscode"):
+    DEBUG = True
+else:
+    DEBUG = False
+    
 class PromoteMDR:
     """
     If enabled by config, dynamically re-assigns non-production statuses
