@@ -1,12 +1,11 @@
 import sys
 import os
 import git
-import toml
 from pathlib import Path
 
 import yaml
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.modules.logs import log
 from Engines.modules.files import safe_file_name, resolve_configurations, resolve_paths
