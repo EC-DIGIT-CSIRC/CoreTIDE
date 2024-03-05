@@ -12,7 +12,7 @@ from typing import Literal, Tuple
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.modules.deployment import enabled_systems, modified_mdr_files, Proxy
-from Engines.modules.logs import log, Colors, tidemec_intro
+from Engines.modules.logs import log, Colors, coretide_intro
 from Engines.modules.tide import DataTide, IndexTide
 from Engines.mutation.promotion import PromoteMDR
 
@@ -28,7 +28,7 @@ SUPPORTED_PLANS = ["STAGING", "PRODUCTION"]
 DEPLOYMENT_PLAN = str(os.getenv("DEPLOYMENT_PLAN")) or ""
 SYSTEMS_DEPLOYMENT = enabled_systems()
 
-print(tidemec_intro())
+print(coretide_intro())
 
 torrent = rf"""
 {Colors.ORANGE}
@@ -36,7 +36,7 @@ torrent = rf"""
 /_  __/ __ \/ _ \/ _ \/ __/ |/ /_  __/  
  / / / /_/ / , _/ , _/ _//    / / /     
 /_/  \____/_/|_/_/|_/___/_/|_/ /_/      
-{Colors.BLUE}{Colors.ITALICS}{Colors.BOLD}TIDeMEC MDR Deployment Orchestration
+{Colors.BLUE}{Colors.ITALICS}{Colors.BOLD}CoreTIDE MDR Deployment Orchestration
 {Colors.STOP}
 """
 

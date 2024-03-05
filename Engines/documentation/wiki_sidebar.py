@@ -140,7 +140,7 @@ def run():
         log("ONGOING", "Did not find a wiki folder", "creating a new folder")
         os.mkdir(WIKI_PATH)
 
-    # 🪬 TIDeMEC Home
+    # 🪬 CoreTIDE Home
     # > 🏗️ Data Model
     # > 🔎 Lookups
     # > 📒 Vocabularies
@@ -156,10 +156,10 @@ def run():
     # .staging_index.json
 
     cat_icon = ICONS["home"]
-    category = "TIDeMEC Home"
+    category = "CoreTIDE Home"
 
     print(f"{cat_icon} Generating sidebar entry for {category}")
-    home = f"[{cat_icon} TIDeMEC Home](./home)"
+    home = f"[{cat_icon} CoreTIDE Home](./home)"
 
     # Data Model
 
@@ -302,7 +302,7 @@ def run():
     time_to_execute = "%.2f" % (time.time() - start_time)
 
     print("\n⏱️ Generated navigation sidebar in {} seconds".format(time_to_execute))
-    print("✅ Successfully built TIDeMEC Sidebar for Gitlab Wiki")
+    print("✅ Successfully built CoreTIDE Sidebar for Gitlab Wiki")
 
 
 if __name__ == "__main__":

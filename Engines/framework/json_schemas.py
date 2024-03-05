@@ -151,7 +151,7 @@ def make_markdown_dropdown(name, key, field=""):
     criticality = ""
     id_icon = ICONS["id"]
 
-    # Double check, first identifying if vocab is indeed an internal reference to tidemec,
+    # Double check, first identifying if vocab is indeed an internal reference to coretide,
     # and if the id starts with model categories that generate vocabs. Since the string
     # is long, shortening it.
     if (
@@ -163,7 +163,7 @@ def make_markdown_dropdown(name, key, field=""):
         crit_value_icon = get_vocab_entry("criticality", criticality, "icon")
         criticality = f"{crit_icon} **Criticality** : {crit_value_icon} {criticality}"
 
-        link = f"[See in TIDeMEC Wiki]({link})"
+        link = f"[See in ret Wiki]({link})"
 
     if tlp:
         tlp = f" | **{get_icon(tlp, vocab='tlp')}TLP:{tlp.upper()}**"
@@ -430,8 +430,8 @@ def definition_handler(entry_point):
 
 def gen_json_schema(dictionary):
     """
-    Fills in all tidemec defined fields by calling gen_lib_schema for
-    each field identified recursively by the tidemec tag. It performs
+    Fills in all coretide defined fields by calling gen_lib_schema for
+    each field identified recursively by the coretide tag. It performs
     recursive exploration by calling itself if the key is iself a dict.
     ----------
     dictionary : Nested dictionary to search into
@@ -439,7 +439,7 @@ def gen_json_schema(dictionary):
     Returns
     -------
     dictionary : Iteration of the dictionary where the explored depths
-                 has been dynamically mapped with tidemec keys.
+                 has been dynamically mapped with coretide keys.
 
     """
     dict_foo = dictionary.copy()
@@ -490,7 +490,7 @@ def gen_json_schema(dictionary):
                     if not dict_foo[field].get("additionalProperties"):
                         dictionary[field]["additionalProperties"] = False
 
-                # If within that dict a key is called tidemec, the dict will receive
+                # If within that dict a key is called coretide, the dict will receive
                 # fields generated from the libraries to allow multi or single
                 # field validation with JSON Schema
                 if "recomposition" in dict_foo[field].keys():
@@ -566,7 +566,7 @@ def run():
         "INFO",
         "Generates JSON Schemas from metaschema files, dynamically "
         "looking up Vocabulary values. JSON Schemas allow to validate the models "
-        "as per the TIDeMEC schema.",
+        "as per the CoreTIDE schema.",
     )
 
     # Loops through all source yaml defined in meta_to_json and generates the
@@ -579,7 +579,7 @@ def run():
             json_output = JSON_SCHEMA_FOLDER / GLOBAL_CONFIG.json_schemas[meta]
             parsing = yaml.safe_load(open(yaml_input, encoding="utf-8"))
             log("ONGOING", "Generating json schema for : " + str(yaml_input))
-            # Generate tidemec fields
+            # Generate coretide fields
             generated = gen_json_schema(parsing)
 
             # Removes the extra keys represented in the metaschema

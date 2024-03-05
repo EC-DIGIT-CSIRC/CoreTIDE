@@ -153,7 +153,7 @@ properties:
                 ⚠️ _This type is not recommended as it bypasses validation, and should only be used
                 in exceptional scenario where other types won't apply._
               
-                💡 Use the `regex` type if you require a custom validation type or contact TIDeMEC Governance.
+                💡 Use the `regex` type if you require a custom validation type or contact CoreTIDE Governance.
 
             - const: string
               description: Will explicitely check for string, and reject other format that can be converted to a string.
@@ -236,7 +236,7 @@ properties:
 
                 👉 You will have to enter the regex using the required `regex.expression` keyword
 
-                ⚠️ TIDeMEC does not vet for any third party site to test regular expression,
+                ⚠️ CoreTIDE does not vet for any third party site to test regular expression,
                 we recommend to **not upload any critical data on a third-party controlled site**.
 
             - const: list
@@ -251,15 +251,15 @@ properties:
 
             - const: email
               description: |
-                Standard email format, such as tidemec@tide.com. IP addresses within the email
+                Standard email format, such as coretide@tide.com. IP addresses within the email
                 address are not expected. 
               markdownDescription: |
                 ### 📧 Email Address
                 Standard email format, such as described in [🔗 RFC 5322](https://datatracker.ietf.org/doc/html/rfc5322)
                 
-                - ✅ tidemec@tide.com
+                - ✅ coretide@tide.com
                 - ✅ tide.governance@tide.babel
-                - ❌ tidemec@10.0.0.19
+                - ❌ coretide@10.0.0.19
                                 
                 💡 Any Top-Level Domain (`tld`) is accepted, as long as the `user@domain.tld` format is respected.
 

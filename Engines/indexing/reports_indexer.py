@@ -46,7 +46,7 @@ def run():
         "field": field_name,
         "icon": ICONS.get(field_name, ""),
         "name": "Intelligence Reports",
-        "description": "Registry of reports uploaded to this TIDeMEC instance"
+        "description": "Registry of reports uploaded to this CoreTIDE instance"
     }
     entries = {}
 

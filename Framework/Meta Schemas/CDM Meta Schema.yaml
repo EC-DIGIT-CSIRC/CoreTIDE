@@ -1,5 +1,5 @@
 title: CDM Schema validator
-description: TIDeMEC Data Model Specification for Cyber Detection Models
+description: CoreTIDE Data Model Specification for Cyber Detection Models
 
 $schema: http://json-schema.org/draft-07/schema#
 additionalProperties: false

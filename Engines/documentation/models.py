@@ -237,7 +237,7 @@ def run():
     time_to_execute = "%.2f" % (time.time() - start_time)
 
     log("INFO", f"Generated {doc_count} documents in {time_to_execute} seconds")
-    log("SUCCESS", "Successfully built TIDeMEC documentation in format", doc_format_log)
+    log("SUCCESS", "Successfully built CoreTIDE documentation in format", doc_format_log)
 
 
 if __name__ == "__main__":

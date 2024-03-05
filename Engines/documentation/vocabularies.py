@@ -33,7 +33,7 @@ def make_vocab_doc(vocab_field, vocabulary):
 
     Parameters
     ----------
-    vocabulary : YAML vocabulary according to TIDeMEC specs
+    vocabulary : YAML vocabulary according to CoreTIDE specs
 
     Returns
     -------

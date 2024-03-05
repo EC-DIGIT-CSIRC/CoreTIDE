@@ -42,7 +42,7 @@ properties:
     tide.template.multiline : True
 
   detection_model: 
-    title: TIDeMEC Cyber Detection Model
+    title: CoreTIDE Cyber Detection Model
     type: string
     tide.vocab: cdm
     description: CDM that this detection rule is implementing.

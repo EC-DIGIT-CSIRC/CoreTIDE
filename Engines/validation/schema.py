@@ -16,7 +16,7 @@ MODELS_INDEX = DataTide.Models.Index
 def run():
 
     log("TITLE", "JSON Schema Validation")
-    log("INFO", "Validates all TIDeMEC objects against their respective json schemas")
+    log("INFO", "Validates all CoreTIDE objects against their respective json schemas")
 
     errorslist = {}
     stats = dict()
@@ -82,7 +82,7 @@ def run():
     errortable = tabulate(errortable, headers="firstrow", tablefmt="fancy_grid")
     if len(errorslist) != 0:
         print(
-            "⚠️ TIDeMEC objects currently do not match up to the metaschemas. Review the files before running the validation again: \n\n"
+            "⚠️ CoreTIDE objects currently do not match up to the metaschemas. Review the files before running the validation again: \n\n"
             + errortable
         )
         os.environ["VALIDATION_ERROR_RAISED"] = "True"
@@ -94,7 +94,7 @@ def run():
             statstable.append([y, stats[y]])
         statstable = tabulate(statstable, headers="firstrow")
 
-        print(f"✅Successfully verified {overall} tidemec objects : \n\n{statstable}")
+        print(f"✅Successfully verified {overall} coretide objects : \n\n{statstable}")
 
 
 if __name__ == "__main__":

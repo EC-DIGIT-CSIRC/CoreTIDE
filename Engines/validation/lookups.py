@@ -404,7 +404,7 @@ def run():
         if METADATA_MANDATORY:
             log(
                 "FATAL",
-                "This TIDeMEC instance is configured to enforce metadata files for every lookup.",
+                "This CoreTIDE instance is configured to enforce metadata files for every lookup.",
                 errors_list,
                 "Create a metadata file for the following lookup(s)",
             )
@@ -425,7 +425,7 @@ def run():
         for error in naming_convention_errors:
             log(
                 "FATAL",
-                "Lookup name is not matching convention set on this TIDeMEC instance",
+                "Lookup name is not matching convention set on this CoreTIDE instance",
                 error,
                 f"Ensure name matches pattern : {NAMING_CONVENTION}",
             )

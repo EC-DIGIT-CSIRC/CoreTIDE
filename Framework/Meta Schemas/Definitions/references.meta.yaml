@@ -29,7 +29,7 @@ properties:
     title: Private references
     icon: 🏦
     description: |
-      Propriatary, sensible and confidential data belonging to the owner of the TIDeMEC instance
+      Propriatary, sensible and confidential data belonging to the owner of the CoreTIDE instance
       where the object was modelled on, and which cannot be shared.
     type: object
     tide.template.spacer: False
@@ -44,7 +44,7 @@ properties:
     title: Pro
     icon: 🔐
     description: |
-      Properties propriatary to the owner of the TIDeMEC instance where the object was created,
+      Properties propriatary to the owner of the CoreTIDE instance where the object was created,
       but which may be shared with a defined list of approved counterparts.
     type: object
     tide.template.hide: True
@@ -59,7 +59,7 @@ properties:
   reports:
     title: Reports
     description: |
-      Document which have been uploaded onto the TIDeMEC instance, which shareability is dependent
+      Document which have been uploaded onto the CoreTIDE instance, which shareability is dependent
       on the respective TLP rating of the indexed object.
     type: array
     tide.template.spacer: False

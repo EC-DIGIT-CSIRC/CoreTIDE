@@ -83,7 +83,7 @@ def key_value_transform(kv_store_list: list) -> dict:
 #
 #        else:
 #            parameter_name = get_value_metaschema(item, schema, "tide.mdr.parameter")
-#            temp = nest[item] #Avoids conflicts if tidemec name and param names are the same
+#            temp = nest[item] #Avoids conflicts if coretide name and param names are the same
 #            nest.pop(item)
 #            nest[parameter_name] = temp
 #
@@ -184,7 +184,7 @@ def rename_param_nest(nest, schema, scope=None):
         )
         temp = nest[
             item
-        ]  # Avoids conflicts if tidemec name and param names are the same
+        ]  # Avoids conflicts if coretide name and param names are the same
         nest.pop(item)
         nest[parameter_name] = temp
 
@@ -324,7 +324,7 @@ def model_value(id, key):
 
 def parents(id: str) -> list:
     """
-    Returns the list of parents for any given TIDeMEC Object.
+    Returns the list of parents for any given CoreTIDE Object.
     If the Object does not have possible parent relationships,
     or in other word is a top-level Object, returns an empty string.
     """
@@ -357,7 +357,7 @@ def parents(id: str) -> list:
 
 def childs(model_id: str) -> list:
     """
-    Returns the list of direct descendants for any given TIDeMEC Object,
+    Returns the list of direct descendants for any given CoreTIDE Object,
     by performing a forward search.
 
     If the object can not have descendants, or in other word is a last-line
@@ -452,7 +452,7 @@ def techniques_resolver(model_id: str, recursive=True) -> list:
 
     if model_type == "mdr":
         parent_id = model_body.get("detection_model") or model_body.get("tags", {}).get(
-            "tidemec"
+            "coretide"
         )
         if not parent_id:
             return []  # Case when there is no parent CDM

@@ -1,32 +1,32 @@
 from typing import Literal
 
 TIDE_INDEX_TAM = {
-"description": "Internal Reference to TIDeMEC existing threat actor models",
+"description": "Internal Reference to CoreTIDE existing threat actor models",
 "icon": "👹",
 "name": "Threat Actors",
 "model": True,
 }
 
 TIDE_INDEX_TVM = {
-"description": "Internal Reference to TIDeMEC existing threat actor vectors",
+"description": "Internal Reference to CoreTIDE existing threat actor vectors",
 "name": "Threat Vectors",
 "model": True,
 }
 
 TIDE_INDEX_CDM = {
-"description": "Internal Reference to TIDeMEC existing cyber detection models",
+"description": "Internal Reference to CoreTIDE existing cyber detection models",
 "name": "Detection Models",
 "model": True,
 }
 
 TIDE_INDEX_BDR = {
-"description": "Internal Reference to TIDeMEC existing Business Detection Requests",
+"description": "Internal Reference to CoreTIDE existing Business Detection Requests",
 "name": "Business Detection Requests",
 "model": True,
 }
 
 TIDE_INDEX_MDR = {
-"description": "Internal Reference to TIDeMEC existing Managed Detection Rules",
+"description": "Internal Reference to CoreTIDE existing Managed Detection Rules",
 "name": "Detection Rules",
 "model": True,
 }
@@ -34,7 +34,7 @@ TIDE_INDEX_MDR = {
 TIDE_INDEX_REPORT = {
 "name": "Intelligence Reports",
 "field": "reports",
-"description": "Registry of reports uploaded to this TIDeMEC instance",
+"description": "Registry of reports uploaded to this CoreTIDE instance",
 "model": True,
 }
 

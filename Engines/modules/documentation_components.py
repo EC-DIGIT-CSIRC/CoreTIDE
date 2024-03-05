@@ -37,7 +37,7 @@ from Engines.modules.logs import log
 
 GET_CVE_DETAILS = CONFIG.Documentation.cve["retrieve_details"]
 CVE_DB_LINK = CONFIG.Documentation.cve["default_db_link"]
-FOOTER_CAPTION = "Generated from TIDeMEC Indexed Data @ "
+FOOTER_CAPTION = "Generated from CoreTIDE Indexed Data @ "
 
 
 def criticality_doc(criticality_data: str) -> str:

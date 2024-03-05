@@ -304,7 +304,7 @@ def run():
     log("TITLE", "Wiki Navigation Index")
     log(
         "INFO",
-        "Assembles tables exposing TIDeMEC data to make the dataset easier to navigate",
+        "Assembles tables exposing CoreTIDE data to make the dataset easier to navigate",
     )
 
     if not os.path.exists(WIKI_PATH):
@@ -324,7 +324,7 @@ def run():
     time_to_execute = "%.2f" % (time.time() - start_time)
 
     print("\n⏱️ Generated navigation index in {} seconds".format(time_to_execute))
-    print("✅ Successfully built TIDeMEC documentation in {}".format(doc_format_log))
+    print("✅ Successfully built CoreTIDE documentation in {}".format(doc_format_log))
 
 
 if __name__ == "__main__":

@@ -222,7 +222,7 @@ def run():
     time_to_execute = "%.2f" % (time.time() - start_time)
 
     print("\n⏱️ Generated documentation in {} seconds".format(time_to_execute))
-    print("✅ Successfully built TIDeMEC documentation in {}".format(doc_format_log))
+    print("✅ Successfully built CoreTIDE documentation in {}".format(doc_format_log))
 
 if __name__ == "__main__":
     run()

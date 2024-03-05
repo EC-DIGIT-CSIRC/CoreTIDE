@@ -154,9 +154,9 @@ def run():
         temp["comment"] = pivot[p]
         layer_techniques.append(temp)
 
-    layer["name"] = "TIDeMEC ATT&CK Coverage"
+    layer["name"] = "CoreTIDE ATT&CK Coverage"
     layer["description"] = (
-        "Automatically filled in by TIDeMEC Toolchain based on latest content"
+        "Automatically filled in by CoreTIDE Toolchain based on latest content"
     )
     layer["domain"] = "mitre-enterprise"
     layer["techniques"] = layer_techniques

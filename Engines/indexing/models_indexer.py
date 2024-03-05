@@ -33,7 +33,7 @@ def run():
     log("TITLE", "Generate Vocabularies from Model Data")
     log(
         "INFO",
-        "Creates Vocabulary like schema TIDeMEC models, so they can be used within JSON Schema for validation.",
+        "Creates Vocabulary like schema CoreTIDE models, so they can be used within JSON Schema for validation.",
     )
 
     MODEL_SCOPE = DataTide.Configurations.Global.models

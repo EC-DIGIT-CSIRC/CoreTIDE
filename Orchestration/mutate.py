@@ -9,7 +9,7 @@ toolchain_start_time = datetime.now()
 
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
-from Engines.modules.logs import log, Colors, tidemec_intro
+from Engines.modules.logs import log, Colors, coretide_intro
 from Engines.mutation import (
     file_name,
     reports,
@@ -19,7 +19,7 @@ from Engines.mutation import (
 
 ROOT = Path(str(git.Repo(".", search_parent_directories=True).working_dir))
 
-print(tidemec_intro())
+print(coretide_intro())
 
 maelstrom = rf"""
 {Colors.ORANGE}
@@ -27,7 +27,7 @@ maelstrom = rf"""
   /  |/  / _ | / __/ /  / __/_  __/ _ \/ __ \/  |/  /
  / /|_/ / __ |/ _// /___\ \  / / / , _/ /_/ / /|_/ / 
 /_/  /_/_/ |_/___/____/___/ /_/ /_/|_|\____/_/  /_/  
-{Colors.BLUE}{Colors.ITALICS}{Colors.BOLD}TIDeMEC Data Mutation Orchestration   
+{Colors.BLUE}{Colors.ITALICS}{Colors.BOLD}CoreTIDE Data Mutation Orchestration   
 {Colors.STOP}
 """
 

@@ -6,7 +6,7 @@ toolchain_start_time = datetime.now()
 
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
-from Engines.modules.logs import tidemec_intro, Colors
+from Engines.modules.logs import coretide_intro, Colors
 
 # This trick caches a special version of the index which will seek
 # and reconcile the staging index for MDRs which are in a Merge Request
@@ -20,7 +20,7 @@ from Engines.documentation import (
     wiki_sidebar,
 )
 
-print(tidemec_intro())
+print(coretide_intro())
 
 vortex = rf"""
 {Colors.ORANGE}
@@ -28,7 +28,7 @@ vortex = rf"""
  | | / / __ \/ _ \/_  __/ __/ |/_/  
  | |/ / /_/ / , _/ / / / _/_>  <    
  |___/\____/_/|_| /_/ /___/_/|_|    
-{Colors.BLUE}{Colors.ITALICS}{Colors.BOLD}TIDeMEC Documentation Orchestration                                    
+{Colors.BLUE}{Colors.ITALICS}{Colors.BOLD}CoreTIDE Documentation Orchestration                                    
 {Colors.STOP}
 """
 
@@ -45,4 +45,4 @@ print("\n" + "Execution Report".center(80, "="))
 time_to_execute = datetime.now() - toolchain_start_time
 time_to_execute = "%.2f" % time_to_execute.total_seconds() + "seconds"
 
-print(f"🏆 Successfully built TIDeMEC Knowledge Base in", time_to_execute)
+print(f"🏆 Successfully built CoreTIDE Knowledge Base in", time_to_execute)

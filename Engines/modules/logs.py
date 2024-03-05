@@ -107,25 +107,25 @@ def log(
         print(log_message)
 
 
-def tidemec_intro():
+def coretide_intro():
     BLUE = Colors.DARK_BLUE
     YELLOW = Colors.ORANGE
     STOP = Colors.STOP
     ITALICS = Colors.ITALICS
     BOLD = Colors.BOLD
 
-    tidemec = f"{BLUE}TID{YELLOW}e{BLUE}MEC"
+    coretide = f"{BLUE}TID{YELLOW}e{BLUE}MEC"
 
     intro = f"""
 {BLUE}            :--==-:.       
 {BLUE}         -+*###*####*+:      
 {BLUE}       -=:   {YELLOW}.:  {BLUE}=-+*##*.              
-{BLUE}     -=.  {YELLOW}.:.     {BLUE}.+.*=:+             {STOP}{BOLD}Powered by {tidemec}{STOP}
+{BLUE}     -=.  {YELLOW}.:.     {BLUE}.+.*=:+             {STOP}{BOLD}Powered by {coretide}{STOP}
 {BLUE}  .-+:  {YELLOW}.-:  :  . {BLUE}-- :  .     
 {BLUE}+*#+   {YELLOW}-=.  -:  : {BLUE}:=          {STOP}{ITALICS}Threat Informed Detection Management{STOP}    
 {BLUE}#*-  {YELLOW}.==.  :=  .-  {BLUE}+                 {STOP}{ITALICS}and Engineering as Code{STOP}
 {BLUE}:   {YELLOW}:==:   =-  .=. {BLUE}.+      
-   {YELLOW}:==-   :=-   --  {BLUE}.+:    {STOP}https://code.europa.eu/ec-digit-s2/tidemec
+   {YELLOW}:==-   :=-   --  {BLUE}.+:    {STOP}https://code.europa.eu/ec-digit-s2/coretide
   {YELLOW}:===.   ==-   :=-   {BLUE}:=-
  {YELLOW}.====    ===.   -=-.    
 """

@@ -169,7 +169,7 @@ class SentinelLookupsDeploy(DeployLookups):
         log(
             "INFO",
             "Performs a progressive and safe update of Watchlists with\
-            the newly modified one from TIDeMEC",
+            the newly modified one from CoreTIDE",
         )
 
         if DEBUG:

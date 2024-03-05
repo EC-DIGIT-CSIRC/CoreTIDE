@@ -10,13 +10,13 @@ from pathlib import Path
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.modules.deployment import enabled_systems, enabled_lookup_systems, diff_calculation
-from Engines.modules.logs import log, Colors, tidemec_intro
+from Engines.modules.logs import log, Colors, coretide_intro
 from Engines.modules.tide import DataTide
 from Engines.modules.plugins import DeployTide
 
 toolchain_start_time = datetime.now()
 
-print(tidemec_intro())
+print(coretide_intro())
 
 floodcurrent = rf"""
 {Colors.ORANGE}
@@ -24,7 +24,7 @@ floodcurrent = rf"""
   / __/ /  / __ \/ __ \/ _ \/ ___/ / / / _ \/ _ \/ __/ |/ /_  __/
  / _// /__/ /_/ / /_/ / // / /__/ /_/ / , _/ , _/ _//    / / /   
 /_/ /____/\____/\____/____/\___/\____/_/|_/_/|_/___/_/|_/ /_/    
-{Colors.BLUE}{Colors.ITALICS}{Colors.BOLD}TIDeMEC Managed Lookups Deployment Orchestration 
+{Colors.BLUE}{Colors.ITALICS}{Colors.BOLD}CoreTIDE Managed Lookups Deployment Orchestration 
 {Colors.STOP}
 """
 

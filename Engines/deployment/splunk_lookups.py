@@ -66,7 +66,7 @@ class SplunkLookupsDeploy(DeployLookups):
         log("ONGOING", "Splunk Lookup Deployer")
         log(
             "INFO",
-            "Overrides existing lookups with the newly modified one from TIDeMEC",
+            "Overrides existing lookups with the newly modified one from CoreTIDE",
         )
 
         service = connect_splunk(

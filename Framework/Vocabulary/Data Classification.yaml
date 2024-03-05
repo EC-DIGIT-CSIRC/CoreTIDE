@@ -1,6 +1,6 @@
 name: Data Classification Marking
 field: classification
-description: Information Security classification for the data contained within the TIDeMEC object.
+description: Information Security classification for the data contained within the CoreTIDE object.
 reference:
   - https://www.consilium.europa.eu/en/general-secretariat/corporate-policies/classified-information/
   - https://www.northropgrumman.com/wp-content/uploads/NATORefresherBriefing.pdf

@@ -4,11 +4,11 @@ import sys
 
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
-from Engines.modules.logs import log, Colors, tidemec_intro
+from Engines.modules.logs import log, Colors, coretide_intro
 from Engines.modules.tide import IndexTide
 from Engines.indexing import models_indexer, reports_indexer
 from Engines.framework import templates
-print(tidemec_intro())
+print(coretide_intro())
 
 toolchain_start_time = datetime.now()
 
@@ -18,7 +18,7 @@ riptide = rf"""
   / _ \/  _/ _ \/_  __/  _/ _ \/ __/  
  / , _// // ___/ / / _/ // // / _/    
 /_/|_/___/_/    /_/ /___/____/___/    
-{Colors.BLUE}{Colors.ITALICS}{Colors.BOLD}TIDeMEC Meta Model Compilation Orchestration
+{Colors.BLUE}{Colors.ITALICS}{Colors.BOLD}CoreTIDE Meta Model Compilation Orchestration
 {Colors.STOP}
 """
 

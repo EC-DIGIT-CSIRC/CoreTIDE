@@ -26,7 +26,7 @@ registry = dict()
 def run():
 
     log("TITLE", "ID Duplication Checks")
-    log("INFO", "Check if ID used in TIDeMEC are uniquely assigned")
+    log("INFO", "Check if ID used in CoreTIDE are uniquely assigned")
 
     for meta_name in METASCHEMAS:
         if meta_name not in SKIPS:
@@ -66,7 +66,7 @@ def run():
                 f"Duplicated ID found with {dup['id']} - {dup['name']} @ [{dup['file_name']}]",
                 f"has the same id as {original_name} @ ({original_file_name})",
             )
-        log("FATAL", "Cannot have duplicated IDs throughout multiple TIDeMEC objects")
+        log("FATAL", "Cannot have duplicated IDs throughout multiple CoreTIDE objects")
         os.environ["VALIDATION_ERROR_RAISED"] = "True"
 
     else:
