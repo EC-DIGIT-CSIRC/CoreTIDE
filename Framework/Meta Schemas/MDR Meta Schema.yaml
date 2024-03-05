@@ -30,11 +30,6 @@ properties:
   references:
     tide.meta.definition: true
 
-  meta:
-    tide.template.hide: true
-    tide.meta.deprecation: Use metadata keyword instead
-    tide.meta.definition: metadata
-
   metadata:
     tide.template.spacer: true
     tide.meta.definition: true
@@ -49,7 +44,7 @@ properties:
   detection_model: 
     title: TIDeMEC Cyber Detection Model
     type: string
-    tide.vocab: true
+    tide.vocab: cdm
     description: CDM that this detection rule is implementing.
     example: CDM0016
 
