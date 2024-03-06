@@ -69,7 +69,7 @@ def gen_schema_md(metaschema, template, model_type=None):
 
     # Parses the metaschema to extract relevant fields    
     title = DOC_TITLES.get(model_type, " ")
-    description = metaschema.get("description")
+    description = metaschema.get("description", "")
     template_name = ""
 
     if model_type:
