@@ -66,6 +66,7 @@ def run():
 
             entry = {}
             entry["name"] = model_data["name"]
+            entry["vocab.search_hints"] = True
             entry["tlp"] = model_data["metadata"]["tlp"]
             entry["criticality"] = model_data.get("criticality")
             entry["aliases"] = model_data.get("actor", {}).get("aliases")
