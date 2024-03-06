@@ -315,7 +315,6 @@ class DataTide:
             json_schemas = dict(Index["json_schemas"])
             data_fields = dict(Index["data_fields"])
             templates = dict(Index["templates"])
-            models_vocabularies = dict(Index["models_vocabularies"])
 
             @dataclass(frozen=True)
             class Paths:

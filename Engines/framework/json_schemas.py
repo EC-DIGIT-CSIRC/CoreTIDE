@@ -19,8 +19,6 @@ from Engines.modules.files import resolve_paths
 GLOBAL_CONFIG = DataTide.Configurations.Global
 
 VOCAB_INDEX = DataTide.Vocabularies.Index
-print("VOCAB INDEX FROM JSON SCHEMA GENERATOR")
-print(VOCAB_INDEX.keys())
 CONFIG_INDEX = DataTide.Configurations.Index
 PATHS = resolve_paths()
 
@@ -28,10 +26,8 @@ PATHS = resolve_paths()
 METASCHEMAS_FOLDER = Path(PATHS["metaschemas"])
 VOCABS_FOLDER = Path(PATHS["vocabularies"])
 JSON_SCHEMA_FOLDER = Path(PATHS["json_schemas"])
-
 ICONS = DataTide.Configurations.Documentation.icons
-MODELS_VOCAB = GLOBAL_CONFIG.models_vocabularies
-
+TIDE_MODELS = DataTide.Configurations.Global.models
 SUBSCHEMAS_PATH = Path(PATHS["subschemas"])
 RECOMPOSITION = GLOBAL_CONFIG.recomposition
 
@@ -151,10 +147,14 @@ def make_markdown_dropdown(name, key, field=""):
     criticality = ""
     id_icon = ICONS["id"]
 
-    if get_type(identifier) in MODELS_VOCAB.keys():
-        criticality = key.get("criticality") or "No Criticality assigned"
+    if get_type(identifier) in TIDE_MODELS:
+        criticality = key.get("criticality")
         crit_icon = get_icon("criticality")
-        crit_value_icon = get_vocab_entry("criticality", criticality, "icon")
+        if not criticality:
+            crit_value_icon = ""
+            criticality = "No Criticality Assigned"
+        else:
+            crit_value_icon = get_vocab_entry("criticality", criticality, "icon")
         criticality = f"{crit_icon} **Criticality** : {crit_value_icon} {criticality}"
 
         link = f"[See in CoreTIDE Wiki]({link})"
@@ -208,9 +208,8 @@ def gen_lib_schema(
     enum = []
     enum_description = []
     enum_helper = []
-    search_hints = VOCAB_INDEX[vocab]["metadata"].get("vocab.search_hints")
-    if search_hints is not False:
-        search_hints = True
+    # Search Hints only set to False if explicitely done from vocabulary
+    search_hints = VOCAB_INDEX[vocab]["metadata"].get("vocab.search_hints", True)
     # Loops through all vocabulary files
     if vocab not in VOCAB_INDEX:
         log("WARNING", "Could not retrieve vocabulary", vocab)
@@ -219,7 +218,7 @@ def gen_lib_schema(
         # Edge case for possible model references, there is no description
         # in that case, only the id which is what the user needs to input
         # and the name used as a description.
-        if VOCAB_INDEX[vocab]["metadata"].get("model"):
+        if (VOCAB_INDEX[vocab]["metadata"].get("model")) or (vocab in TIDE_MODELS):
             for key in VOCAB_INDEX[vocab]["entries"]:
                 value = key
                 key_data = VOCAB_INDEX[vocab]["entries"][key]
