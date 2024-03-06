@@ -7,13 +7,13 @@ description = """Splunk Enterprise enables you to search, analyze and
 visualize your data to quickly act on insights from across your technology landscape."""
 
 [setup]
-proxy = true
+proxy = false
 url = "$SPLUNK_URL"
 port = "$SPLUNK_PORT"
 app = "$SPLUNK_APP" # App the searches will be deployed to.
 correlation_searches = true # Enables or disable saved search also being correlation searches
-#allow_skew = "10%" # Time Skewing Setup
-#schedule_offset = 5
+#allow_skew         # :str Time Skewing Setup, for example "10%". See: https://docs.splunk.com/Documentation/SplunkCloud/latest/Report/Skewscheduledreportstarttimes
+#schedule_offset    # :int Adds a constant offset after the skew calculation to dispatch.earliest_time, for example 5 (5mins) .
 frequency_scheduling = "random" # random | current . Frequencies get generated into a cron expression. Hour and minutes can be randomized, or anchored on the current time when the query was made
 actions_enabled = ["notable"] # Actions authorized to be allocated by the deployment engine 
 default_actions = ["notable"] # When no actions parameters were identified as part of the deployment, this adds default actions

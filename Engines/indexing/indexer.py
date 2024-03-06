@@ -206,7 +206,7 @@ def indexer(write_index=False) -> dict:
             model_cat_index = dict()
             for model in os.listdir(PATHS[meta_name]):
                 model_path = Path(PATHS[meta_name]) / model
-                if not os.path.isdir(model_path):
+                if (not os.path.isdir(model_path)) and (str(model_path).endswith(".yaml")):
                     obj_counter += 1
 
                     if "[DEBUG]" not in model:
