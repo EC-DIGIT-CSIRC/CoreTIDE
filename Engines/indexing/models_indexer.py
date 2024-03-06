@@ -21,7 +21,9 @@ WIKI_PATH = (
 )
 WIKI_MODEL_FOLDER = DataTide.Configurations.Documentation.object_names
 # Extracting the name of the top-level folder containing models documentation
-WIKI_MODEL_DOCUMENTATION_FOLDER = DataTide.Configurations.Global.Paths.Core._raw["models_docs_folder"].split("/")[-2]
+WIKI_MODEL_DOCUMENTATION_FOLDER = DataTide.Configurations.Global.Paths.Core._raw[
+    "models_docs_folder"
+].split("/")[-2]
 GLFM = DataTide.Configurations.Documentation.glfm_doc_target
 
 DEBUG = DataTide.Configurations.DEBUG
@@ -54,32 +56,34 @@ def run():
             "field": model_type,
             "icon": ICONS[model_type],
             "name": index_name,
-            "description": index_name
+            "description": index_name,
         }
         entries = {}
         registry = DataTide.Models.Index[model_type]
-        base_model_link = f"{WIKI_MODEL_DOCUMENTATION_FOLDER}/{WIKI_MODEL_FOLDER[model_type]}/"
+        base_model_link = (
+            f"{WIKI_MODEL_DOCUMENTATION_FOLDER}/{WIKI_MODEL_FOLDER[model_type]}/"
+        )
 
-        for model in registry:            
-            
+        for model in registry:
+
             model_data = registry[model]
 
             entry = {}
             entry["name"] = model_data["name"]
-            entry["vocab.search_hints"] = True
+            entry["model"] = True  # Allows certain switches when generating json schema
             entry["tlp"] = model_data["metadata"]["tlp"]
             entry["criticality"] = model_data.get("criticality")
             entry["aliases"] = model_data.get("actor", {}).get("aliases")
             if model_type == "mdr":
-                link = f"{base_model_link}{ICONS[model_type]} {entry['name']}"         
+                link = f"{base_model_link}{ICONS[model_type]} {entry['name']}"
             else:
-                link = f"{base_model_link}{ICONS[model_type]} [{model}] {entry['name']}"         
+                link = f"{base_model_link}{ICONS[model_type]} [{model}] {entry['name']}"
             if GLFM:
                 link = link.replace(" ", "-")
                 link = quote(link)
             link = WIKI_URL + link
             entry["link"] = link
-            
+
             description = str()
 
             match model_type:
@@ -99,7 +103,10 @@ def run():
             # Filter out None values
             entry = {k: v for k, v in entry.items() if v is not None}
             # Replace newlines to improve display
-            entry = {k: v.replace("\n ", " ") if type(v) is str else v for k, v in entry.items()}
+            entry = {
+                k: v.replace("\n ", " ") if type(v) is str else v
+                for k, v in entry.items()
+            }
 
             entries[model] = entry
 
@@ -107,7 +114,7 @@ def run():
         model_index[model_type]["metadata"] = metadata
         model_index[model_type]["entries"] = entries
 
-    with open(TIDE_INDEXES_PATH/"models.json", "w+", encoding="utf-8") as export:
+    with open(TIDE_INDEXES_PATH / "models.json", "w+", encoding="utf-8") as export:
         export.write("")
         json.dump(model_index, export, indent=EXPORT_INDENT)
 
