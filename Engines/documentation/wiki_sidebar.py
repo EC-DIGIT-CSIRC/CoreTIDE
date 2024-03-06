@@ -39,7 +39,7 @@ DOCUMENTATION_TYPE = os.getenv("DOCUMENTATION_TYPE") or "GLFM"
 
 GLFM = DataTide.Configurations.Documentation.glfm_doc_target
 RAW_PATHS = DataTide.Configurations.Global.Paths._raw.copy()
-print(RAW_PATHS)
+
 RAW_WIKI_PATH = RAW_PATHS["wiki_docs_folder"]
 LOOKUP_DOCS_FOLDER = Path(str(RAW_PATHS["lookup_docs"]).removeprefix(RAW_WIKI_PATH))
 SPECS = Path(str(RAW_PATHS["schemas_docs_folder"]).removeprefix(RAW_WIKI_PATH))
