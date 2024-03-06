@@ -101,7 +101,7 @@ def indexer(write_index=False) -> dict:
             voc_entry["entries"] = voc_data
 
             voc_index[voc_body["field"]] = voc_entry
-    print(voc_index.keys())
+
     index["vocabs"] = voc_index
 
     # JSON Schemas Indexer

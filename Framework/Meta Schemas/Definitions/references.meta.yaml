@@ -41,7 +41,7 @@ properties:
     additionalProperties: False
 
   restricted:
-    title: Pro
+    title: Restricted references
     icon: 🔐
     description: |
       Properties propriatary to the owner of the CoreTIDE instance where the object was created,

@@ -118,7 +118,7 @@ def construct_meta_doc_data(metaschema, assembly=[], depth=0):
 
                 buffer[recurs] = "`" + key + "`"
                 title = metaschema[key].get("title")
-                icon = get_icon(key, metaschema=metaschema) or ""
+                icon = get_icon(key, metaschema=metaschema) or get_icon(key)
                 buffer["Name"] = f"{icon} {title}".strip()
                 buffer["Description"] = metaschema[key].get("description", "").replace("\n", " ")
                 buffer["Type"] = metaschema[key].get("type")
