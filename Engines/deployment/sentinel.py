@@ -1,0 +1,304 @@
+import os
+import git
+import os
+import sys
+import yaml
+from pprint import pprint
+from pathlib import Path
+
+import pandas as pd
+
+sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
+
+from Engines.modules.sentinel import (
+    connect_to_sentinel,
+    create_query,
+    iso_duration_timedelta,
+)
+from Engines.modules.framework import get_vocab_entry, techniques_resolver
+from Engines.modules.deployment import fetch_config_envvar, Proxy
+from Engines.modules.logs import log
+from Engines.modules.tide import DataTide
+from Engines.modules.plugins import DeployMDR
+
+from azure.mgmt.securityinsight import SecurityInsights
+
+
+class SentinelDeploy(DeployMDR):
+
+    def __init__(self, DEBUG=False):
+
+        self.DEPLOYER_IDENTIFIER = "sentinel"
+        self.DEBUG = DEBUG
+
+        SENTINEL_CONFIG = DataTide.Configurations.Systems.Sentinel
+        self.DEFAULT_CONFIG = SENTINEL_CONFIG.defaults
+        SENTINEL_SETUP = fetch_config_envvar(SENTINEL_CONFIG.setup)
+        SENTINEL_SECRETS = fetch_config_envvar(SENTINEL_CONFIG.secrets)
+
+        if SENTINEL_SETUP["proxy"]:
+            Proxy.set_proxy()
+        else:
+            Proxy.unset_proxy()
+
+        self.AZURE_CLIENT_ID = SENTINEL_SECRETS["azure_client_id"]
+        self.AZURE_CLIENT_SECRET = SENTINEL_SECRETS["azure_client_secret"]
+        self.AZURE_SENTINEL_RESOURCE_GROUP = SENTINEL_SETUP["resource_group"]
+        self.AZURE_SENTINEL_WORKSPACE_NAME = SENTINEL_SETUP["workspace"]
+
+        self.AZURE_SUBSCRIPTION_ID = SENTINEL_SETUP["azure_subscription_id"]
+        self.AZURE_TENANT_ID = SENTINEL_SETUP["azure_tenant_id"]
+
+        self.SPLUNK_SUBSCHEMA = DataTide.TideSchemas.subschemas["systems"][
+            self.DEPLOYER_IDENTIFIER
+        ]["properties"]
+
+    def config_mdr(self, data, client: SecurityInsights):
+
+        rule = client.alert_rules.models.ScheduledAlertRule()
+        rule.name = data["name"]
+        rule.description = data["description"]
+        mdr_sentinel_raw = data["configurations"]["sentinel"]
+        status = mdr_sentinel_raw["status"]
+
+        # TODO Add modifiers to Sentinel
+        status_parameters = get_vocab_entry("status", status, "attributes_override")
+        if status_parameters is dict:
+            status_parameters = status_parameters.get(self.DEPLOYER_IDENTIFIER)
+        else:
+            status_parameters = {}
+
+        default_config = pd.json_normalize(self.DEFAULT_CONFIG, sep=".").to_dict(
+            orient="records"
+        )[0]
+        mdr_config = pd.json_normalize(mdr_sentinel_raw, sep=".").to_dict(
+            orient="records"
+        )[0]
+
+        mdr_sentinel = {}
+        mdr_sentinel.update(default_config)
+        mdr_sentinel.update(mdr_config)
+        if status_parameters:
+            mdr_sentinel.update(
+                pd.json_normalize(status_parameters, sep=".").to_dict(orient="records")[
+                    0
+                ]
+            )
+
+        if self.DEBUG:
+            with open("sentinel_config.toml", "w+") as out:
+                pprint(mdr_sentinel)
+
+        status = mdr_sentinel["status"]
+        rule.enabled = True
+        if status in ["DISABLED"]:
+            rule.enabled = False
+
+        rule.suppression_duration = iso_duration_timedelta(mdr_sentinel["suppression"])
+        # If the suppression was added by on the MDR, we automatically toggle
+        if mdr_sentinel_raw.get("suppression"):
+            rule.suppression_enabled = True
+        else:
+            # So we can still carry the default value, be it false or true
+            rule.suppression_enabled = mdr_sentinel.get("suppression_enabled")
+
+        if mdr_sentinel.get("scheduling.nrt") == True:
+            rule.kind = "NRT"
+        else:
+            rule.query_frequency = iso_duration_timedelta(
+                mdr_sentinel["scheduling.frequency"]
+            )
+            rule.query_period = iso_duration_timedelta(
+                mdr_sentinel["scheduling.lookback"]
+            )
+            rule.trigger_threshold = mdr_sentinel.get("threshold")
+            rule.trigger_operator = mdr_sentinel.get("trigger")
+
+        details_overrides = client.alert_rules.models.AlertDetailsOverride()
+        details_overrides.alert_display_name_format = mdr_sentinel.get("alert.title")
+        details_overrides.alert_description_format = mdr_sentinel.get(
+            "alert.description"
+        )
+        dynamic_properties = mdr_sentinel.get("alert.dynamic_properties")
+        if dynamic_properties:
+            alert_dynamic_properties = []
+            alert_dynamic_property = client.alert_rules.models.AlertPropertyMapping()
+            for prop in dynamic_properties:
+                alert_dynamic_property.alert_property = prop["property"]
+                alert_dynamic_property.value = prop["column"]
+                alert_dynamic_properties.append(alert_dynamic_property)
+
+            details_overrides.alert_dynamic_properties = alert_dynamic_properties
+
+        rule.alert_details_override = details_overrides
+
+        # Custom Details
+        custom_details = mdr_sentinel.get("alert.custom_details")
+        if custom_details:
+            cleaned_custom_details = {}
+            for detail in custom_details:
+                cleaned_custom_details[detail["key"]] = detail["column"]
+
+            rule.custom_details = cleaned_custom_details
+
+        # Event Grouping
+        event_grouping = client.alert_rules.models.EventGroupingSettings()
+        event_grouping.aggregation_kind = mdr_sentinel.get("grouping.event")
+
+        # Incident Configuration
+        alert_enabled = mdr_sentinel["alert.create_incident"]
+        incident_configuration = client.alert_rules.models.IncidentConfiguration(
+            create_incident=alert_enabled
+        )
+
+        # Alert Grouping Configuration
+        grouping_enabled = mdr_sentinel["grouping.alert.enabled"]
+        grouping_lookback = iso_duration_timedelta(
+            mdr_sentinel["grouping.alert.grouping_lookback"]
+        )
+        reopen_closed_incident = mdr_sentinel["grouping.alert.reopen_closed_incidents"]
+        matching_method = mdr_sentinel["grouping.alert.matching"]
+        group_by_entities = mdr_sentinel.get(
+            "grouping.alert.matching.group_by_entities"
+        )
+        group_by_alert_details = mdr_sentinel.get(
+            "grouping.alert.matching.group_by_alert_details"
+        )
+        group_by_custom_details = mdr_sentinel.get(
+            "grouping.alert.matching.group_by_custom_details"
+        )
+        grouping_configuration = client.alert_rules.models.GroupingConfiguration(
+            enabled=grouping_enabled,
+            lookback_duration=grouping_lookback,
+            reopen_closed_incident=reopen_closed_incident,
+            matching_method=matching_method,
+            group_by_entities=group_by_entities,
+            group_by_alert_details=group_by_alert_details,
+            group_by_custom_details=group_by_custom_details,
+        )
+
+        incident_configuration.grouping_configuration = grouping_configuration
+        rule.incident_configuration = incident_configuration
+
+        # Entity Mapping
+        entity_data = mdr_sentinel.get("entities")
+        entity_mappings = []
+        if entity_data:
+            for entity in entity_data:
+                mappings = client.alert_rules.models.EntityMapping()
+                mappings.entity_type = entity["entity"]
+                field_mappings = []
+
+                for field in entity["mappings"]:
+                    field_mapping = client.alert_rules.models.FieldMapping()
+                    field_mapping.identifier = field["identifier"]
+                    field_mapping.column_name = field["column"]
+                    field_mappings.append(field_mapping)
+
+                mappings.field_mappings = field_mappings
+                entity_mappings.append(mappings)
+
+        # Add automated query extensions
+        rule.query = create_query(mdr_sentinel["query"], data)
+
+        # Assign severity, Capping at high which is the maximum in Sentinel
+        severity = data["response"]["alert_severity"]
+        if severity == "Critical":
+            severity = "High"
+        rule.severity = severity
+
+        # Human readable name and description on the console
+        rule.display_name = data["name"]
+        rule.description = data["description"]
+
+        # Auto-enrich with techniques resolver
+        techniques = techniques_resolver(data["uuid"])
+        if techniques:
+            tactics = list()
+            for t in techniques:
+                # Sentinel backend expects PascalCase
+                vocab_tactics = [
+                    t.title().replace(" ", "").strip()
+                    for t in get_vocab_entry("att&ck", t, "tide.vocab.stages")
+                ]
+                tactics.extend(vocab_tactics)
+
+            # Sentinel does not currently support sub-techniques for mapping
+            techniques = [t.split(".")[0] for t in techniques]
+
+            # Remove duplicates from returned techniques and tactics
+            techniques = list(dict.fromkeys(techniques))
+            tactics = list(dict.fromkeys(tactics))
+
+            rule.tactics = tactics
+            rule.techniques = techniques
+
+        return rule
+
+    def deploy_mdr(self, data, client: SecurityInsights):
+        """
+        Deployment routine, connecting to the platform and deploying the configuration
+        """
+
+        mdr_name = data["name"]
+        mdr_uuid = data["uuid"]
+        mdr_status = data["configurations"][self.DEPLOYER_IDENTIFIER]["status"]
+
+        if mdr_status in ["REMOVED"]:
+            log(
+                "WARNING",
+                "The rule will be removed from the Sentinel Workspace",
+                mdr_name,
+            )
+            client.alert_rules.delete(
+                resource_group_name=self.AZURE_SENTINEL_RESOURCE_GROUP,
+                workspace_name=self.AZURE_SENTINEL_WORKSPACE_NAME,
+                rule_id=mdr_uuid,
+            )
+
+            log("SUCCESS", "Deleted rule from workspace")
+            return True
+
+        log("ONGOING", "Compiling Scheduled Alert Object")
+        alert_rule = self.config_mdr(data, client)
+
+        log("INFO", "Deploying rule to Sentinel")
+        client.alert_rules.create_or_update(
+            resource_group_name=self.AZURE_SENTINEL_RESOURCE_GROUP,
+            workspace_name=self.AZURE_SENTINEL_WORKSPACE_NAME,
+            rule_id=mdr_uuid,
+            alert_rule=alert_rule,
+        )
+
+        log("SUCCESS", "Deployed MDR Successfully", mdr_name)
+        return True
+
+    def deploy(self, deployment: list[str]):
+
+        if not deployment:
+            raise Exception("DEPLOYMENT NOT FOUND")
+
+        # Connect to client that is injected into deployment
+        client = connect_to_sentinel(
+            self.AZURE_CLIENT_ID,
+            self.AZURE_CLIENT_SECRET,
+            self.AZURE_TENANT_ID,
+            self.AZURE_SUBSCRIPTION_ID,
+        )
+
+        for mdr in deployment:
+            mdr_data = DataTide.Models.mdr[mdr]
+
+            # Check if modified MDR contains a platform entry (by safety, but should not happen since
+            # the orchestrator will filter for the platform)
+            if self.DEPLOYER_IDENTIFIER in mdr_data["configurations"].keys():
+                self.deploy_mdr(mdr_data, client)
+            else:
+                log(
+                    "SKIP",
+                    "Skipping {mdr_data.get('name')} as does not contain a Sentinel rule",
+                )
+
+
+def declare():
+    return SentinelDeploy()

@@ -1,0 +1,454 @@
+name: Targets
+field: targets
+description: Granular delimited technical entities holding a value to the organization,
+  that are targeted by adversaries. They might be also involved in the detection coverage
+  as the target of log collection. Partially inspired by Veris.
+reference: http://veriscommunity.net/enums.html#section-asset, https://collaborate.mitre.org/attackics/index.php/All_Assets
+icon: 🎯
+keys:
+  - id: TGT0001
+    name: Critical Documents
+    icon: 🗃️
+    description: Placeholder
+  - id: TGT0002
+    name: Personal Information
+    icon: 🪪
+    description: Placeholder
+  - id: TGT0003
+    name: Cloud Storage Accounts
+    icon: 🪣
+    description: Placeholder
+  - id: TGT0004
+    name: Key Store
+    icon: 🗝️
+    description: Placeholder
+  - id: TGT0005
+    name: Archival Database
+    icon: 🗄️
+    description: Placeholder
+  - id: TGT0006
+    name: Production Database
+    icon: 🗄️
+    description: Placeholder
+  - id: TGT0007
+    name: Identity Services
+    icon: 👤
+    description: Placeholder
+  - id: TGT0008
+    name: Compute Cluster
+    icon: 🖥️
+    description: Placeholder
+  - id: TGT0009
+    name: Workstations
+    icon: 🖥️
+    description: Placeholder
+  - id: TGT0010
+    name: Public-Facing Servers
+    icon: 🖥️
+    description: Placeholder
+  - id: TGT0011
+    name: Network Equipment
+    icon: 🌐
+    description: Placeholder
+  #- id: TGT0012
+  #  name: Network Equipment
+  #  description: Placeholder
+  - id: TGT0013
+    name: VPN Client
+    icon: 🛡️
+    description: Placeholder
+  - id: TGT0014
+    name: Virtual Machines
+    icon: 🖥️
+    description: Placeholder
+  - id: TGT0015
+    name: Serverless
+    icon: 🔧
+    description: Placeholder
+  - id: TGT0016
+    name: Email Platform
+    icon: 📧
+    description: Placeholder
+  - id: TGT0017
+    name: Web Application Servers
+    icon: 🖥️
+    description: Placeholder
+  - id: TGT0018
+    name: API Endpoints
+    icon: 🧩
+    description: Placeholder
+  - id: TGT0019
+    name: Cloud Portal
+    icon: ☁️
+    description: Placeholder
+  - id: TGT0020
+    name: Firmware
+    icon: ⚙️
+    description: Placeholder
+  - id: TGT0021
+    name: Production Software
+    icon: 💿
+    description: Placeholder
+  - id: TGT0022
+    name: Development Pipelines
+    icon: 🛠️
+    description: Development pipelines outline the stages and workflows involved in the software development process, from initial development to testing, integration, and deployment.
+  - id: TGT0023
+    name: Software Containers
+    icon: 🛠️
+    description: Placeholder
+  - id: TGT0024
+    name: Virtual Machines
+    icon: 🛠️
+    description: Placeholder
+  - id: TGT0025
+    name: IaaS
+    icon: ☁️
+    description: Placeholder
+  #- id: TGT0026
+  #  name: IaaS
+  #  description: Placeholder
+  - id: TGT0027
+    name: Relational Database
+    icon: 🗄️
+    description: Placeholder
+  - id: TGT0028
+    name: NoSQL Database
+    icon: 🗄️
+    description: Placeholder
+  - id: TGT0029
+    name: Microservices
+    icon: 🛠️
+    description: Placeholder
+  - id: TGT0030
+    name: SAML-Joined Applications
+    icon: 🛡️
+    description: Placeholder
+  - id: TGT0031
+    name: Software Development Tools
+    icon: 🛠️
+    description: Placeholder
+  - id: TGT0032
+    name: Code Repositories
+    icon: 🛠️
+    description: Code repositories provide a centralized location for storing and managing source code, enabling version control, collaboration, and code sharing among developers.
+  - id: TGT0033
+    name: CI/CD Pipelines
+    icon: 🛠️
+    description: CI/CD pipelines automate the process of building, testing, and deploying software, ensuring efficient and reliable software delivery.
+  - id: TGT0033
+    name: Server Authentication
+    icon: 🔑
+    description: Server - Authentication
+  - id: TGT0034
+    name: Server Backup
+    icon: 🗄️
+    description: Server - Backup
+  - id: TGT0035
+    name: DHCP
+    icon: 🌐
+    description: Server - DHCP
+  - id: TGT0036
+    name: Directory
+    icon: 📂
+    description: Server - Directory (LDAP, AD)
+  - id: TGT0037
+    name: DNS
+    icon: 🌐
+    description: Server - DNS
+  - id: TGT0038
+    name: Server Logs
+    icon: 📄
+    description: Server - Log or event management
+  - id: TGT0039
+    name: Mainframe
+    icon: 🖥️
+    description: Server - Mainframe
+  - id: TGT0040
+    name: Payment switch
+    icon: 💳
+    description: Server - Payment switch or gateway
+  - id: TGT0041
+    name: POS controller
+    icon: 🧾
+    description: Server - POS controller
+  - id: TGT0042
+    name: Print
+    icon: 🖨️
+    description: Server - Print
+  - id: TGT0043
+    name: Proxy
+    icon: 🌐
+    description: Server - Proxy
+  - id: TGT0044
+    name: Remote access
+    icon: 🕹️
+    description: Server - Remote access
+  - id: TGT0045
+    name: Virtual Machines Host
+    icon: 🖥️
+    description: Server - Virtual Host
+  - id: TGT0046
+    name: Access reader
+    icon: 🪪
+    description: Network - Access control reader (e.g., badge, biometric)
+  - id: TGT0047
+    name: Camera
+    icon: 📷
+    description: Network - Camera or surveillance system
+  - id: TGT0048
+    name: Firewall
+    icon: 🔥
+    description: Network - Firewall
+  - id: TGT0049
+    name: HSM
+    icon: 🔐
+    description: Network - Hardware security module (HSM)
+  - id: TGT0050
+    name: IDS
+    icon: 🛡️
+    description: Network - IDS or IPs
+  - id: TGT0051
+    name: Broadband
+    icon: ☎️
+    description: Network - Mobile broadband network
+  - id: TGT0052
+    name: PBX
+    icon: ☎️
+    description: Network - Private branch exchange (PBX)
+  - id: TGT0053
+    name: Private WAN
+    icon: 🌐
+    description: Network - Private WAN
+  - id: TGT0054
+    name: Public WAN
+    icon: 🌐
+    description: Network - Public WAN
+  - id: TGT0055
+    name: RTU
+    icon: 🌐
+    description: Network - Remote terminal unit (RTU)
+  - id: TGT0056
+    name: Router or switch
+    icon: 🌐
+    description: Network - Router or switch
+  - id: TGT0057
+    name: SAN
+    icon: 📂
+    description: Network - Storage area network (SAN)
+  - id: TGT0058
+    name: Telephone
+    icon: 📠
+    description: Network - Telephone
+  - id: TGT0059
+    name: VoIP adapter
+    icon: 📠
+    description: Network - VoIP adapter
+  - id: TGT0060
+    name: LAN
+    icon: 🌐
+    description: Network - Wired LAN
+  - id: TGT0061
+    name: WLAN
+    icon: 🌐
+    description: Network - Wireless LAN
+  - id: TGT0062
+    name: Auth token
+    icon: 🔐
+    description: User Device - Authentication token or device
+  - id: TGT0063
+    name: Desktop
+    icon: 🖥️
+    description: User Device - Desktop or workstation
+  - id: TGT0064
+    name: Laptop
+    icon: 💻
+    description: User Device - Laptop
+  - id: TGT0065
+    name: Media
+    icon: 🎞️
+    description: User Device - Media player or recorder
+  - id: TGT0066
+    name: Mobile phone
+    icon: 📱
+    description: User Device - Mobile phone or smartphone
+  - id: TGT0067
+    name: Peripheral
+    icon: 🖨️
+    description: User Device - Peripheral (e.g., printer, copier, fax)
+  - id: TGT0068
+    name: POS terminal
+    icon: 🖥️
+    description: User Device - POS terminal
+  - id: TGT0069
+    name: Tablet
+    icon: 📱
+    description: User Device - Tablet
+  - id: TGT0070
+    name: Telephone
+    icon: 📞
+    description: User Device - Telephone
+  - id: TGT0071
+    name: VoIP phone
+    icon: 📠
+    description: User Device - VoIP phone
+  - id: TGT0072
+    name: ATM
+    icon: 💳
+    description: Public Terminal - Automated Teller Machine (ATM)
+  - id: TGT0073
+    name: PED pad
+    icon: 💳
+    description: Public Terminal - Detached PIN pad or card reader
+  - id: TGT0074
+    name: Gas terminal
+    icon: ⛽
+    description: "Public Terminal - Gas 'pay-at-the-pump' terminal"
+  - id: TGT0075
+    name: Kiosk
+    icon: 🏪
+    description: Public Terminal - Self-service kiosk
+  - id: TGT0076
+    name: Tapes
+    icon: 📼
+    description: Media - Backup tapes
+  - id: TGT0077
+    name: Disk media
+    icon: 💽
+    description: Media - Disk media (e.g., CDs, DVDs)
+  - id: TGT0078
+    name: Documents
+    icon: 📑
+    description: Media - Documents
+  - id: TGT0079
+    name: Flash drive
+    icon: 💾
+    description: Media - Flash drive or card
+  - id: TGT0080
+    name: Disk drive
+    icon: 💿
+    description: Media - Hard disk drive
+  - id: TGT0081
+    name: Smart card
+    icon: 🪪
+    description: Media - Identity smart card
+  - id: TGT0082
+    name: Payment card
+    icon: 💳
+    description: Media - Payment card (e.g., magstripe, EMV)
+  - id: TGT0083
+    name: Other
+    description: Media - Other/Unknown
+  - id: TGT0084
+    name: System admin
+    icon: 👤
+    description: People - Administrator
+  - id: TGT0085
+    name: Auditor
+    icon: 👤
+    description: People - Auditor
+  - id: TGT0086
+    name: Call center
+    icon: 👤
+    description: People - Call center
+  - id: TGT0087
+    name: Cashier
+    icon: 👤
+    description: People - Cashier
+  - id: TGT0088
+    name: Customer
+    icon: 👤
+    description: People - Customer
+  - id: TGT0089
+    name: Developer
+    icon: 👤
+    description: People - Developer
+  - id: TGT0090
+    name: End-user
+    icon: 👤
+    description: People - End-user
+  - id: TGT0091
+    name: Executive
+    icon: 👤
+    description: People - Executive
+  - id: TGT0092
+    name: Finance
+    icon: 👤
+    description: People - Finance
+  - id: TGT0093
+    name: Former employee
+    icon: 👤
+    description: People - Former employee
+  - id: TGT0094
+    name: Guard
+    icon: 👤
+    description: People - Guard
+  - id: TGT0095
+    name: Helpdesk
+    icon: 👤
+    description: People - Helpdesk
+  - id: TGT0096
+    name: Human resources
+    icon: 👤
+    description: People - Human resources
+  - id: TGT0097
+    name: Maintenance
+    icon: 👤
+    description: People - Maintenance
+  - id: TGT0098
+    name: Manager
+    icon: 👤
+    description: People - Manager
+  - id: TGT0099
+    name: Partner
+    icon: 👤
+    description: People - Manager
+  - id: TGT0100
+    name: Control Server
+    icon: 🖲️
+    description: A device which acts as both a server and controller, that hosts the control software used in communicating with lower-level control devices in an ICS network (e.g. Remote Terminal Units (RTUs) and Programmable Logic Controllers (PLCs)).
+    link: https://collaborate.mitre.org/attackics/index.php/Control_Server
+  - id: TGT0101
+    name: Data Historian
+    icon: 🗄️
+    description: A centralized database located on a computer installed in the control system DMZ supporting external corporate user data access for archival and analysis using statistical process control and other techniques.
+    link: https://collaborate.mitre.org/attackics/index.php/Engineering_Workstation
+  - id: TGT0102
+    name: Engineering Workstation
+    icon: 👷
+    description: The engineering workstation is usually a high-end very reliable computing platform designed for configuration, maintenance and diagnostics of the control system applications and other control system equipment. The system is usually made up of redundant hard disk drives, high speed network interface, reliable CPUs, performance graphics hardware, and applications that provide configuration and monitoring tools to perform control system application development, compilation and distribution of system modifications.
+    link: https://collaborate.mitre.org/attackics/index.php/Engineering_Workstation
+  - id: TGT0103
+    name: Field Controller/RTU/PLC/IED
+    icon: ⌨️
+    description: Controller terminology depends on the type of system they are associated with. They provide typical processing capabilities. Controllers, sometimes referred to as Remote Terminal Units (RTU) and Programmable Logic Controllers (PLC), are computerized control units that are typically rack or panel mounted with modular processing and interface cards. The units are collocated with the process equipment and interface through input and output modules to the various sensors and controlled devices. Most utilize a programmable logic-based application that provides scanning and writing of data to and from the IO interface modules and communicates with the control system network via various communications methods, including serial and network communications.
+    link: https://collaborate.mitre.org/attackics/index.php/Field_Controller/RTU/PLC/IED
+  - id: TGT0104
+    name: Human-Machine Interface
+    icon: 🎰
+    description: "In computer science and human-computer interaction, the Human-Machine Interface (HMI) refers to the graphical, textual and auditory information the program presents to the user (operator) using computer monitors and audio subsystems, and the control sequences (such as keystrokes with the computer keyboard, movements of the computer mouse, and selections with the touchscreen) the user employs to control the program. Currently the following types of HMI are the most common: \n\nGraphical user interfaces(GUI) accept input via devices such as computer keyboard and mouse and provide articulated graphical output on the computer monitor. \nWeb-based user interfaces accept input and provide output by generating web pages which are transported via the network and viewed by the user using a web browser program. The operations user must be able to control the system and assess the state of the system. Each control system vendor provides a unique look-and-feel to their basic HMI applications. An older, not gender-neutral version of the term is man-machine interface (MMI).\nThe system may expose several user interfaces to serve different kinds of users. User interface screens may be optimized to provide the appropriate information and control interface to operations users, engineering users and management users."
+    link: https://collaborate.mitre.org/attackics/index.php/Human-Machine_Interface
+  - id: TGT0105
+    name: Input/Output Server
+    icon: 🖲️
+    description: The Input/Output (I/O) server provides the interface between the control system LAN applications and the field equipment monitored and controlled by the control system applications. The I/O server, sometimes referred to as a Front-End Processor (FEP) or Data Acquisition Server (DAS), converts the control system application data into packets that are transmitted over various types of communications media to the end device locations. The I/O server also converts data received from the various end devices over different communications mediums into data formatted to communicate with the control system networked applications.
+    link: https://collaborate.mitre.org/attackics/index.php/Input/Output_Server
+  - id: TGT0106
+    name: Safety Instrumented System/Protection Relay
+    icon: 🦺
+    description: A safety instrumented system (SIS) takes automated action to keep a plant in a safe state, or to put it into a safe state, when abnormal conditions are present. The SIS may implement a single function or multiple functions to protect against various process hazards in your plant.3 The function of protective relaying is to cause the prompt removal from service of an element of a power system when it suffers a short circuit or when it starts to operate in any abnormal manner that might cause damage or otherwise interfere with the effective operation of the rest of the system.
+    link: https://collaborate.mitre.org/attackics/index.php/Safety_Instrumented_System/Protection_Relay
+  - id: TGT0107
+    name: Function-as-a-Service
+    icon: 🧩
+    description: FaaS (Function-as-a-Service) is a type of cloud-computing service that allows you to execute code in response to events without the complex infrastructure typically associated with building and launching microservices applications.
+    link: https://www.ibm.com/cloud/learn/faas
+  - id: TGT0108
+    name: Business Communication Tools
+    icon: 🗣️
+    description: Enterprise communication consists of an organization's tools and practices to collaborate and share information internally and externally. Common examples include phone, email, instant messaging, and face-to-face video meetings.
+  - id: TGT0109
+    name: Windows API
+    icon: 🧩
+    description: The Windows API, informally WinAPI, is Microsoft's core set of application programming interfaces (APIs) available in the Microsoft Windows operating systems. The name Windows API collectively refers to several different platform implementations that are often referred to by their own names (for example, Win32 API). Almost all Windows programs interact with the Windows API.
+    link: https://learn.microsoft.com/en-us/windows/win32/apiindex/windows-api-list

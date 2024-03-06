@@ -1,0 +1,68 @@
+🚧 Staging Deployment:
+  stage: 🚀 Deployment
+  environment: MDR Staging
+  script:
+    - export DEPLOYMENT_PLAN=STAGING
+    - cd $TIDE_CORE_REPO/Orchestration/
+    - python deploy.py
+  rules:
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /🛑 Do Not Deploy/'
+      when: never
+    - if: $TIDE_DEPLOYMENT == "DISABLED"
+      when: never
+    - if: ($CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH) && ($TIDE_DEPLOYMENT == "ENABLED")
+      changes: 
+        - Models Library/Managed Detection Rules/*.yaml
+  needs:
+    - 🔮 Staging Validation Toolchain
+  retry: 2 # Retrying twice helps with certain systems, like CBC which has random issues
+  variables:
+    FF_USE_NEW_BASH_EVAL_STRATEGY: "true"
+  allow_failure:
+    exit_codes: 19
+
+☄️ Production Deployment:
+  stage: 🚀 Deployment
+  environment: MDR Production
+  script:
+    - export DEPLOYMENT_PLAN=PRODUCTION
+    - cd $TIDE_CORE_REPO/Orchestration/
+    - python deploy.py
+    - cd ../../ # Back into Tide Repo, if needs commit
+    - rm -rf $TIDE_CORE_REPO
+    - git add -A
+    - if ! git diff-index --quiet HEAD; then
+    -   git commit -m "[CoreTIDE] MDR Status Promotion $CI_COMMIT_MESSAGE"
+    -   git rebase origin/$CI_DEFAULT_BRANCH
+    -   git push $TIDE_REPO_ACCESS HEAD:$CI_COMMIT_REF_NAME
+    - fi
+  rules:
+    - if: $TIDE_DEPLOYMENT == "DISABLED"
+      when: never
+    - if: ($CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH) && ($TIDE_DEPLOYMENT == "ENABLED")
+      changes: 
+        - Models Library/Managed Detection Rules/*.yaml
+  needs:
+    - 🔮 Validation Toolchain
+  retry: 2
+  variables:
+    FF_USE_NEW_BASH_EVAL_STRATEGY: "true"
+  allow_failure:
+    exit_codes: 19
+
+📄 Lookups Deployment:
+  stage: 🚀 Deployment
+  environment: Lookups Production
+  script:
+    - git rebase origin/$CI_DEFAULT_BRANCH #Allows to pull latest mutation if there are
+    - cd $TIDE_CORE_REPO/Orchestration/
+    - python deploy_lookups.py
+  rules:
+    - if: $TIDE_DEPLOYMENT == "DISABLED"
+      when: never
+    - if: ($CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH) && ($TIDE_DEPLOYMENT == "ENABLED")
+      changes: 
+        - Data Model/Lookups/*/*
+      
+  needs:
+    - 📄 Lookups Validation

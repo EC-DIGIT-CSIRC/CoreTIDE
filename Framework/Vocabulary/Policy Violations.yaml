@@ -1,0 +1,32 @@
+name: Policy, mandate or governance violations
+field: violation
+description: Categories of usage violations which is not directly the result of an exercised threat, but needs to be monitored and accounted for illegitimate behaviours.
+icon: 👮
+keys:
+  - id: VIO0001
+    name: Illegal content streaming or usage of disallowed web service
+    description: This could be copyrighted material, but also includes other illegal categories
+  - id: VIO0002
+    name: Insecure communication protocol
+    description: Usage of protocols that are outdated and unsecure. Examples of such protocols are FTP and telnet
+  - id: VIO0003
+    name: Vulnerable system or service
+    description: Any vulnerable systems or applications / services that leave the system vulnerable for compromise
+  - id: VIO0004
+    name: Unauthorized process launched
+    description: Launch of an unauthorized process. Examples of such processes are psexec, powershell and the command prompt. Also covers unauthorized processes running as a service
+  - id: VIO0005
+    name: Illegal or aberrant application found on host
+    description: Any application present on hosts that are not allowed by policy or are quite simply illegal. Examples of such applications are hacking tools and pirated software
+  - id: VIO0006
+    name: Resource abuse
+    description: This use case is reserved for situations where systems are being abused, for example for bitcoin mining
+  - id: VIO0007
+    name: Unauthorized use of high-privileged account
+    description: Any unauthorized use of accounts with high privileges, such as root accounts on Linux / UNIX and administrator accounts on Windows
+  - id: VIO0008
+    name: Unauthorized modification of technical policy
+    description: Unauthorized modification of configuration settings. This can be a compliance issue, where the configuration may result in a hardening baseline deviation. It can also be part of malicious activity
+  - id: VIO0009
+    name: Uncompliant remote access to internal resources
+    description: Legitimate remote activities not being achieved with organization approved means, such as using a third-party VPN or service, unsupported protocols or non-standard infrastructure.

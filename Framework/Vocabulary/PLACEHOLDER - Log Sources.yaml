@@ -1,0 +1,13 @@
+# Only used for testing purposes, would be fully dynamic in future
+name: Log Sources
+field: logsources
+description: Log categories holding data of interest for the purpose of threat detection
+keys:
+  - id: LOG0001
+    name: aws:securityhub
+    tide.vocab.stages: splunk
+    description: AWS Security Hub alerts
+  - id: LOG0002
+    name: Azure AD Connector
+    tide.vocab.stages: sentinel
+    description: Azure AD audit events and system alerts

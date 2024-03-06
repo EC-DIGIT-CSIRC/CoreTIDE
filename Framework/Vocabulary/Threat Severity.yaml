@@ -1,0 +1,30 @@
+name: Threat Severity
+field: severity
+description: The severity summarizes the overall danger of incident the vector will provoke, and is to be derived (WIP) from impact, leverage, and difficulty to execute.
+reference: https://www.ncsc.gov.uk/news/new-cyber-attack-categorisation-system-improve-uk-response-incidents
+icon: 💣
+keys:
+  - id: SEV0001
+    name: Localised incident
+    icon: 🔫
+    description: A cyber attack on an individual, or preliminary indications of cyber activity against a small or medium-sized organisation.
+  - id: SEV0002
+    name: Moderate incident
+    icon: 🧨
+    description: A cyber attack on a small organisation, or which poses a considerable risk to a medium-sized organisation, or preliminary indications of cyber activity against a large organisation or the government.
+  - id: SEV0003
+    name: Substantial incident
+    icon: 🔥
+    description: A cyber attack which has a serious impact on a medium-sized organisation, or which poses a considerable risk to a large organisation or wider / local government.
+  - id: SEV0004
+    name: Significant incident
+    icon: ⚠️
+    description: A cyber attack which has a serious impact on a large organisation or on wider / local government, or which poses a considerable risk to central government or (inter)national essential services.
+  - id: SEV0005
+    name: Highly significant incident
+    icon: 🚨
+    description: A cyber attack which has a serious impact on central government, (inter)national essential services, a large proportion of the (inter)national population, or the (inter)national economy.
+  - id: SEV0006
+    name: National cyber emergency
+    icon: ☢️
+    description: A cyber attack which causes sustained disruption of (inter)national essential services or affects (inter)national national security, leading to severe economic or social consequences or to loss of life.

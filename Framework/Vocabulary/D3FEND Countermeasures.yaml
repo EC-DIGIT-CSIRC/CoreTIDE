@@ -1,0 +1,973 @@
+name: D3FEND Countermeasures Methods
+field: methods
+description: MITRE D3FEND's technical detection approaches
+stages:
+  - Harden
+  - Detect
+  - Isolate
+  - Deceive
+  - Evict
+icon: ⚔️
+keys:
+  - id: D3-AH
+    name: Application Hardening
+    tide.vocab.stages: Harden
+    description: 'Synonyms : Process Hardening
+
+
+      Application Hardening makes an executable application more resilient to a class
+      of exploits which either introduce new code or execute unwanted existing code.
+      These techniques may be applied at compile-time or on an application binary.'
+    link: https://d3fend.mitre.org/technique/d3f:ApplicationHardening
+  - id: D3-ACH
+    name: Application Configuration Hardening
+    tide.vocab.stages: Harden
+    description: Modifying an application's configuration to reduce its attack surface.
+    link: https://d3fend.mitre.org/technique/d3f:ApplicationConfigurationHardening
+  - id: D3-DCE
+    name: Dead Code Elimination
+    tide.vocab.stages: Harden
+    description: Removing unreachable or "dead code" from compiled source code.
+    link: https://d3fend.mitre.org/technique/d3f:DeadCodeElimination
+  - id: D3-EHPV
+    name: Exception Handler Pointer Validation
+    tide.vocab.stages: Harden
+    description: 'Synonyms : Exception Handler Validation
+
+
+      Validates that a referenced exception handler pointer is a valid exception handler.'
+    link: https://d3fend.mitre.org/technique/d3f:ExceptionHandlerPointerValidation
+  - id: D3-PSEP
+    name: Process Segment Execution Prevention
+    tide.vocab.stages: Harden
+    description: "Synonyms : Execute Disable\_, and\_No Execute\n\nPreventing execution\
+      \ of any address in a memory region other than the code segment."
+    link: https://d3fend.mitre.org/technique/d3f:ProcessSegmentExecutionPrevention
+  - id: D3-SAOR
+    name: Segment Address Offset Randomization
+    tide.vocab.stages: Harden
+    description: "Synonyms : Address Space Layout Randomization\_, and\_ASLR\n\nRandomizing\
+      \ the base (start) address of one or more segments of memory during the initialization\
+      \ of a process."
+    link: https://d3fend.mitre.org/technique/d3f:SegmentAddressOffsetRandomization
+  - id: D3-SFCV
+    name: Stack Frame Canary Validation
+    tide.vocab.stages: Harden
+    description: Comparing a value stored in a stack frame with a known good value
+      in order to prevent or detect a memory segment overwrite.
+    link: https://d3fend.mitre.org/technique/d3f:StackFrameCanaryValidation
+  - id: D3-PAN
+    name: Pointer Authentication
+    tide.vocab.stages: Harden
+    description: Comparing the cryptographic hash or derivative of a pointer's value
+      to an expected value.
+    link: https://d3fend.mitre.org/technique/d3f:PointerAuthentication
+  - id: D3-CH
+    name: Credential Hardening
+    tide.vocab.stages: Harden
+    description: Credential Hardening techniques modify system or network properties
+      in order to protect system or network/domain credentials.
+    link: https://d3fend.mitre.org/technique/d3f:CredentialHardening
+  - id: D3-BAN
+    name: Biometric Authentication
+    tide.vocab.stages: Harden
+    description: Using biological measures in order to authenticate a user.
+    link: https://d3fend.mitre.org/technique/d3f:BiometricAuthentication
+  - id: D3-CBAN
+    name: Certificate-based Authentication
+    tide.vocab.stages: Harden
+    description: Requiring a digital certificate in order to authenticate a user.
+    link: https://d3fend.mitre.org/technique/d3f:Certificate-basedAuthentication
+  - id: D3-CP
+    name: Certificate Pinning
+    tide.vocab.stages: Harden
+    description: Persisting either a server's X509 certificate or their public key
+      and comparing that to server's presented identity to allow for greater client
+      confidence in the remote server's identity for SSL connections.
+    link: https://d3fend.mitre.org/technique/d3f:CertificatePinning
+  - id: D3-CTS
+    name: Credential Transmission Scoping
+    tide.vocab.stages: Harden
+    description: 'Synonyms : Phishing Resistant Authentication
+
+
+      Limiting the transmission of a credential to a scoped set of relying parties.'
+    link: https://d3fend.mitre.org/technique/d3f:CredentialTransmissionScoping
+  - id: D3-DTP
+    name: Domain Trust Policy
+    tide.vocab.stages: Harden
+    description: Restricting inter-domain trust by modifying domain configuration.
+    link: https://d3fend.mitre.org/technique/d3f:DomainTrustPolicy
+  - id: D3-SPP
+    name: Strong Password Policy
+    tide.vocab.stages: Harden
+    description: Modifying system configuration to increase password strength.
+    link: https://d3fend.mitre.org/technique/d3f:StrongPasswordPolicy
+  - id: D3-UAP
+    name: User Account Permissions
+    tide.vocab.stages: Harden
+    description: Restricting a user account's access to resources.
+    link: https://d3fend.mitre.org/technique/d3f:UserAccountPermissions
+  - id: D3-MFA
+    name: Multi-factor Authentication
+    tide.vocab.stages: Harden
+    description: Requiring proof of two or more pieces of evidence in order to authenticate
+      a user.
+    link: https://d3fend.mitre.org/technique/d3f:Multi-factorAuthentication
+  - id: D3-OTP
+    name: One-time Password
+    tide.vocab.stages: Harden
+    description: 'Synonyms : OTP
+
+
+      A one-time password is valid for only one user authentication.'
+    link: https://d3fend.mitre.org/technique/d3f:One-timePassword
+  - id: D3-MH
+    name: Message Hardening
+    tide.vocab.stages: Harden
+    description: 'Synonyms : Email Or Messaging Hardening
+
+
+      Email or Messaging Hardening includes measures taken to ensure the confidentiality
+      and integrity of user to user computer messages.'
+    link: https://d3fend.mitre.org/technique/d3f:MessageHardening
+  - id: D3-TAAN
+    name: Transfer Agent Authentication
+    tide.vocab.stages: Harden
+    description: Validating that server components of a messaging infrastructure are
+      authorized to send a particular message.
+    link: https://d3fend.mitre.org/technique/d3f:TransferAgentAuthentication
+  - id: D3-MAN
+    name: Message Authentication
+    tide.vocab.stages: Harden
+    description: Authenticating the sender of a message and ensuring message integrity.
+    link: https://d3fend.mitre.org/technique/d3f:MessageAuthentication
+  - id: D3-MENCR
+    name: Message Encryption
+    tide.vocab.stages: Harden
+    description: Encrypting a message body using a cryptographic key.
+    link: https://d3fend.mitre.org/technique/d3f:MessageEncryption
+  - id: D3-PH
+    name: Platform Hardening
+    tide.vocab.stages: Harden
+    description: 'Hardening components of a Platform with the intention of making
+      them more difficult to exploit. Platforms includes components such as: * BIOS
+      UEFI Subsystems * Hardware security devices such as Trusted Platform Modules
+      * Boot process logic or code * Kernel software components'
+    link: https://d3fend.mitre.org/technique/d3f:PlatformHardening
+  - id: D3-BA
+    name: Bootloader Authentication
+    tide.vocab.stages: Harden
+    description: 'Synonyms : Secure Boot
+
+
+      Cryptographically authenticating the bootloader software before system boot.'
+    link: https://d3fend.mitre.org/technique/d3f:BootloaderAuthentication
+  - id: D3-DENCR
+    name: Disk Encryption
+    tide.vocab.stages: Harden
+    description: Encrypting a hard disk partition to prevent cleartext access to a
+      file system.
+    link: https://d3fend.mitre.org/technique/d3f:DiskEncryption
+  - id: D3-DLIC
+    name: Driver Load Integrity Checking
+    tide.vocab.stages: Harden
+    description: Ensuring the integrity of drivers loaded during initialization of
+      the operating system.
+    link: https://d3fend.mitre.org/technique/d3f:DriverLoadIntegrityChecking
+  - id: D3-RFS
+    name: RF Shielding
+    tide.vocab.stages: Harden
+    description: Adding physical barriers to a platform to prevent undesired radio
+      interference.
+    link: https://d3fend.mitre.org/technique/d3f:RFShielding
+  - id: D3-SU
+    name: Software Update
+    tide.vocab.stages: Harden
+    description: Replacing old software on a computer system component.
+    link: https://d3fend.mitre.org/technique/d3f:SoftwareUpdate
+  - id: D3-SCP
+    name: System Configuration Permissions
+    tide.vocab.stages: Harden
+    description: Restricting system configuration modifications to a specific user
+      or group of users.
+    link: https://d3fend.mitre.org/technique/d3f:SystemConfigurationPermissions
+  - id: D3-TBI
+    name: TPM Boot Integrity
+    tide.vocab.stages: Harden
+    description: "Synonyms : Static Root of Trust Measurement\_, and\_STRM\n\nAssuring\
+      \ the integrity of a platform by demonstrating that the boot process starts\
+      \ from a trusted combination of hardware and software and continues until the\
+      \ operating system has fully booted and applications are running. Sometimes\
+      \ called Static Root of Trust Measurement (STRM)."
+    link: https://d3fend.mitre.org/technique/d3f:TPMBootIntegrity
+  - id: D3-FE
+    name: File Encryption
+    tide.vocab.stages: Harden
+    description: Encrypting a file using a cryptographic key.
+    link: https://d3fend.mitre.org/technique/d3f:FileEncryption
+  - id: D3-LFP
+    name: Local File Permissions
+    tide.vocab.stages: Harden
+    description: Restricting access to a local file by configuring operating system
+      functionality.
+    link: https://d3fend.mitre.org/technique/d3f:LocalFilePermissions
+  - id: D3-FA
+    name: File Analysis
+    tide.vocab.stages: Detect
+    description: 'File Analysis is an analytic process to determine a file''s status.
+      For example: virus, trojan, benign, malicious, trusted, unauthorized, sensitive,
+      etc.'
+    link: https://d3fend.mitre.org/technique/d3f:FileAnalysis
+  - id: D3-DA
+    name: Dynamic Analysis
+    tide.vocab.stages: Detect
+    description: "Synonyms : Malware Detonation\_, and\_Malware Sandbox\n\nExecuting\
+      \ or opening a file in a synthetic \"sandbox\" environment to determine if the\
+      \ file is a malicious program or if the file exploits another program such as\
+      \ a document reader."
+    link: https://d3fend.mitre.org/technique/d3f:DynamicAnalysis
+  - id: D3-EFA
+    name: Emulated File Analysis
+    tide.vocab.stages: Detect
+    description: Emulating instructions in a file looking for specific patterns.
+    link: https://d3fend.mitre.org/technique/d3f:EmulatedFileAnalysis
+  - id: D3-FCR
+    name: File Content Rules
+    tide.vocab.stages: Detect
+    description: "Synonyms : File Content Signatures\_, and\_File Signatures\n\nEmploying\
+      \ a pattern matching rule language to analyze files."
+    link: https://d3fend.mitre.org/technique/d3f:FileContentRules
+  - id: D3-FH
+    name: File Hashing
+    tide.vocab.stages: Detect
+    description: Employing file hash comparisons to detect known malware.
+    link: https://d3fend.mitre.org/technique/d3f:FileHashing
+  - id: D3-ID
+    name: Identifier Analysis
+    tide.vocab.stages: Detect
+    description: Analyzing identifier artifacts such as IP address, domain names,
+      or URL(I)s.
+    link: https://d3fend.mitre.org/technique/d3f:IdentifierAnalysis
+  - id: D3-UA
+    name: URL Analysis
+    tide.vocab.stages: Detect
+    description: Determining if a URL is benign or malicious by analyzing the URL
+      or its components.
+    link: https://d3fend.mitre.org/technique/d3f:URLAnalysis
+  - id: D3-HD
+    name: Homoglyph Detection
+    tide.vocab.stages: Detect
+    description: Comparing strings using a variety of techniques to determine if a
+      deceptive or malicious string is being presented to a user.
+    link: https://d3fend.mitre.org/technique/d3f:HomoglyphDetection
+  - id: D3-MA
+    name: Message Analysis
+    tide.vocab.stages: Detect
+    description: "Synonyms : Electronic Message Analysis\_, and\_Email Or Messaging\
+      \ Analysis\n\nAnalyzing email or instant message content to detect unauthorized\
+      \ activity."
+    link: https://d3fend.mitre.org/technique/d3f:MessageAnalysis
+  - id: D3-SMRA
+    name: Sender MTA Reputation Analysis
+    tide.vocab.stages: Detect
+    description: Characterizing the reputation of mail transfer agents (MTA) to determine
+      the security risk in emails.
+    link: https://d3fend.mitre.org/technique/d3f:SenderMTAReputationAnalysis
+  - id: D3-SRA
+    name: Sender Reputation Analysis
+    tide.vocab.stages: Detect
+    description: Ascertaining sender reputation based on information associated with
+      a message (e.g. email/instant messaging).
+    link: https://d3fend.mitre.org/technique/d3f:SenderReputationAnalysis
+  - id: D3-NTA
+    name: Network Traffic Analysis
+    tide.vocab.stages: Detect
+    description: Analyzing intercepted or summarized computer network traffic to detect
+      unauthorized activity.
+    link: https://d3fend.mitre.org/technique/d3f:NetworkTrafficAnalysis
+  - id: D3-RPA
+    name: Relay Pattern Analysis
+    tide.vocab.stages: Detect
+    description: 'Synonyms : Relay Network Detection
+
+
+      The detection of an internal host relaying traffic between the internal network
+      and the external network.'
+    link: https://d3fend.mitre.org/technique/d3f:RelayPatternAnalysis
+  - id: D3-RTSD
+    name: Remote Terminal Session Detection
+    tide.vocab.stages: Detect
+    description: Detection of an unauthorized remote live terminal console session
+      by examining network traffic to a network host.
+    link: https://d3fend.mitre.org/technique/d3f:RemoteTerminalSessionDetection
+  - id: D3-RTA
+    name: RPC Traffic Analysis
+    tide.vocab.stages: Detect
+    description: 'Synonyms : RPC Protocol Analysis
+
+
+      Monitoring the activity of remote procedure calls in communication traffic to
+      establish standard protocol operations and potential attacker activities.'
+    link: https://d3fend.mitre.org/technique/d3f:RPCTrafficAnalysis
+  - id: D3-ANAA
+    name: Administrative Network Activity Analysis
+    tide.vocab.stages: Detect
+    description: Detection of unauthorized use of administrative network protocols
+      by analyzing network activity against a baseline.
+    link: https://d3fend.mitre.org/technique/d3f:AdministrativeNetworkActivityAnalysis
+  - id: D3-BSE
+    name: Byte Sequence Emulation
+    tide.vocab.stages: Detect
+    description: 'Synonyms : Shellcode Transmission Detection
+
+
+      Analyzing sequences of bytes and determining if they likely represent malicious
+      shellcode.'
+    link: https://d3fend.mitre.org/technique/d3f:ByteSequenceEmulation
+  - id: D3-CA
+    name: Certificate Analysis
+    tide.vocab.stages: Detect
+    description: Analyzing Public Key Infrastructure certificates to detect if they
+      have been misconfigured or spoofed using both network traffic, certificate fields
+      and third-party logs.
+    link: https://d3fend.mitre.org/technique/d3f:CertificateAnalysis
+  - id: D3-CSPP
+    name: Client-server Payload Profiling
+    tide.vocab.stages: Detect
+    description: Comparing client-server request and response payloads to a baseline
+      profile to identify outliers.
+    link: https://d3fend.mitre.org/technique/d3f:Client-serverPayloadProfiling
+  - id: D3-CAA
+    name: Connection Attempt Analysis
+    tide.vocab.stages: Detect
+    description: 'Synonyms : Network Scan Detection
+
+
+      Analyzing failed connections in a network to detect unauthorized activity.'
+    link: https://d3fend.mitre.org/technique/d3f:ConnectionAttemptAnalysis
+  - id: D3-DNSTA
+    name: DNS Traffic Analysis
+    tide.vocab.stages: Detect
+    description: 'Synonyms : Domain Name Analysis
+
+
+      Analysis of domain name metadata, including name and DNS records, to determine
+      whether the domain is likely to resolve to an undesirable host.'
+    link: https://d3fend.mitre.org/technique/d3f:DNSTrafficAnalysis
+  - id: D3-ACA
+    name: Active Certificate Analysis
+    tide.vocab.stages: Detect
+    description: Actively collecting PKI certificates by connecting to the server
+      and downloading its server certificates for analysis.
+    link: https://d3fend.mitre.org/technique/d3f:ActiveCertificateAnalysis
+  - id: D3-PCA
+    name: Passive Certificate Analysis
+    tide.vocab.stages: Detect
+    description: Collecting host certificates from network traffic or other passive
+      sources like a certificate transparency log and analyzing them for unauthorized
+      activity.
+    link: https://d3fend.mitre.org/technique/d3f:PassiveCertificateAnalysis
+  - id: D3-FC
+    name: File Carving
+    tide.vocab.stages: Detect
+    description: Identifying and extracting files from network application protocols
+      through the use of network stream reassembly software.
+    link: https://d3fend.mitre.org/technique/d3f:FileCarving
+  - id: D3-ISVA
+    name: Inbound Session Volume Analysis
+    tide.vocab.stages: Detect
+    description: Analyzing inbound network session or connection attempt volume.
+    link: https://d3fend.mitre.org/technique/d3f:InboundSessionVolumeAnalysis
+  - id: D3-IPCTA
+    name: IPC Traffic Analysis
+    tide.vocab.stages: Detect
+    description: 'Synonyms : IPC Analysis
+
+
+      Analyzing standard inter process communication (IPC) protocols to detect deviations
+      from normal protocol activity.'
+    link: https://d3fend.mitre.org/technique/d3f:IPCTrafficAnalysis
+  - id: D3-NTCD
+    name: Network Traffic Community Deviation
+    tide.vocab.stages: Detect
+    description: Establishing baseline communities of network hosts and identifying
+      statistically divergent inter-community communication.
+    link: https://d3fend.mitre.org/technique/d3f:NetworkTrafficCommunityDeviation
+  - id: D3-PHDURA
+    name: Per Host Download-Upload Ratio Analysis
+    tide.vocab.stages: Detect
+    description: Detecting anomalies that indicate malicious activity by comparing
+      the amount of data downloaded versus data uploaded by a host.
+    link: https://d3fend.mitre.org/technique/d3f:PerHostDownload-UploadRatioAnalysis
+  - id: D3-PMAD
+    name: Protocol Metadata Anomaly Detection
+    tide.vocab.stages: Detect
+    description: Collecting network communication protocol metadata and identifying
+      statistical outliers.
+    link: https://d3fend.mitre.org/technique/d3f:ProtocolMetadataAnomalyDetection
+  - id: D3-PM
+    name: Platform Monitoring
+    tide.vocab.stages: Detect
+    description: Monitoring platform components such as operating systems software,
+      hardware devices, or firmware.
+    link: https://d3fend.mitre.org/technique/d3f:PlatformMonitoring
+  - id: D3-SJA
+    name: Scheduled Job Analysis
+    tide.vocab.stages: Detect
+    description: 'Synonyms : Scheduled Job Execution
+
+
+      Analysis of source files, processes, destination files, or destination servers
+      associated with a scheduled job to detect unauthorized use of job scheduling.'
+    link: https://d3fend.mitre.org/technique/d3f:ScheduledJobAnalysis
+  - id: D3-SDM
+    name: System Daemon Monitoring
+    tide.vocab.stages: Detect
+    description: Tracking changes to the state or configuration of critical system
+      level processes.
+    link: https://d3fend.mitre.org/technique/d3f:SystemDaemonMonitoring
+  - id: D3-SFA
+    name: System File Analysis
+    tide.vocab.stages: Detect
+    description: Monitoring system files such as authentication databases, configuration
+      files, system logs, and system executables for modification or tampering.
+    link: https://d3fend.mitre.org/technique/d3f:SystemFileAnalysis
+  - id: D3-SFV
+    name: System Firmware Verification
+    tide.vocab.stages: Detect
+    description: Cryptographically verifying installed system firmware integrity.
+    link: https://d3fend.mitre.org/technique/d3f:SystemFirmwareVerification
+  - id: D3-SICA
+    name: System Init Config Analysis
+    tide.vocab.stages: Detect
+    description: "Synonyms : Autorun Analysis\_, and\_Startup Analysis\n\nAnalysis\
+      \ of any system process startup configuration."
+    link: https://d3fend.mitre.org/technique/d3f:SystemInitConfigAnalysis
+  - id: D3-USICA
+    name: User Session Init Config Analysis
+    tide.vocab.stages: Detect
+    description: 'Synonyms : User Startup Config Analysis
+
+
+      Analyzing modifications to user session config files such as .bashrc or .bash_profile.'
+    link: https://d3fend.mitre.org/technique/d3f:UserSessionInitConfigAnalysis
+  - id: D3-SBV
+    name: Service Binary Verification
+    tide.vocab.stages: Detect
+    description: Analyzing changes in service binary files by comparing to a source
+      of truth.
+    link: https://d3fend.mitre.org/technique/d3f:ServiceBinaryVerification
+  - id: D3-EHB
+    name: Endpoint Health Beacon
+    tide.vocab.stages: Detect
+    description: 'Synonyms : Endpoint Health Telemetry
+
+
+      Monitoring the security status of an endpoint by sending periodic messages with
+      health status, where absence of a response may indicate that the endpoint has
+      been compromised.'
+    link: https://d3fend.mitre.org/technique/d3f:EndpointHealthBeacon
+  - id: D3-PFV
+    name: Peripheral Firmware Verification
+    tide.vocab.stages: Detect
+    description: Cryptographically verifying peripheral firmware integrity.
+    link: https://d3fend.mitre.org/technique/d3f:PeripheralFirmwareVerification
+  - id: D3-FBA
+    name: Firmware Behavior Analysis
+    tide.vocab.stages: Detect
+    description: 'Synonyms : Firmware Timing Analysis
+
+
+      Analyzing the behavior of embedded code in firmware and looking for anomalous
+      behavior and suspicious activity.'
+    link: https://d3fend.mitre.org/technique/d3f:FirmwareBehaviorAnalysis
+  - id: D3-FEMC
+    name: Firmware Embedded Monitoring Code
+    tide.vocab.stages: Detect
+    description: Monitoring code is injected into firmware for integrity monitoring
+      of firmware and firmware data.
+    link: https://d3fend.mitre.org/technique/d3f:FirmwareEmbeddedMonitoringCode
+  - id: D3-FV
+    name: Firmware Verification
+    tide.vocab.stages: Detect
+    description: Cryptographically verifying firmware integrity.
+    link: https://d3fend.mitre.org/technique/d3f:FirmwareVerification
+  - id: D3-OSM
+    name: Operating System Monitoring
+    tide.vocab.stages: Detect
+    description: The operating system software, for D3FEND's purposes, includes the
+      kernel and its process management functions, hardware drivers, initialization
+      or boot logic. It also includes and other key system daemons and their configuration.
+      The monitoring or analysis of these components for unauthorized activity constitute
+      **Operating System Monitoring**.
+    link: https://d3fend.mitre.org/technique/d3f:OperatingSystemMonitoring
+  - id: D3-IDA
+    name: Input Device Analysis
+    tide.vocab.stages: Detect
+    description: Operating system level mechanisms to prevent abusive input device
+      exploitation.
+    link: https://d3fend.mitre.org/technique/d3f:InputDeviceAnalysis
+  - id: D3-MBT
+    name: Memory Boundary Tracking
+    tide.vocab.stages: Detect
+    description: Analyzing a call stack for return addresses which point to unexpected
+      memory locations.
+    link: https://d3fend.mitre.org/technique/d3f:MemoryBoundaryTracking
+  - id: D3-PA
+    name: Process Analysis
+    tide.vocab.stages: Detect
+    description: Process Analysis consists of observing a running application process
+      and analyzing it to watch for certain behaviors or conditions which may indicate
+      adversary activity. Analysis can occur inside of the process or through a third-party
+      monitoring application. Examples include monitoring system and privileged calls,
+      monitoring process initiation chains, and memory boundary allocations.
+    link: https://d3fend.mitre.org/technique/d3f:ProcessAnalysis
+  - id: D3-PSMD
+    name: Process Self-Modification Detection
+    tide.vocab.stages: Detect
+    description: Detects processes that modify, change, or replace their own code
+      at runtime.
+    link: https://d3fend.mitre.org/technique/d3f:ProcessSelf-ModificationDetection
+  - id: D3-SEA
+    name: Script Execution Analysis
+    tide.vocab.stages: Detect
+    description: Analyzing the execution of a script to detect unauthorized user activity.
+    link: https://d3fend.mitre.org/technique/d3f:ScriptExecutionAnalysis
+  - id: D3-SSC
+    name: Shadow Stack Comparisons
+    tide.vocab.stages: Detect
+    description: Comparing a call stack in system memory with a shadow call stack
+      maintained by the processor to determine unauthorized shellcode activity.
+    link: https://d3fend.mitre.org/technique/d3f:ShadowStackComparisons
+  - id: D3-SCA
+    name: System Call Analysis
+    tide.vocab.stages: Detect
+    description: Analyzing system calls to determine whether a process is exhibiting
+      unauthorized behavior.
+    link: https://d3fend.mitre.org/technique/d3f:SystemCallAnalysis
+  - id: D3-DQSA
+    name: Database Query String Analysis
+    tide.vocab.stages: Detect
+    description: Analyzing database queries to detect [SQL Injection](https://capec.mitre.org/data/definitions/66.html).
+    link: https://d3fend.mitre.org/technique/d3f:DatabaseQueryStringAnalysis
+  - id: D3-FAPA
+    name: File Access Pattern Analysis
+    tide.vocab.stages: Detect
+    description: Analyzing the files accessed by a process to identify unauthorized
+      activity.
+    link: https://d3fend.mitre.org/technique/d3f:FileAccessPatternAnalysis
+  - id: D3-IBCA
+    name: Indirect Branch Call Analysis
+    tide.vocab.stages: Detect
+    description: Analyzing vendor specific branch call recording in order to detect
+      ROP style attacks.
+    link: https://d3fend.mitre.org/technique/d3f:IndirectBranchCallAnalysis
+  - id: D3-PCSV
+    name: Process Code Segment Verification
+    tide.vocab.stages: Detect
+    description: Comparing the "text" or "code" memory segments to a source of truth.
+    link: https://d3fend.mitre.org/technique/d3f:ProcessCodeSegmentVerification
+  - id: D3-PSA
+    name: Process Spawn Analysis
+    tide.vocab.stages: Detect
+    description: Analyzing spawn arguments or attributes of a process to detect processes
+      that are unauthorized.
+    link: https://d3fend.mitre.org/technique/d3f:ProcessSpawnAnalysis
+  - id: D3-FCA
+    name: File Creation Analysis
+    tide.vocab.stages: Detect
+    description: Analyzing the properties of file create system call invocations.
+    link: https://d3fend.mitre.org/technique/d3f:FileCreationAnalysis
+  - id: D3-PLA
+    name: Process Lineage Analysis
+    tide.vocab.stages: Detect
+    description: 'Synonyms : Process Tree Analysis
+
+
+      Identification of suspicious processes executing on an end-point device by examining
+      the ancestry and siblings of a process, and the associated metadata of each
+      node on the tree, such as process execution, duration, and order relative to
+      siblings and ancestors.'
+    link: https://d3fend.mitre.org/technique/d3f:ProcessLineageAnalysis
+  - id: D3-UBA
+    name: User Behavior Analysis
+    tide.vocab.stages: Detect
+    description: "Synonyms : Credential Monitoring\_, and\_UBA\n\nAnalysis of user\
+      \ behavior and patterns for the purpose of detecting unauthorized user activity."
+    link: https://d3fend.mitre.org/technique/d3f:UserBehaviorAnalysis
+  - id: D3-RAPA
+    name: Resource Access Pattern Analysis
+    tide.vocab.stages: Detect
+    description: Analyzing the resources accessed by a user to identify unauthorized
+      activity.
+    link: https://d3fend.mitre.org/technique/d3f:ResourceAccessPatternAnalysis
+  - id: D3-SDA
+    name: Session Duration Analysis
+    tide.vocab.stages: Detect
+    description: Analyzing the duration of user sessions in order to detect unauthorized
+      activity.
+    link: https://d3fend.mitre.org/technique/d3f:SessionDurationAnalysis
+  - id: D3-UDTA
+    name: User Data Transfer Analysis
+    tide.vocab.stages: Detect
+    description: Analyzing the amount of data transferred by a user.
+    link: https://d3fend.mitre.org/technique/d3f:UserDataTransferAnalysis
+  - id: D3-UGLPA
+    name: User Geolocation Logon Pattern Analysis
+    tide.vocab.stages: Detect
+    description: Monitoring geolocation data of user logon attempts and comparing
+      it to a baseline user behavior profile to identify anomalies in logon location.
+    link: https://d3fend.mitre.org/technique/d3f:UserGeolocationLogonPatternAnalysis
+  - id: D3-WSAA
+    name: Web Session Activity Analysis
+    tide.vocab.stages: Detect
+    description: Monitoring changes in user web session behavior by comparing current
+      web session activity to a baseline behavior profile or a catalog of predetermined
+      malicious behavior.
+    link: https://d3fend.mitre.org/technique/d3f:WebSessionActivityAnalysis
+  - id: D3-ANET
+    name: Authentication Event Thresholding
+    tide.vocab.stages: Detect
+    description: Collecting authentication events, creating a baseline user profile,
+      and determining whether authentication events are consistent with the baseline
+      profile.
+    link: https://d3fend.mitre.org/technique/d3f:AuthenticationEventThresholding
+  - id: D3-AZET
+    name: Authorization Event Thresholding
+    tide.vocab.stages: Detect
+    description: Collecting authorization events, creating a baseline user profile,
+      and determining whether authorization events are consistent with the baseline
+      profile.
+    link: https://d3fend.mitre.org/technique/d3f:AuthorizationEventThresholding
+  - id: D3-CCSA
+    name: Credential Compromise Scope Analysis
+    tide.vocab.stages: Detect
+    description: Determining which credentials may have been compromised by analyzing
+      the user logon history of a particular system.
+    link: https://d3fend.mitre.org/technique/d3f:CredentialCompromiseScopeAnalysis
+  - id: D3-DAM
+    name: Domain Account Monitoring
+    tide.vocab.stages: Detect
+    description: Monitoring the existence of or changes to Domain User Accounts.
+    link: https://d3fend.mitre.org/technique/d3f:DomainAccountMonitoring
+  - id: D3-JFAPA
+    name: Job Function Access Pattern Analysis
+    tide.vocab.stages: Detect
+    description: Detecting anomalies in user access patterns by comparing user access
+      activity to behavioral profiles that categorize users by role such as job title,
+      function, department.
+    link: https://d3fend.mitre.org/technique/d3f:JobFunctionAccessPatternAnalysis
+  - id: D3-LAM
+    name: Local Account Monitoring
+    tide.vocab.stages: Detect
+    description: Analyzing local user accounts to detect unauthorized activity.
+    link: https://d3fend.mitre.org/technique/d3f:LocalAccountMonitoring
+  - id: D3-EI
+    name: Execution Isolation
+    tide.vocab.stages: Isolate
+    description: Execution Isolation techniques prevent application processes from
+      accessing non-essential system resources, such as memory, devices, or files.
+    link: https://d3fend.mitre.org/technique/d3f:ExecutionIsolation
+  - id: D3-SCF
+    name: System Call Filtering
+    tide.vocab.stages: Isolate
+    description: Configuring a kernel to use an allow or deny list to filter kernel
+      api calls.
+    link: https://d3fend.mitre.org/technique/d3f:SystemCallFiltering
+  - id: D3-EAL
+    name: Executable Allowlisting
+    tide.vocab.stages: Isolate
+    description: 'Synonyms : File Signature Authentication
+
+
+      Using a digital signature to authenticate a file before opening.'
+    link: https://d3fend.mitre.org/technique/d3f:ExecutableAllowlisting
+  - id: D3-EDL
+    name: Executable Denylisting
+    tide.vocab.stages: Isolate
+    description: 'Synonyms : Executable Blacklisting
+
+
+      Blocking the execution of files on a host in accordance with defined application
+      policy rules.'
+    link: https://d3fend.mitre.org/technique/d3f:ExecutableDenylisting
+  - id: D3-HBPI
+    name: Hardware-based Process Isolation
+    tide.vocab.stages: Isolate
+    description: 'Synonyms : Virtualization
+
+
+      Preventing one process from writing to the memory space of another process through
+      hardware based address manager implementations.'
+    link: https://d3fend.mitre.org/technique/d3f:Hardware-basedProcessIsolation
+  - id: D3-IOPR
+    name: IO Port Restriction
+    tide.vocab.stages: Isolate
+    description: Limiting access to computer input/output (IO) ports to restrict unauthorized
+      devices.
+    link: https://d3fend.mitre.org/technique/d3f:IOPortRestriction
+  - id: D3-KBPI
+    name: Kernel-based Process Isolation
+    tide.vocab.stages: Isolate
+    description: Using kernel-level capabilities to isolate processes.
+    link: https://d3fend.mitre.org/technique/d3f:Kernel-basedProcessIsolation
+  - id: D3-MAC
+    name: Mandatory Access Control
+    tide.vocab.stages: Isolate
+    description: Controlling access to local computer system resources with kernel-level
+      capabilities.
+    link: https://d3fend.mitre.org/technique/d3f:MandatoryAccessControl
+  - id: D3-NI
+    name: Network Isolation
+    tide.vocab.stages: Isolate
+    description: Network Isolation techniques prevent network hosts from accessing
+      non-essential system network resources.
+    link: https://d3fend.mitre.org/technique/d3f:NetworkIsolation
+  - id: D3-BDI
+    name: Broadcast Domain Isolation
+    tide.vocab.stages: Isolate
+    description: 'Synonyms : Network Segmentation
+
+
+      Broadcast isolation restricts the number of computers a host can contact on
+      their LAN.'
+    link: https://d3fend.mitre.org/technique/d3f:BroadcastDomainIsolation
+  - id: D3-RRDD
+    name: Reverse Resolution Domain Denylisting
+    tide.vocab.stages: Isolate
+    description: 'Synonyms : Reverse Resolution Domain Blacklisting
+
+
+      Blocking a reverse DNS lookup''s answer''s domain name value.'
+    link: https://d3fend.mitre.org/technique/d3f:ReverseResolutionDomainDenylisting
+  - id: D3-RRID
+    name: Reverse Resolution IP Denylisting
+    tide.vocab.stages: Isolate
+    description: 'Synonyms : Reverse Resolution IP Blacklisting
+
+
+      Blocking a reverse lookup based on the query''s IP address value.'
+    link: https://d3fend.mitre.org/technique/d3f:ReverseResolutionIPDenylisting
+  - id: D3-OTF
+    name: Outbound Traffic Filtering
+    tide.vocab.stages: Isolate
+    description: Restricting network traffic originating from a private host or enclave
+      destined towards untrusted networks.
+    link: https://d3fend.mitre.org/technique/d3f:OutboundTrafficFiltering
+  - id: D3-DNSAL
+    name: DNS Allowlisting
+    tide.vocab.stages: Isolate
+    description: 'Synonyms : DNS Whitelisting
+
+
+      Permitting only approved domains and their subdomains to be resolved.'
+    link: https://d3fend.mitre.org/technique/d3f:DNSAllowlisting
+  - id: D3-DNSDL
+    name: DNS Denylisting
+    tide.vocab.stages: Isolate
+    description: 'Synonyms : DNS Blacklisting
+
+
+      Blocking DNS Network Traffic based on criteria such as IP address, domain name,
+      or DNS query type.'
+    link: https://d3fend.mitre.org/technique/d3f:DNSDenylisting
+  - id: D3-ET
+    name: Encrypted Tunnels
+    tide.vocab.stages: Isolate
+    description: Encrypted encapsulation of routable network traffic.
+    link: https://d3fend.mitre.org/technique/d3f:EncryptedTunnels
+  - id: D3-ITF
+    name: Inbound Traffic Filtering
+    tide.vocab.stages: Isolate
+    description: Restricting network traffic originating from untrusted networks destined
+      towards a private host or enclave.
+    link: https://d3fend.mitre.org/technique/d3f:InboundTrafficFiltering
+  - id: D3-FRDDL
+    name: Forward Resolution Domain Denylisting
+    tide.vocab.stages: Isolate
+    description: 'Synonyms : Forward Resolution Domain Blacklisting
+
+
+      Blocking a lookup based on the query''s domain name value.'
+    link: https://d3fend.mitre.org/technique/d3f:ForwardResolutionDomainDenylisting
+  - id: D3-FRIDL
+    name: Forward Resolution IP Denylisting
+    tide.vocab.stages: Isolate
+    description: 'Synonyms : Forward Resolution IP Blacklisting
+
+
+      Blocking a DNS lookup''s answer''s IP address value.'
+    link: https://d3fend.mitre.org/technique/d3f:ForwardResolutionIPDenylisting
+  - id: D3-HDDL
+    name: Hierarchical Domain Denylisting
+    tide.vocab.stages: Isolate
+    description: 'Synonyms : Hierarchical Domain Blacklisting
+
+
+      Blocking the resolution of any subdomain of a specified domain name.'
+    link: https://d3fend.mitre.org/technique/d3f:HierarchicalDomainDenylisting
+  - id: D3-HDL
+    name: Homoglyph Denylisting
+    tide.vocab.stages: Isolate
+    description: 'Synonyms : Homoglyph Blacklisting
+
+
+      Blocking DNS queries that are deceptively similar to legitimate domain names.'
+    link: https://d3fend.mitre.org/technique/d3f:HomoglyphDenylisting
+  - id: D3-DE
+    name: Decoy Environment
+    tide.vocab.stages: Deceive
+    description: A Decoy Environment comprises hosts and networks for the purposes
+      of deceiving an attacker.
+    link: https://d3fend.mitre.org/technique/d3f:DecoyEnvironment
+  - id: D3-IHN
+    name: Integrated Honeynet
+    tide.vocab.stages: Deceive
+    description: The practice of setting decoys in a production environment to entice
+      interaction from attackers.
+    link: https://d3fend.mitre.org/technique/d3f:IntegratedHoneynet
+  - id: D3-CHN
+    name: Connected Honeynet
+    tide.vocab.stages: Deceive
+    description: A decoy service, system, or environment, that is connected to the
+      enterprise network, and simulates or emulates certain functionality to the network,
+      without exposing full access to a production system.
+    link: https://d3fend.mitre.org/technique/d3f:ConnectedHoneynet
+  - id: D3-SHN
+    name: Standalone Honeynet
+    tide.vocab.stages: Deceive
+    description: An environment created for the purpose of attracting attackers and
+      eliciting their behaviors that is not connected to any production enterprise
+      systems.
+    link: https://d3fend.mitre.org/technique/d3f:StandaloneHoneynet
+  - id: D3-DO
+    name: Decoy Object
+    tide.vocab.stages: Deceive
+    description: A Decoy Object is created and deployed for the purposes of deceiving
+      attackers.
+    link: https://d3fend.mitre.org/technique/d3f:DecoyObject
+  - id: D3-DF
+    name: Decoy File
+    tide.vocab.stages: Deceive
+    description: A file created for the purposes of deceiving an adversary.
+    link: https://d3fend.mitre.org/technique/d3f:DecoyFile
+  - id: D3-DNR
+    name: Decoy Network Resource
+    tide.vocab.stages: Deceive
+    description: Deploying a network resource for the purposes of deceiving an adversary.
+    link: https://d3fend.mitre.org/technique/d3f:DecoyNetworkResource
+  - id: D3-DP
+    name: Decoy Persona
+    tide.vocab.stages: Deceive
+    description: Establishing a fake online identity to misdirect, deceive, and or
+      interact with adversaries.
+    link: https://d3fend.mitre.org/technique/d3f:DecoyPersona
+  - id: D3-DPR
+    name: Decoy Public Release
+    tide.vocab.stages: Deceive
+    description: Issuing publicly released media to deceive adversaries.
+    link: https://d3fend.mitre.org/technique/d3f:DecoyPublicRelease
+  - id: D3-DST
+    name: Decoy Session Token
+    tide.vocab.stages: Deceive
+    description: An authentication token created for the purposes of deceiving an
+      adversary.
+    link: https://d3fend.mitre.org/technique/d3f:DecoySessionToken
+  - id: D3-DUC
+    name: Decoy User Credential
+    tide.vocab.stages: Deceive
+    description: A Credential created for the purpose of deceiving an adversary.
+    link: https://d3fend.mitre.org/technique/d3f:DecoyUserCredential
+  - id: D3-DE
+    name: Decoy Environment
+    tide.vocab.stages: Deceive
+    description: A Decoy Environment comprises hosts and networks for the purposes
+      of deceiving an attacker.
+    link: https://d3fend.mitre.org/technique/d3f:DecoyEnvironment
+  - id: D3-IHN
+    name: Integrated Honeynet
+    tide.vocab.stages: Deceive
+    description: The practice of setting decoys in a production environment to entice
+      interaction from attackers.
+    link: https://d3fend.mitre.org/technique/d3f:IntegratedHoneynet
+  - id: D3-CHN
+    name: Connected Honeynet
+    tide.vocab.stages: Deceive
+    description: A decoy service, system, or environment, that is connected to the
+      enterprise network, and simulates or emulates certain functionality to the network,
+      without exposing full access to a production system.
+    link: https://d3fend.mitre.org/technique/d3f:ConnectedHoneynet
+  - id: D3-SHN
+    name: Standalone Honeynet
+    tide.vocab.stages: Deceive
+    description: An environment created for the purpose of attracting attackers and
+      eliciting their behaviors that is not connected to any production enterprise
+      systems.
+    link: https://d3fend.mitre.org/technique/d3f:StandaloneHoneynet
+  - id: D3-DO
+    name: Decoy Object
+    tide.vocab.stages: Deceive
+    description: A Decoy Object is created and deployed for the purposes of deceiving
+      attackers.
+    link: https://d3fend.mitre.org/technique/d3f:DecoyObject
+  - id: D3-DF
+    name: Decoy File
+    tide.vocab.stages: Deceive
+    description: A file created for the purposes of deceiving an adversary.
+    link: https://d3fend.mitre.org/technique/d3f:DecoyFile
+  - id: D3-DNR
+    name: Decoy Network Resource
+    tide.vocab.stages: Deceive
+    description: Deploying a network resource for the purposes of deceiving an adversary.
+    link: https://d3fend.mitre.org/technique/d3f:DecoyNetworkResource
+  - id: D3-DP
+    name: Decoy Persona
+    tide.vocab.stages: Deceive
+    description: Establishing a fake online identity to misdirect, deceive, and or
+      interact with adversaries.
+    link: https://d3fend.mitre.org/technique/d3f:DecoyPersona
+  - id: D3-DPR
+    name: Decoy Public Release
+    tide.vocab.stages: Deceive
+    description: Issuing publicly released media to deceive adversaries.
+    link: https://d3fend.mitre.org/technique/d3f:DecoyPublicRelease
+  - id: D3-DST
+    name: Decoy Session Token
+    tide.vocab.stages: Deceive
+    description: An authentication token created for the purposes of deceiving an
+      adversary.
+    link: https://d3fend.mitre.org/technique/d3f:DecoySessionToken
+  - id: D3-DUC
+    name: Decoy User Credential
+    tide.vocab.stages: Deceive
+    description: A Credential created for the purpose of deceiving an adversary.
+    link: https://d3fend.mitre.org/technique/d3f:DecoyUserCredential
+  - id: D3-CE
+    name: Credential Eviction
+    tide.vocab.stages: Evict
+    description: Credential Eviction techniques disable or remove compromised credentials
+      from a computer network.
+    link: https://d3fend.mitre.org/technique/d3f:CredentialEviction
+  - id: D3-AL
+    name: Account Locking
+    tide.vocab.stages: Evict
+    description: The process of temporarily disabling user accounts on a system or
+      domain.
+    link: https://d3fend.mitre.org/technique/d3f:AccountLocking
+  - id: D3-ANCI
+    name: Authentication Cache Invalidation
+    tide.vocab.stages: Evict
+    description: Removing tokens or credentials from an authentication cache to prevent
+      further user associated account accesses.
+    link: https://d3fend.mitre.org/technique/d3f:AuthenticationCacheInvalidation
+  - id: D3-PE
+    name: Process Eviction
+    tide.vocab.stages: Evict
+    description: Process eviction techniques terminate or remove running process.
+    link: https://d3fend.mitre.org/technique/d3f:ProcessEviction
+  - id: D3-PT
+    name: Process Termination
+    tide.vocab.stages: Evict
+    description: Terminating a running application process on a computer system.
+    link: https://d3fend.mitre.org/technique/d3f:ProcessTermination

@@ -1,0 +1,11 @@
+###### Required packages for CoreTIDE Toolchain ######
+pyyaml 
+ruamel.yaml
+pandas 
+tabulate
+mitrecve
+jsonschema
+git
+splunk-sdk
+carbon-black-cloud-sdk
+toml

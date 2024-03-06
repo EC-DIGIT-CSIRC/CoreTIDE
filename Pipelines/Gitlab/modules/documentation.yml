@@ -1,0 +1,101 @@
+🗃️ Documentation Toolchain:
+  stage: 📖 Documentation
+  script:
+    # Clone Wiki in injected core > Copy Index in for future STG computation
+    # > Paste the output to the Wiki 
+    - git rebase origin/$CI_DEFAULT_BRANCH #Allows to pull latest mutation if there are
+    - cd $TIDE_CORE_REPO
+    - git clone $TIDE_WIKI_ACCESS
+    - pwd 
+  
+    # Generate index. Stores a copy in wiki for Staging documentation
+    - cd Engines/indexing/
+    - export GENERATE_INDEX_FILE=True
+    - python ./indexer.py # Index generates in the root of the repo
+    - cd ../../ #Back within the Core Root directory
+    - cp index.json $TIDE_WIKI/
+
+    # Extract the staging index to Core Root for reconciliation
+    - if [ -e $TIDE_WIKI/staging_index.json ]
+    -  then cp $TIDE_WIKI/staging_index.json ./
+    - fi
+    - ls -lah
+    # Execute documentation toolchain
+    - cd Orchestration/
+    - python document.py
+    - cd ../ #Back within the Core Root directory
+    - cp -fr wiki/. ./$TIDE_WIKI/ #Copy content of wiki to top level directory
+    - cd $TIDE_WIKI
+    - git add -A
+    #Graceful exit when there is nothing to commit
+    - if ! git diff-index --quiet HEAD; then
+    -   git commit -m "$CI_COMMIT_MESSAGE"
+    -   git rebase
+    -   git push $TIDE_WIKI_ACCESS
+    - fi
+    - cd ../ #Back if Tide Repo Root
+    - rm -rf $TIDE_CORE_REPO # Remove injected Core
+  rules:
+    - if: $TIDE_WIKI_GENERATION != "GITLAB_WIKI"
+      when: never
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+  needs:
+    - 🔮 Validation Toolchain
+  resource_group: wiki
+
+🚧 MDR Staging Documentation:
+  stage: 📖 Documentation
+  script:
+    - git rebase origin/$CI_DEFAULT_BRANCH #Allows to pull latest mutation if there are
+    - cd $TIDE_CORE_REPO
+    - git clone $TIDE_WIKI_ACCESS
+    - pwd 
+
+    # Extract the staging index to Core Root for reconciliation
+    - if [ -e $TIDE_WIKI/staging_index.json ]
+    -  then cp $TIDE_WIKI/staging_index.json ./
+    - fi
+
+    # Extract the staging index to Core Root for reconciliation
+    - if [ -e $TIDE_WIKI/index.json ]
+    -  then cp $TIDE_WIKI/index.json ./
+    - fi
+
+    # Import staging index, run staging_indexer to update it, copy
+    # it back into the wiki for future computations
+    - cd Engines/indexing/
+    - export GENERATE_INDEX_FILE=True
+    - python ./staging_indexer.py # Index generates in the root of the repo
+    - cd ../../ #Back within the Core Root directory
+    - cp staging_index.json $TIDE_WIKI/
+
+    - ls -lah
+    # Execute documentation toolchain
+    - cd Orchestration/
+    - python document.py
+    - cd ../ #Back within the Core Root directory
+    - cp -fr wiki/. ./$TIDE_WIKI/ #Copy content of wiki to top level directory
+    - cd $TIDE_WIKI
+    - git add -A
+    #Graceful exit when there is nothing to commit
+    - if ! git diff-index --quiet HEAD; then
+    -   git commit -m "$CI_COMMIT_MESSAGE"
+    -   git rebase
+    -   git push $TIDE_WIKI_ACCESS
+    - fi
+    - cd ../ #Back if Tide Repo Root
+    - rm -rf $TIDE_CORE_REPO # Remove injected Core
+  rules:
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /🛑 Do Not Deploy/'
+      when: never
+    - if: $TIDE_WIKI_GENERATION != "GITLAB_WIKI"
+      when: never
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+      changes: 
+        - Models Library/Managed Detection Rules/*.yaml
+  needs:
+    - 🔮 Staging Validation Toolchain
+  retry: 1
+  variables:
+    FF_USE_NEW_BASH_EVAL_STRATEGY: "true"
+  resource_group: wiki

@@ -1,0 +1,29 @@
+name: Intelligence Reports
+field: reports
+description: Registry of reports uploaded to this CoreTIDE instance
+icon: 💡
+model: true
+keys:
+  - id: RPT0001
+    name: Test File Cyber Security Brief (June 2023)
+    file_name: RPT0001 - [TLP AMBER+STRICT] - Test File Cyber Security Brief (June
+      2023).pdf
+    description: 'Cyber Security Brief (June 2023)July 3, 2023 - Version: 1.0TLP:CLEARDisclosure
+      is not limited.TLP:CLEAR information may be distributed freely.Executive summaryWe
+      analysed 312 open source reports for this Cyber Security Brief.1Relating to
+      cyber policy and law enforcement, in the EU, large online platforms risk fines
+      fornot marking deepfakes, the EU’s Artificial Intelligence Act bans high-risk
+      AI practices and therewere fines for breaching user data access rights. In the
+      rest of the world, the US ...'
+    tlp: amber+strict
+  - id: RPT0002
+    name: TA-24-006_-_Persistent-campaign-delivering-AsyncRAT-loader
+    file_name: RPT0002 - [TLP AMBER+STRICT] - TA-24-006_-_Persistent-campaign-delivering-AsyncRAT-loader.pdf
+    description: 'Threat Alert - TA 24-006Persistent campaign deliveringAsyncRAT malwareJanuary
+      8, 2023 - Version: 1.0TLP:AMBER+STRICTCategory Type ThreatLevelDomain(s) Sector(s)
+      ConfidenceFORACTIONCybercrime Top MalwareSpearphishingLow World Criticalinfrastructure,
+      AnyA1Key PointsAn ongoing sophisticated campaign aims at delivering AsyncRAT
+      malware to specific victims.The campaign has been persistent since at least
+      11 months, updating frequently its obfuscationtechniques.At least one EUIBA
+      detected attempts to d...'
+    tlp: amber+strict

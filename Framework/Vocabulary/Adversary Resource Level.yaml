@@ -1,0 +1,46 @@
+name: Adversary Resource Level
+field: resources
+stix:  attack-resource-level-ov
+description: Attack Resource Level is an open vocabulary that captures the general level of resources that a threat actor, intrusion set, or campaign might have access to. It ranges from individual, a person acting alone, to government, the resources of a national government.
+reference: https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_moarppphq8vq
+icon: 💸
+keys:
+  - id: RES0001
+    name: Unknown
+    description: Unsufficient information to accurately estimate the adversary resource level
+  - id: RES0001
+    name: Solo
+    stix: individual
+    description: Resources limited to the average individual; Threat Actor acts independently.
+  - id: RES0002
+    name: Group
+    stix: club
+    description: Members interact on a social and volunteer basis, often with little
+      personal interest in the specific target. An example might be a core group of
+      unrelated activists who regularly exchange tips on a particular blog. Group persists
+      long term.
+  - id: RES0003
+    name: Mission-Based
+    stix: contest
+    description: A short-lived and perhaps anonymous interaction that concludes when
+      the participants have achieved a single goal. For example, people who break into
+      systems just for thrills or prestige may hold a contest to see who can break into
+      a specific target first. It also includes announced "operations" to achieve a
+      specific goal, such as the original "OpIsrael" call for volunteers to disrupt
+      all of Israel's Internet functions for a day.
+  - id: RES0004
+    name: Tiger Team
+    stix: team
+    description: A formally organized group with a leader, typically motivated by a
+      specific goal and organized around that goal. Group persists long term and typically
+      operates within a single geography.
+  - id: RES0005
+    name: Structured Organization
+    stix: organization
+    description: Larger and better resourced than a team; typically, a company or crime
+      syndicate. Usually operates in multiple geographic areas and persists long term.
+  - id: RES0006
+    name: Government-sponsored
+    stix: government
+    description: Controls public assets and functions within a jurisdiction; very well
+      resourced and persists long term.

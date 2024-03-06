@@ -1,0 +1,140 @@
+title: CDM Schema validator
+description: CoreTIDE Data Model Specification for Cyber Detection Models
+
+$schema: http://json-schema.org/draft-07/schema#
+additionalProperties: false
+
+required:
+  - id
+  - name
+  - criticality
+  - detection
+  - metadata
+
+properties:
+
+  id:
+    title: Model Identifier
+    type: string
+    description: Identifier as CDMXXXX where XXXX is incremented from the previous model
+    pattern: '(CDM)\d{4}'
+    example: CDM0001
+    default: CDM0000
+
+  name: 
+    title: Model Name
+    type: string
+    description: Name of the detection model
+    example: Placeholder
+
+  criticality: 
+    title: Vector criticality
+    type: string
+    tide.vocab: true
+    description: Priority to implement to achieve detection objectives 
+    example: Emergency
+
+  references:
+    tide.meta.definition: true
+
+  metadata:
+    tide.meta.definition: true
+
+  detection:
+    title: Description of the detection objective
+    type: object
+    description: Set of data detailing how and where to perform the detection, following an analysis and research process
+    required:
+      - vectors
+      - methods
+      - maturity
+      - feasibility
+      - datasources
+      - collection
+      - artifacts
+      - guidelines
+      - tuning
+
+    
+    properties:
+
+      vectors: 
+        title: Threat Vector Model
+        type: array
+        tide.vocab: tvm
+        description: Threat Vectors that need to be detected
+        example: TVM0001
+
+      killchain: 
+        title: Cyber Kill Chain
+        type:
+          - string
+          - array
+        tide.vocab: true
+        description: Where the vector is positionned in the kill chain of adversarial operations
+        example: Lateral Movement
+
+      att&ck: 
+        title: ATT&CK Technique
+        tide.vocab: true
+        type: string
+        description: Optional, when the detection model is specific of a particular att&ck technique. Else, techniques will be looked up from the TVMs.
+        example: T1606
+
+      methods: 
+        title: Technical Detection Methods
+        tide.vocab: true
+        tide.vocab.stages:
+          - Detect
+        type: array
+        description: MITRE D3FEND Detect Techniques that describe the approach required by the detection model to fulfill its objectives best during implementation.
+        example: Resource Access Pattern Analysis
+
+      maturity: 
+        title: Detection Maturity Level
+        type: string
+        tide.vocab: true
+        description: The Detection Maturity Level (DML) model is a capability maturity model for referencing the required CDM maturity to achieve its cyber attack detection goals. 
+        example: Tools
+
+      feasibility: 
+        title: Difficulty to implement
+        type: string
+        tide.vocab: true
+        description: Estimated hardship that will be encountered to implement model, from data required and method
+        example: Straightforward
+
+      datasources: 
+        title: ATT&CK Data Sources
+        type: array
+        tide.vocab: true
+        description: ATT&CK Data source reference
+        example: Process
+
+      collection: 
+        title: Possible data collection points
+        description: If available, suggested data logs options for the detection model implementation
+        type: array
+        tide.vocab: true
+        example: Cloudwatch
+
+      artifacts:
+        title: D3FEND Digital Artifacts
+        type: array
+        tide.vocab: true
+        description: Digital Artifacts are in D3FEND an ontology of objects useful for cyberdefense engineering and which allow to get a real-world anchor to the model. 
+        example: Domain Name
+
+      guidelines: 
+        title: Guidelines
+        type: string
+        special: multiline
+        description: Detailed technical explanation of the detection objective, and goals to implement it , in short sentences
+        example: Lookup file modification logs, and chart statistics of access across 5 min intervals
+
+      tuning: 
+        title: Tuning
+        type: string
+        special: multiline
+        description: Recommendations to tune out false positives without damaging the alert
+        example: Some development workstations may be prone to false positive, but be mindful that production servers should not be whitelisted

@@ -1,0 +1,41 @@
+  status: DEVELOPMENT
+  #contributors:
+    #-
+  #trigger: GreaterThan
+  #threshold: 0
+  
+  scheduling:
+    #nrt: false
+    frequency: 
+    lookback: 
+  
+  #alert:
+    #create_incident: true
+    #suppression: 
+    #title: 
+    #description: |
+      #Type Here
+    #custom_details:
+      #- key: 
+        #column: 
+    #dynamic_properties:
+      #- property: 
+        #column: 
+  
+  #grouping:
+    #event: SingleAlert
+  
+    #alert:
+      #enabled: 
+      #reopen_closed_incidents: 
+      #grouping_lookback: 
+      #matching: AllEntities
+  
+  #entities:
+    #- entity: 
+      #mappings:
+        #- identifier: 
+          #column: 
+  
+  query: |
+    Type Here

@@ -1,0 +1,14 @@
+[attack]
+enterprise = "/attack/enterprise-attack-v14.1.xlsx"
+mobile = "/attack/mobile-attack-v14.1.xlsx"
+ics = "/attack/ics-attack-v14.1.xlsx"
+
+[d3fend]
+ontology = "/d3fend/d3fend-ontology.json"
+countermeasures = "/d3fend/d3fend.csv"
+
+[engage] #https://engage.mitre.org/learn-more-data/
+matrix = "/engage/Engage-Data-V1.0.xlsx"
+
+[nist]
+data = "/nist/NIST Cybersecurity Framework.xlsx"

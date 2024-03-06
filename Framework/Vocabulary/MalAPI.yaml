@@ -1,0 +1,2767 @@
+name: Malicious Window API
+field: malapi
+description: MalAPI.io maps Windows APIs to common techniques used by malware.
+reference: https://malapi.io
+icon: 🎭
+stages:
+  - name: Enumeration
+    icon: 📟
+    description: Functions associated with system enumeration.
+  - name: Injection
+    icon: 💉
+    description: Functions associated with process-related attacks (e.g. DLL injection,
+      process hollowing)
+  - name: Evasion
+    icon: 🏃‍♂️
+    description: Functions associated with evasive behaviour to evade security controls
+      and solutions.
+  - name: Spying
+    icon: 🥸
+    description: Functions associated with spying on user actions (e.g. keylogger,
+      screen capture).
+  - name: Internet
+    icon: 🌐
+    description: Functions associated with malicious internet connectivity (e.g. C&C,
+      exfiltration, downloads).
+  - name: Anti-Debugging
+    icon: 🐞
+    description: Functions associated with anti-reverse engineering and debugging.
+  - name: Ransomware
+    icon: 🔐
+    description: Cryptographic functions used by ransomware.
+  - name: Helper
+    icon: 🤝
+    description: Functions that are not necessarily malicious, but can aid malware.
+keys:
+  - name: Accept
+    description: 'Accept is used to permit an incoming connection attempt on a socket.
+
+      Library : `Ws2_32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-accept
+    tide.vocab.stages: Internet
+  - name: AdjustTokenPrivileges
+    description: 'AdjustTokenPrivileges is used to enable or disable specific access
+      privileges. Malware that performs process injection often calls this function
+      to gain additional permissions.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/securitybaseapi/nf-securitybaseapi-adjusttokenprivileges
+    tide.vocab.stages: Injection
+  - name: AttachThreadInput
+    description: 'AttachThreadInput is used to attach the input processing from one
+      thread to another so that the second thread receives input events such as keyboard
+      and mouse events. This function is commonly used by keyloggers.
+
+      Library : `User32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-attachthreadinput
+    tide.vocab.stages: Spying
+  - name: Bind
+    description: 'Bind is used to associates a local address with a socket.
+
+      Library : `Ws2_32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-bind
+    tide.vocab.stages: Internet
+  - name: BitBlt
+    description: 'BitBlt is used to copy graphic data from one device to another.
+      Spyware sometimes uses this function to capture screenshots.
+
+      Library : `Gdi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-bitblt
+    tide.vocab.stages: Spying
+  - name: BringWindowToTop
+    description: 'BringWindowToTop is used for bringing the specified window to the
+      top of the Z order.
+
+      Library : `User32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-bringwindowtotop
+    tide.vocab.stages: Helper
+  - name: CallNextHookEx
+    description: 'CallNextHookEx is used within code that is hooking an event set
+      by SetWindowsHookEx. CallNextHookEx calls the next hook in the chain. This function
+      is commonly used by keyloggers.
+
+      Library : `User32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-callnexthookex
+    tide.vocab.stages: Spying
+  - name: CallWindowProcA
+    description: 'CallWindowProcA is used to pass message information to the specified
+      window procedure.
+
+      Library : `User32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-callwindowproca
+    tide.vocab.stages: Helper
+  - name: CheckRemoteDebuggerPresent
+    description: 'CheckRemoteDebuggerPresent is used to check if a debugger is being
+      used. This function is commonly used by malware for anti-debugging techniques.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/debugapi/nf-debugapi-checkremotedebuggerpresent
+    tide.vocab.stages: Anti-Debugging
+  - name: Closesocket
+    description: 'Closesocket is used to close an existing socket.
+
+      Library : `Ws2_32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winsock/nf-winsock-closesocket
+    tide.vocab.stages: Internet
+  - name: Connect
+    description: 'Connect is used to establish a connection to a specified socket.
+
+      Library : `Ws2_32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-connect
+    tide.vocab.stages: Internet
+  - name: ConnectNamedPipe
+    description: 'ConnectNamedPipe is used to create a server pipe for interprocess
+      communication that will wait for a client pipe to connect. This function can
+      be used to simplify connectivity to a C2 server.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/namedpipeapi/nf-namedpipeapi-connectnamedpipe
+    tide.vocab.stages: Helper
+  - name: ControlService
+    description: 'ControlService is used to start, stop, modify, or send a signal
+      to a running service. This function is commonly used by malware went it requires
+      interaction with a service for malicious purposes.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winsvc/nf-winsvc-controlservice
+    tide.vocab.stages: Helper
+  - name: ControlServiceExA
+    description: 'ControlServiceExA is used to start, stop, modify, or send a signal
+      to a running service. This function is commonly used by malware went it requires
+      interaction with a service for malicious purposes.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winsvc/nf-winsvc-controlserviceexa
+    tide.vocab.stages: Helper
+  - name: CopyFile2
+    description: 'CopyFile2 is used to copy an existing file to a new file.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-copyfile2
+    tide.vocab.stages: Helper
+  - name: CopyFileA
+    description: 'CopyFileA is used to copy an existing file to a new file.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-copyfilea
+    tide.vocab.stages: Helper
+  - name: CopyFileExA
+    description: 'CopyFileExA is used to copy an existing file to a new file.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-copyfileexa
+    tide.vocab.stages: Helper
+  - name: CountClipboardFormats
+    description: 'CountClipboardFormats is used to determine whether victim''s clipboard
+      was empty. A kind of Anti-debugging technique to determine if the system could
+      be a sandbox.
+
+      Library : `User32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-countclipboardformats
+    tide.vocab.stages: Anti-Debugging
+  - name: CreateFile2
+    description: 'CreateFile2 is used to create a new file or opens an existing file.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfile2
+    tide.vocab.stages: Helper
+  - name: CreateFileA
+    description: 'CreateFileA is used to create a new file or opens an existing file.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilea
+    tide.vocab.stages: Helper
+  - name: CreateFileMappingA
+    description: 'CreateFileMappingA creates a handle to a file mapping that loads
+      a file into memory and makes it accessible via memory addresses. Launchers,
+      loaders, and injectors use this function to read and modify PE files.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-createfilemappinga
+    tide.vocab.stages:
+      - Injection
+      - Evasion
+  - name: CreateMutexA
+    description: 'CreateMutexA is used to create a new mutex object. Mutexs are often
+      used by malware to prevent the reinfection of a system with the same or different
+      malware variant.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-createmutexa
+    tide.vocab.stages: Helper
+  - name: CreateMutexExA
+    description: 'CreateMutexExA is used to create a new mutex object. Mutexs are
+      often used by malware to prevent the reinfection of a system with the same or
+      different malware variant.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-createmutexexa
+    tide.vocab.stages: Helper
+  - name: CreatePipe
+    description: 'CreatePipe is used to create an anonymous pipe and returns handles
+      to the read and write ends of the pipe. Could be used to add a sub-process for
+      execution via cmd.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/namedpipeapi/nf-namedpipeapi-createpipe
+    tide.vocab.stages: Helper
+  - name: CreateProcessA
+    description: 'CreateProcessA is used to create a process. This function is used
+      by malware in several process injection attacks such as process hollowing.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-createprocessa
+    tide.vocab.stages: Injection
+  - name: CreateProcessAsUserA
+    description: 'CreateProcessAsUserA is used to create a new process and its primary
+      thread.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-createprocessasusera
+    tide.vocab.stages: Injection
+  - name: CreateProcessInternal
+    description: 'CreateProcessInternal is an undocumented API for process creation.
+      According to Windows Internals, CreateProcess and CreateProcessAsUser actually
+      lead to this API, which is responsible for starting the process creation in
+      user land. Eventually it calls NtCreateUserProcess for the kernel land operations.
+      This API is commonly used for spawning a suspended process to be hollowed/injected.
+
+      Library : `Kernel32.dll`'
+    link: https://medium.com/@Achilles8284/the-birth-of-a-process-part-1-bfb4fdac070e
+    tide.vocab.stages:
+      - Injection
+      - Evasion
+  - name: CreateProcessWithTokenW
+    description: 'CreateProcessWithTokenW is used to create a new process and its
+      primary thread.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-createprocesswithtokenw
+    tide.vocab.stages: Injection
+  - name: CreateRemoteThread
+    description: 'CreateRemoteThread is used to create a thread that runs in the virtual
+      address space of another process.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-createremotethread
+    tide.vocab.stages: Injection
+  - name: CreateRemoteThreadEx
+    description: 'CreateRemoteThreadEx is used to create a thread that runs in the
+      virtual address space of another process.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-createremotethreadex
+    tide.vocab.stages: Injection
+  - name: CreateServiceA
+    description: 'CreateServiceA is used to create a service object and adds it to
+      the specified service control manager database. This function is commonly used
+      by malware for persistence.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winsvc/nf-winsvc-createservicea
+    tide.vocab.stages: Helper
+  - name: CreateThread
+    description: 'CreateThread is used to create a thread to execute within the virtual
+      address space of the calling process. This function is commonly used for shellcode
+      execution.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-createthread
+    tide.vocab.stages: Injection
+  - name: CreateTimerQueueTimer
+    description: 'CreateTimerQueueTimer is used to create a timer-queue timer. This
+      function is commonly used by malware for time-based evasion.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/threadpoollegacyapiset/nf-threadpoollegacyapiset-createtimerqueuetimer
+    tide.vocab.stages: Evasion
+  - name: CreateToolhelp32Snapshot
+    description: 'CreateToolhelp32Snapshot is used to enumerate processes, threads,
+      and modules. This function is commonly used by malware to enumerate processes
+      before process injection.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/tlhelp32/nf-tlhelp32-createtoolhelp32snapshot
+    tide.vocab.stages:
+      - Enumeration
+      - Anti-Debugging
+  - name: CreateWaitableTimer
+    description: 'CreateWaitableTimer is used to create a delay timer. This function
+      is used by malware for time-based evasion.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-createwaitabletimerw
+    tide.vocab.stages: Evasion
+  - name: CreateWindowExA
+    description: 'CreateWindowExA is used to create an overlapped, pop-up, or child
+      window with an extended window style. This function is commonly used by malware
+      to create invisible windows or for evasion purposes.
+
+      Library : `User32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-createwindowexa
+    tide.vocab.stages: Evasion
+  - name: CryptAcquireContextA
+    description: 'CryptAcquireContextA is used to acquire a handle to a particular
+      key container within a particular cryptographic service provider (CSP)
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/wincrypt/nf-wincrypt-cryptacquirecontexta
+    tide.vocab.stages: Ransomware
+  - name: CryptBinaryToString
+    description: 'The CryptBinaryToString function is used to convert an array of
+      bytes into a formatted string.
+
+      Library : `Crypt32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/wincrypt/nf-wincrypt-cryptbinarytostringa
+    tide.vocab.stages: Ransomware
+  - name: CryptCreateHash
+    description: 'CryptCreateHash is used to create a hash.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/wincrypt/nf-wincrypt-cryptcreatehash
+    tide.vocab.stages: Ransomware
+  - name: CryptDecrypt
+    description: 'CryptDecrypt is used to decrypt data.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/wincrypt/nf-wincrypt-cryptdecrypt
+    tide.vocab.stages: Ransomware
+  - name: CryptDeriveKey
+    description: 'CryptDeriveKey is used to create encryption keys.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/wincrypt/nf-wincrypt-cryptderivekey
+    tide.vocab.stages: Ransomware
+  - name: CryptDestroyHash
+    description: 'The CryptDestroyHash function destroys the hash object referenced
+      by the hHash parameter. After a hash object has been destroyed, it can no longer
+      be used.
+
+      Library : `Crypt32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/wincrypt/nf-wincrypt-cryptdestroyhash
+    tide.vocab.stages: Ransomware
+  - name: CryptDestroyKey
+    description: 'CryptDestroyKey is used to destroy previously generated encryption
+      keys.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/wincrypt/nf-wincrypt-cryptdestroykey
+    tide.vocab.stages: Ransomware
+  - name: CryptEncrypt
+    description: 'CryptEncrypt is used to encrypt data.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/wincrypt/nf-wincrypt-cryptencrypt
+    tide.vocab.stages: Ransomware
+  - name: CryptGenRandom
+    description: 'CryptGenRandom is used to fill a buffer with cryptographically random
+      bytes.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/wincrypt/nf-wincrypt-cryptgenrandom
+    tide.vocab.stages: Ransomware
+  - name: CryptGetHashParam
+    description: 'CryptGetHashParam
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/wincrypt/nf-wincrypt-cryptgethashparam
+    tide.vocab.stages: Ransomware
+  - name: CryptHashData
+    description: 'CryptHashData is used to create a hash.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/wincrypt/nf-wincrypt-crypthashdata
+    tide.vocab.stages: Ransomware
+  - name: CryptReleaseContext
+    description: 'The CryptReleaseContext function is used to release the handle of
+      a cryptographic service provider (CSP) and a key container.
+
+      Library : `Crypt32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/wincrypt/nf-wincrypt-cryptreleasecontext
+    tide.vocab.stages: Ransomware
+  - name: CryptSetKeyParam
+    description: 'CryptSetKeyParam is used to customize various aspects of a session
+      key''s operations.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/wincrypt/nf-wincrypt-cryptsetkeyparam
+    tide.vocab.stages: Ransomware
+  - name: CryptStringToBinary
+    description: 'The CryptStringToBinary function is used to convert a formatted
+      string into an array of bytes.
+
+      Library : `Crypt32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/wincrypt/nf-wincrypt-cryptstringtobinarya
+    tide.vocab.stages: Ransomware
+  - name: DecryptFileA
+    description: 'DecryptFileA is used to decrypt an encrypted file or directory.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-decryptfilea
+    tide.vocab.stages: Ransomware
+  - name: DeleteFileA
+    description: 'DeleteFileA is used to delete an existing file. This function is
+      used by malware to hide its tracks or tamper with an application.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-deletefilea
+    tide.vocab.stages: Evasion
+  - name: DeleteService
+    description: 'DeleteService is used to mark the specified service for deletion
+      from the service control manager database.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winsvc/nf-winsvc-deleteservice
+    tide.vocab.stages: Helper
+  - name: DeviceIoControl
+    description: 'DeviceIoControl is used to send a control message from user space
+      to a device driver. DeviceIoControl is popular with kernel malware because it
+      is an easy, flexible way to pass information between user space and kernel space.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/ioapiset/nf-ioapiset-deviceiocontrol
+    tide.vocab.stages: Helper
+  - name: DnsQueryEx
+    description: 'DnsQueryEx is used to send a DNS query. This may be used for communications
+      over a DNS tunnel.
+
+      Library : `Dnsapi.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/windns/nf-windns-dnsqueryex
+    tide.vocab.stages: Internet
+  - name: DnsQuery_A
+    description: 'DnsQuery_A is used to send a DNS query. This may be used for communications
+      over a DNS tunnel.
+
+      Library : `Dnsapi.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/windns/nf-windns-dnsquery_a
+    tide.vocab.stages: Internet
+  - name: DrawTextExA
+    description: 'DrawTextExA is used to draw formatted text in the specified rectangle.
+      This function has been used by ransomware for writing ransom notes.
+
+      Library : `User32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-drawtextexa
+    tide.vocab.stages: Helper
+  - name: DuplicateToken
+    description: 'The DuplicateToken function creates a new access token that duplicates
+      one already in existence.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/securitybaseapi/nf-securitybaseapi-duplicatetoken
+    tide.vocab.stages:
+      - Injection
+      - Evasion
+  - name: EncryptFileA
+    description: 'EncryptFileA is used to encrypt a file or directory.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-encryptfilea
+    tide.vocab.stages: Ransomware
+  - name: EnumDesktopWindows
+    description: 'EnumDesktopWindows is used to enumerate all top-level windows associated
+      with the specified desktop. This function is commonly used for enumeration purposes.
+
+      Library : `User32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-enumdesktopwindows
+    tide.vocab.stages: Enumeration
+  - name: EnumDeviceDrivers
+    description: 'EnumDeviceDrivers is used to enumerate drivers in the machine. This
+      function is commonly used with kernel malware or for enumeration purposes.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/psapi/nf-psapi-enumdevicedrivers
+    tide.vocab.stages: Enumeration
+  - name: EnumProcessModules
+    description: 'EnumProcessModules is used to enumerate the loaded modules (executables
+      and DLLs) for a given process. Malware enumerates through modules when doing
+      injection.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/psapi/nf-psapi-enumprocessmodules
+    tide.vocab.stages: Enumeration
+  - name: EnumProcessModulesEx
+    description: 'EnumProcessModulesEx is used to enumerate the loaded modules (executables
+      and DLLs) for a given process. Malware enumerates through modules when doing
+      injection.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/psapi/nf-psapi-enumprocessmodulesex
+    tide.vocab.stages: Enumeration
+  - name: EnumProcesses
+    description: 'EnumProcesses is used to enumerate processes in the machine. Process
+      enumeration is often a precursor to process injection.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/psapi/nf-psapi-enumprocesses
+    tide.vocab.stages: Enumeration
+  - name: EnumResourceTypesA
+    description: 'EnumResourceTypesA is used to enumerate resource types within a
+      binary module. Starting with Windows Vista, this is typically a language-neutral
+      Portable Executable (LN file), and the enumeration also includes resources from
+      one of the corresponding language-specific resource files (.mui files)â€”if
+      one existsâ€”that contain localizable language resources. It is also possible
+      to use hModule to specify a .mui file, in which case only that file is searched
+      for resource types. Alternately, applications can call EnumResourceTypesEx,
+      which provides more precise control over which resource files to enumerate.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-enumresourcetypesa
+    tide.vocab.stages: Enumeration
+  - name: EnumResourceTypesExA
+    description: 'EnumResourceTypesExA is used to enumerate resource types associated
+      with a specified binary module. The search can include both a language-neutral
+      Portable Executable file (LN file) and its associated .mui files. Alternately,
+      it can be limited to a single binary module of any type, or to the .mui files
+      associated with a single LN file. The search can also be limited to a single
+      associated .mui file that contains resources for a specific language.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-enumresourcetypesexw
+    tide.vocab.stages: Enumeration
+  - name: EnumSystemLocalesA
+    description: 'EnumSystemLocalesA is used enumerate installed locale identifiers,
+      all of the supported identifiers or alternate sort identifiers, according to
+      which flag is passed to the API. Can be used to geofence infection campaigns
+      or avoid infecting systems from a certain region/country. It can also be used
+      to jump to allocated shellcode and execute it.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winnls/nf-winnls-enumsystemlocalesw
+    tide.vocab.stages:
+      - Injection
+      - Enumeration
+      - Evasion
+      - Ransomware
+  - name: EnumWindows
+    description: 'EnumWindows is used to enumerate all top-level windows on the screen
+      by passing the handle to each window, in turn, to an application-defined callback
+      function. This function is commonly used for enumeration purposes.
+
+      Library : `User32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-enumwindows
+    tide.vocab.stages: Enumeration
+  - name: ExitWindowsEx
+    description: 'ExitWindowsEx is used to log off an interactive user, shuts down
+      the system, or shuts down and restarts the system. This function is commonly
+      used by malware as an anti-debugging technique.
+
+      Library : `User32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-exitwindowsex
+    tide.vocab.stages: Anti-Debugging
+  - name: FindClose
+    description: 'FindClose is used to close a file search handle.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-findclose
+    tide.vocab.stages: Helper
+  - name: FindFirstFileA
+    description: 'FindFirstFileA is used to search through a directory and enumerate
+      the filesystem.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-findfirstfilea
+    tide.vocab.stages: Enumeration
+  - name: FindFirstUrlCacheEntryA
+    description: 'FindFirstUrlCacheEntryA is used to begin the enumeration of the
+      Internet cache.
+
+      Library : `Wininet.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/wininet/nf-wininet-findfirsturlcacheentrya
+    tide.vocab.stages:
+      - Enumeration
+      - Internet
+  - name: FindNextFileA
+    description: 'FindNextFileA is used to search through a directory and enumerate
+      the filesystem.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-findnextfilea
+    tide.vocab.stages: Enumeration
+  - name: FindNextUrlCacheEntryA
+    description: 'FindNextUrlCacheEntryA is used to retrieve the next entry in the
+      Internet cache.
+
+      Library : `Wininet.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/wininet/nf-wininet-findnexturlcacheentrya
+    tide.vocab.stages:
+      - Enumeration
+      - Internet
+  - name: FindResourceA
+    description: 'FindResourceA is used to find a resource in an executable or loaded
+      DLL. Malware sometimes uses resources to store strings, configuration information,
+      or other malicious files. If you see this function used, check for a .rsrc section
+      in the malware’s PE header.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-findresourcea
+    tide.vocab.stages: Helper
+  - name: FindResourceExA
+    description: 'FindResourceExA is used to find a resource in an executable or loaded
+      DLL. Malware sometimes uses resources to store strings, configuration information,
+      or other malicious files. If you see this function used, check for a .rsrc section
+      in the malware’s PE header.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-findresourceexa
+    tide.vocab.stages: Helper
+  - name: FindWindowA
+    description: 'FindWindowA is used to get a handle to the top-level window whose
+      class name and window name match the specified strings. This function is commonly
+      used by malware as an anti-debugging technique.
+
+      Library : `User32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-findwindowa
+    tide.vocab.stages: Anti-Debugging
+  - name: FindWindowExA
+    description: 'FindWindowExA is used to get a handle to the top-level window whose
+      class name and window name match the specified strings. This function is commonly
+      used by malware as an anti-debugging technique.
+
+      Library : `User32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-findwindowexa
+    tide.vocab.stages: Anti-Debugging
+  - name: FlushEfsCache
+    description: 'FlushEfsCache is used to flush EFS data from memory. This is used
+      by EFS ransomware post-encryption to cause the files and folder to become unreadable.
+
+      Library : `Advapi32.dll`'
+    link: https://www.geoffchappell.com/studies/windows/win32/advapi32/api/index.htm
+    tide.vocab.stages: Ransomware
+  - name: FtpPutFileA
+    description: 'FtpPutFileA is used to upload a file to a server via FTP.
+
+      Library : `Wininet.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/wininet/nf-wininet-ftpputfilea
+    tide.vocab.stages: Internet
+  - name: GetAdaptersInfo
+    description: 'GetAdaptersInfo is used to obtain information about the network
+      adapters on the system. This function is commonly used by malware for enumeration
+      purposes.
+
+      Library : `Iphlpapi.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/iphlpapi/nf-iphlpapi-getadaptersinfo
+    tide.vocab.stages: Enumeration
+  - name: GetAsyncKeyState
+    description: 'GetAsyncKeyState is used to determine when a specific key is pressed.
+      This function is commonly used by keyloggers.
+
+      Library : `User32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getasynckeystate
+    tide.vocab.stages: Spying
+  - name: GetClipboardData
+    description: 'GetClipboardData is used to retrieve copied data residing in the
+      clipboard.
+
+      Library : `User32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getclipboarddata
+    tide.vocab.stages: Spying
+  - name: GetComputerNameA
+    description: 'GetComputerNameA is used to retrieve the computer name. This is
+      commonly used by malware for anti-debugging purposes.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-getcomputernamea
+    tide.vocab.stages:
+      - Enumeration
+      - Anti-Debugging
+  - name: GetCurrentHwProfileA
+    description: 'GetCurrentHwProfileA is used to retrieve information about the current
+      hardware profile for the local computer. This function is commonly used by malware
+      to anti-debugging purposes.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-getcurrenthwprofilea
+    tide.vocab.stages: Enumeration
+  - name: GetCurrentProcess
+    description: 'GetCurrentProcess is used to retrieve a handle for the current process.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getcurrentprocess
+    tide.vocab.stages: Enumeration
+  - name: GetCurrentProcessId
+    description: 'GetCurrentProcessId is used to retrieve the process identifier of
+      the calling process.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getcurrentprocessid
+    tide.vocab.stages: Enumeration
+  - name: GetCurrentThread
+    description: 'GetCurrentThread is used to retrieve a handle for the calling thread.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getcurrentthread
+    tide.vocab.stages: Enumeration
+  - name: GetCurrentThreadId
+    description: 'GetCurrentThreadId is used to retrieve the thread identifier of
+      the calling thread.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getcurrentthreadid
+    tide.vocab.stages: Enumeration
+  - name: GetDC
+    description: 'GetDC is used to retrieve a handle to a device context (DC) for
+      the client area of a specified window or for the entire screen. This function
+      is commonly used by spyware for taking screenshots.
+
+      Library : `User32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getdc
+    tide.vocab.stages: Spying
+  - name: GetDCEx
+    description: 'GetDCEx is used to retrieve a handle to a device context (DC) for
+      the client area of a specified window or for the entire screen. This function
+      is commonly used by spyware for taking screenshots.
+
+      Library : `User32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getdcex
+    tide.vocab.stages: Spying
+  - name: GetDesktopWindow
+    description: 'GetDesktopWindow is used to get a handle to the desktop window that
+      covers the entire screen.
+
+      Library : `User32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getdesktopwindow
+    tide.vocab.stages: Helper
+  - name: GetDriveTypeA
+    description: 'GetDriveTypeA is used to determine whether a disk drive is a removable
+      / fixed / CD-ROM / RAM disk or network drive.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-getdrivetypea
+    tide.vocab.stages:
+      - Enumeration
+      - Ransomware
+      - Helper
+  - name: GetFileAttributesA
+    description: 'GetFileAttributesA is used to retrieve file system attributes for
+      a specified file or directory.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-getfileattributesa
+    tide.vocab.stages: Enumeration
+  - name: GetFileTime
+    description: 'GetFileTime is used to retrieve the date and time that a file or
+      directory was created, last accessed, and last modified.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-getfiletime
+    tide.vocab.stages: Enumeration
+  - name: GetForegroundWindow
+    description: 'GetForegroundWindow is used to get a handle to the foreground window
+      (the window with which the user is currently working). This function is commonly
+      used by keyloggers and spyware to determine which window is being utilized at
+      the moment by the user.
+
+      Library : `User32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getforegroundwindow
+    tide.vocab.stages:
+      - Spying
+      - Anti-Debugging
+  - name: GetIpNetTable
+    description: 'The GetIpNetTable function retrieves the IPv4 to physical address
+      mapping table. Could be used to identify hosts & mounted drives tracking ARP
+      entries.
+
+      Library : `Iphlpapi.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/iphlpapi/nf-iphlpapi-getipnettable
+    tide.vocab.stages:
+      - Enumeration
+      - Helper
+  - name: GetKeyState
+    description: 'GetKeyState is used to retrieve the status of the specified virtual
+      key. This function is commonly used by keyloggers.
+
+      Library : `User32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getkeystate
+    tide.vocab.stages: Spying
+  - name: GetKeyboardState
+    description: 'GetKeyboardState is used to copy the status of the 256 virtual keys
+      to the specified buffer. This function is commonly used by keyloggers.
+
+      Library : `User32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getkeyboardstate
+    tide.vocab.stages: Spying
+  - name: GetKeynameTextA
+    description: 'The GetKeynameTextA function is used to retrieve a string that represents
+      the name of a key.
+
+      Library : `User32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getkeynametexta
+    tide.vocab.stages: Spying
+  - name: GetLogicalDrives
+    description: 'GetLogicalDrives is used to retrieve a bitmask representing the
+      currently available disk drives. This function can be used to emumerate all
+      drives / mounted drives.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-getlogicaldrives
+    tide.vocab.stages:
+      - Enumeration
+      - Ransomware
+      - Helper
+  - name: GetLogicalProcessorInformation
+    description: 'GetLogicalProcessorInformation is used to retrieve information about
+      logical processors and related hardware. The function is used by malware for
+      anti-debugging purposes.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-getlogicalprocessorinformation
+    tide.vocab.stages:
+      - Enumeration
+      - Anti-Debugging
+  - name: GetLogicalProcessorInformationEx
+    description: 'GetLogicalProcessorInformationEx is used to retrieve information
+      about logical processors and related hardware. The function is used by malware
+      for anti-debugging purposes.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-getlogicalprocessorinformationex
+    tide.vocab.stages:
+      - Enumeration
+      - Anti-Debugging
+  - name: GetMessageA
+    description: 'GetMessageA is used to retrieve a message from the calling thread''s
+      message queue. This function is commonly used by keyloggers.
+
+      Library : `User32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getmessagea
+    tide.vocab.stages: Spying
+  - name: GetModuleBaseNameA
+    description: 'GetModuleBaseNameA is used to retrieve the base name of a specified
+      module.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/psapi/nf-psapi-getmodulebasenamea
+    tide.vocab.stages:
+      - Enumeration
+      - Helper
+  - name: GetModuleFileNameA
+    description: 'GetModuleFileNameA is used to return the filename of a module that
+      is loaded in the current process. Malware can use this function to modify or
+      copy files in the currently running process.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-getmodulefilenamea
+    tide.vocab.stages: Helper
+  - name: GetModuleFileNameExA
+    description: 'GetModuleFileNameExA is used to return the filename of a module
+      that is loaded in the current process. Malware can use this function to modify
+      or copy files in the currently running process.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/psapi/nf-psapi-getmodulefilenameexa
+    tide.vocab.stages: Helper
+  - name: GetModuleHandleA
+    description: 'GetModuleHandleW is used to retrieve a module handle for the specified
+      module. The module must have been loaded by the calling process. This function
+      is often used along with GetProcAddress to dynamically retrieve the address
+      of a function for evasion purposes.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-getmodulehandlea
+    tide.vocab.stages:
+      - Injection
+      - Evasion
+  - name: GetNativeSystemInfo
+    description: 'GetNativeSystemInfo is used to retrieve information about the current
+      system to an application running under WOW64. If the function is called from
+      a 64-bit application, or on a 64-bit system that does not have an Intel64 or
+      x64 processor (such as ARM64), it is equivalent to the GetSystemInfo function.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-getnativesysteminfo
+    tide.vocab.stages:
+      - Enumeration
+      - Anti-Debugging
+  - name: GetProcAddress
+    description: 'GetProcAddress is used to get the memory address of a function in
+      a DLL. This is often used by malware for obfuscation and evasion purposes to
+      avoid having to call the function directly.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-getprocaddress
+    tide.vocab.stages:
+      - Injection
+      - Evasion
+  - name: GetProcessHeap
+    description: 'GetProcessHeap is used to retrieve a handle to the default heap
+      of the calling process.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/heapapi/nf-heapapi-getprocessheap
+    tide.vocab.stages: Injection
+  - name: GetProcessHeaps
+    description: 'GetProcessHeaps is used to return the number of active heaps and
+      retrieves handles to all of the active heaps for the calling process.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/heapapi/nf-heapapi-getprocessheaps
+    tide.vocab.stages: Injection
+  - name: GetProcessId
+    description: 'GetProcessId is used to retrieve the process identifier of the specified
+      process.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getprocessid
+    tide.vocab.stages: Enumeration
+  - name: GetProcessIdOfThread
+    description: 'GetProcessIdOfThread is used to retrieve the process identifier
+      of the process associated with the specified thread.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getprocessidofthread
+    tide.vocab.stages: Enumeration
+  - name: GetRawInputData
+    description: 'GetRawInputData is used to retrieve the raw input data from a specified
+      device. This function is commonly used by keyloggers.
+
+      Library : `User32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getrawinputdata
+    tide.vocab.stages: Spying
+  - name: GetSystemDefaultLangId
+    description: 'GetSystemDefaultLangId is used to retrieve the language identifier
+      for the system. This function is used by malware that wish to infect specific
+      locales or simply wish to gather statistics on areas of infection.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winnls/nf-winnls-getsystemdefaultlangid
+    tide.vocab.stages: Enumeration
+  - name: GetSystemDirectoryA
+    description: 'GetSystemDirectoryA retrieve the path of the system directory.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-getsystemdirectorya
+    tide.vocab.stages: Enumeration
+  - name: GetSystemTime
+    description: 'GetSystemTime is used to retrieve the current system date and time
+      in Coordinated Universal Time (UTC) format. This function is commonly used by
+      malware for anti-debugging.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-getsystemtime
+    tide.vocab.stages:
+      - Enumeration
+      - Anti-Debugging
+  - name: GetSystemTimeAsFileTime
+    description: 'Retrieves the current system date and time. The information is in
+      Coordinated Universal Time (UTC) format. This function is commonly used by malware
+      for anti-debugging.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-getsystemtimeasfiletime
+    tide.vocab.stages:
+      - Enumeration
+      - Anti-Debugging
+  - name: GetTempFileNameA
+    description: 'GetTempFileNameA is used to create a name for a temporary file.
+      If a unique file name is generated, an empty file is created and the handle
+      to it is released; otherwise, only a file name is generated.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-gettempfilenamea
+    tide.vocab.stages: Helper
+  - name: GetTempPathA
+    description: 'GetTempPathA is used to retrieve the path of the directory designated
+      for temporary files. This is often used by malware when it requires a location
+      for additional installations.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-gettemppatha
+    tide.vocab.stages: Helper
+  - name: GetThreadContext
+    description: 'GetThreadContext is used to retrieve a thread''s context. This is
+      often used as part of process injection techniques.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getthreadcontext
+    tide.vocab.stages: Injection
+  - name: GetThreadId
+    description: 'GetThreadId is used to retrieve the thread identifier of the specified
+      thread.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getthreadid
+    tide.vocab.stages: Enumeration
+  - name: GetThreadInformation
+    description: 'GetThreadInformation is used to retrieve information about the specified
+      thread.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getthreadinformation
+    tide.vocab.stages: Enumeration
+  - name: GetThreadLocale
+    description: 'GetThreadLocale is used to retrieve the locale identifier of the
+      current thread. Can be used alongside other language and/or locale APIs to geofence
+      infections
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winnls/nf-winnls-getthreadlocale
+    tide.vocab.stages: Enumeration
+  - name: GetTickCount
+    description: 'GetTickCount is used to retrieve the number of milliseconds since
+      bootup. This function is used by malware for anti-debugging purposes.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-gettickcount
+    tide.vocab.stages: Anti-Debugging
+  - name: GetTickCount64
+    description: 'GetTickCount64 is used to retrieve the number of milliseconds that
+      have elapsed since the system was started. This function is used by malware
+      for anti-debugging purposes by checking how long the system uptime is.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-gettickcount64
+    tide.vocab.stages: Anti-Debugging
+  - name: GetUserNameA
+    description: 'GetUserNameA is used to retrieve the username associated with the
+      current thread. This function is used by malware for anti-debugging purposes.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-getusernamea
+    tide.vocab.stages:
+      - Enumeration
+      - Anti-Debugging
+  - name: GetVersionExA
+    description: 'GetVersionExA is a classic method used to retrieve the Windows version.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-getversionexa
+    tide.vocab.stages: Enumeration
+  - name: GetWindowDC
+    description: 'GetWindowDC is used to retrieve the device context (DC) for the
+      entire window, including title bar, menus, and scroll bars. This function is
+      commonly used by spyware and keyloggers to capture screenshots.
+
+      Library : `User32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getwindowdc
+    tide.vocab.stages: Spying
+  - name: GetWindowsDirectoryA
+    description: 'GetWindowsDirectoryA is used to retreive the path to the Windows
+      directory. This function may be used by malware retrieve the Windows path for
+      additional installations.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-getwindowsdirectorya
+    tide.vocab.stages: Enumeration
+  - name: Gethostbyname
+    description: 'gethostbyname is used to retrieve host information corresponding
+      to a host name from a host database.
+
+      Library : `Ws2_32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-gethostbyname
+    tide.vocab.stages: Internet
+  - name: Gethostname
+    description: 'gethostname is used to retrieve the standard host name for the local
+      computer.
+
+      Library : `Ws2_32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-gethostname
+    tide.vocab.stages: Internet
+  - name: GlobalAlloc
+    description: 'GlobalAlloc is used to allocate the specified number of bytes from
+      the heap.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-globalalloc
+    tide.vocab.stages: Injection
+  - name: HeapAlloc
+    description: 'HeapAlloc is used to allocate a block of memory from a heap.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/heapapi/nf-heapapi-heapalloc
+    tide.vocab.stages: Injection
+  - name: HeapCreate
+    description: 'HeapCreate is used to allocate heap memory that can be used by the
+      calling process.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/heapapi/nf-heapapi-heapcreate
+    tide.vocab.stages: Injection
+  - name: HeapReAlloc
+    description: 'HeapReAlloc is used to reallocate a block of memory from a heap.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/heapapi/nf-heapapi-heaprealloc
+    tide.vocab.stages: Injection
+  - name: HttpAddRequestHeaders
+    description: 'HttpAddRequestHeaders adds HTTP request headers to forge custom
+      request handle
+
+      Library : `Wininet.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/wininet/nf-wininet-httpaddrequestheadersa
+    tide.vocab.stages: Internet
+  - name: HttpOpenRequestA
+    description: 'HttpOpenRequestA is used to create a HTTP request.
+
+      Library : `Wininet.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/wininet/nf-wininet-httpopenrequesta
+    tide.vocab.stages: Internet
+  - name: HttpSendRequestA
+    description: 'HttpSendRequestA is used to send a HTTP request to a server.
+
+      Library : `Wininet.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/wininet/nf-wininet-httpsendrequesta
+    tide.vocab.stages: Internet
+  - name: HttpSendRequestExA
+    description: 'HttpSendRequestExA is used to send a HTTP request to a server
+
+      Library : `Wininet.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/wininet/nf-wininet-httpsendrequestexa
+    tide.vocab.stages: Internet
+  - name: IcmpSendEcho
+    description: 'IcmpSendEcho is used to send an IPv4 ICMP echo request and returns
+      any echo response replies. The call returns when the time-out has expired or
+      the reply buffer is filled. This function is used by malware for time-evasion
+      purposes by specifying a large timeout value.
+
+      Library : `Iphlpapi.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/icmpapi/nf-icmpapi-icmpsendecho
+    tide.vocab.stages: Evasion
+  - name: ImpersonateLoggedOnUser
+    description: 'The ImpersonateLoggedOnUser function lets the calling thread impersonate
+      the security context of a logged-on user. The user is represented by a token
+      handle.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/securitybaseapi/nf-securitybaseapi-impersonateloggedonuser
+    tide.vocab.stages:
+      - Evasion
+      - Helper
+  - name: Inet_addr
+    description: 'inet_addr is used to convert a string containing an IPv4 dotted-decimal
+      address into a proper address for the IN_ADDR structure.
+
+      Library : `Ws2_32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-inet_addr
+    tide.vocab.stages: Internet
+  - name: InternetCloseHandle
+    description: 'InternetCloseHandle is used to close an internet handle.
+
+      Library : `Wininet.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/wininet/nf-wininet-internetclosehandle
+    tide.vocab.stages: Internet
+  - name: InternetConnectA
+    description: 'InternetConnectA is used to open a File Transfer Protocol (FTP)
+      or HTTP session for a given site.
+
+      Library : `Wininet.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/wininet/nf-wininet-internetconnecta
+    tide.vocab.stages: Internet
+  - name: InternetOpenA
+    description: 'InternetOpenA is used to initialize the use of WinINet functions.
+
+      Library : `Wininet.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/wininet/nf-wininet-internetopenurla
+    tide.vocab.stages: Internet
+  - name: InternetOpenUrlA
+    description: 'InternetOpenUrlA is used to open a resource specified by a complete
+      FTP or HTTP URL.
+
+      Library : `Wininet.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/wininet/nf-wininet-internetopenurla
+    tide.vocab.stages: Internet
+  - name: InternetReadFile
+    description: 'InternetReadFile is used to read data from a handle opened by the
+      InternetOpenUrl, FtpOpenFile, or HttpOpenRequest function.
+
+      Library : `Wininet.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/wininet/nf-wininet-internetreadfile
+    tide.vocab.stages: Internet
+  - name: InternetReadFileExA
+    description: 'InternetReadFileExA is used to read data from a handle opened by
+      the InternetOpenUrl or HttpOpenRequest function.
+
+      Library : `Wininet.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/wininet/nf-wininet-internetreadfileexa
+    tide.vocab.stages: Internet
+  - name: InternetSetOptionA
+    description: 'InternetSetOptionA is used to set an Internet option.
+
+      Library : `Wininet.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/wininet/nf-wininet-internetsetoptiona
+    tide.vocab.stages: Internet
+  - name: InternetWriteFile
+    description: 'InternetWriteFile is used to write data to an open Internet file.
+
+      Library : `Wininet.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/wininet/nf-wininet-internetreadfile
+    tide.vocab.stages: Internet
+  - name: IsDebuggerPresent
+    description: 'IsDebuggerPresent is used to determine whether the calling process
+      is being debugged by a user-mode debugger.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/debugapi/nf-debugapi-isdebuggerpresent
+    tide.vocab.stages: Anti-Debugging
+  - name: IsWoW64Process
+    description: 'IsWow64Process is used by a 32-bit process to determine if it is
+      running on a 64-bit operating system.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/wow64apiset/nf-wow64apiset-iswow64process
+    tide.vocab.stages:
+      - Enumeration
+      - Helper
+  - name: KeInsertQueueApc
+    description: 'KeInsertQueueApc is responsible for attaching an initialized APC
+      to the APC queue of its target thread
+
+      Library : `Kernel32.dll`'
+    link: https://www.codewarrior.cn/ntdoc/winnt/ke/KeInsertQueueApc.htm
+    tide.vocab.stages: Injection
+  - name: LdrLoadDll
+    description: 'LdrLoadDll is used instead of LoadLibrary to load modules.
+
+      Library : `Ntdll.dll`'
+    link: http://undocumented.ntinternals.net/index.html?page=UserMode%2FUndocumented%20Functions%2FExecutable%20Images%2FLdrLoadDll.html
+    tide.vocab.stages: Injection
+  - name: Listen
+    description: 'Listen is used to place a socket in a state in which it is listening
+      for an incoming connection.
+
+      Library : `Ws2_32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-listen
+    tide.vocab.stages: Internet
+  - name: LoadLibraryA
+    description: 'LoadLibraryA is used to load a specified module into the address
+      space of the calling process. Malware commonly use this to load DLLs dynamically
+      for evasion purposes.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-loadlibrarya
+    tide.vocab.stages:
+      - Injection
+      - Evasion
+  - name: LoadLibraryExA
+    description: 'LoadLibraryExA is used to load a specified module into the address
+      space of the calling process. Malware commonly use this to load DLLs dynamically
+      for evasion purposes.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-loadlibraryexa
+    tide.vocab.stages:
+      - Injection
+      - Evasion
+  - name: LoadResource
+    description: 'LoadResource is used to load a resource from a PE file into memory.
+      Malware sometimes uses resources to store strings, configuration information,
+      or other malicious files.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-loadresource
+    tide.vocab.stages: Evasion
+  - name: LocalAlloc
+    description: 'LocalAlloc is used for heap allocation and manipulation.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-localalloc
+    tide.vocab.stages: Injection
+  - name: LockResource
+    description: 'LockResource is used with FindResource(), LoadResource() and SizeOfResource()
+      usually to work with embedded executables into the .rsrc section (droppers)
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-lockresource
+    tide.vocab.stages:
+      - Evasion
+      - Helper
+  - name: LookupAccountNameA
+    description: 'LookupAccountNameA is used to accept the name of a system and an
+      account as input. It retrieves a security identifier (SID) for the account and
+      the name of the domain on which the account was found.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-lookupaccountnamea
+    tide.vocab.stages: Enumeration
+  - name: LookupPrivilegeValueA
+    description: 'LookupPrivilegeValueA is used to retrieve the locally unique identifier
+      (LUID) used on a specified system to locally represent the specified privilege
+      name. This function is commonly used by malware in process injection or token
+      stealing.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-lookupprivilegevaluea
+    tide.vocab.stages: Enumeration
+  - name: MapViewOfFile
+    description: 'MapViewOfFile is used for heap allocation and manipulation.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-mapviewoffile
+    tide.vocab.stages: Injection
+  - name: MapViewOfFile2
+    description: 'MapViewOfFile2 is used for heap allocation and manipulation.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-mapviewoffile2
+    tide.vocab.stages: Injection
+  - name: MapViewOfFile3
+    description: 'MapViewOfFile3 is used for heap allocation and manipulation.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-mapviewoffile3
+    tide.vocab.stages: Injection
+  - name: MapViewOfFileEx
+    description: 'MapViewOfFileEx is used for heap allocation and manipulation.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-mapviewoffileex
+    tide.vocab.stages: Injection
+  - name: MapVirtualKeyA
+    description: 'MapVirtualKeyA is used to map a virtual-key code into a scan code
+      or character value, or translates a scan code into a virtual-key code. This
+      function is commonly used by spyware and keyloggers.
+
+      Library : `User32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-mapvirtualkeya
+    tide.vocab.stages: Spying
+  - name: MapVirtualKeyExA
+    description: 'MapVirtualKeyExA is used to map a virtual-key code into a scan code
+      or character value, or translates a scan code into a virtual-key code. This
+      function is commonly used by spyware and keyloggers.
+
+      Library : `User32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-mapvirtualkeyexa
+    tide.vocab.stages: Spying
+  - name: Module32First
+    description: 'Module32First is used as part of CreateToolHelp32Snapshot for enumeration
+      purposes.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/tlhelp32/nf-tlhelp32-module32first
+    tide.vocab.stages: Enumeration
+  - name: Module32Next
+    description: 'Module32Next is used as part of CreateToolHelp32Snapshot for enumeration
+      purposes.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/tlhelp32/nf-tlhelp32-module32next
+    tide.vocab.stages: Enumeration
+  - name: MoveFileA
+    description: 'MoveFileA is used to move an existing file or a directory, including
+      its children.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-movefilea
+    tide.vocab.stages: Helper
+  - name: MoveFileExA
+    description: 'MoveFileExA is used to move an existing file or a directory, including
+      its children.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-movefileexa
+    tide.vocab.stages: Helper
+  - name: NetShareAdd
+    description: 'NetShareAdd is used to share a server resource.
+
+      Library : `Netapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/lmshare/nf-lmshare-netshareadd
+    tide.vocab.stages: Helper
+  - name: NetShareCheck
+    description: 'NetShareCheck is used to check whether or not a server is sharing
+      a device.
+
+      Library : `Netapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/lmshare/nf-lmshare-netsharecheck
+    tide.vocab.stages: Enumeration
+  - name: NetShareEnum
+    description: 'NetShareEnum is used to retrieve information about each shared resource
+      on a server.
+
+      Library : `Netapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/lmshare/nf-lmshare-netshareenum
+    tide.vocab.stages: Enumeration
+  - name: NetShareGetInfo
+    description: 'NetShareGetInfo is used to retrieves information about a particular
+      shared resource on a server.
+
+      Library : `Netapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/lmshare/nf-lmshare-netsharegetinfo
+    tide.vocab.stages: Enumeration
+  - name: NetShareSetInfo
+    description: 'NetShareSetInfo is used to set the parameters of a shared resource.
+
+      Library : `Netapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/lmshare/nf-lmshare-netsharesetinfo
+    tide.vocab.stages: Helper
+  - name: NtAdjustPrivilegesToken
+    description: 'NtAdjustPrivilegesToken is used to modify state of avaiable token''s
+      privileges. This function is often used by malware that performs process injection
+      often calls this function to gain additional permissions.
+
+      Library : `Ntdll.dll`'
+    link: http://undocumented.ntinternals.net/index.html?page=UserMode%2FUndocumented%20Functions%2FNT%20Objects%2FToken%2FNtAdjustPrivilegesToken.html
+    tide.vocab.stages: Injection
+  - name: NtAllocateVirtualMemory
+    description: 'NtAllocateVirtualMemoy is used to reserve, commit, or both, a region
+      of pages within the user-mode virtual address space of a specified process.
+
+      Library : `Ntdll.dll`'
+    link: http://undocumented.ntinternals.net/index.html?page=UserMode%2FUndocumented%20Functions%2FMemory%20Management%2FVirtual%20Memory%2FNtWriteVirtualMemory.html
+    tide.vocab.stages: Injection
+  - name: NtClose
+    description: 'NtClose is used to close an open handle.
+
+      Library : `Ntdll.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winternl/nf-winternl-ntclose
+    tide.vocab.stages: Helper
+  - name: NtContinue
+    description: 'NtContinue is used to resume the execution of a thread.
+
+      Library : `Ntdll.dll`'
+    link: http://undocumented.ntinternals.net/index.html?page=UserMode%2FUndocumented%20Functions%2FNT%20Objects%2FThread%2FNtContinue.html
+    tide.vocab.stages: Injection
+  - name: NtCreateFile
+    description: 'NtCreateFile is used to create a new file or directory, or opens
+      an existing file, device, directory, or volume.
+
+      Library : `Ntdll.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winternl/nf-winternl-ntcreatefile
+    tide.vocab.stages: Helper
+  - name: NtCreateProcess
+    description: 'NtCreateProcess is used to create a new process.
+
+      Library : `Ntdll.dll`'
+    link: http://undocumented.ntinternals.net/index.html?page=UserMode%2FUndocumented%20Functions%2FNT%20Objects%2FProcess%2FNtCreateProcess.html
+    tide.vocab.stages: Injection
+  - name: NtCreateProcessEx
+    description: 'NtCreateProcessEx is used to create a new process.
+
+      Library : `Ntdll.dll`'
+    link: https://titanwolf.org/Network/Articles/Article?AID=47158f72-b6f0-4b0e-b9d6-a51af615aac6#gsc.tab=0
+    tide.vocab.stages: Injection
+  - name: NtCreateSection
+    description: 'NtCreateSection is used to create a new section object.
+
+      Library : `Ntdll.dll`'
+    link: https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-zwcreatesection
+    tide.vocab.stages: Injection
+  - name: NtCreateThread
+    description: 'NtCreateThread is used to create a new thread.
+
+      Library : `Ntdll.dll`'
+    link: http://undocumented.ntinternals.net/index.html?page=UserMode%2FUndocumented%20Functions%2FNT%20Objects%2FThread%2FNtCreateThread.html
+    tide.vocab.stages: Injection
+  - name: NtCreateThreadEx
+    description: 'NtCreateThreadEx is used to create a new thread.
+
+      Library : `Ntdll.dll`'
+    link: https://securityxploded.com/ntcreatethreadex.php
+    tide.vocab.stages: Injection
+  - name: NtCreateUserProcess
+    description: 'NtCreateUserProcess is used to create a new process.
+
+      Library : `Ntdll.dll`'
+    link: https://github.com/Microwave89/createuserprocess/blob/master/createuserprocess/main.c
+    tide.vocab.stages: Injection
+  - name: NtDelayExecution
+    description: 'NtDelayExecution is used to suspend execution, similiar to the Sleep()
+      API function. This function can be used by malware for evasion purposes.
+
+      Library : `Ntdll.dll`'
+    link: https://undocumented.ntinternals.net/index.html?page=UserMode%2FUndocumented%20Functions%2FNT%20Objects%2FThread%2FNtDelayExecution.html
+    tide.vocab.stages: Evasion
+  - name: NtDeleteKey
+    description: 'NtDeleteKey is used to delete a registry key.
+
+      Library : `Ntdll.dll`'
+    link: https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-zwdeletekey
+    tide.vocab.stages: Helper
+  - name: NtDeleteValueKey
+    description: 'NtDeleteValueKey is used to delete a registry key value.
+
+      Library : `Ntdll.dll`'
+    link: https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-zwdeletevaluekey
+    tide.vocab.stages: Helper
+  - name: NtDuplicateObject
+    description: 'NtDuplicateObject is used to create a handle that is a duplicate
+      of the specified source handle. Malware can use this function to obtain the
+      necessary access rights to a process via duplicating its handle, and subsequently
+      kill a process or inject into it.
+
+      Library : `Ntdll.dll`'
+    link: http://undocumented.ntinternals.net/index.html?page=UserMode%2FUndocumented%20Functions%2FNT%20Objects%2FType%20independed%2FNtDuplicateObject.html
+    tide.vocab.stages: Injection
+  - name: NtMakeTemporaryObject
+    description: 'NtMakeTemporaryObject is used to change the attributes of an object
+      to make it temporary.
+
+      Library : `Ntdll.dll`'
+    link: https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-zwmaketemporaryobject
+    tide.vocab.stages: Helper
+  - name: NtMapViewOfSection
+    description: 'NtMapViewOfSection is used to map a view of a section into the virtual
+      address space of a subject process. This function is used by malware as part
+      of process injection.
+
+      Library : `Ntdll.dll`'
+    link: https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-zwmapviewofsection
+    tide.vocab.stages: Injection
+  - name: NtOpenProcess
+    description: 'NtOpenProcess is used to get a handle on a process. This function
+      is commonly used as part of process injection.
+
+      Library : `Ntdll.dll`'
+    link: http://undocumented.ntinternals.net/index.html?page=UserMode%2FUndocumented%20Functions%2FNT%20Objects%2FProcess%2FNtOpenProcess.html
+    tide.vocab.stages: Injection
+  - name: NtOpenThread
+    description: 'NtOpenThread is used to get a handle on a thread. This function
+      is commonly used as part of process injection.
+
+      Library : `Ntdll.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/devnotes/ntopenthread
+    tide.vocab.stages: Injection
+  - name: NtProtectVirtualMemory
+    description: 'NtProtectVirtualMemory is used to interact with and modify memory
+      regions.
+
+      Library : `Ntdll.dll`'
+    link: http://www.codewarrior.cn/ntdoc/winnt/mm/NtProtectVirtualMemory.htm
+    tide.vocab.stages: Injection
+  - name: NtQueryDirectoryFile
+    description: 'NtQueryDirectoryFile is used to retrieve information about a directory.
+      This function can be used for enumeration purposes.
+
+      Library : `Ntdll.dll`'
+    link: https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-ntquerydirectoryfile
+    tide.vocab.stages: Enumeration
+  - name: NtQueryInformationProcess
+    description: 'NtQueryInformationProcess is used to retrieve information about
+      a specified process.
+
+      Library : `Ntdll.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winternl/nf-winternl-ntqueryinformationprocess
+    tide.vocab.stages:
+      - Enumeration
+      - Anti-Debugging
+  - name: NtQuerySystemEnvironmentValueEx
+    description: 'NtQuerySystemEnvironmentValueEx is used to locate a specified system
+      environment variable and return its value.
+
+      Library : `Ntdll.dll`'
+    link: http://www.codewarrior.cn/ntdoc/winxp/ex/NtQuerySystemEnvironmentValueEx.htm
+    tide.vocab.stages: Enumeration
+  - name: NtQueryTimer
+    description: 'NtQueryTimer is used to query a timer''s attributes.
+
+      Library : `Ntdll.dll`'
+    link: https://undocumented.ntinternals.net/index.html?page=UserMode%2FUndocumented%20Functions%2FNT%20Objects%2FTimer%2FNtQueryTimer.html
+    tide.vocab.stages: Helper
+  - name: NtQueueApcThread
+    description: 'NtQueueApcThread is used to execute code for a different thread.
+      This function is commonly used as part of process injection.
+
+      Library : `Ntdll.dll`'
+    link: https://repnz.github.io/posts/apc/user-apc/#ntqueueapcthreadex2-some-new-friends-in-the-fast-ring
+    tide.vocab.stages: Injection
+  - name: NtQueueApcThreadEx
+    description: 'NtQueueApcThreadEx is used to execute code for a different thread.
+      This function is commonly used as part of process injection.
+
+      Library : `Ntdll.dll`'
+    link: https://repnz.github.io/posts/apc/user-apc/#ntqueueapcthreadex2-some-new-friends-in-the-fast-ring
+    tide.vocab.stages: Injection
+  - name: NtQueueApcThreadEx2
+    description: 'NtQueueApcThreadEx2 is a new system call that allows to pass both
+      UserApcFlags and MemoryReserveHandle.
+
+      Library : `Ntdll.dll`'
+    link: https://repnz.github.io/posts/apc/user-apc/#ntqueueapcthreadex2-some-new-friends-in-the-fast-ring
+    tide.vocab.stages: Injection
+  - name: NtReadVirtualMemory
+    description: 'NtReadVirtualMemory is used to copy data in the specified address
+      range from the address space of the specified process into the specified buffer
+      of the current process
+
+      Library : `Ntdll.dll`'
+    link: http://www.codewarrior.cn/ntdoc/winnt/mm/NtReadVirtualMemory.htm
+    tide.vocab.stages: Injection
+  - name: NtReadVirtualMemoryEx
+    description: 'NtReadVirtualMemoryEx is used to copy data in the specified address
+      range from the address space of the specified process into the specified buffer
+      of the current process
+
+      Library : `Ntdll.dll`'
+    link: ''
+    tide.vocab.stages: Injection
+  - name: NtResumeProcess
+    description: 'NtResumeProcess is used to resume a suspended process
+
+      Library : `ntdll.dll`'
+    link: https://www.pinvoke.net/default.aspx/ntdll/NtResumeProcess.html
+    tide.vocab.stages:
+      - Injection
+      - Helper
+  - name: NtResumeThread
+    description: 'NtResumeThread is used to resume a suspended thread.
+
+      Library : `Ntdll.dll`'
+    link: https://ntopcode.wordpress.com/tag/ntresumethread/
+    tide.vocab.stages: Injection
+  - name: NtSetContextThread
+    description: 'NtSetContextThread is used to set the usermode context of the specified
+      thread.
+
+      Library : `Ntdll.dll`'
+    link: http://www.codewarrior.cn/ntdoc/wrk/ps/NtSetContextThread.htm
+    tide.vocab.stages: Helper
+  - name: NtSetInformationProcess
+    description: 'NtSetInformationProcess is used to modify information about a process
+      such making it a critical process.
+
+      Library : `Ntdll.dll`'
+    link: http://undocumented.ntinternals.net/index.html?page=UserMode%2FUndocumented%20Functions%2FNT%20Objects%2FProcess%2FNtSetInformationProcess.html
+    tide.vocab.stages: Helper
+  - name: NtSetInformationThread
+    description: 'NtSetInformationThread is used to set the priority of a thread.
+
+      Library : `Ntdll.dll`'
+    link: https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-ntsetinformationthread
+    tide.vocab.stages: Helper
+  - name: NtSetSystemEnvironmentValueEx
+    description: 'NtSetSystemEnvironmentValueEx is used to set a system environment
+      variable.
+
+      Library : `Ntdll.dll`'
+    link: http://www.codewarrior.cn/ntdoc/winxp/ex/NtSetSystemEnvironmentValueEx.htm
+    tide.vocab.stages: Helper
+  - name: NtSetValueKey
+    description: 'NtSetValueKey is used to create or replace a registry value.
+
+      Library : `Ntdll.dll`'
+    link: https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-zwsetvaluekey
+    tide.vocab.stages: Helper
+  - name: NtShutdownSystem
+    description: 'NtShutdownSystem is used to shutdown the system.
+
+      Library : `Ntdll.dll`'
+    link: http://undocumented.ntinternals.net/index.html?page=UserMode%2FUndocumented%20Functions%2FHardware%2FNtShutdownSystem.html
+    tide.vocab.stages: Helper
+  - name: NtSuspendProcess
+    description: 'NtSuspendProcess is used to suspend the target process
+
+      Library : `ntdll.dll`'
+    link: https://www.pinvoke.net/default.aspx/ntdll.NtSuspendProcess
+    tide.vocab.stages: Injection
+  - name: NtTerminateProcess
+    description: 'NtTerminateProcess is used to terminate a process and all its threads.
+
+      Library : `Ntdll.dll`'
+    link: https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddk/nf-ntddk-zwterminateprocess
+    tide.vocab.stages: Helper
+  - name: NtTerminateThread
+    description: 'NtTerminateThread is used to terminate a thread.
+
+      Library : `Ntdll.dll`'
+    link: http://www.codewarrior.cn/ntdoc/winnt/ps/NtTerminateThread.htm
+    tide.vocab.stages: Helper
+  - name: NtUnmapViewOfSection
+    description: 'NtUnmapViewOfSection is used to unmap a view of a section from the
+      virtual address space of a subject process.
+
+      Library : `Ntdll.dll`'
+    link: https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-zwunmapviewofsection
+    tide.vocab.stages: Injection
+  - name: NtWaitForMultipleObjects
+    description: 'NtWaitForMultipleObjects is used to wait until one or all of the
+      specified objects are in the signaled state or the time-out interval elapses.
+      This function is commonly used by malware for evasion purposes
+
+      Library : `Ntdll.dll`'
+    link: http://undocumented.ntinternals.net/index.html?page=UserMode%2FUndocumented%20Functions%2FNT%20Objects%2FType%20independed%2FNtWaitForMultipleObjects.html
+    tide.vocab.stages:
+      - Evasion
+      - Injection
+  - name: NtWaitForSingleObject
+    description: 'NtWaitForSingleObject is used to wait until the specified object
+      is in the signaled state or the time-out interval elapses. This function is
+      commonly used by malware for evasion purposes.
+
+      Library : `Ntdll.dll`'
+    link: http://undocumented.ntinternals.net/index.html?page=UserMode%2FUndocumented%20Functions%2FNT%20Objects%2FType%20independed%2FNtWaitForSingleObject.html
+    tide.vocab.stages:
+      - Evasion
+      - Injection
+  - name: NtWriteVirtualMemory
+    description: 'NtWriteVirtualMemory is used to copy the specified address range
+      from the current process into the specified address range of the specified process.
+
+      Library : `Ntdll.dll`'
+    link: http://www.codewarrior.cn/ntdoc/winnt/mm/NtWriteVirtualMemory.htm
+    tide.vocab.stages: Injection
+  - name: OpenClipboard
+    description: 'OpenClipboard is used to get a handle on the clipboard.
+
+      Library : `User32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-openclipboard
+    tide.vocab.stages: Helper
+  - name: OpenFileMappingA
+    description: 'OpenFileMappingA is used to open a named file mapping object.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-openfilemappinga
+    tide.vocab.stages: Injection
+  - name: OpenProcess
+    description: 'OpenProcess is used to get a handle on a process. This function
+      is commonly used by malware during process injection.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-openprocess
+    tide.vocab.stages: Injection
+  - name: OpenProcessToken
+    description: 'OpenProcessToken is used to open the access token associated with
+      a process.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-openprocesstoken
+    tide.vocab.stages: Injection
+  - name: OpenSCManagerA
+    description: 'OpenSCManagerA is used to open a handle to the service control manager.
+      This function is commonly used when a malware intends to interact with a service.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winsvc/nf-winsvc-openscmanagera
+    tide.vocab.stages: Helper
+  - name: OpenServiceA
+    description: 'OpenServiceA is used to open an existing service.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winsvc/nf-winsvc-openservicea
+    tide.vocab.stages: Helper
+  - name: OpenThread
+    description: 'OpenThread is used to get a handle on a specified thread. It is
+      commonly seen in process injection techniques.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-openthread
+    tide.vocab.stages: Injection
+  - name: OutputDebugStringA
+    description: 'OutputDebugStringA sends a string to the debugger for display. This
+      function can be used as an anti-debugging technique.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/debugapi/nf-debugapi-outputdebugstringa
+    tide.vocab.stages: Anti-Debugging
+  - name: PathFileExistsA
+    description: 'PathFileExistsA is used to determine whether a path to a file system
+      object such as a file or folder is valid. This function is used by malware to
+      enumerate files and installed programs (e.g. AV solutions).
+
+      Library : `Shlwapi.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/shlwapi/nf-shlwapi-pathfileexistsa
+    tide.vocab.stages: Enumeration
+  - name: PeekMessageA
+    description: 'PeekMessageA is used to check for incoming sent messages, checks
+      the thread message queue for a posted message, and retrieves the message (if
+      any exist).
+
+      Library : `User32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-peekmessagea
+    tide.vocab.stages: Spying
+  - name: PeekNamedPipe
+    description: "Used to copy data from a named pipe without removing data from the\
+      \ \npipe. This function has been used by exploits targeting SMB vulnerabilities.\n\
+      Library : `Kernel32.dll`"
+    link: https://docs.microsoft.com/en-us/windows/win32/api/namedpipeapi/nf-namedpipeapi-peeknamedpipe
+    tide.vocab.stages: Helper
+  - name: PostMessageA
+    description: 'PostMessageA is used to post a message in the message queue associated
+      with the thread that created the specified window and returns without waiting
+      for the thread to process the message.
+
+      Library : `User32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-postmessagea
+    tide.vocab.stages: Spying
+  - name: PostThreadMessageA
+    description: 'PostThreadMessageA is used to post a message to the message queue
+      of the specified thread.
+
+      Library : `User32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-postthreadmessagea
+    tide.vocab.stages: Spying
+  - name: Process32First
+    description: 'Process32First is used as part of CreateToolhelp32Snapshot for enumeration
+      purposes.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/tlhelp32/nf-tlhelp32-process32first
+    tide.vocab.stages:
+      - Enumeration
+      - Injection
+  - name: Process32Next
+    description: 'Process32Next is used as part of CreateToolhelp32Snapshot for enumeration
+      purposes.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/tlhelp32/nf-tlhelp32-process32next
+    tide.vocab.stages:
+      - Enumeration
+      - Injection
+  - name: QueryPerformanceCounter
+    description: 'QueryPerformanceCounter is used to retrieve the frequency of the
+      performance counter. This function is commonly used by malware for anti-debugging
+      purposes. The malware will measure the time before and after an operation, if
+      the time exceeds taken expected time, the malware will terminate or activate
+      a benign function.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/profileapi/nf-profileapi-queryperformancecounter
+    tide.vocab.stages: Anti-Debugging
+  - name: QueryPerformanceFrequency
+    description: 'QueryPerformanceFrequency is used to retrieve the frequency of the
+      performance counter. This function is commonly used by malware for anti-debugging
+      purposes. The malware will measure the time before and after an operation, if
+      the time exceeds taken expected time, the malware will terminate or activate
+      a benign function.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/profileapi/nf-profileapi-queryperformancefrequency
+    tide.vocab.stages: Anti-Debugging
+  - name: QueueUserAPC
+    description: 'QueueUserAPC is used to execute code for a different thread. This
+      function is commonly used as part of process injection.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-queueuserapc
+    tide.vocab.stages: Injection
+  - name: ReadFile
+    description: 'ReadFile is used to read data from the specified file or input/output
+      (I/O) device.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-readfile
+    tide.vocab.stages: Enumeration
+  - name: ReadProcessMemory
+    description: 'ReadProcessMemory can be used to read the memory of a remote process.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-readprocessmemory
+    tide.vocab.stages:
+      - Enumeration
+      - Injection
+  - name: Recv
+    description: 'Recv is used to receive data from a connected socket or a bound
+      connectionless socket.
+
+      Library : `Ws2_32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-recv
+    tide.vocab.stages: Internet
+  - name: RegCloseKey
+    description: 'RegCloseKey is used to close a handle to the specified registry
+      key.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winreg/nf-winreg-regclosekey
+    tide.vocab.stages: Helper
+  - name: RegConnectRegistryA
+    description: 'RegConnectRegistryA is used to establish a connection to a predefined
+      registry key on another computer.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winreg/nf-winreg-regconnectregistrya
+    tide.vocab.stages: Helper
+  - name: RegCopyTreeA
+    description: 'RegCopyTreeA is used to copy the specified registry key, along with
+      its values and subkeys, to the specified destination key.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winreg/nf-winreg-regcopytreea
+    tide.vocab.stages: Helper
+  - name: RegCreateKeyA
+    description: 'RegCreateKeyA is used to create a specified registry key. If the
+      key already exists, the function opens it.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winreg/nf-winreg-regcreatekeya
+    tide.vocab.stages: Helper
+  - name: RegCreateKeyExA
+    description: 'RegCreateKeyExA is used to create a specified registry key. If the
+      key already exists, the function opens it.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winreg/nf-winreg-regcreatekeyexa
+    tide.vocab.stages: Helper
+  - name: RegCreateKeyTransactedA
+    description: 'RegCreateKeyTransactedA is used to create the specified registry
+      key and associates it with a transaction. If the key already exists, the function
+      opens it.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winreg/nf-winreg-regcreatekeytransacteda
+    tide.vocab.stages: Helper
+  - name: RegDeleteKeyA
+    description: 'RegDeleteKeyA is used to delete a subkey and its values from the
+      specified platform-specific view of the registry.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winreg/nf-winreg-regdeletekeya
+    tide.vocab.stages: Helper
+  - name: RegDeleteKeyExA
+    description: 'RegDeleteKeyExA is used to delete a subkey and its values from the
+      specified platform-specific view of the registry.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winreg/nf-winreg-regdeletekeyexa
+    tide.vocab.stages: Helper
+  - name: RegDeleteKeyTransactedA
+    description: 'RegDeleteKeyTransactedA is used to delete a subkey and its values
+      from the specified platform-specific view of the registry as a transacted operation.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winreg/nf-winreg-regdeletekeytransacteda
+    tide.vocab.stages: Helper
+  - name: RegDeleteKeyValueA
+    description: 'RegDeleteKeyValueA is used to remove the specified value from the
+      specified registry key and subkey.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winreg/nf-winreg-regdeletekeyvaluea
+    tide.vocab.stages: Helper
+  - name: RegDeleteTreeA
+    description: 'RegDeleteTreeA is used to delete the subkeys and values of the specified
+      key recursively.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winreg/nf-winreg-regdeletetreea
+    tide.vocab.stages: Helper
+  - name: RegDeleteValueA
+    description: 'RegDeleteValueA is used to remove a named value from the specified
+      registry key.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winreg/nf-winreg-regdeletevaluea
+    tide.vocab.stages: Helper
+  - name: RegEnumKeyA
+    description: 'RegEnumKeyA is used to enumerate the subkeys of the specified open
+      registry key. The function retrieves the name of one subkey each time it is
+      called.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winreg/nf-winreg-regenumkeya
+    tide.vocab.stages:
+      - Enumeration
+      - Helper
+  - name: RegEnumKeyExA
+    description: 'RegEnumKeyExA is used to enumerate the subkeys of the specified
+      open registry key.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winreg/nf-winreg-regenumkeyexa
+    tide.vocab.stages:
+      - Enumeration
+      - Helper
+  - name: RegEnumValueA
+    description: 'RegEnumValueA is used to enumerate the values for the specified
+      open registry key
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winreg/nf-winreg-regenumvaluea
+    tide.vocab.stages:
+      - Enumeration
+      - Helper
+  - name: RegFlushKey
+    description: 'RegFlushKey is used to write all the attributes of the specified
+      open registry key into the registry.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winreg/nf-winreg-regflushkey
+    tide.vocab.stages: Helper
+  - name: RegGetKeySecurity
+    description: 'RegGetKeySecurity is used to retrieve a copy of the security descriptor
+      protecting the specified open registry key.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winreg/nf-winreg-reggetkeysecurity
+    tide.vocab.stages: Helper
+  - name: RegGetValueA
+    description: 'RegGetValueA is used to retrieve the type and data for the specified
+      registry value.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winreg/nf-winreg-reggetvaluea
+    tide.vocab.stages: Helper
+  - name: RegLoadKeyA
+    description: 'RegLoadKeyA is used to create a subkey under HKEY_USERS or HKEY_LOCAL_MACHINE
+      and loads the data from the specified registry hive into that subkey.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winreg/nf-winreg-regloadkeya
+    tide.vocab.stages: Helper
+  - name: RegLoadMUIStringA
+    description: 'RegLoadMUIStringA is used to load the specified string from the
+      specified key and subkey.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winreg/nf-winreg-regloadmuistringa
+    tide.vocab.stages: Helper
+  - name: RegOpenCurrentUser
+    description: 'RegOpenCurrentUser is used to retrieve a handle to the HKEY_CURRENT_USER
+      key for the user the current thread is impersonating.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winreg/nf-winreg-regopencurrentuser
+    tide.vocab.stages: Helper
+  - name: RegOpenKeyA
+    description: 'RegOpenKeyA is used to open a specified registry key.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winreg/nf-winreg-regopenkeya
+    tide.vocab.stages: Helper
+  - name: RegOpenKeyExA
+    description: 'RegOpenKeyExA is used to open a specified registry key.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winreg/nf-winreg-regopenkeyexa
+    tide.vocab.stages: Helper
+  - name: RegOpenKeyTransactedA
+    description: 'RegOpenKeyTransactedA is used to open the specified registry key
+      and associates it with a transaction
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winreg/nf-winreg-regopenkeytransacteda
+    tide.vocab.stages: Helper
+  - name: RegOpenUserClassesRoot
+    description: 'RegOpenUserClassesRoot is used to retrieve a handle to the HKEY_CLASSES_ROOT
+      key for a specified user.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winreg/nf-winreg-regopenuserclassesroot
+    tide.vocab.stages: Helper
+  - name: RegOverridePredefKey
+    description: 'RegOverridePredefKey is used to map a predefined registry key to
+      the specified registry key.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winreg/nf-winreg-regoverridepredefkey
+    tide.vocab.stages: Helper
+  - name: RegQueryInfoKeyA
+    description: 'RegQueryInfoKeyA is used to retrieves information about the specified
+      registry key.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winreg/nf-winreg-regqueryinfokeya
+    tide.vocab.stages: Enumeration
+  - name: RegQueryMultipleValuesA
+    description: 'RegQueryMultipleValuesA is used to retrieve the type and data for
+      a list of value names associated with an open registry key.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winreg/nf-winreg-regquerymultiplevaluesa
+    tide.vocab.stages: Enumeration
+  - name: RegQueryValueExA
+    description: 'RegQueryValueExA is used to retrieve the type and data for the specified
+      value name associated with an open registry key.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winreg/nf-winreg-regqueryvalueexa
+    tide.vocab.stages: Enumeration
+  - name: RegReplaceKeyA
+    description: 'RegReplaceKeyA is used to replace the file backing a registry key
+      and all its subkeys with another file, so that when the system is next started,
+      the key and subkeys will have the values stored in the new file.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winreg/nf-winreg-regreplacekeya
+    tide.vocab.stages: Helper
+  - name: RegRestoreKeyA
+    description: 'RegRestoreKeyA is used to read the registry information in a specified
+      file and copies it over the specified key.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winreg/nf-winreg-regrestorekeya
+    tide.vocab.stages: Helper
+  - name: RegSaveKeyA
+    description: 'RegSaveKeyA is used to save the specified key and all of its subkeys
+      and values to a registry file, in the specified format.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winreg/nf-winreg-regsavekeya
+    tide.vocab.stages: Helper
+  - name: RegSaveKeyExA
+    description: 'RegSaveKeyExA is used to save the specified key and all of its subkeys
+      and values to a registry file, in the specified format.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winreg/nf-winreg-regsavekeyexa
+    tide.vocab.stages: Helper
+  - name: RegSetKeySecurity
+    description: 'RegSetKeySecurity is used to set the security of an open registry
+      key.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winreg/nf-winreg-regsetkeysecurity
+    tide.vocab.stages: Helper
+  - name: RegSetKeyValueA
+    description: 'RegSetKeyValueA is used to set a value for a given registry key.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winreg/nf-winreg-regsetkeyvaluea
+    tide.vocab.stages: Helper
+  - name: RegSetValueExA
+    description: 'RegSetValueExA is used to set a value and type for a given registry
+      key.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winreg/nf-winreg-regsetvalueexa
+    tide.vocab.stages: Helper
+  - name: RegUnLoadKeyA
+    description: 'RegUnLoadKeyA is used to unload the specified registry key and its
+      subkeys from the registry.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winreg/nf-winreg-regunloadkeya
+    tide.vocab.stages: Helper
+  - name: RegisterHotKey
+    description: 'RegisterHotKey is used to create a system wide hotkey. This function
+      is commonly used by spyware or keyloggers to recieve a notification when a certain
+      combination of keys are pressed.
+
+      Library : `User32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-registerhotkey
+    tide.vocab.stages:
+      - Evasion
+      - Spying
+  - name: RegisterRawInputDevices
+    description: 'RegisterRawInputDevices is used to register the devices that supply
+      raw input.
+
+      Library : `User32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-registerrawinputdevices
+    tide.vocab.stages: Spying
+  - name: ResumeThread
+    description: 'ResumeThread is used to resume a specified thread often times as
+      part of process injection.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-resumethread
+    tide.vocab.stages: Injection
+  - name: RtlCopyMemory
+    description: 'RtlCopyMemory is used to copy the contents of a source memory block
+      to a destination memory block.
+
+      Library : `Ntdll.dll`'
+    link: https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlcopymemory
+    tide.vocab.stages: Injection
+  - name: RtlCreateHeap
+    description: 'RtlCreateHeap is used to create a heap object that can be used by
+      the calling process.
+
+      Library : `Ntdll.dll`'
+    link: https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlcreateheap
+    tide.vocab.stages: Injection
+  - name: RtlGetVersion
+    description: 'RtlGetVersion is used to enumerate OS basic information properties
+      such Windows and build versions.
+
+      Library : `NtosKrnl.lib`'
+    link: https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlgetversion
+    tide.vocab.stages:
+      - Enumeration
+      - Anti-Debugging
+  - name: RtlMoveMemory
+    description: 'RtlMoveMemory is used to copy the contents of a source memory block
+      to a destination memory block, and supports overlapping source and destination
+      memory blocks.
+
+      Library : `Ntdll.dll`'
+    link: ''
+    tide.vocab.stages: Injection
+  - name: RtlSetProcessIsCritical
+    description: 'RtlSetProcessIsCritical is used to set a process to a system critical
+      status. This function is used by malware to prevent the process from being terminated.
+
+      Library : `Ntdll.dll`'
+    link: https://www.codeproject.com/Articles/43405/Protecting-Your-Process-with-RtlSetProcessIsCriti
+    tide.vocab.stages: Helper
+  - name: SearchPathA
+    description: 'SearchPathA is used to search for a specified file in a specified
+      path.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/processenv/nf-processenv-searchpatha
+    tide.vocab.stages: Enumeration
+  - name: Select
+    description: 'Select is used to determine the status of one or more sockets, waiting
+      if necessary, to perform synchronous I/O. This function is used by malware for
+      time-based evasion by setting a large timeout number.
+
+      Library : `Ws2_32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-select
+    tide.vocab.stages: Evasion
+  - name: Send
+    description: 'Send is used to send data on a connected socket.
+
+      Library : `Ws2_32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-send
+    tide.vocab.stages: Internet
+  - name: SendMessageA
+    description: 'SendMessageA is used to send the specified message to a window or
+      windows.
+
+      Library : `User32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-sendmessagea
+    tide.vocab.stages: Spying
+  - name: SendMessageCallbackA
+    description: 'SendMessageCallbackA is used to send the specified message to a
+      window or windows.
+
+      Library : `User32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-sendmessagecallbacka
+    tide.vocab.stages: Spying
+  - name: SendMessageTimeoutA
+    description: 'SendMessageTimeoutA is used to send the specified message to a window
+      or windows.
+
+      Library : `User32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-sendmessagetimeouta
+    tide.vocab.stages: Spying
+  - name: SendNotifyMessageA
+    description: 'SendNotifyMessageA is used to send the specified message to a window
+      or windows.
+
+      Library : `User32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-sendnotifymessagea
+    tide.vocab.stages: Spying
+  - name: SetClipboardData
+    description: 'SetClipboardData is used to place data on the clipboard in a specified
+      clipboard format.
+
+      Library : `User32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setclipboarddata
+    tide.vocab.stages: Helper
+  - name: SetCurrentDirectory
+    description: 'SetCurrentDirectory is used to change the current directory for
+      the current process.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-setcurrentdirectory
+    tide.vocab.stages: Helper
+  - name: SetEnvironmentVariableA
+    description: 'SetEnvironmentVariableA sets the contents of the specified environment
+      variable for the current process.  Setting custom envrinoment variables can
+      be used for obfuscation and evasion purposes.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/processenv/nf-processenv-setenvironmentvariablea
+    tide.vocab.stages: Evasion
+  - name: SetFileAttributesA
+    description: 'SetFileAttributesA is used to set attributes of a file or directory.
+      This function is commonly used by malware to make a file or directory hidden.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-setfileattributesa
+    tide.vocab.stages: Evasion
+  - name: SetFileTime
+    description: 'SetFileTime sets the date and time that the specified file or directory
+      was created, last accessed, or last modified. This function is often used by
+      malware to conceal malicious activity.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-setfiletime
+    tide.vocab.stages: Evasion
+  - name: SetFocus
+    description: 'SetFocus is used to set the keyboard focus to the specified window
+
+      Library : `User32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setfocus
+    tide.vocab.stages: Helper
+  - name: SetForegroundWindow
+    description: 'SetForegroundWindow is used for bring the thread that created the
+      specified window into the foreground and activates the window
+
+      Library : `User32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setforegroundwindow
+    tide.vocab.stages: Helper
+  - name: SetProcessDEPPolicy
+    description: 'SetProcessDEPPolicy is used to override the default DEP policy.
+      Malware will use this function to allow data execution.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-setprocessdeppolicy
+    tide.vocab.stages: Injection
+  - name: SetPropA
+    description: 'SetPropA is used to add a new entry or changes an existing entry
+      in the property list of the specified window. This function is commonly used
+      by malware to register a property and wait for its invocation to execute malicious
+      commands.
+
+      Library : `User32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setpropa
+    tide.vocab.stages: Injection
+  - name: SetThreadContext
+    description: 'SetThreadContext is used to modify a thread''s context. This is
+      often used as part of process injection techniques.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-setthreadcontext
+    tide.vocab.stages: Injection
+  - name: SetThreadPriority
+    description: 'SetThreadPriority is used to set the priority value for the specified
+      thread. This value, together with the priority class of the thread''s process,
+      determines the thread''s base priority level.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-setthreadpriority
+    tide.vocab.stages: Helper
+  - name: SetThreadToken
+    description: 'The SetThreadToken function assigns an impersonation token to a
+      thread. The function can also cause a thread to stop using an impersonation
+      token.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-setthreadtoken
+    tide.vocab.stages:
+      - Evasion
+      - Helper
+  - name: SetTimer
+    description: 'SetTimer is used to create a timer with the specified time-out value.
+      This function is commonly used by malware for time-based evasion
+
+      Library : `User32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-settimer
+    tide.vocab.stages: Evasion
+  - name: SetWaitableTimer
+    description: 'SetWaitableTimer is used to activate the specified waitable timer.
+      This function is commonly used by malware for time-based evasion.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-setwaitabletimer
+    tide.vocab.stages: Evasion
+  - name: SetWinEventHook
+    description: 'SetWinEventHook is used to set an event hook function for a range
+      of events.
+
+      Library : `User32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwineventhook
+    tide.vocab.stages: Spying
+  - name: SetWindowLongA
+    description: 'SetWindowLongA is used to changes an attribute of a specified window.
+
+      Library : `User32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowlonga
+    tide.vocab.stages: Helper
+  - name: SetWindowLongPtrA
+    description: 'SetWindowLongPtrA is used to changes an attribute of a specified
+      window.
+
+      Library : `User32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowlongptra
+    tide.vocab.stages: Helper
+  - name: SetWindowsHookExA
+    description: 'SetWindowsHookExA is used to install an application-defined hook
+      procedure into a hook chain. This function is commonly used by keyloggers.
+
+      Library : `User32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowshookexa
+    tide.vocab.stages: Spying
+  - name: ShellExecuteA
+    description: 'ShellExecuteA is used to perform an operation on a specified file.
+
+      Library : `Shell32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/shellapi/nf-shellapi-shellexecutea
+    tide.vocab.stages: Internet
+  - name: ShellExecuteExA
+    description: 'ShellExecuteExA is used to perform an operation on a specified file.
+
+      Library : `Shell32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/shellapi/nf-shellapi-shellexecuteexa
+    tide.vocab.stages: Internet
+  - name: ShowWindow
+    description: 'ShowWindow is used to set the specified window''s show state.
+
+      Library : `User32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-showwindow
+    tide.vocab.stages: Helper
+  - name: SizeOfResource
+    description: 'SizeOfResource checks and retrieves the size of given resource.
+      Usually found in droppers
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-sizeofresource
+    tide.vocab.stages:
+      - Evasion
+      - Helper
+  - name: Sleep
+    description: 'Sleep is used to suspend the execution of the current thread for
+      a set time. This function is commonly used for time-based evasion by adding
+      delays in the code.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-sleep
+    tide.vocab.stages:
+      - Evasion
+      - Anti-Debugging
+  - name: SleepEx
+    description: 'SleepEx is used to suspend the execution of the current thread for
+      a set time. This function is commonly used for time-based evasion by adding
+      delays in the code.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-sleepex
+    tide.vocab.stages:
+      - Evasion
+      - Anti-Debugging
+  - name: Socket
+    description: 'socket is used create a socket that is bound to a specific transport
+      service provider.
+
+      Library : `Ws2_32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-socket
+    tide.vocab.stages: Internet
+  - name: StartServiceA
+    description: 'StartServiceA is used to start a service.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winsvc/nf-winsvc-startservicea
+    tide.vocab.stages: Helper
+  - name: StartServiceCtrlDispatcherA
+    description: 'StartServiceCtrlDispatcherA is used by a service to connect the
+      main thread of the process to the service control manager.
+
+      Library : `Advapi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winsvc/nf-winsvc-startservicectrldispatchera
+    tide.vocab.stages: Helper
+  - name: StretchBlt
+    description: 'StretchBlt is used to copy graphic data from one device to another.
+      Spyware sometimes uses this function to capture screenshots.
+
+      Library : `Gdi32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-stretchblt
+    tide.vocab.stages: Spying
+  - name: SuspendThread
+    description: 'SuspendThread is used to suspend a specified thread often times
+      as part of process injection or to tamper with a legitimate application.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-suspendthread
+    tide.vocab.stages: Injection
+  - name: TerminateProcess
+    description: 'TerminateProcess is used to terminate a process.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-terminateprocess
+    tide.vocab.stages: Helper
+  - name: TerminateThread
+    description: 'TerminateThread is used to terminate a thread.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-terminatethread
+    tide.vocab.stages: Helper
+  - name: Thread32First
+    description: 'Thread32First is used as part of CreateToolhelp32Snapshot for enumeration
+      purposes.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/tlhelp32/nf-tlhelp32-thread32first
+    tide.vocab.stages:
+      - Enumeration
+      - Injection
+  - name: Thread32Next
+    description: 'Thread32Next is used as part of CreateToolhelp32Snapshot for enumeration
+      purposes.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/tlhelp32/nf-tlhelp32-thread32next
+    tide.vocab.stages:
+      - Enumeration
+      - Injection
+  - name: TimeGetTime
+    description: 'TimeGetTime is used to retrieve the system time, in milliseconds.
+      The system time is the time elapsed since Windows was started.
+
+      Library : `Winmm.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/timeapi/nf-timeapi-timegettime
+    tide.vocab.stages: Evasion
+  - name: Toolhelp32ReadProcessMemory
+    description: 'Toolhelp32ReadProcessMemory can be used to read the memory of other
+      processes.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/tlhelp32/nf-tlhelp32-toolhelp32readprocessmemory
+    tide.vocab.stages:
+      - Enumeration
+      - Injection
+  - name: URLDownloadToCacheFile
+    description: 'URLDownloadToCacheFile is used to download data to the Internet
+      cache and returns the file name of the cache location for retrieving the bits.
+
+      Library : `Urlmon.dll`'
+    link: https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/ms775122(v=vs.85)
+    tide.vocab.stages: Internet
+  - name: URLDownloadToFile
+    description: 'URLDownloadToFile is used to download bits from the Internet and
+      saves them to a file.
+
+      Library : `Urlmon.dll`'
+    link: https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/ms775123(v=vs.85)
+    tide.vocab.stages: Internet
+  - name: URLOpenBlockingStream
+    description: 'URLOpenBlockingStream is used to create a blocking type stream object
+      from a URL and downloads the data from the Internet.
+
+      Library : `Urlmon.dll`'
+    link: https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/ms775127(v=vs.85)
+    tide.vocab.stages: Internet
+  - name: URLOpenStream
+    description: 'URLOpenStream is used to create a push type stream object from a
+      URL.
+
+      Library : `Urlmon.dll`'
+    link: https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/ms775129(v=vs.85)
+    tide.vocab.stages: Internet
+  - name: UnhookWindowsHookEx
+    description: 'UnhookWindowsHookEx is used to remove a hook procedure installed
+      in a hook chain by the SetWindowsHookEx function.
+
+      Library : `User32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-unhookwindowshookex
+    tide.vocab.stages: Spying
+  - name: UnmapViewOfFile
+    description: 'UnmapViewOfFile is used to unmap a mapped view of a file from the
+      calling process''s address space.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-unmapviewoffile
+    tide.vocab.stages: Helper
+  - name: UuidFromStringA
+    description: 'UuidFromStringA is used to convert a string to a UUID. This function
+      can be abused to both decode data and write it to memory without using common
+      functions such as memcpy or WriteProcessMemory.
+
+      Library : `Rpcrt4.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/rpcdce/nf-rpcdce-uuidfromstringa
+    tide.vocab.stages:
+      - Evasion
+      - Injection
+      - Helper
+  - name: VirtualAlloc
+    description: 'VirtualAlloc is often used by malware to allocate memory as part
+      of process injection.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-virtualalloc
+    tide.vocab.stages: Injection
+  - name: VirtualAlloc2
+    description: 'VirtualAlloc2 is used to reserve or changes the state of a region
+      of pages in the virtual address space of a specified process.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-virtualalloc2
+    tide.vocab.stages: Injection
+  - name: VirtualAlloc2FromApp
+    description: 'VirtualAlloc2FromApp is used to reserve or changes the state of
+      a region of pages in the virtual address space of the calling process.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-virtualalloc2fromapp
+    tide.vocab.stages: Injection
+  - name: VirtualAllocEx
+    description: 'VirtualAllocEx is often used by malware to allocate memory in a
+      remote process as part of process injection.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-virtualallocex
+    tide.vocab.stages: Injection
+  - name: VirtualAllocExNuma
+    description: 'VirtualAllocExNuma is used to reserve or changes the state of a
+      region of pages in the virtual address space of a specified process.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-virtualallocexnuma
+    tide.vocab.stages: Injection
+  - name: VirtualAllocFromApp
+    description: 'VirtualAllocFromApp is used to reserve or changes the state of a
+      region of pages in the virtual address space of the calling process.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-virtualallocfromapp
+    tide.vocab.stages: Injection
+  - name: VirtualProtect
+    description: 'VirtualProtect is often used by malware to modify memory protection
+      (often to allow write or execution).
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-virtualprotect
+    tide.vocab.stages: Injection
+  - name: VirtualProtectEx
+    description: 'VirtualProtectEx is often used by malware to modify memory protection
+      in a remote process (often to allow write or execution).
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-virtualprotectex
+    tide.vocab.stages: Injection
+  - name: VirtualProtectFromApp
+    description: 'VirtualProtectFromApp is used to change the protection on a region
+      of committed pages in the virtual address space of the calling process.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-virtualprotectfromapp
+    tide.vocab.stages: Injection
+  - name: VirtualQueryEx
+    description: 'VirtualQueryEx is used to retrieve information about a range of
+      pages within the virtual address space of a specified process. This function
+      is commonly used by malware to enumerate an external process.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-getcomputernamew
+    tide.vocab.stages: Enumeration
+  - name: WNetAddConnection2A
+    description: 'The WNetAddConnection2A function makes a connection to a network
+      resource and can redirect a local device to the network resource. The WNetAddConnection2
+      function supersedes the WNetAddConnection function.
+
+      Library : `Mpr.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winnetwk/nf-winnetwk-wnetaddconnection2a
+    tide.vocab.stages:
+      - Enumeration
+      - Helper
+  - name: WNetAddConnectionA
+    description: 'The WNetAddConnectionA function enables the calling application
+      to connect a local device to a network resource. A successful connection is
+      persistent, meaning that the system automatically restores the connection during
+      subsequent logon operations.
+
+      Library : `Mpr.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winnetwk/nf-winnetwk-wnetaddconnectiona
+    tide.vocab.stages: Enumeration
+  - name: WNetCloseEnum
+    description: 'The WNetCloseEnum function ends a network resource enumeration started
+      by a call to the WNetOpenEnum function.
+
+      Library : `Mpr.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winnetwk/nf-winnetwk-wnetcloseenum
+    tide.vocab.stages: Enumeration
+  - name: WNetEnumResourceA
+    description: 'The WNetEnumResourceA function continues an enumeration of network
+      resources that was started by a call to the WNetOpenEnum function.
+
+      Library : `Mpr.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winnetwk/nf-winnetwk-wnetenumresourcea
+    tide.vocab.stages:
+      - Enumeration
+      - Helper
+  - name: WNetOpenEnumA
+    description: 'The WNetOpenEnumA function starts an enumeration of network resources
+      or existing connections. You can continue the enumeration by calling the WNetEnumResource
+      function.
+
+      Library : `Mpr.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winnetwk/nf-winnetwk-wnetopenenuma
+    tide.vocab.stages:
+      - Internet
+      - Helper
+  - name: WSACleanup
+    description: 'WSACleanup is used to terminate the use of the Winsock 2 DLL. This
+      function is commonly used by malware upon successfully utilizing the Winsock
+      2 functions.
+
+      Library : `Ws2_32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winsock/nf-winsock-wsacleanup
+    tide.vocab.stages: Internet
+  - name: WSAIoctl
+    description: 'WSAIoctl Can be used to retrieve and set socket mode. E.g.: Put
+      NIC in ''Promiscuous Mode''
+
+      Library : `ws2_32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-wsaioctl
+    tide.vocab.stages: Internet
+  - name: WSASocketA
+    description: 'WSASocketA is used to create a socket that is bound to a specific
+      transport-service provider.
+
+      Library : `Ws2_32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-wsasocketa
+    tide.vocab.stages: Internet
+  - name: WSAStartup
+    description: 'WSAStartup is used to initiate use of the Winsock DLL by a process.
+
+      Library : `Ws2_32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-wsastartup
+    tide.vocab.stages: Internet
+  - name: WaitForMultipleObjects
+    description: 'WaitForMultipleObjects is used to wait until one or all of the specified
+      objects are in the signaled state or the time-out interval elapses. This function
+      is commonly used to allow time for shellcode to execute or for time-based evasion.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-waitformultipleobjects
+    tide.vocab.stages:
+      - Injection
+      - Evasion
+  - name: WaitForMultipleObjectsEx
+    description: 'WaitForMultipleObjectsEx is used to wait until one or all of the
+      specified objects are in the signaled state or the time-out interval elapses.
+      This function is commonly used to allow time for shellcode to execute or for
+      time-based evasion.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-waitformultipleobjectsex
+    tide.vocab.stages:
+      - Injection
+      - Evasion
+  - name: WaitForSingleObject
+    description: 'WaitForSingleObject is used to delay the execution of an object.
+      This function is commonly used to allow time for shellcode being executed within
+      a thread to run. It is also used for time-based evasion.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-waitforsingleobject
+    tide.vocab.stages:
+      - Injection
+      - Evasion
+  - name: WaitForSingleObjectEx
+    description: 'WaitForSingleObjectEx is used to delay the execution of an object.
+      This function is commonly used to allow time for shellcode being executed within
+      a thread to run. It is also used for time-based evasion.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-waitforsingleobjectex
+    tide.vocab.stages:
+      - Injection
+      - Evasion
+  - name: WinExec
+    description: 'WinExec is used to allow the execution of an application.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-winexec
+    tide.vocab.stages: Internet
+  - name: Wow64SetThreadContext
+    description: 'Wow64SetThreadContext is used to set the context for the specified
+      thread. This function can be used by malware as part of a process hollowing
+      attack.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-setthreadcontext
+    tide.vocab.stages: Injection
+  - name: WriteFile
+    description: 'WriteFile is used to write data to the specified file or input/output
+      (I/O) device.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-writefile
+    tide.vocab.stages: Helper
+  - name: WriteProcessMemory
+    description: 'Writing data into a specified region of memory. This function is
+      often used by malware as part of process injection to inject malicious code
+      into a specified process.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-writeprocessmemory
+    tide.vocab.stages: Injection
+  - name: ioctlsocket
+    description: 'ioctlsocket takes control of the I/O mode of a socket in any state
+
+      Library : `Ws2_32.lib`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winsock/nf-winsock-ioctlsocket
+    tide.vocab.stages: Internet
+  - name: lstrcatA
+    description: 'lstrcatA is used to append one string to another.
+
+      Library : `Kernel32.dll`'
+    link: https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-lstrcata
+    tide.vocab.stages: Helper
+  - name: timeSetEvent
+    description: 'timeSetEvent is used to start a specified timer event. This function
+      is obselete but is still used by malware for time-based evasion.
+
+      Library : `Winmm.dll`'
+    link: https://docs.microsoft.com/en-us/previous-versions/dd757634(v=vs.85)
+    tide.vocab.stages: Evasion

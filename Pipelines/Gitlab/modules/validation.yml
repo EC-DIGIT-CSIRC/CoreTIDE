@@ -1,0 +1,38 @@
+# Separating Toolchains since in main mutation is expected to run beforehand
+🔮 Validation Toolchain:
+  stage: ✅ Validation
+  script:
+    - git rebase origin/$CI_DEFAULT_BRANCH #Allows to pull latest mutation if there are
+    - cd $TIDE_CORE_REPO/Orchestration/
+    - python validate.py
+  rules:
+    - if:  $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+      when: always
+  needs:
+    - 🧪 Data Mutation Toolchain
+  variables:
+    FF_USE_NEW_BASH_EVAL_STRATEGY: "true"
+  allow_failure:
+    exit_codes: 19
+
+🔮 Staging Validation Toolchain:
+  stage: ✅ Validation
+  script:
+    - cd $TIDE_CORE_REPO/Orchestration
+    - python validate.py
+  rules:
+    - if:  $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+      when: always
+  variables:
+    FF_USE_NEW_BASH_EVAL_STRATEGY: "true"
+  allow_failure:
+    exit_codes: 19
+
+📄 Lookups Validation:
+  stage: ✅ Validation
+  script:
+    - cd $TIDE_CORE_REPO/Engines/validation/
+    - python lookups.py
+  rules:
+    - changes: 
+        - Lookups/*/*

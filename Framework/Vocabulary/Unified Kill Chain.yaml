@@ -1,0 +1,118 @@
+name: Unified Kill Chain
+field: killchain
+description: Cyber attacks are typically phased progressions towards strategic objectives. The Unified Kill Chains provides insight into the tactics that hackers employ to attain these objectives. This provides a solid basis to develop (or realign) defensive strategies to raise cyber resilience.
+reference: https://www.unifiedkillchain.com/assets/The-Unified-Kill-Chain.pdf
+icon: ⛓️
+stages:
+  - Initial Foothold
+  - Network Propagation
+  - Action on Objectives
+keys:
+  - id: UKC0001
+    name: Reconnaissance
+    icon: 🔭
+    description: Researching, identifying and selecting targets using active or passive reconnaissance.
+    tide.vocab.stages: Initial Foothold
+    misp: unified-kill-chain:Initial Foothold="reconnaissance"
+  - id: UKC0002
+    name: Weaponization
+    icon: 💣
+    tide.vocab.stages: Initial Foothold
+    description: Preparatory activities aimed at setting up the infrastructure required for the attack.
+    misp: unified-kill-chain:Initial Foothold="weaponization"
+  - id: UKC0003
+    name: Delivery
+    icon: 📦
+    tide.vocab.stages: Initial Foothold
+    description: Techniques resulting in the transmission of a weaponized object to the targeted environment.
+    misp: unified-kill-chain:Initial Foothold="delivery"
+  - id: UKC0004
+    name: Social Engineering
+    icon: 🪝
+    tide.vocab.stages: Initial Foothold
+    description: Techniques aimed at the manipulation of people to perform unsafe actions.
+    misp: unified-kill-chain:Initial Foothold="social-engineering"
+  - id: UKC0005
+    name: Exploitation
+    icon: 💥
+    tide.vocab.stages: Initial Foothold
+    description: Techniques to exploit vulnerabilities in systems that may, amongst others, result in code execution.
+    misp: unified-kill-chain:Initial Foothold="exploitation"
+  - id: UKC0006
+    name: Persistence
+    icon: 🔐
+    tide.vocab.stages: Initial Foothold
+    description: Any access, action or change to a system that gives an attacker persistent presence on the system.
+    misp: unified-kill-chain:Initial Foothold="persistence"
+  - id: UKC0007
+    name: Defense Evasion
+    icon: 🏃🏽
+    tide.vocab.stages: Initial Foothold
+    description: Techniques an attacker may specifically use for evading detection or avoiding other defenses.
+    misp: unified-kill-chain:Initial Foothold="defense-evasion"
+  - id: UKC0008
+    name: Command & Control
+    icon: 🕹️
+    tide.vocab.stages: Initial Foothold
+    description: Techniques that allow attackers to communicate with controlled systems within a target network.
+    misp: unified-kill-chain:Initial Foothold="command-control"
+  - id: UKC0009
+    name: Pivoting
+    icon: 🌐
+    tide.vocab.stages: Network Propagation
+    description: Tunneling traffic through a controlled system to other systems that are not directly accessible.
+    misp: unified-kill-chain:Network Propagation="pivoting"
+  - id: UKC0010
+    name: Discovery
+    icon: 🧭
+    tide.vocab.stages: Network Propagation
+    description: Techniques that allow an attacker to gain knowledge about a system and its network environment.
+    misp: unified-kill-chain:Network Propagation="discovery"
+  - id: UKC0011
+    name: Privilege Escalation
+    icon: 🥸
+    tide.vocab.stages: Network Propagation
+    description: The result of techniques that provide an attacker with higher permissions on a system or network.
+    misp: unified-kill-chain:Network Propagation="privilege-escalation"
+  - id: UKC0012
+    name: Execution
+    icon: ⚡
+    tide.vocab.stages: Network Propagation
+    description: Techniques that result in execution of attacker-controlled code on a local or remote system.
+    misp: unified-kill-chain:Network Propagation="execution"
+  - id: UKC0013
+    name: Credential Access
+    icon: 🔑
+    tide.vocab.stages: Network Propagation
+    description: Techniques resulting in the access of, or control over, system, service or domain credentials.
+    misp: unified-kill-chain:Network Propagation="credential-access"
+  - id: UKC0014
+    name: Lateral Movement
+    icon: 🌐
+    tide.vocab.stages: Network Propagation
+    description: Techniques that enable an adversary to horizontally access and control other remote systems.
+    misp: unified-kill-chain:Network Propagation="lateral-movement"
+  - id: UKC0015
+    name: Collection
+    icon: 🗃️
+    tide.vocab.stages: Action on Objectives
+    description: Techniques used to identify and gather data from a target network prior to exfiltration.
+    misp: unified-kill-chain:Action on Objectives="collection"
+  - id: UKC0016
+    name: Exfiltration
+    icon: 📨
+    tide.vocab.stages: Action on Objectives
+    description: Techniques that result or aid in an attacker removing data from a target network.
+    misp: unified-kill-chain:Action on Objectives="exfiltration"
+  - id: UKC0017
+    name: Impact
+    icon: 💥
+    tide.vocab.stages: Action on Objectives
+    description: Techniques aimed at manipulating, interrupting or destroying the target system or data.
+    misp: unified-kill-chain:Action on Objectives="impact"
+  - id: UKC0018
+    name: Objectives
+    icon: 🎯
+    tide.vocab.stages: Action on Objectives
+    description: Socio-technical objectives of an attack that are intended to achieve a strategic goal.
+    misp: unified-kill-chain:Action on Objectives="objectives"

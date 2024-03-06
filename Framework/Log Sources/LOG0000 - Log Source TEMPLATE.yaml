@@ -1,0 +1,38 @@
+name: 
+status: 
+references:
+  - https://
+
+meta:
+  version: 
+  created: YYYY-MM-DD
+  modified: YYYY-MM-DD
+  author: author@domain.com
+
+log:
+  description: |
+    Type Here
+  domains:
+    - 
+  datasources:
+    - 
+  #targets:
+    #-
+  #platforms:
+    #-
+  #artifacts:
+    #-
+  #observations: |
+    #Type Here
+  query: |
+    Type Here
+  fields:
+    - name: 
+      description: |
+        Type Here
+      type: 
+      #extraction: 
+      retrieved: 
+      sample: 
+  sample: |
+    Type Here

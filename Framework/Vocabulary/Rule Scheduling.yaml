@@ -1,0 +1,71 @@
+name: Rule Scheduling
+field: scheduling
+description: The frequency at which the rule should be executed on the detection system, when it is not real-time
+icon: ⏳
+keys:
+  - id: SCH0000
+    name: Real-time
+    description: The rule is continuously (or near continuously) ran on incoming logs
+  - id: SCH0001
+    name: 5m
+    description: Rule is scheduled to run every 5m
+  - id: SCH0002
+    name: 10m
+    description: Rule is scheduled to run every 10m
+  - id: SCH0003
+    name: 15m
+    description: Rule is scheduled to run every 15m
+  - id: SCH0004
+    name: 30m
+    description: Rule is scheduled to run every 30m
+  - id: SCH0005
+    name: 1h
+    description: Rule is scheduled to run every 1h
+  - id: SCH0006
+    name: 2h
+    description: Rule is scheduled to run every 2h
+  - id: SCH0007
+    name: 3h
+    description: Rule is scheduled to run every 3h
+  - id: SCH0008
+    name: 4h
+    description: Rule is scheduled to run every 4h
+  - id: SCH0009
+    name: 5h
+    description: Rule is scheduled to run every 5h
+  - id: SCH0010
+    name: 6h
+    description: Rule is scheduled to run every 6h
+  - id: SCH0011
+    name: 7h
+    description: Rule is scheduled to run every 7h
+  - id: SCH0012
+    name: 8h
+    description: Rule is scheduled to run every 8h
+  - id: SCH0013
+    name: 9h
+    description: Rule is scheduled to run every 9h
+  - id: SCH0014
+    name: 10h
+    description: Rule is scheduled to run every 10h
+  - id: SCH0015
+    name: 12h
+    description: Rule is scheduled to run every 12h
+  - id: SCH0016
+    name: 24h
+    description: Rule is scheduled to run every 24h
+  - id: SCH0017
+    name: 48h
+    description: Rule is scheduled to run every 48h
+  - id: SCH0018
+    name: 72h
+    description: Rule is scheduled to run every 72h
+  - id: SCH0019
+    name: 168h
+    description: Rule is scheduled to run every 168h
+  - id: SCH0020
+    name: 336h
+    description: Rule is scheduled to run every 336h
+  - id: SCH0021
+    name: 720h
+    description: Rule is scheduled to run every 720h
