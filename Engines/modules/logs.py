@@ -114,7 +114,7 @@ def coretide_intro():
     ITALICS = Colors.ITALICS
     BOLD = Colors.BOLD
 
-    coretide = f"{BLUE}TID{YELLOW}e{BLUE}MEC"
+    coretide = f"{YELLOW}CORE{BLUE}TIDE"
 
     intro = f"""
 {BLUE}            :--==-:.       
@@ -122,10 +122,10 @@ def coretide_intro():
 {BLUE}       -=:   {YELLOW}.:  {BLUE}=-+*##*.              
 {BLUE}     -=.  {YELLOW}.:.     {BLUE}.+.*=:+             {STOP}{BOLD}Powered by {coretide}{STOP}
 {BLUE}  .-+:  {YELLOW}.-:  :  . {BLUE}-- :  .     
-{BLUE}+*#+   {YELLOW}-=.  -:  : {BLUE}:=          {STOP}{ITALICS}Threat Informed Detection Management{STOP}    
-{BLUE}#*-  {YELLOW}.==.  :=  .-  {BLUE}+                 {STOP}{ITALICS}and Engineering as Code{STOP}
+{BLUE}+*#+   {YELLOW}-=.  -:  : {BLUE}:=              {STOP}{ITALICS}The engine powering OpenTIDE Instances{STOP}    
+{BLUE}#*-  {YELLOW}.==.  :=  .-  {BLUE}+            {STOP}{ITALICS}Part of the OpenThreat Informed Detection Engineering Initiative{STOP}
 {BLUE}:   {YELLOW}:==:   =-  .=. {BLUE}.+      
-   {YELLOW}:==-   :=-   --  {BLUE}.+:    {STOP}https://code.europa.eu/ec-digit-s2/coretide
+   {YELLOW}:==-   :=-   --  {BLUE}.+:    {STOP}https://code.europa.eu/ec-digit-s2/opentide/coretide
   {YELLOW}:===.   ==-   :=-   {BLUE}:=-
  {YELLOW}.====    ===.   -=-.    
 """
