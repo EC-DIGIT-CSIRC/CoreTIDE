@@ -247,9 +247,6 @@ def indexer(write_index=False) -> dict:
         if tide_reports_index:
             index["vocabs"].update(tide_reports_index)
     
-    print("FINAL UPDATED VOCABULARIES INDEX")
-    print(index["vocabs"].keys())
-    
     # Lookups indexer
 
     print("🔎 Indexing Lookups...")
