@@ -24,7 +24,7 @@
     - cd Orchestration/
     - python document.py
     - cd ../ #Back within the Core Root directory
-    - cp -fr wiki/. ../$TIDE_WIKI #Copy content of wiki to top level directory
+    - cp -fr wiki/. ./$TIDE_WIKI/ #Copy content of wiki to top level directory
     - cd $TIDE_WIKI
     - git add -A
     #Graceful exit when there is nothing to commit
@@ -74,7 +74,7 @@
     - cd Orchestration/
     - python document.py
     - cd ../ #Back within the Core Root directory
-    - cp -fr wiki/. ../$TIDE_WIKI #Copy content of wiki to top level directory
+    - cp -fr wiki/. ./$TIDE_WIKI/ #Copy content of wiki to top level directory
     - cd $TIDE_WIKI
     - git add -A
     #Graceful exit when there is nothing to commit
