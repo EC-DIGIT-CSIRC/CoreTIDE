@@ -349,7 +349,8 @@ def gen_lib_schema(
         return array
 
     elif mode == "enum":
-
+        if not enum:
+            enum = [""]
         if enum_helper and search_hints:
             enum.extend(enum_helper)
             enum_description.extend(enum_description)
