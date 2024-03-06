@@ -114,7 +114,7 @@ def coretide_intro():
     ITALICS = Colors.ITALICS
     BOLD = Colors.BOLD
 
-    coretide = f"{YELLOW}CORE{BLUE}TIDE"
+    coretide = f"{YELLOW}Core{BLUE}TIDE"
 
     intro = f"""
 {BLUE}            :--==-:.       
