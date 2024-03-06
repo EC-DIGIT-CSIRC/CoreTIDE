@@ -9,7 +9,7 @@ from typing import Literal, Tuple
 
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
-from Engines.modules.framework import get_vocab_entry
+from Engines.modules.framework import get_vocab_entry, get_type
 from Engines.modules.documentation import get_icon
 from Engines.modules.logs import log
 from Engines.modules.tide import DataTide
@@ -151,19 +151,13 @@ def make_markdown_dropdown(name, key, field=""):
     criticality = ""
     id_icon = ICONS["id"]
 
-    # Double check, first identifying if vocab is indeed an internal reference to coretide,
-    # and if the id starts with model categories that generate vocabs. Since the string
-    # is long, shortening it.
-    if (
-        VOCAB_INDEX.get(field, {}).get("metadata", {}).get("model")
-        and identifier.lower()[:3] in MODELS_VOCAB.keys()
-    ):
+    if get_type(identifier) in MODELS_VOCAB.keys():
         criticality = key.get("criticality") or "No Criticality assigned"
         crit_icon = get_icon("criticality")
         crit_value_icon = get_vocab_entry("criticality", criticality, "icon")
         criticality = f"{crit_icon} **Criticality** : {crit_value_icon} {criticality}"
 
-        link = f"[See in ret Wiki]({link})"
+        link = f"[See in CoreTIDE Wiki]({link})"
 
     if tlp:
         tlp = f" | **{get_icon(tlp, vocab='tlp')}TLP:{tlp.upper()}**"
