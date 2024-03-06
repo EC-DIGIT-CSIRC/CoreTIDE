@@ -25,6 +25,9 @@ LOOKUPS_INDEX = DataTide.Lookups.lookups
 LOOKUPS_METADATA_INDEX = DataTide.Lookups.metadata
 MODELS_INDEX = DataTide.Models.Index
 VOCAB_INDEX = DataTide.Vocabularies.Index
+WIKI_MODEL_DOCUMENTATION_FOLDER = DataTide.Configurations.Global.Paths.Core._raw[
+    "models_docs_folder"
+].split("/")[-2]
 
 
 start_time = time.time()
@@ -46,7 +49,7 @@ SPECS = Path(str(RAW_PATHS["schemas_docs_folder"]).removeprefix(RAW_WIKI_PATH))
 
 
 DOC_TITLES = DOCUMENTATION_CONFIG.titles
-VOCABS_DOCS = Path(PATHS_CONFIG["vocabularies_docs"])
+VOCABS_DOCS = Path(str(PATHS_CONFIG["vocabularies_docs"]).removeprefix(RAW_WIKI_PATH))
 SKIP_VOCABS = DOCUMENTATION_CONFIG.skip_vocabularies
 WIKI_PATH = PATHS_CONFIG["wiki_docs_folder"]
 OUT_PATH = Path(WIKI_PATH) / "_sidebar.md"
@@ -103,7 +106,7 @@ def sidebar_link(model_id):
     model = MODELS_INDEX[model_type][model_id]
     icon = ICONS[model_type]
 
-    doc_path = "/" + DOCUMENTATION_CONFIG.object_names[model_type]
+    doc_path = WIKI_MODEL_DOCUMENTATION_FOLDER + "/"+ DOCUMENTATION_CONFIG.object_names[model_type]
 
     if model_type == "mdr":
         model_name = model.get("name") or model.get("title").split("$")[0].strip()
