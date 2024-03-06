@@ -146,7 +146,7 @@ def construct_meta_doc_data(metaschema, assembly=[], depth=0):
 
 
 def gen_schema_md_table(metaschema):
-    recursion = construct_meta_doc_data(metaschema["properties"])
+    recursion = construct_meta_doc_data(metaschema["properties"], assembly=[])
     df = pd.DataFrame(recursion)
     df.fillna('', inplace=True)
     df.insert(0, 'Name', df.pop('Name'))
@@ -183,7 +183,6 @@ def run():
             
             meta = METASCHEMAS_INDEX[model]
             template = TEMPLATES_INDEX[model]
-
             doc = gen_schema_md(meta, template, model)
             output_path = SCHEMA_DOCS_PATH / (icon + " " + DOC_TITLES[model] + ".md")
             
