@@ -12,6 +12,15 @@ required:
   - description
   - configurations
 
+tide.template.force-required:
+  - metadata
+
+anyOf:
+  - required:
+    - metadata
+  - required:
+    - meta
+
 properties:
 
   name:
