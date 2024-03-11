@@ -33,6 +33,11 @@ properties:
   metadata:
     tide.template.spacer: true
     tide.meta.definition: true
+  
+  meta:
+    tide.template.hide: true
+    tide.meta.deprecation: Use metadata keyword instead
+    tide.meta.definition: metadata
 
   description:
     title: Detection description
