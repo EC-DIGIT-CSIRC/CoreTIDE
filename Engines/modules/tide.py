@@ -87,7 +87,7 @@ class IndexTide:
         updated_mdr = list()
 
         for mdr in STG_INDEX:
-            if mdr not in RECONCILED_INDEX["models"]["mdr"][mdr]:
+            if mdr not in RECONCILED_INDEX["models"]["mdr"]:
                 RECONCILED_INDEX["models"]["mdr"][mdr] = STG_INDEX[mdr]
                 added_mdr.append(mdr)
             else:
