@@ -86,23 +86,23 @@ class IndexTide:
         added_mdr = list()
         updated_mdr = list()
 
-        for mdr in STG_INDEX["mdr"]:
-            if mdr not in RECONCILED_INDEX["mdr"][mdr]:
-                RECONCILED_INDEX["mdr"][mdr] = STG_INDEX["mdr"][mdr]
+        for mdr in STG_INDEX:
+            if mdr not in RECONCILED_INDEX["models"]["mdr"][mdr]:
+                RECONCILED_INDEX["models"]["mdr"][mdr] = STG_INDEX[mdr]
                 added_mdr.append(mdr)
             else:
                 main_mdr_metadata = (
-                    RECONCILED_INDEX["mdr"][mdr].get("meta") or RECONCILED_INDEX["mdr"][mdr]["metadata"]
+                    RECONCILED_INDEX["models"]["mdr"][mdr].get("meta") or RECONCILED_INDEX["models"]["mdr"][mdr]["metadata"]
                 )
                 main_version = main_mdr_metadata["version"]
                 stg_mdr_metadata = (
-                    STG_INDEX["mdr"][mdr].get("meta") or STG_INDEX["mdr"][mdr]["metadata"]
+                    STG_INDEX[mdr].get("meta") or STG_INDEX[mdr]["metadata"]
                 )
                 stg_version = stg_mdr_metadata["version"]
 
                 mdr_name = (
-                    STG_INDEX["mdr"][mdr].get("name")
-                    or STG_INDEX["mdr"][mdr]["title"].split("$")[0].strip()
+                    STG_INDEX[mdr].get("name")
+                    or STG_INDEX[mdr]["title"].split("$")[0].strip()
                 )
 
                 if stg_version > main_version:
@@ -113,9 +113,9 @@ class IndexTide:
                     )
 
                     updated_mdr = list()
-                    RECONCILED_INDEX["mdr"][mdr] = STG_INDEX["mdr"][mdr]
-                    if RECONCILED_INDEX["mdr"][mdr].get("meta"):
-                        RECONCILED_INDEX["mdr"][mdr]["metadata"] = RECONCILED_INDEX["mdr"][mdr].pop(
+                    RECONCILED_INDEX["models"]["mdr"][mdr] = STG_INDEX[mdr]
+                    if RECONCILED_INDEX["models"]["mdr"][mdr].get("meta"):
+                        RECONCILED_INDEX["models"]["mdr"][mdr]["metadata"] = RECONCILED_INDEX["models"]["mdr"][mdr].pop(
                             "meta"
                         )  # Renaming meta to metadata in the fly to accomodate renaming
                     global TIDE_MDR_STAGING_BANNER
