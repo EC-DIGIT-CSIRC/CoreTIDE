@@ -82,18 +82,17 @@ class IndexTide:
 
         RECONCILED_INDEX = index.copy()
         STG_INDEX = json.load(open(Path(STAGING_INDEX_PATH)))
-        MDR_INDEX = RECONCILED_INDEX
         BANNER_MESSAGE = "⚠️ This documentation reflects the latest staging deployment from this MDR. Production status on mainline is, but staging deployment is currently overriding it"
         added_mdr = list()
         updated_mdr = list()
 
         for mdr in STG_INDEX:
-            if mdr not in MDR_INDEX:
-                MDR_INDEX[mdr] = STG_INDEX[mdr]
+            if mdr not in RECONCILED_INDEX:
+                RECONCILED_INDEX[mdr] = STG_INDEX[mdr]
                 added_mdr.append(mdr)
             else:
                 main_mdr_metadata = (
-                    MDR_INDEX[mdr].get("meta") or MDR_INDEX[mdr]["metadata"]
+                    RECONCILED_INDEX[mdr].get("meta") or RECONCILED_INDEX[mdr]["metadata"]
                 )
                 main_version = main_mdr_metadata["version"]
                 stg_mdr_metadata = (
@@ -114,9 +113,9 @@ class IndexTide:
                     )
 
                     updated_mdr = list()
-                    MDR_INDEX[mdr] = STG_INDEX[mdr]
-                    if MDR_INDEX[mdr].get("meta"):
-                        MDR_INDEX[mdr]["metadata"] = MDR_INDEX[mdr].pop(
+                    RECONCILED_INDEX[mdr] = STG_INDEX[mdr]
+                    if RECONCILED_INDEX[mdr].get("meta"):
+                        RECONCILED_INDEX[mdr]["metadata"] = RECONCILED_INDEX[mdr].pop(
                             "meta"
                         )  # Renaming meta to metadata in the fly to accomodate renaming
                     global TIDE_MDR_STAGING_BANNER
