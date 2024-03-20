@@ -46,7 +46,7 @@
 🚧 MDR Staging Documentation:
   stage: 📖 Documentation
   script:
-    - git rebase origin/$CI_DEFAULT_BRANCH #Allows to pull latest mutation if there are
+    - git rebase origin $CI_DEFAULT_BRANCH #Allows to pull latest mutation if there are
     - cd $TIDE_CORE_REPO
     - git clone $TIDE_WIKI_ACCESS
     - pwd 
