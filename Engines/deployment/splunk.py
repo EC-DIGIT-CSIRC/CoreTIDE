@@ -347,7 +347,7 @@ class SplunkDeploy(DeployMDR):
         deploy_config.update(mdr_config)
         deploy_config.update(actions_config)
         deploy_config["search"] = query
-        import pprint
+        from pprint import pprint
         pprint(deploy_config)
         if self.DEBUG:
             log("DEBUG", "The following configuration was compiled")
