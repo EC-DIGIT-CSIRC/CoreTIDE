@@ -97,14 +97,21 @@ def run():
         log("INFO", "Now processing all files under model type", model_type)
         for file in sorted(os.listdir(folder)):
             raw_body = open(folder / file, "r", encoding="utf-8").read()
-            current_references = yaml.safe_load(raw_body).get("references")
+            yaml_body = yaml.safe_load(raw_body)
+            current_references = yaml_body.get("references")
             if current_references and (type(current_references) is not list):
                 log("DEBUG", "No need to migrate", file)
 
-            elif "#public:" not in raw_body.split("metadata:")[0]:
+            if "meta" in yaml_body:
+                metadata_keyword = "meta:"
+            elif "metadata" in yaml_body:
+                metadata_keyword = "metadata:"
+
+            elif "#public:" not in raw_body.split(metadata_keyword)[0]:
                 log("ONGOING", "Migrating to new references model", file)
-                header = raw_body.split("meta:")[0]
-                large_block = "metadata:" + raw_body.split("meta:")[1]
+                
+                header = raw_body.split(metadata_keyword)[0]
+                large_block = "metadata:" + raw_body.split(metadata_keyword)[1]
 
                 old_references = ""
 
