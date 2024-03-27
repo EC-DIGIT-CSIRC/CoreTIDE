@@ -41,7 +41,6 @@ class MyDumper(yaml.Dumper):
 
 def upgrade_refs(old_refs):
 
-    old_refs = old_refs.get("references")
     new = dict()
 
     if old_refs:
@@ -99,36 +98,30 @@ def run():
             raw_body = open(folder / file, "r", encoding="utf-8").read()
             yaml_body = yaml.safe_load(raw_body)
             current_references = yaml_body.get("references")
-            if current_references and (type(current_references) is not list):
-                log("DEBUG", "No need to migrate", file)
 
             if "meta" in yaml_body:
                 metadata_keyword = "meta:"
             elif "metadata" in yaml_body:
                 metadata_keyword = "metadata:"
 
-            elif "#public:" not in raw_body.split(metadata_keyword)[0]:
+            if current_references and (type(current_references) is not list):
+                log("DEBUG", "No need to migrate", file)
+
+            elif (type(current_references) is not dict) or ("#public:" not in raw_body.split(metadata_keyword)[0]):
                 log("ONGOING", "Migrating to new references model", file)
                 
                 header = raw_body.split(metadata_keyword)[0]
                 large_block = "metadata:" + raw_body.split(metadata_keyword)[1]
 
-                old_references = ""
-
-                ""
-                if "#references" in header:
+                if not current_references:
                     new_references = REF_TEMPLATE
                     header = header.split("#references")[0]
                     large_block = "\n" + large_block
-                if "references" in header:
-                    old_references = "references:" + header.split("references:")[1]
-                    old_references = yaml.safe_load(old_references)
 
-                    new_references = upgrade_refs(old_references)
+                if current_references:
+                    new_references = upgrade_refs(current_references)
                     new_references = new_references + "\n"
                     header = header.split("references")[0]
-                else:
-                    new_references = REF_TEMPLATE
 
                 body = ""
                 body = header + new_references + large_block
