@@ -46,10 +46,9 @@ RAW_PATHS = DataTide.Configurations.Global.Paths._raw.copy()
 RAW_WIKI_PATH = RAW_PATHS["wiki_docs_folder"]
 LOOKUP_DOCS_FOLDER = Path(str(RAW_PATHS["lookup_docs"]).removeprefix(RAW_WIKI_PATH))
 SPECS = Path(str(RAW_PATHS["schemas_docs_folder"]).removeprefix(RAW_WIKI_PATH))
-
+VOCABS_DOCS = Path(str(RAW_PATHS["vocabularies_docs"]).removeprefix(RAW_WIKI_PATH))
 
 DOC_TITLES = DOCUMENTATION_CONFIG.titles
-VOCABS_DOCS = Path(str(PATHS_CONFIG["vocabularies_docs"]).removeprefix(RAW_WIKI_PATH))
 SKIP_VOCABS = DOCUMENTATION_CONFIG.skip_vocabularies
 WIKI_PATH = PATHS_CONFIG["wiki_docs_folder"]
 OUT_PATH = Path(WIKI_PATH) / "_sidebar.md"
