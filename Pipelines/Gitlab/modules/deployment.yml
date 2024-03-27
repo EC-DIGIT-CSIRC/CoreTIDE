@@ -45,6 +45,7 @@
   needs:
     - 🔮 Validation Toolchain
   retry: 2
+  resource_group: deployment
   variables:
     FF_USE_NEW_BASH_EVAL_STRATEGY: "true"
   allow_failure:
@@ -63,6 +64,6 @@
     - if: ($CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH) && ($TIDE_DEPLOYMENT == "ENABLED")
       changes: 
         - Data Model/Lookups/*/*
-      
+  resource_group: deployment
   needs:
     - 📄 Lookups Validation
