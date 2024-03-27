@@ -8,8 +8,7 @@
   rules:
     - if:  $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
       when: always
-  needs:
-    - 🧪 Data Mutation Toolchain
+      needs: "🧪 Data Mutation Toolchain"
   variables:
     FF_USE_NEW_BASH_EVAL_STRATEGY: "true"
   allow_failure:
