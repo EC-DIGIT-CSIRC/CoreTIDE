@@ -27,7 +27,7 @@ REF_TEMPLATE = """#references:
   #internal:
     #a:
   #restricted:
-    #A
+    #A:
   #reports:
     #-
 """
@@ -107,7 +107,7 @@ def run():
             if current_references and (type(current_references) is not list):
                 log("DEBUG", "No need to migrate", file)
 
-            elif (type(current_references) is not dict) or ("#public:" not in raw_body.split(metadata_keyword)[0]):
+            elif (current_references and type(current_references) is not dict) or ("#public:" not in raw_body.split(metadata_keyword)[0]):
                 log("ONGOING", "Migrating to new references model", file)
                 
                 header = raw_body.split(metadata_keyword)[0]
@@ -130,6 +130,8 @@ def run():
                 # output_path = Path("./DEBUG") / file
                 with open(output_path, "w+", encoding="utf-8") as export:
                     export.write(body)
+                    log("SUCCESS", "Migrated reference schema correctly")
+
 
     log("SUCCESS", "Ensured all files are migrated to the new reference schema")
 
