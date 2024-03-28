@@ -145,7 +145,7 @@ def diff_calculation(stage: Literal["STAGING", "PRODUCTION"]) -> list:
     modified_files = [f.b_path for f in diff.iter_change_type("M")]
 
     scope = added_files + renamed_files + modified_files
-
+    scope = list(set(scope)) #De-duplicate - may happen if file modified and renamed, for example
     log("INFO", "Computed diff scope", ", ".join(scope))
 
     return scope
