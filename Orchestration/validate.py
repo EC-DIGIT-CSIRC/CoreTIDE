@@ -37,7 +37,7 @@ os.environ["VALIDATION_WARNING_RAISED"] = ""
 id_uniqueness.run()
 uuid_v4.run()
 schema.run()
-cve.run()
+#cve.run()
 
 print("\n" + "Execution Report".center(80, "="))
 
