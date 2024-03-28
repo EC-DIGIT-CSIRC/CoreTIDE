@@ -371,6 +371,9 @@ class SplunkDeploy(DeployMDR):
             if attribute in deploy_config:
                 second_stage[attribute] = deploy_config.pop(attribute)
 
+        from pprint import pprint
+        pprint(deploy_config)
+
         if not self.DEBUG:
             # Check if saved search already exists or create a new one
             search_exists = False
