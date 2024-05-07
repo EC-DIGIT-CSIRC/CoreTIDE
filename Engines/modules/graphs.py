@@ -23,6 +23,17 @@ from Engines.modules.tide import DataTide
 
 CHAINING_INDEX = DataTide.Models.chaining
 
+def mermaid_sanitizer(string:str)->str:
+    """
+    Removes reserved characters in mermaid syntax to avoid
+    breaking the parser
+    """
+
+    FORBIDDEN_CHARACTERS = ["(", ")", "[", "]", "{", "}", "|"]
+    for character in FORBIDDEN_CHARACTERS:
+        string = string.replace(character, "")
+
+    return string
 
 def relationships_graph(id):
 
@@ -83,13 +94,12 @@ def relationships_graph(id):
     graph_mermaid = f"""
 ```mermaid
 mindmap
-    Root[{object_name(id).strip()}]
+    Root[{mermaid_sanitizer(object_name(id).strip())}]
         {mindmap}
 ```
     """
 
     return graph_mermaid
-
 
 def chaining_graph(tvm):
     graph = str()
@@ -266,7 +276,7 @@ def chaining_graph(tvm):
         return br_data
 
     header_data = "\n".join(
-        [f"{v}[{v} {mermaid_breakspace(str(model_value(v, 'name')))}]" for v in header]
+        [f"{v}[{v} {mermaid_breakspace(mermaid_sanitizer(str(model_value(v, 'name'))))}]" for v in header]
     )
 
     vector_links = "\n".join(vector_links)
