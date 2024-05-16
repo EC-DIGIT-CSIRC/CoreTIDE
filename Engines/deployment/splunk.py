@@ -402,12 +402,12 @@ class SplunkDeploy(DeployMDR):
             # Debugging output; sets attribute one by one
             if self.DEBUG_STEP:
                 for k, v in deploy_config.items():
-                    log("DEBUG", f"Updating value {k} with {v}")
+                    log("ONGOING", f"Updating value {k} with {v}")
                     selected_search.update(**{k: v})
 
                 if second_stage:
                     for k, v in second_stage.items():
-                        log("DEBUG", f"Updating value {k} with {v}")
+                        log("ONGOING", f"Updating value {k} with {v}")
                         selected_search.update(**{k: v})
 
             else:
