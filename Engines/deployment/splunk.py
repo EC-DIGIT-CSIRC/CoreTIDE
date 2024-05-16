@@ -40,7 +40,7 @@ class SplunkDeploy(DeployMDR):
         else:
             self.DEBUG = False
 
-        self.DEBUG_STEP = False  # Edits parameters in the saved search object to check which one fails
+        self.DEBUG_STEP = True  # Edits parameters in the saved search object to check which one fails
         self.DEBUG_FILES_UUID = [
             "701b9c83-15f9-411d-bf3f-d11597b62f8b"
         ]  # Target a specific file to pickup
