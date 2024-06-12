@@ -14,6 +14,14 @@ reference: https://attack.mitre.org/groups/
 model: true
 icon: 🐲
 keys:
+  - id: G1028
+    name: APT-C-23
+    description: '[APT-C-23](https://attack.mitre.org/groups/G1028) is a threat group
+      that has been active since at least 2014.(Citation: symantec_mantis) [APT-C-23](https://attack.mitre.org/groups/G1028)
+      has primarily focused its operations on the Middle East, including Israeli military
+      assets. [APT-C-23](https://attack.mitre.org/groups/G1028) has developed mobile
+      spyware targeting Android and iOS devices since 2017.(Citation: welivesecurity_apt-c-23)'
+    link: https://attack.mitre.org/groups/G1028
   - id: G0099
     name: APT-C-36
     description: '[APT-C-36](https://attack.mitre.org/groups/G0099) is a suspected
@@ -86,7 +94,7 @@ keys:
       [APT28](https://attack.mitre.org/groups/G0007) reportedly compromised the Hillary
       Clinton campaign, the Democratic National Committee, and the Democratic Congressional
       Campaign Committee in 2016 in an attempt to interfere with the U.S. presidential
-      election. (Citation: Crowdstrike DNC June 2016) In 2018, the US indicted five
+      election.(Citation: Crowdstrike DNC June 2016) In 2018, the US indicted five
       GRU Unit 26165 officers associated with [APT28](https://attack.mitre.org/groups/G0007)
       for cyber operations (including close-access operations) conducted between 2014
       and 2018 against the World Anti-Doping Agency (WADA), the US Anti-Doping Agency,
@@ -127,11 +135,7 @@ keys:
       Clandestine Wolf, and Operation Double Tap.(Citation: FireEye Clandestine Wolf)(Citation:
       FireEye Operation Double Tap) As of June 2015, the group appears to have shifted
       from targeting primarily US victims to primarily political organizations in
-      Hong Kong.(Citation: Symantec Buckeye)
-
-
-      In 2017, MITRE developed an APT3 Adversary Emulation Plan.(Citation: APT3 Adversary
-      Emulation Plan)'
+      Hong Kong.(Citation: Symantec Buckeye)'
     link: https://attack.mitre.org/groups/G0022
   - id: G0013
     name: APT30
@@ -157,8 +161,8 @@ keys:
       threat group that has carried out operations since at least 2013. The group
       has targeted organizations across multiple industries in the United States,
       Saudi Arabia, and South Korea, with a particular interest in the aviation and
-      energy sectors. (Citation: FireEye APT33 Sept 2017) (Citation: FireEye APT33
-      Webinar Sept 2017)'
+      energy sectors.(Citation: FireEye APT33 Sept 2017)(Citation: FireEye APT33 Webinar
+      Sept 2017)'
     link: https://attack.mitre.org/groups/G0064
   - id: G0067
     name: APT37
@@ -187,10 +191,11 @@ keys:
       has targeted banks, financial institutions, casinos, cryptocurrency exchanges,
       SWIFT system endpoints, and ATMs in at least 38 countries worldwide. Significant
       operations include the 2016 Bank of Bangladesh heist, during which [APT38](https://attack.mitre.org/groups/G0082)
-      stole $81 million, as well as attacks against Bancomext (2018) and Banco de
-      Chile (2018); some of their attacks have been destructive.(Citation: CISA AA20-239A
-      BeagleBoyz August 2020)(Citation: FireEye APT38 Oct 2018)(Citation: DOJ North
-      Korea Indictment Feb 2021)(Citation: Kaspersky Lazarus Under The Hood Blog 2017)
+      stole $81 million, as well as attacks against Bancomext (Citation: FireEye APT38
+      Oct 2018) and Banco de Chile (Citation: FireEye APT38 Oct 2018); some of their
+      attacks have been destructive.(Citation: CISA AA20-239A BeagleBoyz August 2020)(Citation:
+      FireEye APT38 Oct 2018)(Citation: DOJ North Korea Indictment Feb 2021)(Citation:
+      Kaspersky Lazarus Under The Hood Blog 2017)
 
 
       North Korean group definitions are known to have significant overlap, and some
@@ -224,6 +229,19 @@ keys:
 
       '
     link: https://attack.mitre.org/groups/G0096
+  - id: G1023
+    name: APT5
+    description: '[APT5](https://attack.mitre.org/groups/G1023) is a China-based espionage
+      actor that has been active since at least 2007 primarily targeting the telecommunications,
+      aerospace, and defense industries throughout the U.S., Europe, and Asia. [APT5](https://attack.mitre.org/groups/G1023)
+      has displayed advanced tradecraft and significant interest in compromising networking
+      devices and their underlying software including through the use of zero-day
+      exploits.(Citation: NSA APT5 Citrix Threat Hunting December 2022)(Citation:
+      Microsoft East Asia Threats September 2023)(Citation: Mandiant Pulse Secure
+      Zero-Day April 2021)(Citation: Mandiant Pulse Secure Update May 2021)(Citation:
+      FireEye Southeast Asia Threat Landscape March 2015)(Citation: Mandiant Advanced
+      Persistent Threats)  '
+    link: https://attack.mitre.org/groups/G1023
   - id: G0130
     name: Ajax Security Team
     description: '[Ajax Security Team](https://attack.mitre.org/groups/G0130) is a
@@ -233,6 +251,21 @@ keys:
       campaigns targeting the US defense industrial base and Iranian users of anti-censorship
       technologies.(Citation: FireEye Operation Saffron Rose 2013)'
     link: https://attack.mitre.org/groups/G0130
+  - id: G1024
+    name: Akira
+    description: '[Akira](https://attack.mitre.org/groups/G1024) is a ransomware variant
+      and ransomware deployment entity active since at least March 2023.(Citation:
+      Arctic Wolf Akira 2023) [Akira](https://attack.mitre.org/groups/G1024) uses
+      compromised credentials to access single-factor external access mechanisms such
+      as VPNs for initial access, then various publicly-available tools and techniques
+      for lateral movement.(Citation: Arctic Wolf Akira 2023)(Citation: Secureworks
+      GOLD SAHARA) [Akira](https://attack.mitre.org/groups/G1024) operations are associated
+      with "double extortion" ransomware activity, where data is exfiltrated from
+      victim environments prior to encryption, with threats to publish files if a
+      ransom is not paid. Technical analysis of [Akira](https://attack.mitre.org/software/S1129)
+      ransomware indicates multiple overlaps with and similarities to [Conti](https://attack.mitre.org/software/S0575)
+      malware.(Citation: BushidoToken Akira 2023)'
+    link: https://attack.mitre.org/groups/G1024
   - id: G0138
     name: Andariel
     description: '[Andariel](https://attack.mitre.org/groups/G0138) is a North Korean
@@ -293,10 +326,10 @@ keys:
     name: BITTER
     description: '[BITTER](https://attack.mitre.org/groups/G1002) is a suspected South
       Asian cyber espionage threat group that has been active since at least 2013.
-      [BITTER](https://attack.mitre.org/groups/G1002) has primarily targeted government,
-      energy, and engineering organizations in Pakistan, China, Bangladesh, and Saudi
-      Arabia.(Citation: Cisco Talos Bitter Bangladesh May 2022)(Citation: Forcepoint
-      BITTER Pakistan Oct 2016)'
+      [BITTER](https://attack.mitre.org/groups/G1002) has targeted government, energy,
+      and engineering organizations in Pakistan, China, Bangladesh, and Saudi Arabia.(Citation:
+      Cisco Talos Bitter Bangladesh May 2022)(Citation: Forcepoint BITTER Pakistan
+      Oct 2016)'
     link: https://attack.mitre.org/groups/G1002
   - id: G0060
     name: BRONZE BUTLER
@@ -373,6 +406,21 @@ keys:
       the semiconductor industry in Taiwan as well as data from the airline industry.(Citation:
       Cycraft Chimera April 2020)(Citation: NCC Group Chimera January 2021)'
     link: https://attack.mitre.org/groups/G0114
+  - id: G1021
+    name: Cinnamon Tempest
+    description: '[Cinnamon Tempest](https://attack.mitre.org/groups/G1021) is a China-based
+      threat group that has been active since at least 2021 deploying multiple strains
+      of ransomware based on the leaked [Babuk](https://attack.mitre.org/software/S0638)
+      source code. [Cinnamon Tempest](https://attack.mitre.org/groups/G1021) does
+      not operate their ransomware on an affiliate model or purchase access but appears
+      to act independently in all stages of the attack lifecycle. Based on victimology,
+      the short lifespan of each ransomware variant, and use of malware attributed
+      to government-sponsored threat groups, [Cinnamon Tempest](https://attack.mitre.org/groups/G1021)
+      may be motivated by intellectual property theft or cyberespionage rather than
+      financial gain.(Citation: Microsoft Ransomware as a Service)(Citation: Microsoft
+      Threat Actor Naming July 2023)(Citation: Trend Micro Cheerscrypt May 2022)(Citation:
+      SecureWorks BRONZE STARLIGHT Ransomware Operations June 2022)'
+    link: https://attack.mitre.org/groups/G1021
   - id: G0003
     name: Cleaver
     description: '[Cleaver](https://attack.mitre.org/groups/G0003) is a threat group
@@ -653,7 +701,9 @@ keys:
       group that has been active since at least 2012, primarily targeting telecommunications
       companies, financial institutions, and government entities in Afghanistan, Australia,
       Belgium, Cambodia, Malaysia, Mozambique, the Philippines, Russia, and Vietnam.
-      Security researchers have identified [GALLIUM](https://attack.mitre.org/groups/G0093)
+      This group is particularly known for launching Operation Soft Cell, a long-term
+      campaign targeting telecommunications providers.(Citation: Cybereason Soft Cell
+      June 2019) Security researchers have identified [GALLIUM](https://attack.mitre.org/groups/G0093)
       as a likely Chinese state-sponsored group, based in part on tools used and TTPs
       commonly associated with Chinese threat actors.(Citation: Cybereason Soft Cell
       June 2019)(Citation: Microsoft GALLIUM December 2019)(Citation: Unit 42 PingPull
@@ -837,7 +887,7 @@ keys:
       wiper attack against Sony Pictures Entertainment as part of a campaign named
       Operation Blockbuster by Novetta. Malware used by [Lazarus Group](https://attack.mitre.org/groups/G0032)
       correlates to other reported campaigns, including Operation Flame, Operation
-      1Mission, Operation Troy, DarkSeoul, and Ten Days of Rain. (Citation: Novetta
+      1Mission, Operation Troy, DarkSeoul, and Ten Days of Rain.(Citation: Novetta
       Blockbuster)
 
 
@@ -915,6 +965,15 @@ keys:
       Charming Kitten January 2021)(Citation: Secureworks COBALT ILLUSION Threat Profile)(Citation:
       Proofpoint TA453 July2021)'
     link: https://attack.mitre.org/groups/G0059
+  - id: G1026
+    name: Malteiro
+    description: '[Malteiro](https://attack.mitre.org/groups/G1026) is a financially
+      motivated criminal group that is likely based in Brazil and has been active
+      since at least November 2019. The group operates and distributes the [Mispadu](https://attack.mitre.org/software/S1122)  banking
+      trojan via a Malware-as-a-Service (MaaS) business model. [Malteiro](https://attack.mitre.org/groups/G1026)
+      mainly targets victims throughout Latin America (particularly Mexico) and Europe
+      (particularly Spain and Portugal).(Citation: SCILabs Malteiro 2021)'
+    link: https://attack.mitre.org/groups/G1026
   - id: G1013
     name: Metador
     description: '[Metador](https://attack.mitre.org/groups/G1013) is a suspected
@@ -996,6 +1055,17 @@ keys:
       MUSTANG PANDA October 2019)(Citation: Secureworks BRONZE PRESIDENT December
       2019) '
     link: https://attack.mitre.org/groups/G0129
+  - id: G1020
+    name: Mustard Tempest
+    description: '[Mustard Tempest](https://attack.mitre.org/groups/G1020) is an initial
+      access broker that has operated the [SocGholish](https://attack.mitre.org/software/S1124)
+      distribution network since at least 2017. [Mustard Tempest](https://attack.mitre.org/groups/G1020)
+      has partnered with [Indrik Spider](https://attack.mitre.org/groups/G0119) to
+      provide access for the download of additional malware including LockBit, [WastedLocker](https://attack.mitre.org/software/S0612),
+      and remote access tools.(Citation: Microsoft Ransomware as a Service)(Citation:
+      Microsoft Threat Actor Naming July 2023)(Citation: Secureworks Gold Prelude
+      Profile)(Citation: SocGholish-update)'
+    link: https://attack.mitre.org/groups/G1020
   - id: G0055
     name: NEODYMIUM
     description: '[NEODYMIUM](https://attack.mitre.org/groups/G0055) is an activity
@@ -1043,20 +1113,23 @@ keys:
       at least 2014. The group has targeted a variety of sectors, including financial,
       government, energy, chemical, and telecommunications. It appears the group carries
       out supply chain attacks, leveraging the trust relationship between organizations
-      to attack their primary targets. FireEye assesses that the group works on behalf
-      of the Iranian government based on infrastructure details that contain references
-      to Iran, use of Iranian infrastructure, and targeting that aligns with nation-state
-      interests.(Citation: Palo Alto OilRig April 2017)(Citation: ClearSky OilRig
-      Jan 2017)(Citation: Palo Alto OilRig May 2016)(Citation: Palo Alto OilRig Oct
-      2016)(Citation: Unit42 OilRig Playbook 2023)(Citation: FireEye APT34 Dec 2017)(Citation:
-      Unit 42 QUADAGENT July 2018)'
+      to attack their primary targets. The group works on behalf of the Iranian government
+      based on infrastructure details that contain references to Iran, use of Iranian
+      infrastructure, and targeting that aligns with nation-state interests.(Citation:
+      FireEye APT34 Dec 2017)(Citation: Palo Alto OilRig April 2017)(Citation: ClearSky
+      OilRig Jan 2017)(Citation: Palo Alto OilRig May 2016)(Citation: Palo Alto OilRig
+      Oct 2016)(Citation: Unit42 OilRig Playbook 2023)(Citation: Unit 42 QUADAGENT
+      July 2018)'
     link: https://attack.mitre.org/groups/G0049
   - id: G0071
     name: Orangeworm
     description: '[Orangeworm](https://attack.mitre.org/groups/G0071) is a group that
       has targeted organizations in the healthcare sector in the United States, Europe,
       and Asia since at least 2015, likely for the purpose of corporate espionage.(Citation:
-      Symantec Orangeworm April 2018)'
+      Symantec Orangeworm April 2018) Reverse engineering of [Kwampirs](https://attack.mitre.org/software/S0236),
+      directly associated with [Orangeworm](https://attack.mitre.org/groups/G0071)
+      activity, indicates significant functional and development overlaps with [Shamoon](https://attack.mitre.org/software/S0140).(Citation:
+      Cylera Kwampirs 2022)'
     link: https://attack.mitre.org/groups/G0071
   - id: G0068
     name: PLATINUM
@@ -1182,14 +1255,21 @@ keys:
     link: https://attack.mitre.org/groups/G0029
   - id: G1015
     name: Scattered Spider
-    description: '[Scattered Spider](https://attack.mitre.org/groups/G1015) is a cybercriminal
-      group that has been active since at least 2022 targeting customer relationship
-      management and business-process outsourcing (BPO) firms as well as  telecommunications
-      and technology companies. During campaigns [Scattered Spider](https://attack.mitre.org/groups/G1015)
-      has leveraged targeted social-engineering techniques and attempted to bypass
-      popular endpoint security tools.(Citation: CrowdStrike Scattered Spider Profile)(Citation:
-      CrowdStrike Scattered Spider BYOVD January 2023)(Citation: Crowdstrike TELCO
-      BPO Campaign December 2022)'
+    description: '[Scattered Spider](https://attack.mitre.org/groups/G1015) is a native
+      English-speaking cybercriminal group that has been active since at least 2022.(Citation:
+      CrowdStrike Scattered Spider Profile)(Citation: MSTIC Octo Tempest Operations
+      October 2023) The group initially targeted customer relationship management
+      and business-process outsourcing (BPO) firms as well as telecommunications and
+      technology companies. Beginning in 2023, [Scattered Spider](https://attack.mitre.org/groups/G1015)
+      expanded its operations to compromise victims in the gaming, hospitality, retail,
+      MSP, manufacturing, and financial sectors.(Citation: MSTIC Octo Tempest Operations
+      October 2023) During campaigns, [Scattered Spider](https://attack.mitre.org/groups/G1015)
+      has leveraged targeted social-engineering techniques, attempted to bypass popular
+      endpoint security tools, and more recently, deployed ransomware for financial
+      gain.(Citation: CISA Scattered Spider Advisory November 2023)(Citation: CrowdStrike
+      Scattered Spider BYOVD January 2023)(Citation: CrowdStrike Scattered Spider
+      Profile)(Citation: MSTIC Octo Tempest Operations October 2023)(Citation: Crowdstrike
+      TELCO BPO Campaign December 2022)'
     link: https://attack.mitre.org/groups/G1015
   - id: G1008
     name: SideCopy
@@ -1350,6 +1430,14 @@ keys:
       companies in the U.S. and Southeast Asia. The group uses custom malware as well
       as "living off the land" techniques. (Citation: Symantec Thrip June 2018)'
     link: https://attack.mitre.org/groups/G0076
+  - id: G1022
+    name: ToddyCat
+    description: '[ToddyCat](https://attack.mitre.org/groups/G1022) is a sophisticated
+      threat group that has been active since at least 2020 using custom loaders and
+      malware in multi-stage infection chains against government and military targets
+      across Europe and Asia.(Citation: Kaspersky ToddyCat June 2022)(Citation: Kaspersky
+      ToddyCat Check Logs October 2023)'
+    link: https://attack.mitre.org/groups/G1022
   - id: G0131
     name: Tonto Team
     description: '[Tonto Team](https://attack.mitre.org/groups/G0131) is a suspected

@@ -5,6 +5,7 @@ description: Techniques represent 'how' an adversary achieves a tactical goal by
 model: true
 reference: https://attack.mitre.org/techniques/enterprise/
 icon: 🗡️
+
 stages:
   - Reconnaissance
   - Resource Development
@@ -20,19 +21,21 @@ stages:
   - Command and Control
   - Exfiltration
   - Impact
+
 keys:
   - id: T1548
     name: Abuse Elevation Control Mechanism
     tide.vocab.stages:
       - Defense Evasion
       - Privilege Escalation
-    description: Adversaries may circumvent mechanisms designed to control elevate
+    description: 'Adversaries may circumvent mechanisms designed to control elevate
       privileges to gain higher-level permissions. Most modern systems contain native
       elevation control mechanisms that are intended to limit privileges that a user
       can perform on a machine. Authorization has to be granted to specific users
-      in order to perform tasks that can be considered of higher risk. An adversary
-      can perform several methods to take advantage of built-in control mechanisms
-      in order to escalate privileges on a system.
+      in order to perform tasks that can be considered of higher risk.(Citation: TechNet
+      How UAC Works)(Citation: sudo man page 2018) An adversary can perform several
+      methods to take advantage of built-in control mechanisms in order to escalate
+      privileges on a system.(Citation: OSX Keydnap malware)(Citation: Fortinet Fareit)'
     link: https://attack.mitre.org/techniques/T1548
   - id: T1548.002
     name: 'Abuse Elevation Control Mechanism: Bypass User Account Control'
@@ -199,6 +202,36 @@ keys:
       also issued <code>killall Terminal</code>. As of macOS Sierra, the sudoers file
       has <code>tty_tickets</code> enabled by default.'
     link: https://attack.mitre.org/techniques/T1548/003
+  - id: T1548.006
+    name: 'Abuse Elevation Control Mechanism: TCC Manipulation'
+    tide.vocab.stages:
+      - Defense Evasion
+      - Privilege Escalation
+    description: "Adversaries can manipulate or abuse the Transparency, Consent, &\
+      \ Control (TCC) service or database to execute malicious applications with elevated\
+      \ permissions. TCC is a Privacy & Security macOS control mechanism used to determine\
+      \ if the running process has permission to access the data or services protected\
+      \ by TCC, such as screen sharing, camera, microphone, or Full Disk Access (FDA).\n\
+      \nWhen an application requests to access data or a service protected by TCC,\
+      \ the TCC daemon (`tccd`) checks the TCC database, located at `/Library/Application\
+      \ Support/com.apple.TCC/TCC.db` (and `~/` equivalent), for existing permissions.\
+      \ If permissions do not exist, then the user is prompted to grant permission.\
+      \ Once permissions are granted, the database stores the application's permissions\
+      \ and will not prompt the user again unless reset. For example, when a web browser\
+      \ requests permissions to the user's webcam, once granted the web browser may\
+      \ not explicitly prompt the user again.(Citation: welivesecurity TCC)\n\nAdversaries\
+      \ may manipulate the TCC database or otherwise abuse the TCC service to execute\
+      \ malicious content. This can be done in various ways, including using privileged\
+      \ system applications to execute malicious payloads or manipulating the database\
+      \ to grant their application TCC permissions. \n\nFor example, adversaries can\
+      \ use Finder, which has FDA permissions by default, to execute malicious [AppleScript](https://attack.mitre.org/techniques/T1059/002)\
+      \ while preventing a user prompt. For a system without System Integrity Protection\
+      \ (SIP) enabled, adversaries have also manipulated the operating system to load\
+      \ an adversary controlled TCC database using environment variables and [Launchctl](https://attack.mitre.org/techniques/T1569/001).(Citation:\
+      \ TCC macOS bypass)(Citation: TCC Database)\n\nAdversaries may also opt to instead\
+      \ inject code (e.g., [Process Injection](https://attack.mitre.org/techniques/T1055))\
+      \ into targeted applications with the desired TCC permissions.\n"
+    link: https://attack.mitre.org/techniques/T1548/006
   - id: T1548.005
     name: 'Abuse Elevation Control Mechanism: Temporary Elevated Cloud Access'
     tide.vocab.stages:
@@ -214,18 +247,22 @@ keys:
       \ This allows accounts to operate with only the permissions they need on a daily\
       \ basis, and to request additional permissions as necessary. Sometimes just-in-time\
       \ access requests are configured to require manual approval, while other times\
-      \ the desired permissions are automatically granted.(Citation: Google Cloud\
-      \ Just in Time Access 2023)(Citation: Azure Just in Time Access 2023)\n\nAccount\
-      \ impersonation allows user or service accounts to temporarily act with the\
-      \ permissions of another account. For example, in GCP users with the `iam.serviceAccountTokenCreator`\
-      \ role can create temporary access tokens or sign arbitrary payloads with the\
-      \ permissions of a service account.(Citation: Google Cloud Service Account Authentication\
-      \ Roles) In Exchange Online, the `ApplicationImpersonation` role allows a service\
-      \ account to use the permissions associated with specified user accounts.(Citation:\
-      \ Microsoft Impersonation and EWS in Exchange) \n\nMany cloud environments also\
-      \ include mechanisms for users to pass roles to resources that allow them to\
-      \ perform tasks and authenticate to other services. While the user that creates\
-      \ the resource does not directly assume the role they pass to it, they may still\
+      \ the desired permissions are automatically granted.(Citation: Azure Just in\
+      \ Time Access 2023)\n\nAccount impersonation allows user or service accounts\
+      \ to temporarily act with the permissions of another account. For example, in\
+      \ GCP users with the `iam.serviceAccountTokenCreator` role can create temporary\
+      \ access tokens or sign arbitrary payloads with the permissions of a service\
+      \ account, while service accounts with domain-wide delegation permission are\
+      \ permitted to impersonate Google Workspace accounts.(Citation: Google Cloud\
+      \ Service Account Authentication Roles)(Citation: Hunters Domain Wide Delegation\
+      \ Google Workspace 2023)(Citation: Google Cloud Just in Time Access 2023)(Citation:\
+      \ Palo Alto Unit 42 Google Workspace Domain Wide Delegation 2023) In Exchange\
+      \ Online, the `ApplicationImpersonation` role allows a service account to use\
+      \ the permissions associated with specified user accounts.(Citation: Microsoft\
+      \ Impersonation and EWS in Exchange) \n\nMany cloud environments also include\
+      \ mechanisms for users to pass roles to resources that allow them to perform\
+      \ tasks and authenticate to other services. While the user that creates the\
+      \ resource does not directly assume the role they pass to it, they may still\
       \ be able to take advantage of the role's access -- for example, by configuring\
       \ the resource to perform certain actions with the permissions it has been granted.\
       \ In AWS, users with the `PassRole` permission can allow a service they create\
@@ -309,9 +346,9 @@ keys:
     description: 'Adversaries may make new tokens and impersonate users to escalate
       privileges and bypass access controls. For example, if an adversary has a username
       and password but the user is not logged onto the system the adversary can then
-      create a logon session for the user using the `LogonUser` function. The function
-      will return a copy of the new session''s access token and the adversary can
-      use `SetThreadToken` to assign the token to a thread.
+      create a logon session for the user using the `LogonUser` function.(Citation:
+      LogonUserW function) The function will return a copy of the new session''s access
+      token and the adversary can use `SetThreadToken` to assign the token to a thread.
 
 
       This behavior is distinct from [Token Impersonation/Theft](https://attack.mitre.org/techniques/T1134/001)
@@ -383,10 +420,10 @@ keys:
       - Privilege Escalation
     description: 'Adversaries may duplicate then impersonate another user''s existing
       token to escalate privileges and bypass access controls. For example, an adversary
-      can duplicate an existing token using `DuplicateToken` or `DuplicateTokenEx`.
-      The token can then be used with `ImpersonateLoggedOnUser` to allow the calling
-      thread to impersonate a logged on user''s security context, or with `SetThreadToken`
-      to assign the impersonated token to a thread.
+      can duplicate an existing token using `DuplicateToken` or `DuplicateTokenEx`.(Citation:
+      DuplicateToken function) The token can then be used with `ImpersonateLoggedOnUser`
+      to allow the calling thread to impersonate a logged on user''s security context,
+      or with `SetThreadToken` to assign the impersonated token to a thread.
 
 
       An adversary may perform [Token Impersonation/Theft](https://attack.mitre.org/techniques/T1134/001)
@@ -441,7 +478,8 @@ keys:
 
 
       For examples, cloud environments typically provide easily accessible interfaces
-      to obtain user lists. On hosts, adversaries can use default [PowerShell](https://attack.mitre.org/techniques/T1059/001)
+      to obtain user lists.(Citation: AWS List Users)(Citation: Google Cloud - IAM
+      Servie Accounts List API) On hosts, adversaries can use default [PowerShell](https://attack.mitre.org/techniques/T1059/001)
       and other command line functionality to identify accounts. Information about
       email addresses and accounts may also be extracted by searching an infected
       system’s files.'
@@ -483,7 +521,8 @@ keys:
       -q group</code>on macOS, and <code>ldapsearch</code> on Linux can list domain
       users and groups. [PowerShell](https://attack.mitre.org/techniques/T1059/001)
       cmdlets including <code>Get-ADUser</code> and <code>Get-ADGroupMember</code>
-      may enumerate members of Active Directory groups.  '
+      may enumerate members of Active Directory groups.(Citation: CrowdStrike StellarParticle
+      January 2022)  '
     link: https://attack.mitre.org/techniques/T1087/002
   - id: T1087.003
     name: 'Account Discovery: Email Account'
@@ -516,8 +555,9 @@ keys:
 
       Commands such as <code>net user</code> and <code>net localgroup</code> of the
       [Net](https://attack.mitre.org/software/S0039) utility and <code>id</code> and
-      <code>groups</code>on macOS and Linux can list local users and groups. On Linux,
-      local users can also be enumerated through the use of the <code>/etc/passwd</code>
+      <code>groups</code> on macOS and Linux can list local users and groups.(Citation:
+      Mandiant APT1)(Citation: id man page)(Citation: groups man page) On Linux, local
+      users can also be enumerated through the use of the <code>/etc/passwd</code>
       file. On macOS the <code>dscl . list /Users</code> command can be used to enumerate
       local accounts.'
     link: https://attack.mitre.org/techniques/T1087/001
@@ -529,14 +569,14 @@ keys:
     description: "Adversaries may manipulate accounts to maintain and/or elevate access\
       \ to victim systems. Account manipulation may consist of any action that preserves\
       \ or modifies adversary access to a compromised account, such as modifying credentials\
-      \ or permission groups. These actions could also include account activity designed\
-      \ to subvert security policies, such as performing iterative password updates\
-      \ to bypass password duration policies and preserve the life of compromised\
-      \ credentials. \n\nIn order to create or manipulate accounts, the adversary\
-      \ must already have sufficient permissions on systems or the domain. However,\
-      \ account manipulation may also lead to privilege escalation where modifications\
-      \ grant access to additional roles, permissions, or higher-privileged [Valid\
-      \ Accounts](https://attack.mitre.org/techniques/T1078)."
+      \ or permission groups.(Citation: FireEye SMOKEDHAM June 2021) These actions\
+      \ could also include account activity designed to subvert security policies,\
+      \ such as performing iterative password updates to bypass password duration\
+      \ policies and preserve the life of compromised credentials. \n\nIn order to\
+      \ create or manipulate accounts, the adversary must already have sufficient\
+      \ permissions on systems or the domain. However, account manipulation may also\
+      \ lead to privilege escalation where modifications grant access to additional\
+      \ roles, permissions, or higher-privileged [Valid Accounts](https://attack.mitre.org/techniques/T1078)."
     link: https://attack.mitre.org/techniques/T1098
   - id: T1098.001
     name: 'Account Manipulation: Additional Cloud Credentials'
@@ -573,7 +613,8 @@ keys:
       \ Application Administrator.(Citation: SpecterOps Azure Privilege Escalation)\
       \ \n\nIn AWS environments, adversaries with the appropriate permissions may\
       \ also use the `sts:GetFederationToken` API call to create a temporary set of\
-      \ credentials tied to the permissions of the original user account. These credentials\
+      \ credentials to [Forge Web Credentials](https://attack.mitre.org/techniques/T1606)\
+      \ tied to the permissions of the original user account. These temporary credentials\
       \ may remain valid for the duration of their lifetime even if the original account’s\
       \ API credentials are deactivated.\n(Citation: Crowdstrike AWS User Federation\
       \ Persistence)"
@@ -601,7 +642,11 @@ keys:
       \ to use the <code>CreatePolicyVersion</code> API to define a new version of\
       \ an IAM policy or the <code>AttachUserPolicy</code> API to attach an IAM policy\
       \ with additional or distinct permissions to a compromised user account.(Citation:\
-      \ Rhino Security Labs AWS Privilege Escalation)"
+      \ Rhino Security Labs AWS Privilege Escalation)\n\nIn some cases, adversaries\
+      \ may add roles to adversary-controlled accounts outside the victim cloud tenant.\
+      \ This allows these external accounts to perform actions inside the victim tenant\
+      \ without requiring the adversary to [Create Account](https://attack.mitre.org/techniques/T1136)\
+      \ or modify a victim-owned account.(Citation: Invictus IR DangerDev 2024)"
     link: https://attack.mitre.org/techniques/T1098/003
   - id: T1098.006
     name: 'Account Manipulation: Additional Container Cluster Roles'
@@ -647,10 +692,9 @@ keys:
       \ or roles to the Top of Information Store (root), Inbox, or other mailbox folders.\
       \ By assigning one or both user permissions to a folder, the adversary can utilize\
       \ any other account in the tenant to maintain persistence to the target user’s\
-      \ mail folders.(Citation: Remediation and Hardening Strategies for Microsoft\
-      \ 365 to Defend Against UNC2452)\n\nThis may be used in persistent threat incidents\
-      \ as well as BEC (Business Email Compromise) incidents where an adversary can\
-      \ add [Additional Cloud Roles](https://attack.mitre.org/techniques/T1098/003)\
+      \ mail folders.(Citation: Mandiant Defend UNC2452 White Paper)\n\nThis may be\
+      \ used in persistent threat incidents as well as BEC (Business Email Compromise)\
+      \ incidents where an adversary can add [Additional Cloud Roles](https://attack.mitre.org/techniques/T1098/003)\
       \ to the accounts they wish to compromise. This may further enable use of additional\
       \ techniques for gaining access to systems. For example, compromised business\
       \ accounts are often used to send messages to other accounts in the network\
@@ -766,10 +810,12 @@ keys:
     name: Acquire Infrastructure
     tide.vocab.stages:
       - Resource Development
-    description: 'Adversaries may buy, lease, or rent infrastructure that can be used
-      during targeting. A wide variety of infrastructure exists for hosting and orchestrating
-      adversary operations. Infrastructure solutions include physical or cloud servers,
-      domains, and third-party web services.(Citation: TrendmicroHideoutsLease) Additionally,
+    description: 'Adversaries may buy, lease, rent, or obtain infrastructure that
+      can be used during targeting. A wide variety of infrastructure exists for hosting
+      and orchestrating adversary operations. Infrastructure solutions include physical
+      or cloud servers, domains, and third-party web services.(Citation: TrendmicroHideoutsLease)
+      Some infrastructure providers offer free trial periods, enabling infrastructure
+      acquisition at limited to no cost.(Citation: Free Trial PurpleUrchin) Additionally,
       botnets are available for rent or purchase.
 
 
@@ -837,6 +883,11 @@ keys:
       httrack_unhcr)(Citation: lazgroup_idn_phishing)
 
 
+      Different URIs/URLs may also be dynamically generated to uniquely serve malicious
+      content to victims (including one-time, single use domain names).(Citation:
+      iOS URL Scheme)(Citation: URI)(Citation: URI Use)(Citation: URI Unique)
+
+
       Adversaries may also acquire and repurpose expired domains, which may be potentially
       already allowlisted/trusted by defenders based on an existing reputation/history.(Citation:
       Categorisation_not_boundary)(Citation: Domain_Steal_CC)(Citation: Redirectors_Domain_Fronting)(Citation:
@@ -889,22 +940,22 @@ keys:
     name: 'Acquire Infrastructure: Server'
     tide.vocab.stages:
       - Resource Development
-    description: 'Adversaries may buy, lease, or rent physical servers that can be
-      used during targeting. Use of servers allows an adversary to stage, launch,
-      and execute an operation. During post-compromise activity, adversaries may utilize
-      servers for various tasks, including for Command and Control. Adversaries may
-      use web servers to support support watering hole operations, as in [Drive-by
-      Compromise](https://attack.mitre.org/techniques/T1189), or email servers to
-      support [Phishing](https://attack.mitre.org/techniques/T1566) operations. Instead
-      of compromising a third-party [Server](https://attack.mitre.org/techniques/T1584/004)
-      or renting a [Virtual Private Server](https://attack.mitre.org/techniques/T1583/003),
-      adversaries may opt to configure and run their own servers in support of operations.
-
-
-      Adversaries may only need a lightweight setup if most of their activities will
-      take place using online infrastructure. Or, they may need to build extensive
-      infrastructure if they want to test, communicate, and control other aspects
-      of their activities on their own systems.(Citation: NYTStuxnet)'
+    description: "Adversaries may buy, lease, rent, or obtain physical servers that\
+      \ can be used during targeting. Use of servers allows an adversary to stage,\
+      \ launch, and execute an operation. During post-compromise activity, adversaries\
+      \ may utilize servers for various tasks, such as watering hole operations in\
+      \ [Drive-by Compromise](https://attack.mitre.org/techniques/T1189), enabling\
+      \ [Phishing](https://attack.mitre.org/techniques/T1566) operations, or facilitating\
+      \ [Command and Control](https://attack.mitre.org/tactics/TA0011). Instead of\
+      \ compromising a third-party [Server](https://attack.mitre.org/techniques/T1584/004)\
+      \ or renting a [Virtual Private Server](https://attack.mitre.org/techniques/T1583/003),\
+      \ adversaries may opt to configure and run their own servers in support of operations.\
+      \ Free trial periods of cloud servers may also be abused.(Citation: Free Trial\
+      \ PurpleUrchin)(Citation: Freejacked) \n\nAdversaries may only need a lightweight\
+      \ setup if most of their activities will take place using online infrastructure.\
+      \ Or, they may need to build extensive infrastructure if they want to test,\
+      \ communicate, and control other aspects of their activities on their own systems.(Citation:\
+      \ NYTStuxnet)"
     link: https://attack.mitre.org/techniques/T1583/004
   - id: T1583.007
     name: 'Acquire Infrastructure: Serverless'
@@ -948,15 +999,15 @@ keys:
     name: 'Acquire Infrastructure: Web Services'
     tide.vocab.stages:
       - Resource Development
-    description: Adversaries may register for web services that can be used during
+    description: 'Adversaries may register for web services that can be used during
       targeting. A variety of popular websites exist for adversaries to register for
       a web-based service that can be abused during later stages of the adversary
       lifecycle, such as during Command and Control ([Web Service](https://attack.mitre.org/techniques/T1102)),
       [Exfiltration Over Web Service](https://attack.mitre.org/techniques/T1567),
       or [Phishing](https://attack.mitre.org/techniques/T1566). Using common services,
       such as those offered by Google or Twitter, makes it easier for adversaries
-      to hide in expected noise. By utilizing a web service, adversaries can make
-      it difficult to physically tie back operations to them.
+      to hide in expected noise.(Citation: FireEye APT29) By utilizing a web service,
+      adversaries can make it difficult to physically tie back operations to them.'
     link: https://attack.mitre.org/techniques/T1583/006
   - id: T1595
     name: Active Scanning
@@ -1068,8 +1119,10 @@ keys:
       malicious activities such as preventing/redirecting users from accessing legitimate
       sites and/or pushing additional malware.(Citation: ttint_rat)(Citation: dns_changer_trojans)(Citation:
       ad_blocker_with_miner) Adversaries may also manipulate DNS and leverage their
-      position in order to intercept user credentials and session cookies.(Citation:
-      volexity_0day_sophos_FW) [Downgrade Attack](https://attack.mitre.org/techniques/T1562/010)s
+      position in order to intercept user credentials, including access tokens ([Steal
+      Application Access Token](https://attack.mitre.org/techniques/T1528)) and session
+      cookies ([Steal Web Session Cookie](https://attack.mitre.org/techniques/T1539)).(Citation:
+      volexity_0day_sophos_FW)(Citation: Token tactics) [Downgrade Attack](https://attack.mitre.org/techniques/T1562/010)s
       can also be used to establish an AiTM position, such as by negotiating a less
       secure, deprecated, or weaker version of communication protocol (SSL/TLS) or
       encryption algorithm.(Citation: mitm_tls_downgrade_att)(Citation: taxonomy_downgrade_att_tls)(Citation:
@@ -1209,7 +1262,8 @@ keys:
       Adversaries may utilize many different protocols, including those used for web\
       \ browsing, transferring files, electronic mail, or DNS. For connections that\
       \ occur internally within an enclave (such as those between a proxy or pivot\
-      \ node and other nodes), commonly used protocols are SMB, SSH, or RDP. "
+      \ node and other nodes), commonly used protocols are SMB, SSH, or RDP.(Citation:\
+      \ Mandiant APT29 Eye Spy Email Nov 22) "
     link: https://attack.mitre.org/techniques/T1071
   - id: T1071.004
     name: 'Application Layer Protocol: DNS'
@@ -1235,8 +1289,9 @@ keys:
       \ with transferring files to avoid detection/network filtering by blending in\
       \ with existing traffic. Commands to the remote system, and often the results\
       \ of those commands, will be embedded within the protocol traffic between the\
-      \ client and server. \n\nProtocols such as SMB, FTP, FTPS, and TFTP that transfer\
-      \ files may be very common in environments.  Packets produced from these protocols\
+      \ client and server. \n\nProtocols such as SMB(Citation: US-CERT TA18-074A),\
+      \ FTP(Citation: ESET Machete July 2019), FTPS, and TFTP that transfer files\
+      \ may be very common in environments.  Packets produced from these protocols\
       \ may have many fields and headers in which data can be concealed. Data could\
       \ also be concealed within the transferred files. An adversary may abuse these\
       \ protocols to communicate with systems under their control within a victim\
@@ -1255,7 +1310,8 @@ keys:
       \ these protocols may have many fields and headers in which data can be concealed.\
       \ Data could also be concealed within the email messages themselves. An adversary\
       \ may abuse these protocols to communicate with systems under their control\
-      \ within a victim network while also mimicking normal, expected traffic. "
+      \ within a victim network while also mimicking normal, expected traffic.(Citation:\
+      \ FireEye APT28) "
     link: https://attack.mitre.org/techniques/T1071/003
   - id: T1071.001
     name: 'Application Layer Protocol: Web Protocols'
@@ -1295,9 +1351,10 @@ keys:
       - Collection
     description: 'An adversary may compress and/or encrypt data that is collected
       prior to exfiltration. Compressing the data can help to obfuscate the collected
-      data and minimize the amount of data sent over the network. Encryption can be
-      used to hide information that is being exfiltrated from detection or make exfiltration
-      less conspicuous upon inspection by a defender.
+      data and minimize the amount of data sent over the network.(Citation: DOJ GRU
+      Indictment Jul 2018) Encryption can be used to hide information that is being
+      exfiltrated from detection or make exfiltration less conspicuous upon inspection
+      by a defender.
 
 
       Both compression and encryption are done prior to exfiltration, and can be performed
@@ -1357,7 +1414,7 @@ keys:
     description: 'An adversary can leverage a computer''s peripheral devices (e.g.,
       microphones and webcams) or applications (e.g., voice and video call services)
       to capture audio recordings for the purpose of listening into sensitive conversations
-      to gather information.
+      to gather information.(Citation: ESET Attor Oct 2019)
 
 
       Malware or scripts may be used to interact with the devices through an available
@@ -1372,11 +1429,12 @@ keys:
       \ automated techniques for collecting internal data. Methods for performing\
       \ this technique could include use of a [Command and Scripting Interpreter](https://attack.mitre.org/techniques/T1059)\
       \ to search for and copy information fitting set criteria such as file type,\
-      \ location, or name at specific time intervals. In cloud-based environments,\
-      \ adversaries may also use cloud APIs, command line interfaces, or extract,\
-      \ transform, and load (ETL) services to automatically collect data. This functionality\
-      \ could also be built into remote access tools. \n\nThis technique may incorporate\
-      \ use of other techniques such as [File and Directory Discovery](https://attack.mitre.org/techniques/T1083)\
+      \ location, or name at specific time intervals. \n\nIn cloud-based environments,\
+      \ adversaries may also use cloud APIs, data pipelines, command line interfaces,\
+      \ or extract, transform, and load (ETL) services to automatically collect data.(Citation:\
+      \ Mandiant UNC3944 SMS Phishing 2023) \n\nThis functionality could also be built\
+      \ into remote access tools. \n\nThis technique may incorporate use of other\
+      \ techniques such as [File and Directory Discovery](https://attack.mitre.org/techniques/T1083)\
       \ and [Lateral Tool Transfer](https://attack.mitre.org/techniques/T1570) to\
       \ identify and move files, as well as [Cloud Service Dashboard](https://attack.mitre.org/techniques/T1538)\
       \ and [Cloud Storage Object Discovery](https://attack.mitre.org/techniques/T1619)\
@@ -1387,11 +1445,11 @@ keys:
     tide.vocab.stages:
       - Exfiltration
     description: "Adversaries may exfiltrate data, such as sensitive documents, through\
-      \ the use of automated processing after being gathered during Collection. \n\
-      \nWhen automated exfiltration is used, other exfiltration techniques likely\
-      \ apply as well to transfer the information out of the network, such as [Exfiltration\
-      \ Over C2 Channel](https://attack.mitre.org/techniques/T1041) and [Exfiltration\
-      \ Over Alternative Protocol](https://attack.mitre.org/techniques/T1048)."
+      \ the use of automated processing after being gathered during Collection.(Citation:\
+      \ ESET Gamaredon June 2020) \n\nWhen automated exfiltration is used, other exfiltration\
+      \ techniques likely apply as well to transfer the information out of the network,\
+      \ such as [Exfiltration Over C2 Channel](https://attack.mitre.org/techniques/T1041)\
+      \ and [Exfiltration Over Alternative Protocol](https://attack.mitre.org/techniques/T1048)."
     link: https://attack.mitre.org/techniques/T1020
   - id: T1020.001
     name: 'Automated Exfiltration: Traffic Duplication'
@@ -1640,14 +1698,13 @@ keys:
       \ during system boot for persistence or privilege escalation. A port monitor\
       \ can be set through the <code>AddMonitor</code> API call to set a DLL to be\
       \ loaded at startup.(Citation: AddMonitor) This DLL can be located in <code>C:\\\
-      Windows\\System32</code> and will be loaded by the print spooler service, spoolsv.exe,\
-      \ on boot. The spoolsv.exe process also runs under SYSTEM level permissions.(Citation:\
-      \ Bloxham) Alternatively, an arbitrary DLL can be loaded if permissions allow\
-      \ writing a fully-qualified pathname for that DLL to <code>HKLM\\SYSTEM\\CurrentControlSet\\\
-      Control\\Print\\Monitors</code>. \n\nThe Registry key contains entries for the\
-      \ following:\n\n* Local Port\n* Standard TCP/IP Port\n* USB Monitor\n* WSD Port\n\
-      \nAdversaries can use this technique to load malicious code at startup that\
-      \ will persist on system reboot and execute as SYSTEM."
+      Windows\\System32</code> and will be loaded and run by the print spooler service,\
+      \ `spoolsv.exe`, under SYSTEM level permissions on boot.(Citation: Bloxham)\
+      \ \n\nAlternatively, an arbitrary DLL can be loaded if permissions allow writing\
+      \ a fully-qualified pathname for that DLL to the `Driver` value of an existing\
+      \ or new arbitrarily named subkey of <code>HKLM\\SYSTEM\\CurrentControlSet\\\
+      Control\\Print\\Monitors</code>. The Registry key contains entries for the following:\n\
+      \n* Local Port\n* Standard TCP/IP Port\n* USB Monitor\n* WSD Port\n"
     link: https://attack.mitre.org/techniques/T1547/010
   - id: T1547.012
     name: 'Boot or Logon Autostart Execution: Print Processors'
@@ -1856,16 +1913,17 @@ keys:
 
 
       Time providers are implemented as dynamic-link libraries (DLLs) that are registered
-      in the subkeys of  <code>HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\W32Time\TimeProviders\</code>.(Citation:
+      in the subkeys of `HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\W32Time\TimeProviders\`.(Citation:
       Microsoft TimeProvider) The time provider manager, directed by the service control
       manager, loads and starts time providers listed and enabled under this key at
       system startup and/or whenever parameters are changed.(Citation: Microsoft TimeProvider)
 
 
       Adversaries may abuse this architecture to establish persistence, specifically
-      by registering and enabling a malicious DLL as a time provider. Administrator
-      privileges are required for time provider registration, though execution will
-      run in context of the Local Service account.(Citation: Github W32Time Oct 2017)'
+      by creating a new arbitrarily named subkey  pointing to a malicious DLL in the
+      `DllName` value. Administrator privileges are required for time provider registration,
+      though execution will run in context of the Local Service account.(Citation:
+      Github W32Time Oct 2017)'
     link: https://attack.mitre.org/techniques/T1547/003
   - id: T1547.004
     name: 'Boot or Logon Autostart Execution: Winlogon Helper DLL'
@@ -1922,14 +1980,15 @@ keys:
       - Persistence
       - Privilege Escalation
     description: "Adversaries may use scripts automatically executed at boot or logon\
-      \ initialization to establish persistence. Initialization scripts can be used\
-      \ to perform administrative functions, which may often execute other programs\
-      \ or send information to an internal logging server. These scripts can vary\
-      \ based on operating system and whether applied locally or remotely.  \n\nAdversaries\
-      \ may use these scripts to maintain persistence on a single system. Depending\
-      \ on the access configuration of the logon scripts, either local credentials\
-      \ or an administrator account may be necessary. \n\nAn adversary may also be\
-      \ able to escalate their privileges since some boot or logon initialization\
+      \ initialization to establish persistence.(Citation: Mandiant APT29 Eye Spy\
+      \ Email Nov 22)(Citation: Anomali Rocke March 2019) Initialization scripts can\
+      \ be used to perform administrative functions, which may often execute other\
+      \ programs or send information to an internal logging server. These scripts\
+      \ can vary based on operating system and whether applied locally or remotely.\
+      \  \n\nAdversaries may use these scripts to maintain persistence on a single\
+      \ system. Depending on the access configuration of the logon scripts, either\
+      \ local credentials or an administrator account may be necessary. \n\nAn adversary\
+      \ may also be able to escalate their privileges since some boot or logon initialization\
       \ scripts run with higher privileges."
     link: https://attack.mitre.org/techniques/T1037
   - id: T1037.002
@@ -2077,9 +2136,11 @@ keys:
 
 
       There have also been instances of botnets using a persistent backdoor through
-      malicious Chrome extensions.(Citation: Stantinko Botnet) There have also been
-      similar examples of extensions being used for command & control.(Citation: Chrome
-      Extension C2 Malware)'
+      malicious Chrome extensions for [Command and Control](https://attack.mitre.org/tactics/TA0011).(Citation:
+      Stantinko Botnet)(Citation: Chrome Extension C2 Malware) Adversaries may also
+      use browser extensions to modify browser permissions and components, privacy
+      settings, and other security controls for [Defense Evasion](https://attack.mitre.org/tactics/TA0005).(Citation:
+      Browers FriarFox)(Citation: Browser Adrozek) '
     link: https://attack.mitre.org/techniques/T1176
   - id: T1217
     name: Browser Information Discovery
@@ -2137,12 +2198,13 @@ keys:
     tide.vocab.stages:
       - Credential Access
     description: 'Adversaries may use brute force techniques to gain access to accounts
-      when passwords are unknown or when password hashes are obtained. Without knowledge
-      of the password for an account or set of accounts, an adversary may systematically
-      guess the password using a repetitive or iterative mechanism. Brute forcing
-      passwords can take place via interaction with a service that will check the
-      validity of those credentials or offline against previously acquired credential
-      data, such as password hashes.
+      when passwords are unknown or when password hashes are obtained.(Citation: TrendMicro
+      Pawn Storm Dec 2020) Without knowledge of the password for an account or set
+      of accounts, an adversary may systematically guess the password using a repetitive
+      or iterative mechanism.(Citation: Dragos Crashoverride 2018) Brute forcing passwords
+      can take place via interaction with a service that will check the validity of
+      those credentials or offline against previously acquired credential data, such
+      as password hashes.
 
 
       Brute forcing credentials may take place at various points during a breach.
@@ -2378,22 +2440,18 @@ keys:
     tide.vocab.stages:
       - Execution
     description: 'Adversaries may abuse cloud management services to execute commands
-      within virtual machines or hybrid-joined devices. Resources such as AWS Systems
-      Manager, Azure RunCommand, and Runbooks allow users to remotely run scripts
-      in virtual machines by leveraging installed virtual machine agents. Similarly,
-      in Azure AD environments, Microsoft Endpoint Manager allows Global or Intune
-      Administrators to run scripts as SYSTEM on on-premises devices joined to the
-      Azure AD.(Citation: AWS Systems Manager Run Command)(Citation: Microsoft Run
-      Command)(Citation: SpecterOps Lateral Movement from Azure to On-Prem AD 2020)
+      within virtual machines. Resources such as AWS Systems Manager, Azure RunCommand,
+      and Runbooks allow users to remotely run scripts in virtual machines by leveraging
+      installed virtual machine agents. (Citation: AWS Systems Manager Run Command)(Citation:
+      Microsoft Run Command)
 
 
       If an adversary gains administrative access to a cloud environment, they may
       be able to abuse cloud management services to execute commands in the environment’s
-      virtual machines or on-premises hybrid-joined devices. Additionally, an adversary
-      that compromises a service provider or delegated administrator account may similarly
-      be able to leverage a [Trusted Relationship](https://attack.mitre.org/techniques/T1199)
-      to execute commands in connected virtual machines.(Citation: MSTIC Nobelium
-      Oct 2021)'
+      virtual machines. Additionally, an adversary that compromises a service provider
+      or delegated administrator account may similarly be able to leverage a [Trusted
+      Relationship](https://attack.mitre.org/techniques/T1199) to execute commands
+      in connected virtual machines.(Citation: MSTIC Nobelium Oct 2021)'
     link: https://attack.mitre.org/techniques/T1651
   - id: T1580
     name: Cloud Infrastructure Discovery
@@ -2572,6 +2630,28 @@ keys:
       via [Python](https://attack.mitre.org/techniques/T1059/006).(Citation: Macro
       Malware Targets Macs)'
     link: https://attack.mitre.org/techniques/T1059/002
+  - id: T1059.010
+    name: 'Command and Scripting Interpreter: AutoHotKey & AutoIT'
+    tide.vocab.stages:
+      - Execution
+    description: 'Adversaries may execute commands and perform malicious tasks using
+      AutoIT and AutoHotKey automation scripts. AutoIT and AutoHotkey (AHK) are scripting
+      languages that enable users to automate Windows tasks. These automation scripts
+      can be used to perform a wide variety of actions, such as clicking on buttons,
+      entering text, and opening and closing programs.(Citation: AutoIT)(Citation:
+      AutoHotKey)
+
+
+      Adversaries may use AHK (`.ahk`) and AutoIT (`.au3`) scripts to execute malicious
+      code on a victim''s system. For example, adversaries have used for AHK to execute
+      payloads and other modular malware such as keyloggers. Adversaries have also
+      used custom AHK files containing embedded malware as [Phishing](https://attack.mitre.org/techniques/T1566)
+      payloads.(Citation: Splunk DarkGate)
+
+
+      These scripts may also be compiled into self-contained executable payloads (`.exe`).(Citation:
+      AutoIT)(Citation: AutoHotKey)'
+    link: https://attack.mitre.org/techniques/T1059/010
   - id: T1059.009
     name: 'Command and Scripting Interpreter: Cloud API'
     tide.vocab.stages:
@@ -2692,7 +2772,7 @@ keys:
       perform many functions. Python can be executed interactively from the command-line
       (via the <code>python.exe</code> interpreter) or via scripts (.py) that can
       be written and distributed to different systems. Python code can also be compiled
-      into binary executables.
+      into binary executables.(Citation: Zscaler APT31 Covid-19 October 2020)
 
 
       Python comes with many built-in packages to interact with the underlying system,
@@ -2733,7 +2813,7 @@ keys:
       such as [Component Object Model](https://attack.mitre.org/techniques/T1559/001)
       and the [Native API](https://attack.mitre.org/techniques/T1106) through the
       Windows API. Although tagged as legacy with no planned future evolutions, VB
-      is integrated and supported in the .NET Framework and cross-platform .NET (Citation:
+      is integrated and supported in the .NET Framework and cross-platform .NET Core.(Citation:
       VB .NET Mar 2020)(Citation: VB Microsoft)
 
 
@@ -2782,13 +2862,14 @@ keys:
     name: Communication Through Removable Media
     tide.vocab.stages:
       - Command and Control
-    description: Adversaries can perform command and control between compromised hosts
-      on potentially disconnected networks using removable media to transfer commands
-      from system to system. Both systems would need to be compromised, with the likelihood
-      that an Internet-connected system was compromised first and the second through
-      lateral movement by [Replication Through Removable Media](https://attack.mitre.org/techniques/T1091).
-      Commands and files would be relayed from the disconnected system to the Internet-connected
-      system to which the adversary has direct access.
+    description: 'Adversaries can perform command and control between compromised
+      hosts on potentially disconnected networks using removable media to transfer
+      commands from system to system.(Citation: ESET Sednit USBStealer 2014) Both
+      systems would need to be compromised, with the likelihood that an Internet-connected
+      system was compromised first and the second through lateral movement by [Replication
+      Through Removable Media](https://attack.mitre.org/techniques/T1091). Commands
+      and files would be relayed from the disconnected system to the Internet-connected
+      system to which the adversary has direct access.'
     link: https://attack.mitre.org/techniques/T1092
   - id: T1586
     name: Compromise Accounts
@@ -2899,29 +2980,29 @@ keys:
       \ via Service](https://attack.mitre.org/techniques/T1566/003))."
     link: https://attack.mitre.org/techniques/T1586/001
   - id: T1554
-    name: Compromise Client Software Binary
+    name: Compromise Host Software Binary
     tide.vocab.stages:
       - Persistence
-    description: 'Adversaries may modify client software binaries to establish persistent
-      access to systems. Client software enables users to access services provided
-      by a server. Common client software types are SSH clients, FTP clients, email
-      clients, and web browsers.
+    description: 'Adversaries may modify host software binaries to establish persistent
+      access to systems. Software binaries/executables provide a wide range of system
+      commands or services, programs, and libraries. Common software binaries are
+      SSH clients, FTP clients, email clients, web browsers, and many other user or
+      server applications.
 
 
-      Adversaries may make modifications to client software binaries to carry out
-      malicious tasks when those applications are in use. For example, an adversary
-      may copy source code for the client software, add a backdoor, compile for the
-      target, and replace the legitimate application binary (or support files) with
-      the backdoored one. An adversary may also modify an existing binary by patching
-      in malicious functionality (e.g., IAT Hooking/Entry point patching)(Citation:
-      Unit42 Banking Trojans Hooking 2022) prior to the binary’s legitimate execution.
-      For example, an adversary may modify the entry point of a binary to point to
-      malicious code patched in by the adversary before resuming normal execution
-      flow.(Citation: ESET FontOnLake Analysis 2021)
+      Adversaries may establish persistence though modifications to host software
+      binaries. For example, an adversary may replace or otherwise infect a legitimate
+      application binary (or support files) with a backdoor. Since these binaries
+      may be routinely executed by applications or the user, the adversary can leverage
+      this for persistent access to the host.
 
 
-      Since these applications may be routinely executed by the user, the adversary
-      can leverage this for persistent access to the host.'
+      An adversary may also modify an existing binary by patching in malicious functionality
+      (e.g., IAT Hooking/Entry point patching)(Citation: Unit42 Banking Trojans Hooking
+      2022) prior to the binary’s legitimate execution. For example, an adversary
+      may modify the entry point of a binary to point to malicious code patched in
+      by the adversary before resuming normal execution flow.(Citation: ESET FontOnLake
+      Analysis 2021)'
     link: https://attack.mitre.org/techniques/T1554
   - id: T1584
     name: Compromise Infrastructure
@@ -2929,12 +3010,12 @@ keys:
       - Resource Development
     description: 'Adversaries may compromise third-party infrastructure that can be
       used during targeting. Infrastructure solutions include physical or cloud servers,
-      domains, and third-party web and DNS services. Instead of buying, leasing, or
-      renting infrastructure an adversary may compromise infrastructure and use it
-      during other phases of the adversary lifecycle.(Citation: Mandiant APT1)(Citation:
-      ICANNDomainNameHijacking)(Citation: Talos DNSpionage Nov 2018)(Citation: FireEye
-      EPS Awakens Part 2) Additionally, adversaries may compromise numerous machines
-      to form a botnet they can leverage.
+      domains, network devices, and third-party web and DNS services. Instead of buying,
+      leasing, or renting infrastructure an adversary may compromise infrastructure
+      and use it during other phases of the adversary lifecycle.(Citation: Mandiant
+      APT1)(Citation: ICANNDomainNameHijacking)(Citation: Talos DNSpionage Nov 2018)(Citation:
+      FireEye EPS Awakens Part 2) Additionally, adversaries may compromise numerous
+      machines to form a botnet they can leverage.
 
 
       Use of compromised infrastructure allows adversaries to stage, launch, and execute
@@ -3016,6 +3097,37 @@ keys:
       As service will not be disrupted, the malicious subdomains may go unnoticed
       for long periods of time.(Citation: Palo Alto Unit 42 Domain Shadowing 2022)'
     link: https://attack.mitre.org/techniques/T1584/001
+  - id: T1584.008
+    name: 'Compromise Infrastructure: Network Devices'
+    tide.vocab.stages:
+      - Resource Development
+    description: 'Adversaries may compromise third-party network devices that can
+      be used during targeting. Network devices, such as small office/home office
+      (SOHO) routers, may be compromised where the adversary''s ultimate goal is not
+      [Initial Access](https://attack.mitre.org/tactics/TA0001) to that environment
+      -- instead leveraging these devices to support additional targeting.
+
+
+      Once an adversary has control, compromised network devices can be used to launch
+      additional operations, such as hosting payloads for [Phishing](https://attack.mitre.org/techniques/T1566)
+      campaigns (i.e., [Link Target](https://attack.mitre.org/techniques/T1608/005))
+      or enabling the required access to execute [Content Injection](https://attack.mitre.org/techniques/T1659)
+      operations. Adversaries may also be able to harvest reusable credentials (i.e.,
+      [Valid Accounts](https://attack.mitre.org/techniques/T1078)) from compromised
+      network devices.
+
+
+      Adversaries often target Internet-facing edge devices and related network appliances
+      that specifically do not support robust host-based defenses.(Citation: Mandiant
+      Fortinet Zero Day)(Citation: Wired Russia Cyberwar)
+
+
+      Compromised network devices may be used to support subsequent [Command and Control](https://attack.mitre.org/tactics/TA0011)
+      activity, such as [Hide Infrastructure](https://attack.mitre.org/techniques/T1665)
+      through an established [Proxy](https://attack.mitre.org/techniques/T1090) and/or
+      [Botnet](https://attack.mitre.org/techniques/T1584/005) network.(Citation: Justice
+      GRU 2024)'
+    link: https://attack.mitre.org/techniques/T1584/008
   - id: T1584.004
     name: 'Compromise Infrastructure: Server'
     tide.vocab.stages:
@@ -3023,10 +3135,10 @@ keys:
     description: 'Adversaries may compromise third-party servers that can be used
       during targeting. Use of servers allows an adversary to stage, launch, and execute
       an operation. During post-compromise activity, adversaries may utilize servers
-      for various tasks, including for Command and Control. Instead of purchasing
-      a [Server](https://attack.mitre.org/techniques/T1583/004) or [Virtual Private
-      Server](https://attack.mitre.org/techniques/T1583/003), adversaries may compromise
-      third-party servers in support of operations.
+      for various tasks, including for Command and Control.(Citation: TrendMicro EarthLusca
+      2022) Instead of purchasing a [Server](https://attack.mitre.org/techniques/T1583/004)
+      or [Virtual Private Server](https://attack.mitre.org/techniques/T1583/003),
+      adversaries may compromise third-party servers in support of operations.
 
 
       Adversaries may also compromise web servers to support watering hole operations,
@@ -3163,10 +3275,10 @@ keys:
     name: Create Account
     tide.vocab.stages:
       - Persistence
-    description: 'Adversaries may create an account to maintain access to victim systems.
-      With a sufficient level of access, creating such accounts may be used to establish
-      secondary credentialed access that do not require persistent remote access tools
-      to be deployed on the system.
+    description: 'Adversaries may create an account to maintain access to victim systems.(Citation:
+      Symantec WastedLocker June 2020) With a sufficient level of access, creating
+      such accounts may be used to establish secondary credentialed access that do
+      not require persistent remote access tools to be deployed on the system.
 
 
       Accounts may be created on the local system or within a domain or cloud tenant.
@@ -3184,6 +3296,19 @@ keys:
       Microsoft Support O365 Add Another Admin, October 2019)(Citation: AWS Create
       IAM User)(Citation: GCP Create Cloud Identity Users)(Citation: Microsoft Azure
       AD Users)
+
+
+      In addition to user accounts, cloud accounts may be associated with services.
+      Cloud providers handle the concept of service accounts in different ways. In
+      Azure, service accounts include service principals and managed identities, which
+      can be linked to various resources such as OAuth applications, serverless functions,
+      and virtual machines in order to grant those resources permissions to perform
+      various activities in the environment.(Citation: Microsoft Entra ID Service
+      Principals) In GCP, service accounts can also be linked to specific resources,
+      as well as be impersonated by other accounts for [Temporary Elevated Cloud Access](https://attack.mitre.org/techniques/T1548/005).(Citation:
+      GCP Service Accounts) While AWS has no specific concept of service accounts,
+      resources can be directly granted permission to assume roles.(Citation: AWS
+      Instance Profiles)(Citation: AWS Lambda Execution Role)
 
 
       Adversaries may create accounts that only have access to specific cloud services,
@@ -3204,7 +3329,8 @@ keys:
       where access and permissions are configured across systems and services that
       are part of that domain. Domain accounts can cover user, administrator, and
       service accounts. With a sufficient level of access, the <code>net user /add
-      /domain</code> command can be used to create a domain account.
+      /domain</code> command can be used to create a domain account.(Citation: Savill
+      1999)
 
 
       Such accounts may be used to establish secondary credentialed access that do
@@ -3249,6 +3375,36 @@ keys:
       \ to create or modify system processes in order to escalate privileges.(Citation:\
       \ OSX Malware Detection)  "
     link: https://attack.mitre.org/techniques/T1543
+  - id: T1543.005
+    name: 'Create or Modify System Process: Container Service'
+    tide.vocab.stages:
+      - Persistence
+      - Privilege Escalation
+    description: 'Adversaries may create or modify container or container cluster
+      management tools that run as daemons, agents, or services on individual hosts.
+      These include software for creating and managing individual containers, such
+      as Docker and Podman, as well as container cluster node-level agents such as
+      kubelet. By modifying these services, an adversary may be able to achieve persistence
+      or escalate their privileges on a host.
+
+
+      For example, by using the `docker run` or `podman run` command with the `restart=always`
+      directive, a container can be configured to persistently restart on the host.(Citation:
+      AquaSec TeamTNT 2023) A user with access to the (rootful) docker command may
+      also be able to escalate their privileges on the host.(Citation: GTFOBins Docker)
+
+
+      In Kubernetes environments, DaemonSets allow an adversary to persistently [Deploy
+      Container](https://attack.mitre.org/techniques/T1610)s on all nodes, including
+      ones added later to the cluster.(Citation: Aquasec Kubernetes Attack 2023)(Citation:
+      Kubernetes DaemonSet) Pods can also be deployed to specific nodes using the
+      `nodeSelector` or `nodeName` fields in the pod spec.(Citation: Kubernetes Assigning
+      Pods to Nodes)(Citation: AppSecco Kubernetes Namespace Breakout 2020)
+
+
+      Note that containers can also be configured to run as [Systemd Service](https://attack.mitre.org/techniques/T1543/002)s.(Citation:
+      Podman Systemd)(Citation: Docker Systemd)'
+    link: https://attack.mitre.org/techniques/T1543/005
   - id: T1543.001
     name: 'Create or Modify System Process: Launch Agent'
     tide.vocab.stages:
@@ -3340,7 +3496,10 @@ keys:
       \ could result in privilege escalation. Adversaries may also place symbolic\
       \ links in these directories, enabling systemd to find these payloads regardless\
       \ of where they reside on the filesystem.(Citation: Anomali Rocke March 2019)(Citation:\
-      \ airwalk backdoor unix systems)(Citation: Rapid7 Service Persistence 22JUNE2016) "
+      \ airwalk backdoor unix systems)(Citation: Rapid7 Service Persistence 22JUNE2016)\
+      \ \n\nThe .service file’s User directive can be used to run service as a specific\
+      \ user, which could result in privilege escalation based on specific user/group\
+      \ permissions. "
     link: https://attack.mitre.org/techniques/T1543/002
   - id: T1543.003
     name: 'Create or Modify System Process: Windows Service'
@@ -3373,23 +3532,28 @@ keys:
       \ June 2020)(Citation: Unit42 AcidBox June 2020)\n\nServices may be created\
       \ with administrator privileges but are executed under SYSTEM privileges, so\
       \ an adversary may also use a service to escalate privileges. Adversaries may\
-      \ also directly start services through [Service Execution](https://attack.mitre.org/techniques/T1569/002).\
-      \ To make detection analysis more challenging, malicious services may also incorporate\
+      \ also directly start services through [Service Execution](https://attack.mitre.org/techniques/T1569/002).\n\
+      \nTo make detection analysis more challenging, malicious services may also incorporate\
       \ [Masquerade Task or Service](https://attack.mitre.org/techniques/T1036/004)\
       \ (ex: using a service and/or payload name related to a legitimate OS or benign\
-      \ software component)."
+      \ software component). Adversaries may also create ‘hidden’ services (i.e.,\
+      \ [Hide Artifacts](https://attack.mitre.org/techniques/T1564)), for example\
+      \ by using the `sc sdset` command to set service permissions via the Service\
+      \ Descriptor Definition Language (SDDL). This may hide a Windows service from\
+      \ the view of standard service enumeration methods such as `Get-Service`, `sc\
+      \ query`, and `services.exe`.(Citation: SANS 1)(Citation: SANS 2)"
     link: https://attack.mitre.org/techniques/T1543/003
   - id: T1555
     name: Credentials from Password Stores
     tide.vocab.stages:
       - Credential Access
-    description: Adversaries may search for common password storage locations to obtain
-      user credentials. Passwords are stored in several places on a system, depending
-      on the operating system or application holding the credentials. There are also
-      specific applications and services that store passwords to make them easier
-      for users to manage and maintain, such as password managers and cloud secrets
-      vaults. Once credentials are obtained, they can be used to perform lateral movement
-      and access restricted information.
+    description: 'Adversaries may search for common password storage locations to
+      obtain user credentials.(Citation: F-Secure The Dukes) Passwords are stored
+      in several places on a system, depending on the operating system or application
+      holding the credentials. There are also specific applications and services that
+      store passwords to make them easier for users to manage and maintain, such as
+      password managers and cloud secrets vaults. Once credentials are obtained, they
+      can be used to perform lateral movement and access restricted information.'
     link: https://attack.mitre.org/techniques/T1555
   - id: T1555.006
     name: 'Credentials from Password Stores: Cloud Secrets Management Stores'
@@ -3492,19 +3656,21 @@ keys:
     name: 'Credentials from Password Stores: Securityd Memory'
     tide.vocab.stages:
       - Credential Access
-    description: 'An adversary may obtain root access (allowing them to read securityd’s
-      memory), then they can scan through memory to find the correct sequence of keys
-      in relatively few tries to decrypt the user’s logon keychain. This provides
-      the adversary with all the plaintext passwords for users, WiFi, mail, browsers,
-      certificates, secure notes, etc.(Citation: OS X Keychain)(Citation: OSX Keydnap
-      malware)
+    description: 'An adversary with root access may gather credentials by reading
+      `securityd`’s memory. `securityd` is a service/daemon responsible for implementing
+      security protocols such as encryption and authorization.(Citation: Apple Dev
+      SecurityD) A privileged adversary may be able to scan through `securityd`''s
+      memory to find the correct sequence of keys to decrypt the user’s logon keychain.
+      This may provide the adversary with various plaintext passwords, such as those
+      for users, WiFi, mail, browsers, certificates, secure notes, etc.(Citation:
+      OS X Keychain)(Citation: OSX Keydnap malware)
 
 
       In OS X prior to El Capitan, users with root access can read plaintext keychain
       passwords of logged-in users because Apple’s keychain implementation allows
       these credentials to be cached so that users are not repeatedly prompted for
       passwords.(Citation: OS X Keychain)(Citation: External to DA, the OS X Way)
-      Apple’s securityd utility takes the user’s logon password, encrypts it with
+      Apple’s `securityd` utility takes the user’s logon password, encrypts it with
       PBKDF2, and stores this master key in memory. Apple also uses a set of keys
       and algorithms to encrypt the user’s password, but once the master key is found,
       an adversary need only iterate over the other values to unlock the final password.(Citation:
@@ -3672,9 +3838,9 @@ keys:
     tide.vocab.stages:
       - Impact
     description: 'Adversaries may insert, delete, or manipulate data in order to influence
-      external outcomes or hide activity, thus threatening the integrity of the data.
-      By manipulating data, adversaries may attempt to affect a business process,
-      organizational understanding, or decision making.
+      external outcomes or hide activity, thus threatening the integrity of the data.(Citation:
+      Sygnia Elephant Beetle Jan 2022) By manipulating data, adversaries may attempt
+      to affect a business process, organizational understanding, or decision making.
 
 
       The type of modification and the impact it will have depends on the target application
@@ -3749,22 +3915,23 @@ keys:
     tide.vocab.stages:
       - Command and Control
     description: 'Adversaries may obfuscate command and control traffic to make it
-      more difficult to detect. Command and control (C2) communications are hidden
-      (but not necessarily encrypted) in an attempt to make the content more difficult
-      to discover or decipher and to make the communication less conspicuous and hide
-      commands from being seen. This encompasses many methods, such as adding junk
-      data to protocol traffic, using steganography, or impersonating legitimate protocols. '
+      more difficult to detect.(Citation: Bitdefender FunnyDream Campaign November
+      2020) Command and control (C2) communications are hidden (but not necessarily
+      encrypted) in an attempt to make the content more difficult to discover or decipher
+      and to make the communication less conspicuous and hide commands from being
+      seen. This encompasses many methods, such as adding junk data to protocol traffic,
+      using steganography, or impersonating legitimate protocols. '
     link: https://attack.mitre.org/techniques/T1001
   - id: T1001.001
     name: 'Data Obfuscation: Junk Data'
     tide.vocab.stages:
       - Command and Control
     description: 'Adversaries may add junk data to protocols used for command and
-      control to make detection more difficult. By adding random or meaningless data
-      to the protocols used for command and control, adversaries can prevent trivial
-      methods for decoding, deciphering, or otherwise analyzing the traffic. Examples
-      may include appending/prepending data with junk characters or writing junk characters
-      between significant characters. '
+      control to make detection more difficult.(Citation: FireEye SUNBURST Backdoor
+      December 2020) By adding random or meaningless data to the protocols used for
+      command and control, adversaries can prevent trivial methods for decoding, deciphering,
+      or otherwise analyzing the traffic. Examples may include appending/prepending
+      data with junk characters or writing junk characters between significant characters. '
     link: https://attack.mitre.org/techniques/T1001/001
   - id: T1001.003
     name: 'Data Obfuscation: Protocol Impersonation'
@@ -4213,15 +4380,22 @@ keys:
       to execute processes associated with a particular image or deployment, such
       as processes that execute or download malware. In others, an adversary may deploy
       a new container configured without network rules, user limitations, etc. to
-      bypass existing defenses within the environment.
+      bypass existing defenses within the environment. In Kubernetes environments,
+      an adversary may attempt to deploy a privileged or vulnerable container into
+      a specific node in order to [Escape to Host](https://attack.mitre.org/techniques/T1611)
+      and access other containers running on the node. (Citation: AppSecco Kubernetes
+      Namespace Breakout 2020)
 
 
       Containers can be deployed by various means, such as via Docker''s <code>create</code>
       and <code>start</code> APIs or via a web application such as the Kubernetes
-      dashboard or Kubeflow.(Citation: Docker Containers API)(Citation: Kubernetes
-      Dashboard)(Citation: Kubeflow Pipelines) Adversaries may deploy containers based
-      on retrieved or built malicious images or from benign images that download and
-      execute malicious payloads at runtime.(Citation: Aqua Build Images on Hosts)'
+      dashboard or Kubeflow. (Citation: Docker Containers API)(Citation: Kubernetes
+      Dashboard)(Citation: Kubeflow Pipelines) In Kubernetes environments, containers
+      may be deployed through workloads such as ReplicaSets or DaemonSets, which can
+      allow containers to be deployed across multiple nodes.(Citation: Kubernetes
+      Workload Management) Adversaries may deploy containers based on retrieved or
+      built malicious images or from benign images that download and execute malicious
+      payloads at runtime.(Citation: Aqua Build Images on Hosts)'
     link: https://attack.mitre.org/techniques/T1610
   - id: T1587
     name: Develop Capabilities
@@ -4473,64 +4647,58 @@ keys:
       \ Shamoon 2012)(Citation: FireEye Shamoon Nov 2016)(Citation: Palo Alto Shamoon\
       \ Nov 2016)(Citation: Kaspersky StoneDrill 2017)"
     link: https://attack.mitre.org/techniques/T1561/002
+  - id: T1482
+    name: Domain Trust Discovery
+    tide.vocab.stages:
+      - Discovery
+    description: 'Adversaries may attempt to gather information on domain trust relationships
+      that may be used to identify lateral movement opportunities in Windows multi-domain/forest
+      environments. Domain trusts provide a mechanism for a domain to allow access
+      to resources based on the authentication procedures of another domain.(Citation:
+      Microsoft Trusts) Domain trusts allow the users of the trusted domain to access
+      resources in the trusting domain. The information discovered may help the adversary
+      conduct [SID-History Injection](https://attack.mitre.org/techniques/T1134/005),
+      [Pass the Ticket](https://attack.mitre.org/techniques/T1550/003), and [Kerberoasting](https://attack.mitre.org/techniques/T1558/003).(Citation:
+      AdSecurity Forging Trust Tickets)(Citation: Harmj0y Domain Trusts) Domain trusts
+      can be enumerated using the `DSEnumerateDomainTrusts()` Win32 API call, .NET
+      methods, and LDAP.(Citation: Harmj0y Domain Trusts) The Windows utility [Nltest](https://attack.mitre.org/software/S0359)
+      is known to be used by adversaries to enumerate domain trusts.(Citation: Microsoft
+      Operation Wilysupply)'
+    link: https://attack.mitre.org/techniques/T1482
   - id: T1484
-    name: Domain Policy Modification
+    name: Domain or Tenant Policy Modification
     tide.vocab.stages:
       - Defense Evasion
       - Privilege Escalation
-    description: 'Adversaries may modify the configuration settings of a domain to
-      evade defenses and/or escalate privileges in domain environments. Domains provide
-      a centralized means of managing how computer resources (ex: computers, user
-      accounts) can act, and interact with each other, on a network. The policy of
-      the domain also includes configuration settings that may apply between domains
-      in a multi-domain/forest environment. Modifications to domain settings may include
-      altering domain Group Policy Objects (GPOs) or changing trust settings for domains,
-      including federation trusts.
-
-
-      With sufficient permissions, adversaries can modify domain policy settings.
-      Since domain configuration settings control many of the interactions within
-      the Active Directory (AD) environment, there are a great number of potential
-      attacks that can stem from this abuse. Examples of such abuse include modifying
-      GPOs to push a malicious [Scheduled Task](https://attack.mitre.org/techniques/T1053/005)
-      to computers throughout the domain environment(Citation: ADSecurity GPO Persistence
-      2016)(Citation: Wald0 Guide to GPOs)(Citation: Harmj0y Abusing GPO Permissions)
-      or modifying domain trusts to include an adversary controlled domain where they
-      can control access tokens that will subsequently be accepted by victim domain
-      resources.(Citation: Microsoft - Customer Guidance on Recent Nation-State Cyber
-      Attacks) Adversaries can also change configuration settings within the AD environment
-      to implement a [Rogue Domain Controller](https://attack.mitre.org/techniques/T1207).
-
-
-      Adversaries may temporarily modify domain policy, carry out a malicious action(s),
-      and then revert the change to remove suspicious indicators.'
+    description: "Adversaries may modify the configuration settings of a domain or\
+      \ identity tenant to evade defenses and/or escalate privileges in centrally\
+      \ managed environments. Such services provide a centralized means of managing\
+      \ identity resources such as devices and accounts, and often include configuration\
+      \ settings that may apply between domains or tenants such as trust relationships,\
+      \ identity syncing, or identity federation.\n\nModifications to domain or tenant\
+      \ settings may include altering domain Group Policy Objects (GPOs) in Microsoft\
+      \ Active Directory (AD) or changing trust settings for domains, including federation\
+      \ trusts relationships between domains or tenants.\n\nWith sufficient permissions,\
+      \ adversaries can modify domain or tenant policy settings. Since configuration\
+      \ settings for these services apply to a large number of identity resources,\
+      \ there are a great number of potential attacks malicious outcomes that can\
+      \ stem from this abuse. Examples of such abuse include:  \n\n* modifying GPOs\
+      \ to push a malicious [Scheduled Task](https://attack.mitre.org/techniques/T1053/005)\
+      \ to computers throughout the domain environment(Citation: ADSecurity GPO Persistence\
+      \ 2016)(Citation: Wald0 Guide to GPOs)(Citation: Harmj0y Abusing GPO Permissions)\n\
+      * modifying domain trusts to include an adversary-controlled domain, allowing\
+      \ adversaries to  forge access tokens that will subsequently be accepted by\
+      \ victim domain resources(Citation: Microsoft - Customer Guidance on Recent\
+      \ Nation-State Cyber Attacks)\n* changing configuration settings within the\
+      \ AD environment to implement a [Rogue Domain Controller](https://attack.mitre.org/techniques/T1207).\n\
+      * adding new, adversary-controlled federated identity providers to identity\
+      \ tenants, allowing adversaries to authenticate as any user managed by the victim\
+      \ tenant (Citation: Okta Cross-Tenant Impersonation 2023)\n\nAdversaries may\
+      \ temporarily modify domain or tenant policy, carry out a malicious action(s),\
+      \ and then revert the change to remove suspicious indicators."
     link: https://attack.mitre.org/techniques/T1484
-  - id: T1484.002
-    name: 'Domain Policy Modification: Domain Trust Modification'
-    tide.vocab.stages:
-      - Defense Evasion
-      - Privilege Escalation
-    description: 'Adversaries may add new domain trusts or modify the properties of
-      existing domain trusts to evade defenses and/or elevate privileges. Domain trust
-      details, such as whether or not a domain is federated, allow authentication
-      and authorization properties to apply between domains for the purpose of accessing
-      shared resources.(Citation: Microsoft - Azure AD Federation) These trust objects
-      may include accounts, credentials, and other authentication material applied
-      to servers, tokens, and domains.
-
-
-      Manipulating the domain trusts may allow an adversary to escalate privileges
-      and/or evade defenses by modifying settings to add objects which they control.
-      For example, this may be used to forge [SAML Tokens](https://attack.mitre.org/techniques/T1606/002),
-      without the need to compromise the signing certificate to forge new credentials.
-      Instead, an adversary can manipulate domain trusts to add their own signing
-      certificate. An adversary may also convert a domain to a federated domain, which
-      may enable malicious trust modifications such as altering the claim issuance
-      rules to log in any valid set of credentials as a specified user.(Citation:
-      AADInternals zure AD Federated Domain) '
-    link: https://attack.mitre.org/techniques/T1484/002
   - id: T1484.001
-    name: 'Domain Policy Modification: Group Policy Modification'
+    name: 'Domain or Tenant Policy Modification: Group Policy Modification'
     tide.vocab.stages:
       - Defense Evasion
       - Privilege Escalation
@@ -4565,24 +4733,33 @@ keys:
       \ the user account under the adversary's control would then be able to modify\
       \ GPOs.(Citation: Harmj0y SeEnableDelegationPrivilege Right)"
     link: https://attack.mitre.org/techniques/T1484/001
-  - id: T1482
-    name: Domain Trust Discovery
+  - id: T1484.002
+    name: 'Domain or Tenant Policy Modification: Trust Modification'
     tide.vocab.stages:
-      - Discovery
-    description: 'Adversaries may attempt to gather information on domain trust relationships
-      that may be used to identify lateral movement opportunities in Windows multi-domain/forest
-      environments. Domain trusts provide a mechanism for a domain to allow access
-      to resources based on the authentication procedures of another domain.(Citation:
-      Microsoft Trusts) Domain trusts allow the users of the trusted domain to access
-      resources in the trusting domain. The information discovered may help the adversary
-      conduct [SID-History Injection](https://attack.mitre.org/techniques/T1134/005),
-      [Pass the Ticket](https://attack.mitre.org/techniques/T1550/003), and [Kerberoasting](https://attack.mitre.org/techniques/T1558/003).(Citation:
-      AdSecurity Forging Trust Tickets)(Citation: Harmj0y Domain Trusts) Domain trusts
-      can be enumerated using the `DSEnumerateDomainTrusts()` Win32 API call, .NET
-      methods, and LDAP.(Citation: Harmj0y Domain Trusts) The Windows utility [Nltest](https://attack.mitre.org/software/S0359)
-      is known to be used by adversaries to enumerate domain trusts.(Citation: Microsoft
-      Operation Wilysupply)'
-    link: https://attack.mitre.org/techniques/T1482
+      - Defense Evasion
+      - Privilege Escalation
+    description: "Adversaries may add new domain trusts, modify the properties of\
+      \ existing domain trusts, or otherwise change the configuration of trust relationships\
+      \ between domains and tenants to evade defenses and/or elevate privileges.Trust\
+      \ details, such as whether or not user identities are federated, allow authentication\
+      \ and authorization properties to apply between domains or tenants for the purpose\
+      \ of accessing shared resources.(Citation: Microsoft - Azure AD Federation)\
+      \ These trust objects may include accounts, credentials, and other authentication\
+      \ material applied to servers, tokens, and domains.\n\nManipulating these trusts\
+      \ may allow an adversary to escalate privileges and/or evade defenses by modifying\
+      \ settings to add objects which they control. For example, in Microsoft Active\
+      \ Directory (AD) environments, this may be used to forge [SAML Tokens](https://attack.mitre.org/techniques/T1606/002)\
+      \ without the need to compromise the signing certificate to forge new credentials.\
+      \ Instead, an adversary can manipulate domain trusts to add their own signing\
+      \ certificate. An adversary may also convert an AD domain to a federated domain\
+      \ using Active Directory Federation Services (AD FS), which may enable malicious\
+      \ trust modifications such as altering the claim issuance rules to log in any\
+      \ valid set of credentials as a specified user.(Citation: AADInternals zure\
+      \ AD Federated Domain) \n\nAn adversary may also add a new federated identity\
+      \ provider to an identity tenant such as Okta, which may enable the adversary\
+      \ to authenticate as any user of the tenant.(Citation: Okta Cross-Tenant Impersonation\
+      \ 2023)"
+    link: https://attack.mitre.org/techniques/T1484/002
   - id: T1189
     name: Drive-by Compromise
     tide.vocab.stages:
@@ -4794,7 +4971,7 @@ keys:
     name: Encrypted Channel
     tide.vocab.stages:
       - Command and Control
-    description: Adversaries may employ a known encryption algorithm to conceal command
+    description: Adversaries may employ an encryption algorithm to conceal command
       and control traffic rather than relying on any inherent protections provided
       by a communication protocol. Despite the use of a secure algorithm, these implementations
       may be vulnerable to reverse engineering if secret keys are encoded and/or generated
@@ -5016,7 +5193,8 @@ keys:
 
       Gaining access to the host may provide the adversary with the opportunity to
       achieve follow-on objectives, such as establishing persistence, moving laterally
-      within the environment, or setting up a command and control channel on the host.'
+      within the environment, accessing other containers running on the host, or setting
+      up a command and control channel on the host.'
     link: https://attack.mitre.org/techniques/T1611
   - id: T1585
     name: Establish Accounts
@@ -5044,7 +5222,11 @@ keys:
       Establishing accounts can also include the creation of accounts with email providers,
       which may be directly leveraged for [Phishing for Information](https://attack.mitre.org/techniques/T1598)
       or [Phishing](https://attack.mitre.org/techniques/T1566).(Citation: Mandiant
-      APT1)'
+      APT1) In addition, establishing accounts may allow adversaries to abuse free
+      services, such as registering for trial periods to [Acquire Infrastructure](https://attack.mitre.org/techniques/T1583)
+      for malicious purposes.(Citation: Free Trial PurpleUrchin)
+
+      '
     link: https://attack.mitre.org/techniques/T1585
   - id: T1585.003
     name: 'Establish Accounts: Cloud Accounts'
@@ -5074,15 +5256,20 @@ keys:
       Adversaries can use accounts created with email providers to further their operations,
       such as leveraging them to conduct [Phishing for Information](https://attack.mitre.org/techniques/T1598)
       or [Phishing](https://attack.mitre.org/techniques/T1566).(Citation: Mandiant
-      APT1) Adversaries may also take steps to cultivate a persona around the email
-      account, such as through use of [Social Media Accounts](https://attack.mitre.org/techniques/T1585/001),
+      APT1) Establishing email accounts may also allow adversaries to abuse free services
+      – such as trial periods – to [Acquire Infrastructure](https://attack.mitre.org/techniques/T1583)
+      for follow-on purposes.(Citation: Free Trial PurpleUrchin)
+
+
+      Adversaries may also take steps to cultivate a persona around the email account,
+      such as through use of [Social Media Accounts](https://attack.mitre.org/techniques/T1585/001),
       to increase the chance of success of follow-on behaviors. Created email accounts
       can also be used in the acquisition of infrastructure (ex: [Domains](https://attack.mitre.org/techniques/T1583/001)).(Citation:
       Mandiant APT1)
 
 
       To decrease the chance of physically tying back operations to themselves, adversaries
-      may make use of disposable email services.(Citation: Trend Micro R980 2016)'
+      may make use of disposable email services.(Citation: Trend Micro R980 2016) '
     link: https://attack.mitre.org/techniques/T1585/002
   - id: T1585.001
     name: 'Establish Accounts: Social Media Accounts'
@@ -5420,7 +5607,8 @@ keys:
       the inherited elevated permissions. Adversaries can use these scripts to execute
       a malicious executable or install other malicious components (such as a [Launch
       Daemon](https://attack.mitre.org/techniques/T1543/004)) with the elevated permissions.(Citation:
-      Application Bundle Manipulation Brandon Dalton)(Citation: wardle evilquest parti)
+      Application Bundle Manipulation Brandon Dalton)(Citation: wardle evilquest parti)(Citation:
+      Windows AppleJeus GReAT)(Citation: Debian Manual Maintainer Scripts)
 
 
       Depending on the distribution, Linux versions of package installer scripts are
@@ -5430,10 +5618,9 @@ keys:
 
 
       For Windows, the Microsoft Installer services uses `.msi` files to manage the
-      installing, updating, and uninstalling of applications. Adversaries have leveraged
-      `Prebuild` and `Postbuild` events to run commands before or after a build when
-      installing .msi files.(Citation: Windows AppleJeus GReAT)(Citation: Debian Manual
-      Maintainer Scripts)'
+      installing, updating, and uninstalling of applications. These installation routines
+      may also include instructions to perform additional actions that may be abused
+      by adversaries.(Citation: Microsoft Installation Procedures)'
     link: https://attack.mitre.org/techniques/T1546/016
   - id: T1546.006
     name: 'Event Triggered Execution: LC_LOAD_DYLIB Addition'
@@ -5607,16 +5794,16 @@ keys:
       executing malicious content triggered by a Windows Management Instrumentation
       (WMI) event subscription. WMI can be used to install event filters, providers,
       consumers, and bindings that execute code when a defined event occurs. Examples
-      of events that may be subscribed to are the wall clock time, user loging, or
+      of events that may be subscribed to are the wall clock time, user login, or
       the computer''s uptime.(Citation: Mandiant M-Trends 2015)
 
 
       Adversaries may use the capabilities of WMI to subscribe to an event and execute
       arbitrary code when that event occurs, providing persistence on a system.(Citation:
       FireEye WMI SANS 2015)(Citation: FireEye WMI 2015) Adversaries may also compile
-      WMI scripts into Windows Management Object (MOF) files (.mof extension) that
-      can be used to create a malicious subscription.(Citation: Dell WMI Persistence)(Citation:
-      Microsoft MOF May 2018)
+      WMI scripts – using `mofcomp.exe`  –into Windows Management Object (MOF) files
+      (.mof extension) that can be used to create a malicious subscription.(Citation:
+      Dell WMI Persistence)(Citation: Microsoft MOF May 2018)
 
 
       WMI subscription execution is proxied by the WMI Provider Host process (WmiPrvSe.exe)
@@ -5921,27 +6108,37 @@ keys:
     name: Exploit Public-Facing Application
     tide.vocab.stages:
       - Initial Access
-    description: "Adversaries may attempt to exploit a weakness in an Internet-facing\
-      \ host or system to initially access a network. The weakness in the system can\
-      \ be a software bug, a temporary glitch, or a misconfiguration.\n\nExploited\
-      \ applications are often websites/web servers, but can also include databases\
-      \ (like SQL), standard services (like SMB or SSH), network device administration\
-      \ and management protocols (like SNMP and Smart Install), and any other system\
-      \ with Internet accessible open sockets.(Citation: NVD CVE-2016-6662)(Citation:\
-      \ CIS Multiple SMB Vulnerabilities)(Citation: US-CERT TA18-106A Network Infrastructure\
-      \ Devices 2018)(Citation: Cisco Blog Legacy Device Attacks)(Citation: NVD CVE-2014-7169)\
-      \ Depending on the flaw being exploited this may also involve [Exploitation\
-      \ for Defense Evasion](https://attack.mitre.org/techniques/T1211). \n\nIf an\
-      \ application is hosted on cloud-based infrastructure and/or is containerized,\
-      \ then exploiting it may lead to compromise of the underlying instance or container.\
-      \ This can allow an adversary a path to access the cloud or container APIs,\
-      \ exploit container host access via [Escape to Host](https://attack.mitre.org/techniques/T1611),\
-      \ or take advantage of weak identity and access management policies.\n\nAdversaries\
-      \ may also exploit edge network infrastructure and related appliances, specifically\
-      \ targeting devices that do not support robust host-based defenses.(Citation:\
-      \ Mandiant Fortinet Zero Day)(Citation: Wired Russia Cyberwar)\n\nFor websites\
-      \ and databases, the OWASP top 10 and CWE top 25 highlight the most common web-based\
-      \ vulnerabilities.(Citation: OWASP Top 10)(Citation: CWE top 25)"
+    description: 'Adversaries may attempt to exploit a weakness in an Internet-facing
+      host or system to initially access a network. The weakness in the system can
+      be a software bug, a temporary glitch, or a misconfiguration.
+
+
+      Exploited applications are often websites/web servers, but can also include
+      databases (like SQL), standard services (like SMB or SSH), network device administration
+      and management protocols (like SNMP and Smart Install), and any other system
+      with Internet accessible open sockets.(Citation: NVD CVE-2016-6662)(Citation:
+      CIS Multiple SMB Vulnerabilities)(Citation: US-CERT TA18-106A Network Infrastructure
+      Devices 2018)(Citation: Cisco Blog Legacy Device Attacks)(Citation: NVD CVE-2014-7169)
+      Depending on the flaw being exploited this may also involve [Exploitation for
+      Defense Evasion](https://attack.mitre.org/techniques/T1211) or [Exploitation
+      for Client Execution](https://attack.mitre.org/techniques/T1203).
+
+
+      If an application is hosted on cloud-based infrastructure and/or is containerized,
+      then exploiting it may lead to compromise of the underlying instance or container.
+      This can allow an adversary a path to access the cloud or container APIs, exploit
+      container host access via [Escape to Host](https://attack.mitre.org/techniques/T1611),
+      or take advantage of weak identity and access management policies.
+
+
+      Adversaries may also exploit edge network infrastructure and related appliances,
+      specifically targeting devices that do not support robust host-based defenses.(Citation:
+      Mandiant Fortinet Zero Day)(Citation: Wired Russia Cyberwar)
+
+
+      For websites and databases, the OWASP top 10 and CWE top 25 highlight the most
+      common web-based vulnerabilities.(Citation: OWASP Top 10)(Citation: CWE top
+      25)'
     link: https://attack.mitre.org/techniques/T1190
   - id: T1203
     name: Exploitation for Client Execution
@@ -6174,7 +6371,11 @@ keys:
       [Native API](https://attack.mitre.org/techniques/T1106). Adversaries may also
       leverage a [Network Device CLI](https://attack.mitre.org/techniques/T1059/008)
       on network devices to gather file and directory information (e.g. <code>dir</code>,
-      <code>show flash</code>, and/or <code>nvram</code>).(Citation: US-CERT-TA18-106A)'
+      <code>show flash</code>, and/or <code>nvram</code>).(Citation: US-CERT-TA18-106A)
+
+
+      Some files and directories may require elevated or specific user permissions
+      to access.'
     link: https://attack.mitre.org/techniques/T1083
   - id: T1222
     name: File and Directory Permissions Modification
@@ -6293,11 +6494,12 @@ keys:
       \ theft.(Citation: VEC)\n\nExtortion by ransomware may occur, for example, when\
       \ an adversary demands payment from a victim after [Data Encrypted for Impact](https://attack.mitre.org/techniques/T1486)\
       \ (Citation: NYT-Colonial) and [Exfiltration](https://attack.mitre.org/tactics/TA0010)\
-      \ of data, followed by threatening public exposure unless payment is made to\
-      \ the adversary.(Citation: Mandiant-leaks)\n\nDue to the potentially immense\
-      \ business impact of financial theft, an adversary may abuse the possibility\
-      \ of financial theft and seeking monetary gain to divert attention from their\
-      \ true goals such as [Data Destruction](https://attack.mitre.org/techniques/T1485)\
+      \ of data, followed by threatening to leak sensitive data to the public unless\
+      \ payment is made to the adversary.(Citation: Mandiant-leaks) Adversaries may\
+      \ use dedicated leak sites to distribute victim data.(Citation: Crowdstrike-leaks)\n\
+      \nDue to the potentially immense business impact of financial theft, an adversary\
+      \ may abuse the possibility of financial theft and seeking monetary gain to\
+      \ divert attention from their true goals such as [Data Destruction](https://attack.mitre.org/techniques/T1485)\
       \ and business disruption.(Citation: AP-NotPetya)"
     link: https://attack.mitre.org/techniques/T1657
   - id: T1495
@@ -6600,16 +6802,18 @@ keys:
     description: 'Adversaries may gather information about the victim''s identity
       that can be used during targeting. Information about identities may include
       a variety of details, including personal data (ex: employee names, email addresses,
-      etc.) as well as sensitive details such as credentials.
+      security question responses, etc.) as well as sensitive details such as credentials
+      or multi-factor authentication (MFA) configurations.
 
 
       Adversaries may gather this information in various ways, such as direct elicitation
       via [Phishing for Information](https://attack.mitre.org/techniques/T1598). Information
       about users could also be enumerated via other active means (i.e. [Active Scanning](https://attack.mitre.org/techniques/T1595))
       such as probing and analyzing responses from authentication services that may
-      reveal valid usernames in a system.(Citation: GrimBlog UsernameEnum) Information
-      about victims may also be exposed to adversaries via online or other accessible
-      data sets (ex: [Social Media](https://attack.mitre.org/techniques/T1593/001)
+      reveal valid usernames in a system or permitted MFA /methods associated with
+      those usernames.(Citation: GrimBlog UsernameEnum)(Citation: Obsidian SSPR Abuse
+      2023) Information about victims may also be exposed to adversaries via online
+      or other accessible data sets (ex: [Social Media](https://attack.mitre.org/techniques/T1593/001)
       or [Search Victim-Owned Websites](https://attack.mitre.org/techniques/T1594)).(Citation:
       OPM Leak)(Citation: Register Deloitte)(Citation: Register Uber)(Citation: Detectify
       Slack Tokens)(Citation: Forbes GitHub Creds)(Citation: GitHub truffleHog)(Citation:
@@ -7016,8 +7220,9 @@ keys:
       to gather information on Group Policy settings.(Citation: Microsoft gpresult)(Citation:
       Github PowerShell Empire) Adversaries may use this information to shape follow-on
       behaviors, including determining potential attack paths within the target network
-      as well as opportunities to manipulate Group Policy settings (i.e. [Domain Policy
-      Modification](https://attack.mitre.org/techniques/T1484)) for their benefit.'
+      as well as opportunities to manipulate Group Policy settings (i.e. [Domain or
+      Tenant Policy Modification](https://attack.mitre.org/techniques/T1484)) for
+      their benefit.'
     link: https://attack.mitre.org/techniques/T1615
   - id: T1200
     name: Hardware Additions
@@ -7097,6 +7302,28 @@ keys:
       delete all emails related to specific topics (such as internal security incident
       notifications).'
     link: https://attack.mitre.org/techniques/T1564/008
+  - id: T1564.012
+    name: 'Hide Artifacts: File/Path Exclusions'
+    tide.vocab.stages:
+      - Defense Evasion
+    description: 'Adversaries may attempt to hide their file-based artifacts by writing
+      them to specific folders or file names excluded from antivirus (AV) scanning
+      and other defensive capabilities. AV and other file-based scanners often include
+      exclusions to optimize performance as well as ease installation and legitimate
+      use of applications. These exclusions may be contextual (e.g., scans are only
+      initiated in response to specific triggering events/alerts), but are also often
+      hardcoded strings referencing specific folders and/or files assumed to be trusted
+      and legitimate.(Citation: Microsoft File Folder Exclusions)
+
+
+      Adversaries may abuse these exclusions to hide their file-based artifacts. For
+      example, rather than  tampering with tool settings to add a new exclusion (i.e.,
+      [Disable or Modify Tools](https://attack.mitre.org/techniques/T1562/001)), adversaries
+      may drop their file-based payloads in default or otherwise well-known exclusions.
+      Adversaries may also use [Security Software Discovery](https://attack.mitre.org/techniques/T1518/001)
+      and other [Discovery](https://attack.mitre.org/tactics/TA0007)/[Reconnaissance](https://attack.mitre.org/tactics/TA0043)
+      activities to both discover and verify existing exclusions in a victim environment.'
+    link: https://attack.mitre.org/techniques/T1564/012
   - id: T1564.005
     name: 'Hide Artifacts: Hidden File System'
     tide.vocab.stages:
@@ -7200,19 +7427,23 @@ keys:
       \ from the plain sight of users. In some cases, windows that would typically\
       \ be displayed when an application carries out an operation can be hidden. This\
       \ may be utilized by system administrators to avoid disrupting user work environments\
-      \ when carrying out administrative tasks. \n\nOn Windows, there are a variety\
-      \ of features in scripting languages in Windows, such as [PowerShell](https://attack.mitre.org/techniques/T1059/001),\
-      \ Jscript, and [Visual Basic](https://attack.mitre.org/techniques/T1059/005)\
-      \ to make windows hidden. One example of this is <code>powershell.exe -WindowStyle\
-      \ Hidden</code>. (Citation: PowerShell About 2019)\n\nSimilarly, on macOS the\
-      \ configurations for how applications run are listed in property list (plist)\
-      \ files. One of the tags in these files can be <code>apple.awt.UIElement</code>,\
+      \ when carrying out administrative tasks. \n\nAdversaries may abuse these functionalities\
+      \ to hide otherwise visible windows from users so as not to alert the user to\
+      \ adversary activity on the system.(Citation: Antiquated Mac Malware)\n\nOn\
+      \ macOS, the configurations for how applications run are listed in property\
+      \ list (plist) files. One of the tags in these files can be <code>apple.awt.UIElement</code>,\
       \ which allows for Java applications to prevent the application's icon from\
       \ appearing in the Dock. A common use for this is when applications run in the\
-      \ system tray, but don't also want to show up in the Dock.\n\nAdversaries may\
-      \ abuse these functionalities to hide otherwise visible windows from users so\
-      \ as not to alert the user to adversary activity on the system.(Citation: Antiquated\
-      \ Mac Malware)"
+      \ system tray, but don't also want to show up in the Dock.\n\nSimilarly, on\
+      \ Windows there are a variety of features in scripting languages, such as [PowerShell](https://attack.mitre.org/techniques/T1059/001),\
+      \ Jscript, and [Visual Basic](https://attack.mitre.org/techniques/T1059/005)\
+      \ to make windows hidden. One example of this is <code>powershell.exe -WindowStyle\
+      \ Hidden</code>.(Citation: PowerShell About 2019)\n\nIn addition, Windows supports\
+      \ the `CreateDesktop()` API that can create a hidden desktop window with its\
+      \ own corresponding <code>explorer.exe</code> process.(Citation: Hidden VNC)(Citation:\
+      \ Anatomy of an hVNC Attack)  All applications running on the hidden desktop\
+      \ window, such as a hidden VNC (hVNC) session,(Citation: Hidden VNC) will be\
+      \ invisible to other desktops windows."
     link: https://attack.mitre.org/techniques/T1564/003
   - id: T1564.011
     name: 'Hide Artifacts: Ignore Process Interrupts'
@@ -7363,6 +7594,46 @@ keys:
       malicious p-code and potentially bypassing dynamic analysis.(Citation: Walmart
       Roberts Oct 2018)(Citation: FireEye VBA stomp Feb 2020)(Citation: pcodedmp Bontchev)'
     link: https://attack.mitre.org/techniques/T1564/007
+  - id: T1665
+    name: Hide Infrastructure
+    tide.vocab.stages:
+      - Command and Control
+    description: 'Adversaries may manipulate network traffic in order to hide and
+      evade detection of their C2 infrastructure. This can be accomplished in various
+      ways including by identifying and filtering traffic from defensive tools,(Citation:
+      TA571) masking malicious domains to obfuscate the true destination from both
+      automated scanning tools and security researchers,(Citation: Schema-abuse)(Citation:
+      Facad1ng)(Citation: Browser-updates) and otherwise hiding malicious artifacts
+      to delay discovery and prolong the effectiveness of adversary infrastructure
+      that could otherwise be identified, blocked, or taken down entirely.
+
+
+      C2 networks may include the use of [Proxy](https://attack.mitre.org/techniques/T1090)
+      or VPNs to disguise IP addresses, which can allow adversaries to blend in with
+      normal network traffic and bypass conditional access policies or anti-abuse
+      protections. For example, an adversary may use a virtual private cloud to spoof
+      their IP address to closer align with a victim''s IP address ranges. This may
+      also bypass security measures relying on geolocation of the source IP address.(Citation:
+      sysdig)(Citation: Orange Residential Proxies)
+
+
+      Adversaries may also attempt to filter network traffic in order to evade defensive
+      tools in numerous ways, including blocking/redirecting common incident responder
+      or security appliance user agents.(Citation: mod_rewrite)(Citation: SocGholish-update)
+      Filtering traffic based on IP and geo-fencing may also avoid automated sandboxing
+      or researcher activity (i.e., [Virtualization/Sandbox Evasion](https://attack.mitre.org/techniques/T1497)).(Citation:
+      TA571)(Citation: mod_rewrite)
+
+
+      Hiding C2 infrastructure may also be supported by [Resource Development](https://attack.mitre.org/tactics/TA0042)
+      activities such as [Acquire Infrastructure](https://attack.mitre.org/techniques/T1583)
+      and [Compromise Infrastructure](https://attack.mitre.org/techniques/T1584).
+      For example, using widely trusted hosting services or domains such as prominent
+      URL shortening providers or marketing services for C2 networks may enable adversaries
+      to present benign content that later redirects victims to malicious web pages
+      or infrastructure once specific conditions are met.(Citation: StarBlizzard)(Citation:
+      QR-cofense)'
+    link: https://attack.mitre.org/techniques/T1665
   - id: T1574
     name: Hijack Execution Flow
     tide.vocab.stages:
@@ -7383,6 +7654,28 @@ keys:
       directories and in the case of Windows the Registry, could also be poisoned
       to include malicious payloads.'
     link: https://attack.mitre.org/techniques/T1574
+  - id: T1574.014
+    name: 'Hijack Execution Flow: AppDomainManager'
+    tide.vocab.stages:
+      - Defense Evasion
+      - Persistence
+      - Privilege Escalation
+    description: "Adversaries may execute their own malicious payloads by hijacking\
+      \ how the .NET `AppDomainManager` loads assemblies. The .NET framework uses\
+      \ the `AppDomainManager` class to create and manage one or more isolated runtime\
+      \ environments (called application domains) inside a process to host the execution\
+      \ of .NET applications. Assemblies (`.exe` or `.dll` binaries compiled to run\
+      \ as .NET code) may be loaded into an application domain as executable code.(Citation:\
+      \ Microsoft App Domains) \n\nKnown as \"AppDomainManager injection,\" adversaries\
+      \ may execute arbitrary code by hijacking how .NET applications load assemblies.\
+      \ For example, malware may create a custom application domain inside a target\
+      \ process to load and execute an arbitrary assembly. Alternatively, configuration\
+      \ files (`.config`) or process environment variables that define .NET runtime\
+      \ settings may be tampered with to instruct otherwise benign .NET applications\
+      \ to load a malicious assembly (identified by name) into the target process.(Citation:\
+      \ PenTestLabs AppDomainManagerInject)(Citation: PwC Yellow Liderc)(Citation:\
+      \ Rapid7 AppDomain Manager Injection)"
+    link: https://attack.mitre.org/techniques/T1574/014
   - id: T1574.012
     name: 'Hijack Execution Flow: COR_PROFILER'
     tide.vocab.stages:
@@ -7445,6 +7738,12 @@ keys:
       attacks occur when a program sets its current directory to a remote location
       such as a Web share before loading a DLL. (Citation: Microsoft Security Advisory
       2269637)
+
+
+      Phantom DLL hijacking is a specific type of DLL search order hijacking where
+      adversaries target references to non-existent DLL files.(Citation: Adversaries
+      Hijack DLLs) They may be able to load their own malicious DLL by planting it
+      with the correct name in the location of the missing module.
 
 
       Adversaries may also directly modify the search order via DLL redirection, which
@@ -7976,7 +8275,14 @@ keys:
       For example, adversaries may add a new firewall rule for a well-known protocol
       (such as RDP) using a non-traditional and potentially less securitized port
       (i.e. [Non-Standard Port](https://attack.mitre.org/techniques/T1571)).(Citation:
-      change_rdp_port_conti)'
+      change_rdp_port_conti)
+
+
+      Adversaries may also modify host networking settings that indirectly manipulate
+      system firewalls, such as interface bandwidth or network connection request
+      thresholds.(Citation: Huntress BlackCat) Settings related to enabling abuse
+      of various [Remote Services](https://attack.mitre.org/techniques/T1021) may
+      also indirectly modify firewall rules.'
     link: https://attack.mitre.org/techniques/T1562/004
   - id: T1562.001
     name: 'Impair Defenses: Disable or Modify Tools'
@@ -8391,7 +8697,9 @@ keys:
       Audit.
 
 
-      The event logs can be cleared with the following utility commands:
+
+      With administrator privileges, the event logs can be cleared with the following
+      utility commands:
 
 
       * <code>wevtutil cl system</code>
@@ -8404,9 +8712,13 @@ keys:
       These logs may also be cleared through other mechanisms, such as the event viewer
       GUI or [PowerShell](https://attack.mitre.org/techniques/T1059/001). For example,
       adversaries may use the PowerShell command <code>Remove-EventLog -LogName Security</code>
-      to delete the Security EventLog and after reboot, disable future logging. Note:
+      to delete the Security EventLog and after reboot, disable future logging.  Note:
       events may still be generated and logged in the .evtx file between the time
-      the command is run and the reboot.(Citation: disable_win_evt_logging)'
+      the command is run and the reboot.(Citation: disable_win_evt_logging)
+
+
+      Adversaries may also attempt to clear logs by directly deleting the stored log
+      files within `C:\Windows\System32\winevt\logs\`.'
     link: https://attack.mitre.org/techniques/T1070/001
   - id: T1070.004
     name: 'Indicator Removal: File Deletion'
@@ -8490,7 +8802,12 @@ keys:
       \ On Linux and macOS systems, a variety of utilities also exist, such as `curl`,\
       \ `scp`, `sftp`, `tftp`, `rsync`, `finger`, and `wget`.(Citation: t1105_lolbas)\n\
       \nAdversaries may also abuse installers and package managers, such as `yum`\
-      \ or `winget`, to download tools to victim hosts.\n\nFiles can also be transferred\
+      \ or `winget`, to download tools to victim hosts. Adversaries have also abused\
+      \ file application features, such as the Windows `search-ms` protocol handler,\
+      \ to deliver malicious files to victims through remote file searches invoked\
+      \ by [User Execution](https://attack.mitre.org/techniques/T1204) (typically\
+      \ after interacting with [Phishing](https://attack.mitre.org/techniques/T1566)\
+      \ lures).(Citation: T1105: Trellix_search-ms)\n\nFiles can also be transferred\
       \ using various [Web Service](https://attack.mitre.org/techniques/T1102)s as\
       \ well as native or otherwise present tools on the victim system.(Citation:\
       \ PTSecurity Cobalt Dec 2016) In some cases, adversaries may be able to leverage\
@@ -8539,6 +8856,10 @@ keys:
 
       * <code>REAgentC.exe</code> can be used to disable Windows Recovery Environment
       (WinRE) repair/recovery options of an infected system
+
+      * <code>diskshadow.exe</code> can be used to delete all volume shadow copies
+      on a system - <code>diskshadow delete shadows all</code> (Citation: Diskshadow)
+      (Citation: Crytox Ransomware)
 
 
       On network devices, adversaries may leverage [Disk Wipe](https://attack.mitre.org/techniques/T1561)
@@ -8623,7 +8944,14 @@ keys:
       2015)(Citation: Spoofing credential dialogs) On Linux systems adversaries may
       launch dialog boxes prompting users for credentials from malicious shell scripts
       or the command line (i.e. [Unix Shell](https://attack.mitre.org/techniques/T1059/004)).(Citation:
-      Spoofing credential dialogs) '
+      Spoofing credential dialogs)
+
+
+      Adversaries may also mimic common software authentication requests, such as
+      those from browsers or email clients. This may also be paired with user activity
+      monitoring (i.e., [Browser Information Discovery](https://attack.mitre.org/techniques/T1217)
+      and/or [Application Window Discovery](https://attack.mitre.org/techniques/T1010))
+      to spoof prompts when users are naturally accessing sensitive sites/data.'
     link: https://attack.mitre.org/techniques/T1056/002
   - id: T1056.001
     name: 'Input Capture: Keylogging'
@@ -8786,33 +9114,27 @@ keys:
     name: Internal Spearphishing
     tide.vocab.stages:
       - Lateral Movement
-    description: 'Adversaries may use internal spearphishing to gain access to additional
-      information or exploit other users within the same organization after they already
-      have access to accounts or systems within the environment. Internal spearphishing
-      is multi-staged campaign where an email account is owned either by controlling
-      the user''s device with previously installed malware or by compromising the
-      account credentials of the user. Adversaries attempt to take advantage of a
-      trusted internal account to increase the likelihood of tricking the target into
-      falling for the phish attempt.(Citation: Trend Micro When Phishing Starts from
-      the Inside 2017)
+    description: 'After they already have access to accounts or systems within the
+      environment, adversaries may use internal spearphishing to gain access to additional
+      information or compromise other users within the same organization. Internal
+      spearphishing is multi-staged campaign where a legitimate account is initially
+      compromised either by controlling the user''s device or by compromising the
+      account credentials of the user. Adversaries may then attempt to take advantage
+      of the trusted internal account to increase the likelihood of tricking more
+      victims into falling for phish attempts, often incorporating [Impersonation](https://attack.mitre.org/techniques/T1656).(Citation:
+      Trend Micro - Int SP)
 
 
-      Adversaries may leverage [Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001)
+      For example, adversaries may leverage [Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001)
       or [Spearphishing Link](https://attack.mitre.org/techniques/T1566/002) as part
       of internal spearphishing to deliver a payload or redirect to an external site
       to capture credentials through [Input Capture](https://attack.mitre.org/techniques/T1056)
-      on sites that mimic email login interfaces.
+      on sites that mimic login interfaces.
 
 
-      There have been notable incidents where internal spearphishing has been used.
-      The Eye Pyramid campaign used phishing emails with malicious attachments for
-      lateral movement between victims, compromising nearly 18,000 email accounts
-      in the process.(Citation: Trend Micro When Phishing Starts from the Inside 2017)
-      The Syrian Electronic Army (SEA) compromised email accounts at the Financial
-      Times (FT) to steal additional account credentials. Once FT learned of the campaign
-      and began warning employees of the threat, the SEA sent phishing emails mimicking
-      the Financial Times IT department and were able to compromise even more users.(Citation:
-      THE FINANCIAL TIMES LTD 2019.)'
+      Adversaries may also leverage internal chat apps, such as Microsoft Teams, to
+      spread malicious content or engage users in attempts to capture sensitive information
+      and/or credentials.(Citation: Int SP - chat apps)'
     link: https://attack.mitre.org/techniques/T1534
   - id: T1570
     name: Lateral Tool Transfer
@@ -8877,10 +9199,7 @@ keys:
 
       Renaming abusable system utilities to evade security monitoring is also a form
       of [Masquerading](https://attack.mitre.org/techniques/T1036).(Citation: LOLBAS
-      Main Site) Masquerading may also include the use of [Proxy](https://attack.mitre.org/techniques/T1090)
-      or VPNs to disguise IP addresses, which can allow adversaries to blend in with
-      normal network traffic and bypass conditional access policies or anti-abuse
-      protections.'
+      Main Site)'
     link: https://attack.mitre.org/techniques/T1036
   - id: T1036.009
     name: 'Masquerading: Break Process Trees'
@@ -9092,6 +9411,34 @@ keys:
       the network and may even be used for persistent access to remote systems and
       externally available services, such as VPNs, Outlook Web Access and remote desktop.'
     link: https://attack.mitre.org/techniques/T1556
+  - id: T1556.009
+    name: 'Modify Authentication Process: Conditional Access Policies'
+    tide.vocab.stages:
+      - Credential Access
+      - Defense Evasion
+      - Persistence
+    description: "Adversaries may disable or modify conditional access policies to\
+      \ enable persistent access to compromised accounts. Conditional access policies\
+      \ are additional verifications used by identity providers and identity and access\
+      \ management systems to determine whether a user should be granted access to\
+      \ a resource.\n\nFor example, in Azure AD, Okta, and JumpCloud, users can be\
+      \ denied access to applications based on their IP address, device enrollment\
+      \ status, and use of multi-factor authentication.(Citation: Microsoft Conditional\
+      \ Access)(Citation: JumpCloud Conditional Access Policies)(Citation: Okta Conditional\
+      \ Access Policies) In some cases, identity providers may also support the use\
+      \ of risk-based metrics to deny sign-ins based on a variety of indicators. In\
+      \ AWS and GCP, IAM policies can contain `condition` attributes that verify arbitrary\
+      \ constraints such as the source IP, the date the request was made, and the\
+      \ nature of the resources or regions being requested.(Citation: AWS IAM Conditions)(Citation:\
+      \ GCP IAM Conditions) These measures help to prevent compromised credentials\
+      \ from resulting in unauthorized access to data or resources, as well as limit\
+      \ user permissions to only those required. \n\nBy modifying conditional access\
+      \ policies, such as adding additional trusted IP ranges, removing [Multi-Factor\
+      \ Authentication](https://attack.mitre.org/techniques/T1556/006) requirements,\
+      \ or allowing additional [Unused/Unsupported Cloud Regions](https://attack.mitre.org/techniques/T1535),\
+      \ adversaries may be able to ensure persistent access to accounts and circumvent\
+      \ defensive measures."
+    link: https://attack.mitre.org/techniques/T1556/009
   - id: T1556.001
     name: 'Modify Authentication Process: Domain Controller Authentication'
     tide.vocab.stages:
@@ -9599,7 +9946,10 @@ keys:
       MFA mechanisms required as an additional credential and security control. To
       circumvent this, adversaries may abuse the automatic generation of push notifications
       to MFA services such as Duo Push, Microsoft Authenticator, Okta, or similar
-      services to have the user grant access to their account.
+      services to have the user grant access to their account. If adversaries lack
+      credentials to victim accounts, they may also abuse automatic push notification
+      generation when this option is configured for self-service password reset (SSPR).(Citation:
+      Obsidian SSPR Abuse 2023)
 
 
       In some cases, adversaries may continuously repeat login attempts in order to
@@ -9874,12 +10224,13 @@ keys:
     tide.vocab.stages:
       - Credential Access
       - Discovery
-    description: 'Adversaries may sniff network traffic to capture information about
-      an environment, including authentication material passed over the network. Network
-      sniffing refers to using the network interface on a system to monitor or capture
-      information sent over a wired or wireless connection. An adversary may place
-      a network interface into promiscuous mode to passively access data in transit
-      over the network, or use span ports to capture a larger amount of data.
+    description: 'Adversaries may passively sniff network traffic to capture information
+      about an environment, including authentication material passed over the network.
+      Network sniffing refers to using the network interface on a system to monitor
+      or capture information sent over a wired or wireless connection. An adversary
+      may place a network interface into promiscuous mode to passively access data
+      in transit over the network, or use span ports to capture a larger amount of
+      data.
 
 
       Data captured via this technique may include user credentials, especially those
@@ -9889,9 +10240,12 @@ keys:
       by redirecting traffic to an adversary.
 
 
-      Network sniffing may also reveal configuration details, such as running services,
+      Network sniffing may reveal configuration details, such as running services,
       version numbers, and other network characteristics (e.g. IP addresses, hostnames,
-      VLAN IDs) necessary for subsequent Lateral Movement and/or Defense Evasion activities.
+      VLAN IDs) necessary for subsequent [Lateral Movement](https://attack.mitre.org/tactics/TA0008)
+      and/or [Defense Evasion](https://attack.mitre.org/tactics/TA0005) activities.
+      Adversaries may likely also utilize network sniffing during [Adversary-in-the-Middle](https://attack.mitre.org/techniques/T1557)
+      (AiTM) to passively gain additional knowledge about the environment.
 
 
       In cloud-based environments, adversaries may still be able to use traffic mirroring
@@ -9952,10 +10306,10 @@ keys:
     tide.vocab.stages:
       - Credential Access
     description: 'Adversaries may attempt to dump credentials to obtain account login
-      and credential material, normally in the form of a hash or a clear text password,
-      from the operating system and software. Credentials can then be used to perform
-      [Lateral Movement](https://attack.mitre.org/tactics/TA0008) and access restricted
-      information.
+      and credential material, normally in the form of a hash or a clear text password.
+      Credentials can be obtained from OS caches, memory, or structures.(Citation:
+      Brining MimiKatz to Unix) Credentials can then be used to perform [Lateral Movement](https://attack.mitre.org/tactics/TA0008)
+      and access restricted information.
 
 
       Several of the tools mentioned in associated sub-techniques may be used by both
@@ -9986,26 +10340,26 @@ keys:
     name: 'OS Credential Dumping: Cached Domain Credentials'
     tide.vocab.stages:
       - Credential Access
-    description: 'Adversaries may attempt to access cached domain credentials used
-      to allow authentication to occur in the event a domain controller is unavailable.(Citation:
-      Microsoft - Cached Creds)
-
-
-      On Windows Vista and newer, the hash format is DCC2 (Domain Cached Credentials
-      version 2) hash, also known as MS-Cache v2 hash.(Citation: PassLib mscache)
-      The number of default cached credentials varies and can be altered per system.
-      This hash does not allow pass-the-hash style attacks, and instead requires [Password
-      Cracking](https://attack.mitre.org/techniques/T1110/002) to recover the plaintext
-      password.(Citation: ired mscache)
-
-
-      With SYSTEM access, the tools/utilities such as [Mimikatz](https://attack.mitre.org/software/S0002),
-      [Reg](https://attack.mitre.org/software/S0075), and secretsdump.py can be used
-      to extract the cached credentials.
-
-
-      Note: Cached credentials for Windows Vista are derived using PBKDF2.(Citation:
-      PassLib mscache)'
+    description: "Adversaries may attempt to access cached domain credentials used\
+      \ to allow authentication to occur in the event a domain controller is unavailable.(Citation:\
+      \ Microsoft - Cached Creds)\n\nOn Windows Vista and newer, the hash format is\
+      \ DCC2 (Domain Cached Credentials version 2) hash, also known as MS-Cache v2\
+      \ hash.(Citation: PassLib mscache) The number of default cached credentials\
+      \ varies and can be altered per system. This hash does not allow pass-the-hash\
+      \ style attacks, and instead requires [Password Cracking](https://attack.mitre.org/techniques/T1110/002)\
+      \ to recover the plaintext password.(Citation: ired mscache)\n\nOn Linux systems,\
+      \ Active Directory credentials can be accessed through caches maintained by\
+      \ software like System Security Services Daemon (SSSD) or Quest Authentication\
+      \ Services (formerly VAS). Cached credential hashes are typically located at\
+      \ `/var/lib/sss/db/cache.[domain].ldb` for SSSD or `/var/opt/quest/vas/authcache/vas_auth.vdb`\
+      \ for Quest. Adversaries can use utilities, such as `tdbdump`, on these database\
+      \ files to dump the cached hashes and use [Password Cracking](https://attack.mitre.org/techniques/T1110/002)\
+      \ to obtain the plaintext password.(Citation: Brining MimiKatz to Unix) \n\n\
+      With SYSTEM or sudo access, the tools/utilities such as [Mimikatz](https://attack.mitre.org/software/S0002),\
+      \ [Reg](https://attack.mitre.org/software/S0075), and secretsdump.py for Windows\
+      \ or Linikatz for Linux can be used to extract the cached credentials.(Citation:\
+      \ Brining MimiKatz to Unix)\n\nNote: Cached credentials for Windows Vista are\
+      \ derived using PBKDF2.(Citation: PassLib mscache)"
     link: https://attack.mitre.org/techniques/T1003/005
   - id: T1003.006
     name: 'OS Credential Dumping: DCSync'
@@ -10079,13 +10433,17 @@ keys:
       * <code>sekurlsa::logonPasswords</code>
 
 
-      Built-in Windows tools such as comsvcs.dll can also be used:
+      Built-in Windows tools such as `comsvcs.dll` can also be used:
 
 
       * <code>rundll32.exe C:\Windows\System32\comsvcs.dll MiniDump PID  lsass.dmp
       full</code>(Citation: Volexity Exchange Marauder March 2021)(Citation: Symantec
       Attacks Against Government Sector)
 
+
+      Similar to [Image File Execution Options Injection](https://attack.mitre.org/techniques/T1546/012),
+      the silent process exit mechanism can be abused to create a memory dump of `lsass.exe`
+      through Windows Error Reporting (`WerFault.exe`).(Citation: Deep Instinct LSASS)
 
 
       Windows Security Support Provider (SSP) DLLs are loaded into LSASS process at
@@ -10161,12 +10519,13 @@ keys:
 
 
       When executing with root privileges, adversaries can search these memory locations
-      for all processes on a system that contain patterns that are indicative of credentials,
-      such as looking for fixed strings in memory structures or cached hashes. When
-      running without privileged access, processes can still view their own virtual
-      memory locations. Some services or programs may save credentials in clear text
-      inside the process’s memory.(Citation: MimiPenguin GitHub May 2017)(Citation:
-      Polop Linux PrivEsc Gitbook)
+      for all processes on a system that contain patterns indicative of credentials.
+      Adversaries may use regex patterns, such as <code>grep -E "^[0-9a-f-]* r" /proc/"$pid"/maps
+      | cut -d'' '' -f 1</code>, to look for fixed strings in memory structures or
+      cached hashes.(Citation: atomic-red proc file system) When running without privileged
+      access, processes can still view their own virtual memory locations. Some services
+      or programs may save credentials in clear text inside the process’s memory.(Citation:
+      MimiPenguin GitHub May 2017)(Citation: Polop Linux PrivEsc Gitbook)
 
 
       If running as or with the permissions of a web browser, a process can search
@@ -10353,6 +10712,37 @@ keys:
       \ into default browsers, allowing adversaries to then communicate via the network.(Citation:\
       \ Malware Analysis Report ComRAT)"
     link: https://attack.mitre.org/techniques/T1027/009
+  - id: T1027.013
+    name: 'Obfuscated Files or Information: Encrypted/Encoded File'
+    tide.vocab.stages:
+      - Defense Evasion
+    description: "Adversaries may encrypt or encode files to obfuscate strings, bytes,\
+      \ and other specific patterns to impede detection. Encrypting and/or encoding\
+      \ file content aims to conceal malicious artifacts within a file used in an\
+      \ intrusion. Many other techniques, such as [Software Packing](https://attack.mitre.org/techniques/T1027/002),\
+      \ [Steganography](https://attack.mitre.org/techniques/T1027/003), and [Embedded\
+      \ Payloads](https://attack.mitre.org/techniques/T1027/009), share this same\
+      \ broad objective. Encrypting and/or encoding files could lead to a lapse in\
+      \ detection of static signatures, only for this malicious content to be revealed\
+      \ (i.e., [Deobfuscate/Decode Files or Information](https://attack.mitre.org/techniques/T1140))\
+      \ at the time of execution/use.\n\nThis type of file obfuscation can be applied\
+      \ to many file artifacts present on victim hosts, such as malware log/configuration\
+      \ and payload files.(Citation: File obfuscation) Files can be encrypted with\
+      \ a hardcoded or user-supplied key, as well as otherwise obfuscated using standard\
+      \ encoding/compression schemes such as Base64.\n\nThe entire content of a file\
+      \ may be obfuscated, or just specific functions or values (such as C2 addresses).\
+      \ Encryption and encoding may also be applied in redundant layers for additional\
+      \ protection.\n\nFor example, adversaries may abuse password-protected Word\
+      \ documents or self-extracting (SFX) archives as a method of encrypting/encoding\
+      \ a file such as a [Phishing](https://attack.mitre.org/techniques/T1566) payload.\
+      \ These files typically function by attaching the intended archived content\
+      \ to a decompressor stub that is executed when the file is invoked (e.g., [User\
+      \ Execution](https://attack.mitre.org/techniques/T1204)).(Citation: SFX - Encrypted/Encoded\
+      \ File) \n\nAdversaries may also abuse file-specific as well as custom encoding\
+      \ schemes. For example, Byte Order Mark (BOM) headers in text files may be abused\
+      \ to manipulate and obfuscate file content until [Command and Scripting Interpreter](https://attack.mitre.org/techniques/T1059)\
+      \ execution."
+    link: https://attack.mitre.org/techniques/T1027/013
   - id: T1027.011
     name: 'Obfuscated Files or Information: Fileless Storage'
     tide.vocab.stages:
@@ -10531,6 +10921,30 @@ keys:
       software licenses, malware, SSL/TLS and code-signing certificates, or raiding
       closed databases of vulnerabilities or exploits.(Citation: DiginotarCompromise)'
     link: https://attack.mitre.org/techniques/T1588
+  - id: T1588.007
+    name: 'Obtain Capabilities: Artificial Intelligence'
+    tide.vocab.stages:
+      - Resource Development
+    description: 'Adversaries may obtain access to generative artificial intelligence
+      tools, such as large language models (LLMs), to aid various techniques during
+      targeting. These tools may be used to inform, bolster, and enable a variety
+      of malicious tasks including conducting [Reconnaissance](https://attack.mitre.org/tactics/TA0043),
+      creating basic scripts, assisting social engineering, and even developing payloads.(Citation:
+      MSFT-AI)
+
+
+      For example, by utilizing a publicly available LLM an adversary is essentially
+      outsourcing or automating certain tasks to the tool. Using AI, the adversary
+      may draft and generate content in a variety of written languages to be used
+      in [Phishing](https://attack.mitre.org/techniques/T1566)/[Phishing for Information](https://attack.mitre.org/techniques/T1598)
+      campaigns. The same publicly available tool may further enable vulnerability
+      or other offensive research supporting [Develop Capabilities](https://attack.mitre.org/techniques/T1587).
+      AI tools may also automate technical tasks by generating, refining, or otherwise
+      enhancing (e.g., [Obfuscated Files or Information](https://attack.mitre.org/techniques/T1027))
+      malicious scripts and payloads.(Citation: OpenAI-CTI)
+
+      '
+    link: https://attack.mitre.org/techniques/T1588/007
   - id: T1588.003
     name: 'Obtain Capabilities: Code Signing Certificates'
     tide.vocab.stages:
@@ -10763,7 +11177,8 @@ keys:
       Sofacy)
 
 
-      There exist user and global Registry keys for the Office Test feature:
+      There exist user and global Registry keys for the Office Test feature, such
+      as:
 
 
       * <code>HKEY_CURRENT_USER\Software\Microsoft\Office test\Special\Perf</code>
@@ -11054,9 +11469,13 @@ keys:
       2023)
 
 
-      Adversaries may also link to "web bugs" or "web beacons" within phishing messages
-      to verify the receipt of an email, while also potentially profiling and tracking
-      victim information such as IP address.(Citation: NIST Web Bug)
+      Adversaries may also embed “tracking pixels”, "web bugs", or "web beacons" within
+      phishing messages to verify the receipt of an email, while also potentially
+      profiling and tracking victim information such as IP address.(Citation: NIST
+      Web Bug) (Citation: Ryte Wiki) These mechanisms often appear as small images
+      (typically one pixel in size) or otherwise obfuscated objects and are typically
+      delivered as HTML code containing a link to a remote server. (Citation: Ryte
+      Wiki)(Citation: IAPP)
 
 
       Adversaries may also be able to spoof a complete website using what is known
@@ -11067,13 +11486,25 @@ keys:
       ZScaler BitB 2020)(Citation: Mr. D0x BitB 2022)
 
 
-      Adversaries can use phishing kits such as `EvilProxy` and `Evilginx2` to proxy
-      the connection between the victim and the legitimate website. On a successful
-      login, the victim is redirected to the legitimate website, while the adversary
-      captures their session cookie (i.e., [Steal Web Session Cookie](https://attack.mitre.org/techniques/T1539))
+      Adversaries can use phishing kits such as `EvilProxy` and `Evilginx2` to perform
+      adversary-in-the-middle phishing by proxying the connection between the victim
+      and the legitimate website. On a successful login, the victim is redirected
+      to the legitimate website, while the adversary captures their session cookie
+      (i.e., [Steal Web Session Cookie](https://attack.mitre.org/techniques/T1539))
       in addition to their username and password. This may enable the adversary to
       then bypass MFA via [Web Session Cookie](https://attack.mitre.org/techniques/T1550/004).(Citation:
       Proofpoint Human Factor)
+
+
+      Adversaries may also send a malicious link in the form of Quick Response (QR)
+      Codes (also known as “quishing”). These links may direct a victim to a credential
+      phishing page.(Citation: QR-campaign-energy-firm) By using a QR code, the URL
+      may not be exposed in the email and may thus go undetected by most automated
+      email security scans.(Citation: qr-phish-agriculture) These QR codes may be
+      scanned by or delivered directly  to a user’s mobile device (i.e., [Phishing](https://attack.mitre.org/techniques/T1660)),
+      which may be less secure in several relevant ways.(Citation: qr-phish-agriculture)
+      For example, mobile users may not be able to notice minor differences between
+      genuine and credential harvesting websites due to mobile’s smaller form factor.
 
 
       From the fake website, information is gathered in web forms and sent to the
@@ -11153,9 +11584,9 @@ keys:
       to an email. All forms of spearphishing are electronically delivered social
       engineering targeted at a specific individual, company, or industry. In this
       scenario, adversaries attach a file to the spearphishing email and usually rely
-      upon [User Execution](https://attack.mitre.org/techniques/T1204) to gain execution.
-      Spearphishing may also involve social engineering techniques, such as posing
-      as a trusted source.
+      upon [User Execution](https://attack.mitre.org/techniques/T1204) to gain execution.(Citation:
+      Unit 42 DarkHydrus July 2018) Spearphishing may also involve social engineering
+      techniques, such as posing as a trusted source.
 
 
       There are many options for the attachment such as Microsoft Office documents,
@@ -11210,7 +11641,24 @@ keys:
       Token](https://attack.mitre.org/techniques/T1528)s.(Citation: Trend Micro Pawn
       Storm OAuth 2017) These stolen access tokens allow the adversary to perform
       various actions on behalf of the user via API calls. (Citation: Microsoft OAuth
-      2.0 Consent Phishing 2021)'
+      2.0 Consent Phishing 2021)
+
+
+      Adversaries may also utilize spearphishing links to [Steal Application Access
+      Token](https://attack.mitre.org/techniques/T1528)s that grant immediate access
+      to the victim environment. For example, a user may be lured through “consent
+      phishing” into granting adversaries permissions/access via a malicious OAuth
+      2.0 request URL .(Citation: Trend Micro Pawn Storm OAuth 2017)(Citation: Microsoft
+      OAuth 2.0 Consent Phishing 2021)
+
+
+      Similarly, malicious links may also target device-based authorization, such
+      as OAuth 2.0 device authorization grant flow which is typically used to authenticate
+      devices without UIs/browsers. Known as “device code phishing,” an adversary
+      may send a link that directs the victim to a malicious authorization page where
+      the user is tricked into entering a code/credentials that produces a device
+      token.(Citation: SecureWorks Device Code Phishing 2021)(Citation: Netskope Device
+      Code Phishing 2021)(Citation: Optiv Device Code Phishing 2021)'
     link: https://attack.mitre.org/techniques/T1566/002
   - id: T1566.004
     name: 'Phishing: Spearphishing Voice'
@@ -11253,20 +11701,20 @@ keys:
       \ electronically delivered social engineering targeted at a specific individual,\
       \ company, or industry. In this scenario, adversaries send messages through\
       \ various social media services, personal webmail, and other non-enterprise\
-      \ controlled services. These services are more likely to have a less-strict\
-      \ security policy than an enterprise. As with most kinds of spearphishing, the\
-      \ goal is to generate rapport with the target or get the target's interest in\
-      \ some way. Adversaries will create fake social media accounts and message employees\
-      \ for potential job opportunities. Doing so allows a plausible reason for asking\
-      \ about services, policies, and software that's running in an environment. The\
-      \ adversary can then send malicious links or attachments through these services.\n\
-      \nA common example is to build rapport with a target via social media, then\
-      \ send content to a personal webmail service that the target uses on their work\
-      \ computer. This allows an adversary to bypass some email restrictions on the\
-      \ work account, and the target is more likely to open the file since it's something\
-      \ they were expecting. If the payload doesn't work as expected, the adversary\
-      \ can continue normal communications and troubleshoot with the target on how\
-      \ to get it working."
+      \ controlled services.(Citation: Lookout Dark Caracal Jan 2018) These services\
+      \ are more likely to have a less-strict security policy than an enterprise.\
+      \ As with most kinds of spearphishing, the goal is to generate rapport with\
+      \ the target or get the target's interest in some way. Adversaries will create\
+      \ fake social media accounts and message employees for potential job opportunities.\
+      \ Doing so allows a plausible reason for asking about services, policies, and\
+      \ software that's running in an environment. The adversary can then send malicious\
+      \ links or attachments through these services.\n\nA common example is to build\
+      \ rapport with a target via social media, then send content to a personal webmail\
+      \ service that the target uses on their work computer. This allows an adversary\
+      \ to bypass some email restrictions on the work account, and the target is more\
+      \ likely to open the file since it's something they were expecting. If the payload\
+      \ doesn't work as expected, the adversary can continue normal communications\
+      \ and troubleshoot with the target on how to get it working."
     link: https://attack.mitre.org/techniques/T1566/003
   - id: T1647
     name: Plist File Modification
@@ -11411,7 +11859,7 @@ keys:
       BIOS (Basic Input/Output System) and The Unified Extensible Firmware Interface
       (UEFI) or Extensible Firmware Interface (EFI) are examples of system firmware
       that operate as the software interface between the operating system and hardware
-      of a computer. (Citation: Wikipedia BIOS) (Citation: Wikipedia UEFI) (Citation:
+      of a computer.(Citation: Wikipedia BIOS)(Citation: Wikipedia UEFI)(Citation:
       About UEFI)
 
 
@@ -11449,26 +11897,24 @@ keys:
     name: Process Discovery
     tide.vocab.stages:
       - Discovery
-    description: 'Adversaries may attempt to get information about running processes
-      on a system. Information obtained could be used to gain an understanding of
-      common software/applications running on systems within the network. Adversaries
-      may use the information from [Process Discovery](https://attack.mitre.org/techniques/T1057)
-      during automated discovery to shape follow-on behaviors, including whether or
-      not the adversary fully infects the target and/or attempts specific actions.
-
-
-      In Windows environments, adversaries could obtain details on running processes
-      using the [Tasklist](https://attack.mitre.org/software/S0057) utility via [cmd](https://attack.mitre.org/software/S0106)
-      or <code>Get-Process</code> via [PowerShell](https://attack.mitre.org/techniques/T1059/001).
-      Information about processes can also be extracted from the output of [Native
-      API](https://attack.mitre.org/techniques/T1106) calls such as <code>CreateToolhelp32Snapshot</code>.
-      In Mac and Linux, this is accomplished with the <code>ps</code> command. Adversaries
-      may also opt to enumerate processes via /proc.
-
-
-      On network devices, [Network Device CLI](https://attack.mitre.org/techniques/T1059/008)
-      commands such as `show processes` can be used to display current running processes.(Citation:
-      US-CERT-TA18-106A)(Citation: show_processes_cisco_cmd)'
+    description: "Adversaries may attempt to get information about running processes\
+      \ on a system. Information obtained could be used to gain an understanding of\
+      \ common software/applications running on systems within the network. Administrator\
+      \ or otherwise elevated access may provide better process details. Adversaries\
+      \ may use the information from [Process Discovery](https://attack.mitre.org/techniques/T1057)\
+      \ during automated discovery to shape follow-on behaviors, including whether\
+      \ or not the adversary fully infects the target and/or attempts specific actions.\n\
+      \nIn Windows environments, adversaries could obtain details on running processes\
+      \ using the [Tasklist](https://attack.mitre.org/software/S0057) utility via\
+      \ [cmd](https://attack.mitre.org/software/S0106) or <code>Get-Process</code>\
+      \ via [PowerShell](https://attack.mitre.org/techniques/T1059/001). Information\
+      \ about processes can also be extracted from the output of [Native API](https://attack.mitre.org/techniques/T1106)\
+      \ calls such as <code>CreateToolhelp32Snapshot</code>. In Mac and Linux, this\
+      \ is accomplished with the <code>ps</code> command. Adversaries may also opt\
+      \ to enumerate processes via `/proc`. \n\nOn network devices, [Network Device\
+      \ CLI](https://attack.mitre.org/techniques/T1059/008) commands such as `show\
+      \ processes` can be used to display current running processes.(Citation: US-CERT-TA18-106A)(Citation:\
+      \ show_processes_cisco_cmd)"
     link: https://attack.mitre.org/techniques/T1057
   - id: T1055
     name: Process Injection
@@ -11937,29 +12383,36 @@ keys:
     name: 'Proxy: Multi-hop Proxy'
     tide.vocab.stages:
       - Command and Control
-    description: 'To disguise the source of malicious traffic, adversaries may chain
-      together multiple proxies. Typically, a defender will be able to identify the
-      last proxy traffic traversed before it enters their network; the defender may
-      or may not be able to identify any previous proxies before the last-hop proxy.
-      This technique makes identifying the original source of the malicious traffic
-      even more difficult by requiring the defender to trace malicious traffic through
-      several proxies to identify its source. A particular variant of this behavior
-      is to use onion routing networks, such as the publicly available TOR network.
-      (Citation: Onion Routing)
+    description: 'Adversaries may chain together multiple proxies to disguise the
+      source of malicious traffic. Typically, a defender will be able to identify
+      the last proxy traffic traversed before it enters their network; the defender
+      may or may not be able to identify any previous proxies before the last-hop
+      proxy. This technique makes identifying the original source of the malicious
+      traffic even more difficult by requiring the defender to trace malicious traffic
+      through several proxies to identify its source.
 
 
-      In the case of network infrastructure, particularly routers, it is possible
-      for an adversary to leverage multiple compromised devices to create a multi-hop
-      proxy chain within the Wide-Area Network (WAN) of the enterprise.  By leveraging
-      [Patch System Image](https://attack.mitre.org/techniques/T1601/001), adversaries
+      For example, adversaries may construct or use onion routing networks – such
+      as the publicly available [Tor](https://attack.mitre.org/software/S0183) network
+      – to transport encrypted C2 traffic through a compromised population, allowing
+      communication with any device within the network.(Citation: Onion Routing)
+
+
+      In the case of network infrastructure, it is possible for an adversary to leverage
+      multiple compromised devices to create a multi-hop proxy chain (i.e., [Network
+      Devices](https://attack.mitre.org/techniques/T1584/008)). By leveraging [Patch
+      System Image](https://attack.mitre.org/techniques/T1601/001) on routers, adversaries
       can add custom code to the affected network devices that will implement onion
-      routing between those nodes.  This custom onion routing network will transport
-      the encrypted C2 traffic through the compromised population, allowing adversaries
-      to communicate with any device within the onion routing network.  This method
-      is dependent upon the [Network Boundary Bridging](https://attack.mitre.org/techniques/T1599)
-      method in order to allow the adversaries to cross the protected network boundary
-      of the Internet perimeter and into the organization’s WAN. Protocols such as
-      ICMP may be used as a transport.'
+      routing between those nodes. This method is dependent upon the [Network Boundary
+      Bridging](https://attack.mitre.org/techniques/T1599) method allowing the adversaries
+      to cross the protected network boundary of the Internet perimeter and into the
+      organization’s Wide-Area Network (WAN).  Protocols such as ICMP may be used
+      as a transport.
+
+
+      Similarly, adversaries may abuse peer-to-peer (P2P) and blockchain-oriented
+      infrastructure to implement routing between a decentralized network of peers.(Citation:
+      NGLite Trojan)'
     link: https://attack.mitre.org/techniques/T1090/003
   - id: T1012
     name: Query Registry
@@ -11985,11 +12438,16 @@ keys:
     description: 'Adversaries may reflectively load code into a process in order to
       conceal the execution of malicious payloads. Reflective loading involves allocating
       then executing payloads directly within the memory of the process, vice creating
-      a thread or process backed by a file path on disk. Reflectively loaded payloads
-      may be compiled binaries, anonymous files (only present in RAM), or just snubs
-      of fileless executable code (ex: position-independent shellcode).(Citation:
-      Introducing Donut)(Citation: S1 Custom Shellcode Tool)(Citation: Stuart ELF
-      Memory)(Citation: 00sec Droppers)(Citation: Mandiant BYOL)
+      a thread or process backed by a file path on disk (e.g., [Shared Modules](https://attack.mitre.org/techniques/T1129)).
+
+
+      Reflectively loaded payloads may be compiled binaries, anonymous files (only
+      present in RAM), or just snubs of fileless executable code (ex: position-independent
+      shellcode).(Citation: Introducing Donut)(Citation: S1 Custom Shellcode Tool)(Citation:
+      Stuart ELF Memory)(Citation: 00sec Droppers)(Citation: Mandiant BYOL) For example,
+      the `Assembly.Load()` method executed by [PowerShell](https://attack.mitre.org/techniques/T1059/001)
+      may be abused to load raw code into the running process.(Citation: Microsoft
+      AssemblyLoad)
 
 
       Reflective code injection is very similar to [Process Injection](https://attack.mitre.org/techniques/T1055)
@@ -12017,11 +12475,14 @@ keys:
       \ as an alternate communications channel for redundant access or as a way to\
       \ establish an interactive remote desktop session with the target system. They\
       \ may also be used as a component of malware to establish a reverse connection\
-      \ or back-connect to a service or adversary controlled system.\n \nAdversaries\
+      \ or back-connect to a service or adversary-controlled system.\n \nAdversaries\
       \ may similarly abuse response features included in EDR and other defensive\
       \ tools that enable remote access.\n\nInstallation of many remote access software\
       \ may also include persistence (e.g., the software's installation routine creates\
-      \ a [Windows Service](https://attack.mitre.org/techniques/T1543/003))."
+      \ a [Windows Service](https://attack.mitre.org/techniques/T1543/003)). Remote\
+      \ access modules/features may also exist as part of otherwise existing software\
+      \ (e.g., Google Chrome’s Remote Desktop).(Citation: Google Chrome Remote Desktop)(Citation:\
+      \ Chrome Remote Desktop)"
     link: https://attack.mitre.org/techniques/T1219
   - id: T1563
     name: Remote Service Session Hijacking
@@ -13085,7 +13546,7 @@ keys:
       - Persistence
     description: 'Adversaries may backdoor web servers with web shells to establish
       persistent access to systems. A Web shell is a Web script that is placed on
-      an openly accessible Web server to allow an adversary to use the Web server
+      an openly accessible Web server to allow an adversary to access the Web server
       as a gateway into a network. A Web shell may provide a set of functions to execute
       or a command-line interface on the system that hosts the Web server.(Citation:
       volexity_0day_sophos_FW)
@@ -13177,22 +13638,32 @@ keys:
     tide.vocab.stages:
       - Execution
       - Lateral Movement
-    description: "Adversaries may gain access to and use third-party software suites\
-      \ installed within an enterprise network, such as administration, monitoring,\
-      \ and deployment systems, to move laterally through the network. Third-party\
-      \ applications and software deployment systems may be in use in the network\
-      \ environment for administration purposes (e.g., SCCM, HBSS, Altiris, etc.).\
-      \  \n\nAccess to a third-party network-wide or enterprise-wide software system\
-      \ may enable an adversary to have remote code execution on all systems that\
-      \ are connected to such a system. The access may be used to laterally move to\
-      \ other systems, gather information, or cause a specific effect, such as wiping\
-      \ the hard drives on all endpoints. Network infrastructure may also have administration\
-      \ tools that can be similarly abused by adversaries. (Citation: Fortinet Zero-Day\
-      \ and Custom Malware Used by Suspected Chinese Actor in Espionage Operation)\n\
-      \nThe permissions required for this action vary by system configuration; local\
-      \ credentials may be sufficient with direct access to the third-party system,\
-      \ or specific domain credentials may be required. However, the system may require\
-      \ an administrative account to log in or to perform it's intended purpose."
+    description: "Adversaries may gain access to and use centralized software suites\
+      \ installed within an enterprise to execute commands and move laterally through\
+      \ the network. Configuration management and software deployment applications\
+      \ may be used in an enterprise network or cloud environment for routine administration\
+      \ purposes. These systems may also be integrated into CI/CD pipelines. Examples\
+      \ of such solutions include: SCCM, HBSS, Altiris, AWS Systems Manager, Microsoft\
+      \ Intune, Azure Arc, and GCP Deployment Manager.  \n\nAccess to network-wide\
+      \ or enterprise-wide endpoint management software may enable an adversary to\
+      \ achieve remote code execution on all connected systems. The access may be\
+      \ used to laterally move to other systems, gather information, or cause a specific\
+      \ effect, such as wiping the hard drives on all endpoints.\n\nSaaS-based configuration\
+      \ management services may allow for broad [Cloud Administration Command](https://attack.mitre.org/techniques/T1651)\
+      \ on cloud-hosted instances, as well as the execution of arbitrary commands\
+      \ on on-premises endpoints. For example, Microsoft Configuration Manager allows\
+      \ Global or Intune Administrators to run scripts as SYSTEM on on-premises devices\
+      \ joined to Azure AD.(Citation: SpecterOps Lateral Movement from Azure to On-Prem\
+      \ AD 2020) Such services may also utilize [Web Protocols](https://attack.mitre.org/techniques/T1071/001)\
+      \ to communicate back to adversary owned infrastructure.(Citation: Mitiga Security\
+      \ Advisory: SSM Agent as Remote Access Trojan)\n\nNetwork infrastructure devices\
+      \ may also have configuration management tools that can be similarly abused\
+      \ by adversaries.(Citation: Fortinet Zero-Day and Custom Malware Used by Suspected\
+      \ Chinese Actor in Espionage Operation)\n\nThe permissions required for this\
+      \ action vary by system configuration; local credentials may be sufficient with\
+      \ direct access to the third-party system, or specific domain credentials may\
+      \ be required. However, the system may require an administrative account to\
+      \ log in or to access specific functionality."
     link: https://attack.mitre.org/techniques/T1072
   - id: T1518
     name: Software Discovery
@@ -13203,6 +13674,11 @@ keys:
       may use the information from [Software Discovery](https://attack.mitre.org/techniques/T1518)
       during automated discovery to shape follow-on behaviors, including whether or
       not the adversary fully infects the target and/or attempts specific actions.
+
+
+      Such software may be deployed widely across the environment for configuration
+      management or security reasons, such as [Software Deployment Tools](https://attack.mitre.org/techniques/T1072),
+      and may allow adversaries broad access to infect devices or move laterally.
 
 
       Adversaries may attempt to enumerate software for a variety of reasons, such
@@ -13216,8 +13692,8 @@ keys:
       - Discovery
     description: 'Adversaries may attempt to get a listing of security software, configurations,
       defensive tools, and sensors that are installed on a system or in a cloud environment.
-      This may include things such as firewall rules and anti-virus. Adversaries may
-      use the information from [Security Software Discovery](https://attack.mitre.org/techniques/T1518/001)
+      This may include things such as cloud monitoring agents and anti-virus. Adversaries
+      may use the information from [Security Software Discovery](https://attack.mitre.org/techniques/T1518/001)
       during automated discovery to shape follow-on behaviors, including whether or
       not the adversary fully infects the target and/or attempts specific actions.
 
@@ -13231,13 +13707,11 @@ keys:
       malware perform checks for LittleSnitch and KnockKnock software.
 
 
-      Adversaries may also utilize cloud APIs to discover the configurations of firewall
-      rules within an environment.(Citation: Expel IO Evil in AWS) For example, the
-      permitted IP ranges, ports or user accounts for the inbound/outbound rules of
-      security groups, virtual firewalls established within AWS for EC2 and/or VPC
-      instances, can be revealed by the <code>DescribeSecurityGroups</code> action
-      with various request parameters. (Citation: DescribeSecurityGroups - Amazon
-      Elastic Compute Cloud)'
+      Adversaries may also utilize the [Cloud API](https://attack.mitre.org/techniques/T1059/009)
+      to discover cloud-native security software installed on compute infrastructure,
+      such as the AWS CloudWatch agent, Azure VM Agent, and Google Cloud Monitor agent.
+      These agents  may collect  metrics and logs from the VM, which may be centrally
+      aggregated in a cloud-based monitoring platform.'
     link: https://attack.mitre.org/techniques/T1518/001
   - id: T1608
     name: Stage Capabilities
@@ -13381,14 +13855,21 @@ keys:
       \nAdversaries may purchase domains similar to legitimate domains (ex: homoglyphs,\
       \ typosquatting, different top-level domain, etc.) during acquisition of infrastructure\
       \ ([Domains](https://attack.mitre.org/techniques/T1583/001)) to help facilitate\
-      \ [Malicious Link](https://attack.mitre.org/techniques/T1204/001). Link shortening\
-      \ services can also be employed. Adversaries may also use free or paid accounts\
-      \ on Platform-as-a-Service providers to host link targets while taking advantage\
-      \ of the widely trusted domains of those providers to avoid being blocked.(Citation:\
-      \ Netskope GCP Redirection)(Citation: Netskope Cloud Phishing)(Citation: Intezer\
-      \ App Service Phishing) Finally, adversaries may take advantage of the decentralized\
-      \ nature of the InterPlanetary File System (IPFS) to host link targets that\
-      \ are difficult to remove.(Citation: Talos IPFS 2022)"
+      \ [Malicious Link](https://attack.mitre.org/techniques/T1204/001).\n\nLinks\
+      \ can be written by adversaries to mask the true destination in order to deceive\
+      \ victims by abusing the URL schema and increasing the effectiveness of phishing.(Citation:\
+      \ Kaspersky-masking)(Citation: mandiant-masking)\n\nAdversaries may also use\
+      \ free or paid accounts on link shortening services and Platform-as-a-Service\
+      \ providers to host link targets while taking advantage of the widely trusted\
+      \ domains of those providers to avoid being blocked while redirecting victims\
+      \ to malicious pages.(Citation: Netskope GCP Redirection)(Citation: Netskope\
+      \ Cloud Phishing)(Citation: Intezer App Service Phishing)(Citation: Cofense-redirect)\
+      \ In addition, adversaries may serve a variety of malicious links through uniquely\
+      \ generated URIs/URLs (including one-time, single use links).(Citation: iOS\
+      \ URL Scheme)(Citation: URI)(Citation: URI Use)(Citation: URI Unique) Finally,\
+      \ adversaries may take advantage of the decentralized nature of the InterPlanetary\
+      \ File System (IPFS) to host link targets that are difficult to remove.(Citation:\
+      \ Talos IPFS 2022)"
     link: https://attack.mitre.org/techniques/T1608/005
   - id: T1608.006
     name: 'Stage Capabilities: SEO Poisoning'
@@ -13488,35 +13969,40 @@ keys:
       \ tokens are used to make authorized API requests on behalf of a user or service\
       \ and are commonly used as a way to access resources in cloud and container-based\
       \ applications and software-as-a-service (SaaS).(Citation: Auth0 - Why You Should\
-      \ Always Use Access Tokens to Secure APIs Sept 2019) OAuth is one commonly implemented\
-      \ framework that issues tokens to users for access to systems. Adversaries who\
-      \ steal account API tokens in cloud and containerized environments may be able\
-      \ to access data and perform actions with the permissions of these accounts,\
-      \ which can lead to privilege escalation and further compromise of the environment.\n\
-      \nIn Kubernetes environments, processes running inside a container communicate\
-      \ with the Kubernetes API server using service account tokens. If a container\
-      \ is compromised, an attacker may be able to steal the container’s token and\
-      \ thereby gain access to Kubernetes API commands.(Citation: Kubernetes Service\
-      \ Accounts)\n\nToken theft can also occur through social engineering, in which\
-      \ case user action may be required to grant access. An application desiring\
-      \ access to cloud-based services or protected APIs can gain entry using OAuth\
-      \ 2.0 through a variety of authorization protocols. An example commonly-used\
-      \ sequence is Microsoft's Authorization Code Grant flow.(Citation: Microsoft\
-      \ Identity Platform Protocols May 2019)(Citation: Microsoft - OAuth Code Authorization\
-      \ flow - June 2019) An OAuth access token enables a third-party application\
-      \ to interact with resources containing user data in the ways requested by the\
-      \ application without obtaining user credentials. \n \nAdversaries can leverage\
-      \ OAuth authorization by constructing a malicious application designed to be\
-      \ granted access to resources with the target user's OAuth token.(Citation:\
-      \ Amnesty OAuth Phishing Attacks, August 2019)(Citation: Trend Micro Pawn Storm\
-      \ OAuth 2017) The adversary will need to complete registration of their application\
-      \ with the authorization server, for example Microsoft Identity Platform using\
-      \ Azure Portal, the Visual Studio IDE, the command-line interface, PowerShell,\
-      \ or REST API calls.(Citation: Microsoft - Azure AD App Registration - May 2019)\
-      \ Then, they can send a [Spearphishing Link](https://attack.mitre.org/techniques/T1566/002)\
-      \ to the target user to entice them to grant access to the application. Once\
-      \ the OAuth access token is granted, the application can gain potentially long-term\
-      \ access to features of the user account through [Application Access Token](https://attack.mitre.org/techniques/T1550/001).(Citation:\
+      \ Always Use Access Tokens to Secure APIs Sept 2019)  Adversaries who steal\
+      \ account API tokens in cloud and containerized environments may be able to\
+      \ access data and perform actions with the permissions of these accounts, which\
+      \ can lead to privilege escalation and further compromise of the environment.\n\
+      \nFor example, in Kubernetes environments, processes running inside a container\
+      \ may communicate with the Kubernetes API server using service account tokens.\
+      \ If a container is compromised, an adversary may be able to steal the container’s\
+      \ token and thereby gain access to Kubernetes API commands.(Citation: Kubernetes\
+      \ Service Accounts)  Similarly, instances within continuous-development / continuous-integration\
+      \ (CI/CD) pipelines will often use API tokens to authenticate to other services\
+      \ for testing and deployment.(Citation: Cider Security Top 10 CICD Security\
+      \ Risks) If these pipelines are compromised, adversaries may be able to steal\
+      \ these tokens and leverage their privileges.\n\nToken theft can also occur\
+      \ through social engineering, in which case user action may be required to grant\
+      \ access. OAuth is one commonly implemented framework that issues tokens to\
+      \ users for access to systems. An application desiring access to cloud-based\
+      \ services or protected APIs can gain entry using OAuth 2.0 through a variety\
+      \ of authorization protocols. An example commonly-used sequence is Microsoft's\
+      \ Authorization Code Grant flow.(Citation: Microsoft Identity Platform Protocols\
+      \ May 2019)(Citation: Microsoft - OAuth Code Authorization flow - June 2019)\
+      \ An OAuth access token enables a third-party application to interact with resources\
+      \ containing user data in the ways requested by the application without obtaining\
+      \ user credentials. \n \nAdversaries can leverage OAuth authorization by constructing\
+      \ a malicious application designed to be granted access to resources with the\
+      \ target user's OAuth token.(Citation: Amnesty OAuth Phishing Attacks, August\
+      \ 2019)(Citation: Trend Micro Pawn Storm OAuth 2017) The adversary will need\
+      \ to complete registration of their application with the authorization server,\
+      \ for example Microsoft Identity Platform using Azure Portal, the Visual Studio\
+      \ IDE, the command-line interface, PowerShell, or REST API calls.(Citation:\
+      \ Microsoft - Azure AD App Registration - May 2019) Then, they can send a [Spearphishing\
+      \ Link](https://attack.mitre.org/techniques/T1566/002) to the target user to\
+      \ entice them to grant access to the application. Once the OAuth access token\
+      \ is granted, the application can gain potentially long-term access to features\
+      \ of the user account through [Application Access Token](https://attack.mitre.org/techniques/T1550/001).(Citation:\
       \ Microsoft - Azure AD Identity Tokens - Aug 2019)\n\nApplication access tokens\
       \ may function within a limited lifetime, limiting how long an adversary can\
       \ utilize the stolen token. However, in some cases, adversaries can also steal\
@@ -13543,9 +14029,14 @@ keys:
 
       There are several examples of malware targeting cookies from web browsers on
       the local system.(Citation: Kaspersky TajMahal April 2019)(Citation: Unit 42
-      Mac Crypto Cookies January 2019) There are also open source frameworks such
-      as `Evilginx2` and `Muraena` that can gather session cookies through a malicious
-      proxy (ex: [Adversary-in-the-Middle](https://attack.mitre.org/techniques/T1557))
+      Mac Crypto Cookies January 2019) Adversaries may also steal cookies by injecting
+      malicious JavaScript content into websites or relying on [User Execution](https://attack.mitre.org/techniques/T1204)
+      by tricking victims into running malicious JavaScript in their browser.(Citation:
+      Talos Roblox Scam 2023)(Citation: Krebs Discord Bookmarks 2023)
+
+
+      There are also open source frameworks such as `Evilginx2` and `Muraena` that
+      can gather session cookies through a malicious proxy (e.g., [Adversary-in-the-Middle](https://attack.mitre.org/techniques/T1557))
       that can be set up by an adversary and used in phishing campaigns.(Citation:
       Github evilginx2)(Citation: GitHub Mauraena)
 
@@ -14217,6 +14708,31 @@ keys:
       Panel is executed. CPL files not exporting <code>CPlApplet</code> are not directly
       executable.(Citation: ESET InvisiMole June 2020)'
     link: https://attack.mitre.org/techniques/T1218/002
+  - id: T1218.015
+    name: 'System Binary Proxy Execution: Electron Applications'
+    tide.vocab.stages:
+      - Defense Evasion
+    description: 'Adversaries may abuse components of the Electron framework to execute
+      malicious code. The Electron framework hosts many common applications such as
+      Signal, Slack, and Microsoft Teams.(Citation: Electron 2) Originally developed
+      by GitHub, Electron is a cross-platform desktop application development framework
+      that employs web technologies like JavaScript, HTML, and CSS.(Citation: Electron
+      3) The Chromium engine is used to display web content and Node.js runs the backend
+      code.(Citation: Electron 1)
+
+
+      Due to the functional mechanics of Electron (such as allowing apps to run arbitrary
+      commands), adversaries may also be able to perform malicious functions in the
+      background potentially disguised as legitimate tools within the framework.(Citation:
+      Electron 1) For example, the abuse of `teams.exe` and `chrome.exe` may allow
+      adversaries to execute malicious commands as child processes of the legitimate
+      application (e.g., `chrome.exe --disable-gpu-sandbox --gpu-launcher="C:\Windows\system32\cmd.exe
+      /c calc.exe`).(Citation: Electron 6-8)
+
+
+      Adversaries may also execute malicious content by planting malicious [JavaScript](https://attack.mitre.org/techniques/T1059/007)
+      within Electron applications.(Citation: Electron Security)'
+    link: https://attack.mitre.org/techniques/T1218/015
   - id: T1218.004
     name: 'System Binary Proxy Execution: InstallUtil'
     tide.vocab.stages:
@@ -14704,6 +15220,28 @@ keys:
       <code>script:</code> moniker which could be used to reference remote code via
       HTTP(S).'
     link: https://attack.mitre.org/techniques/T1216/001
+  - id: T1216.002
+    name: 'System Script Proxy Execution: SyncAppvPublishingServer'
+    tide.vocab.stages:
+      - Defense Evasion
+    description: "Adversaries may abuse SyncAppvPublishingServer.vbs to proxy execution\
+      \ of malicious [PowerShell](https://attack.mitre.org/techniques/T1059/001) commands.\
+      \ SyncAppvPublishingServer.vbs is a Visual Basic script associated with how\
+      \ Windows virtualizes applications (Microsoft Application Virtualization, or\
+      \ App-V).(Citation: 1 - appv) For example, Windows may render Win32 applications\
+      \ to users as virtual applications, allowing users to launch and interact with\
+      \ them as if they were installed locally.(Citation: 2 - appv)(Citation: 3 -\
+      \ appv)\n    \nThe SyncAppvPublishingServer.vbs script is legitimate, may be\
+      \ signed by Microsoft, and is commonly executed from `\\System32` through the\
+      \ command line via `wscript.exe`.(Citation: 4 - appv)(Citation: 5 - appv)\n\n\
+      Adversaries may abuse SyncAppvPublishingServer.vbs to bypass [PowerShell](https://attack.mitre.org/techniques/T1059/001)\
+      \ execution restrictions and evade defensive counter measures by \"living off\
+      \ the land.\"(Citation: 6 - appv)(Citation: 4 - appv) Proxying execution may\
+      \ function as a trusted/signed alternative to directly invoking `powershell.exe`.(Citation:\
+      \ 7 - appv)\n\nFor example,  [PowerShell](https://attack.mitre.org/techniques/T1059/001)\
+      \ commands may be invoked using:(Citation: 5 - appv)\n\n`SyncAppvPublishingServer.vbs\
+      \ \"n; {PowerShell}\"`"
+    link: https://attack.mitre.org/techniques/T1216/002
   - id: T1007
     name: System Service Discovery
     tide.vocab.stages:
@@ -14799,23 +15337,35 @@ keys:
     name: System Time Discovery
     tide.vocab.stages:
       - Discovery
-    description: 'An adversary may gather the system time and/or time zone from a
-      local or remote system. The system time is set and stored by the Windows Time
-      Service within a domain to maintain time synchronization between systems and
-      services in an enterprise network. (Citation: MSDN System Time)(Citation: Technet
-      Windows Time Service)
+    description: 'An adversary may gather the system time and/or time zone settings
+      from a local or remote system. The system time is set and stored by services,
+      such as the Windows Time Service on Windows or <code>systemsetup</code> on macOS.(Citation:
+      MSDN System Time)(Citation: Technet Windows Time Service)(Citation: systemsetup
+      mac time) These time settings may also be synchronized between systems and services
+      in an enterprise network, typically accomplished with a network time server
+      within a domain.(Citation: Mac Time Sync)(Citation: linux system time)
 
 
       System time information may be gathered in a number of ways, such as with [Net](https://attack.mitre.org/software/S0039)
       on Windows by performing <code>net time \\hostname</code> to gather the system
       time on a remote system. The victim''s time zone may also be inferred from the
       current system time or gathered by using <code>w32tm /tz</code>.(Citation: Technet
-      Windows Time Service)
+      Windows Time Service) In addition, adversaries can discover device uptime through
+      functions such as <code>GetTickCount()</code> to determine how long it has been
+      since the system booted up.(Citation: Virtualization/Sandbox Evasion)
 
 
       On network devices, [Network Device CLI](https://attack.mitre.org/techniques/T1059/008)
       commands such as `show clock detail` can be used to see the current time configuration.(Citation:
       show_clock_detail_cisco_cmd)
+
+
+      In addition, system calls – such as <code>time()</code> – have been used to
+      collect the current time on Linux devices.(Citation: MAGNET GOBLIN) On macOS
+      systems, adversaries may use commands such as <code>systemsetup -gettimezone</code>
+      or <code>timeIntervalSinceNow</code> to gather current time zone information
+      or current date and time.(Citation: System Information Discovery Technique)(Citation:
+      ESET DazzleSpy Jan 2022)
 
 
       This information could be useful for performing other techniques, such as executing
@@ -15020,9 +15570,8 @@ keys:
     tide.vocab.stages:
       - Exfiltration
     description: 'Adversaries may exfiltrate data by transferring the data, including
-      backups of cloud environments, to another cloud account they control on the
-      same service to avoid typical file transfers/downloads and network-based exfiltration
-      detection.
+      through sharing/syncing and creating backups of cloud environments, to another
+      cloud account they control on the same service.
 
 
       A defender who is monitoring for large transfers to outside the cloud environment
@@ -15030,7 +15579,13 @@ keys:
       watching for data transfers to another account within the same cloud provider.
       Such transfers may utilize existing cloud provider APIs and the internal address
       space of the cloud provider to blend into normal traffic or avoid data transfers
-      over external network interfaces.
+      over external network interfaces.(Citation: TLDRSec AWS Attacks)
+
+
+      Adversaries may also use cloud-native mechanisms to share victim data with adversary-controlled
+      cloud accounts, such as creating anonymous file sharing links or, in Azure,
+      a shared access signature (SAS) URI.(Citation: Microsoft Azure Storage Shared
+      Access Signature)
 
 
       Incidents have been observed where adversaries have created backups of cloud
@@ -15101,12 +15656,13 @@ keys:
     name: Unsecured Credentials
     tide.vocab.stages:
       - Credential Access
-    description: Adversaries may search compromised systems to find and obtain insecurely
+    description: 'Adversaries may search compromised systems to find and obtain insecurely
       stored credentials. These credentials can be stored and/or misplaced in many
       locations on a system, including plaintext files (e.g. [Bash History](https://attack.mitre.org/techniques/T1552/003)),
       operating system or application-specific repositories (e.g. [Credentials in
-      Registry](https://attack.mitre.org/techniques/T1552/002)), or other specialized
-      files/artifacts (e.g. [Private Keys](https://attack.mitre.org/techniques/T1552/004)).
+      Registry](https://attack.mitre.org/techniques/T1552/002)),  or other specialized
+      files/artifacts (e.g. [Private Keys](https://attack.mitre.org/techniques/T1552/004)).(Citation:
+      Brining MimiKatz to Unix)'
     link: https://attack.mitre.org/techniques/T1552
   - id: T1552.003
     name: 'Unsecured Credentials: Bash History'
@@ -15205,9 +15761,9 @@ keys:
 
 
       It is possible to extract passwords from backups or saved virtual machines through
-      [OS Credential Dumping](https://attack.mitre.org/techniques/T1003). (Citation:
+      [OS Credential Dumping](https://attack.mitre.org/techniques/T1003).(Citation:
       CG 2014) Passwords may also be obtained from Group Policy Preferences stored
-      on the Windows Domain Controller. (Citation: SRD GPP)
+      on the Windows Domain Controller.(Citation: SRD GPP)
 
 
       In cloud and/or containerized environments, authenticated user and service account
@@ -15501,9 +16057,13 @@ keys:
 
       Adversaries may also deceive users into performing actions such as enabling
       [Remote Access Software](https://attack.mitre.org/techniques/T1219), allowing
-      direct control of the system to the adversary, or downloading and executing
-      malware for [User Execution](https://attack.mitre.org/techniques/T1204). For
-      example, tech support scams can be facilitated through [Phishing](https://attack.mitre.org/techniques/T1566),
+      direct control of the system to the adversary; running malicious JavaScript
+      in their browser, allowing adversaries to [Steal Web Session Cookie](https://attack.mitre.org/techniques/T1539)s;
+      or downloading and executing malware for [User Execution](https://attack.mitre.org/techniques/T1204).(Citation:
+      Talos Roblox Scam 2023)(Citation: Krebs Discord Bookmarks 2023)
+
+
+      For example, tech support scams can be facilitated through [Phishing](https://attack.mitre.org/techniques/T1566),
       vishing, or various forms of user interaction. Adversaries can use a combination
       of these methods, such as spoofing and promoting toll-free numbers or call centers
       that are used to direct victims to malicious websites, to deliver and execute
@@ -15611,15 +16171,20 @@ keys:
       \ Evasion. Cloud accounts are those created and configured by an organization\
       \ for use by users, remote support, services, or for administration of resources\
       \ within a cloud service provider or SaaS application. Cloud Accounts can exist\
-      \ solely in the cloud or be hybrid joined between on-premises systems and the\
-      \ cloud through federation with other identity sources such as Windows Active\
-      \ Directory. (Citation: AWS Identity Federation)(Citation: Google Federating\
-      \ GC)(Citation: Microsoft Deploying AD Federation)\n\nService or user accounts\
-      \ may be targeted by adversaries through [Brute Force](https://attack.mitre.org/techniques/T1110),\
+      \ solely in the cloud; alternatively, they may be hybrid-joined between on-premises\
+      \ systems and the cloud through syncing or federation with other identity sources\
+      \ such as Windows Active Directory. (Citation: AWS Identity Federation)(Citation:\
+      \ Google Federating GC)(Citation: Microsoft Deploying AD Federation)\n\nService\
+      \ or user accounts may be targeted by adversaries through [Brute Force](https://attack.mitre.org/techniques/T1110),\
       \ [Phishing](https://attack.mitre.org/techniques/T1566), or various other means\
-      \ to gain access to the environment. Federated accounts may be a pathway for\
-      \ the adversary to affect both on-premises systems and cloud environments.\n\
-      \nAn adversary may create long lasting [Additional Cloud Credentials](https://attack.mitre.org/techniques/T1098/001)\
+      \ to gain access to the environment. Federated or synced accounts may be a pathway\
+      \ for the adversary to affect both on-premises systems and cloud environments\
+      \ - for example, by leveraging shared credentials to log onto [Remote Services](https://attack.mitre.org/techniques/T1021).\
+      \ High privileged cloud accounts, whether federated, synced, or cloud-only,\
+      \ may also allow pivoting to on-premises environments by leveraging SaaS-based\
+      \ [Software Deployment Tools](https://attack.mitre.org/techniques/T1072) to\
+      \ run commands on hybrid-joined devices.\n\nAn adversary may create long lasting\
+      \ [Additional Cloud Credentials](https://attack.mitre.org/techniques/T1098/001)\
       \ on a compromised cloud account to maintain persistence in the environment.\
       \ Such credentials may also be used to bypass security controls such as multi-factor\
       \ authentication. \n\nCloud accounts may also be able to assume [Temporary Elevated\
@@ -15771,15 +16336,18 @@ keys:
       \ a virtual environment. \n\nChecks could include generic system properties\
       \ such as host/domain name and samples of network traffic. Adversaries may also\
       \ check the network adapters addresses, CPU core count, and available memory/drive\
-      \ size. \n\nOther common checks may enumerate services running that are unique\
-      \ to these applications, installed programs on the system, manufacturer/product\
-      \ fields for strings relating to virtual machine applications, and VME-specific\
-      \ hardware/processor instructions.(Citation: McAfee Virtual Jan 2017) In applications\
-      \ like VMWare, adversaries can also use a special I/O port to send commands\
-      \ and receive output. \n \nHardware checks, such as the presence of the fan,\
-      \ temperature, and audio devices, could also be used to gather evidence that\
-      \ can be indicative a virtual environment. Adversaries may also query for specific\
-      \ readings from these devices.(Citation: Unit 42 OilRig Sept 2018)"
+      \ size. Once executed, malware may also use [File and Directory Discovery](https://attack.mitre.org/techniques/T1083)\
+      \ to check if it was saved in a folder or file with unexpected or even analysis-related\
+      \ naming artifacts such as `malware`, `sample`, or `hash`.\n\nOther common checks\
+      \ may enumerate services running that are unique to these applications, installed\
+      \ programs on the system, manufacturer/product fields for strings relating to\
+      \ virtual machine applications, and VME-specific hardware/processor instructions.(Citation:\
+      \ McAfee Virtual Jan 2017) In applications like VMWare, adversaries can also\
+      \ use a special I/O port to send commands and receive output. \n \nHardware\
+      \ checks, such as the presence of the fan, temperature, and audio devices, could\
+      \ also be used to gather evidence that can be indicative a virtual environment.\
+      \ Adversaries may also query for specific readings from these devices.(Citation:\
+      \ Unit 42 OilRig Sept 2018)"
     link: https://attack.mitre.org/techniques/T1497/001
   - id: T1497.003
     name: 'Virtualization/Sandbox Evasion: Time Based Evasion'
@@ -16001,21 +16569,36 @@ keys:
     tide.vocab.stages:
       - Execution
     description: 'Adversaries may abuse Windows Management Instrumentation (WMI) to
-      execute malicious commands and payloads. WMI is an administration feature that
-      provides a uniform environment to access Windows system components. The WMI
-      service enables both local and remote access, though the latter is facilitated
+      execute malicious commands and payloads. WMI is designed for programmers and
+      is the infrastructure for management data and operations on Windows systems.(Citation:
+      WMI 1-3) WMI is an administration feature that provides a uniform environment
+      to access Windows system components.
+
+
+      The WMI service enables both local and remote access, though the latter is facilitated
       by [Remote Services](https://attack.mitre.org/techniques/T1021) such as [Distributed
-      Component Object Model](https://attack.mitre.org/techniques/T1021/003) (DCOM)
-      and [Windows Remote Management](https://attack.mitre.org/techniques/T1021/006)
-      (WinRM).(Citation: MSDN WMI) Remote WMI over DCOM operates using port 135, whereas
-      WMI over WinRM operates over port 5985 when using HTTP and 5986 for HTTPS.(Citation:
-      MSDN WMI)(Citation: FireEye WMI 2015)
+      Component Object Model](https://attack.mitre.org/techniques/T1021/003) and [Windows
+      Remote Management](https://attack.mitre.org/techniques/T1021/006).(Citation:
+      WMI 1-3) Remote WMI over DCOM operates using port 135, whereas WMI over WinRM
+      operates over port 5985 when using HTTP and 5986 for HTTPS.(Citation: WMI 1-3)
+      (Citation: Mandiant WMI)
 
 
       An adversary can use WMI to interact with local and remote systems and use it
-      as a means to execute various behaviors, such as gathering information for Discovery
-      as well as remote Execution of files as part of Lateral Movement. (Citation:
-      FireEye WMI SANS 2015) (Citation: FireEye WMI 2015)'
+      as a means to execute various behaviors, such as gathering information for [Discovery](https://attack.mitre.org/tactics/TA0007)
+      as well as [Execution](https://attack.mitre.org/tactics/TA0002) of commands
+      and payloads.(Citation: Mandiant WMI) For example, `wmic.exe` can be abused
+      by an adversary to delete shadow copies with the command `wmic.exe Shadowcopy
+      Delete` (i.e., [Inhibit System Recovery](https://attack.mitre.org/techniques/T1490)).(Citation:
+      WMI 6)
+
+
+      **Note:** `wmic.exe` is deprecated as of January of 2024, with the WMIC feature
+      being “disabled by default” on Windows 11+. WMIC will be removed from subsequent
+      Windows releases and replaced by [PowerShell](https://attack.mitre.org/techniques/T1059/001)
+      as the primary WMI interface.(Citation: WMI 7,8) In addition to PowerShell and
+      tools like `wbemtool.exe`, COM APIs can also be used to programmatically interact
+      with WMI via C++, .NET, VBScript, etc.(Citation: WMI 7,8)'
     link: https://attack.mitre.org/techniques/T1047
   - id: T1220
     name: XSL Script Processing
@@ -16113,20 +16696,33 @@ keys:
       \ Manipulation](https://attack.mitre.org/techniques/T1565/002) or [Endpoint\
       \ Denial of Service](https://attack.mitre.org/techniques/T1642).  \n\n \n\n\
       [Adversary-in-the-Middle](https://attack.mitre.org/techniques/T1638) can be\
-      \ achieved through several mechanisms, such as a malicious application registering\
-      \ itself as a VPN client. By doing this, the adversary can effectively redirect\
-      \ device traffic to wherever they want. However, registering as a VPN client\
-      \ requires user consent on both Android and iOS. Additionally, on iOS, the application\
-      \ requires a special entitlement that must be granted by Apple. Alternatively,\
-      \ if an application is able to escalate privileges, it can potentially utilize\
-      \ those privileges to gain access to network traffic.  \n\n \n\nOutside of a\
-      \ mobile device, adversaries may be able to capture traffic by employing a rogue\
-      \ base station or Wi-Fi access point. These devices will allow adversaries to\
-      \ capture network traffic after it has left the device, while it is flowing\
-      \ to its destination. On a local network, enterprise techniques could be used,\
-      \ such as DNS redirection or DNS poisoning.  \n\n \n\nIf applications properly\
-      \ encrypt their network traffic, sensitive data may not be accessible an adversary,\
-      \ depending on the point of capture. "
+      \ achieved through several mechanisms. For example, a malicious application\
+      \ may register itself as a VPN client, effectively redirecting device traffic\
+      \ to adversary-owned resources. Registering as a VPN client requires user consent\
+      \ on both Android and iOS; additionally, a special entitlement granted by Apple\
+      \ is needed for iOS devices. Alternatively, a malicious application with escalation\
+      \ privileges may utilize those privileges to gain access to network traffic.\
+      \   \n\n\n Specific to Android devices, adversary-in-the-disk is a type of AiTM\
+      \ attack where adversaries monitor and manipulate data that is exchanged between\
+      \ applications and external storage.(Citation: mitd_kaspersky)(Citation: mitd_checkpoint)(Citation:\
+      \ mitd_checkpoint_research) To accomplish this, a malicious application firsts\
+      \ requests for access to multimedia files on the device (`READ_EXTERNAL STORAGE`\
+      \ and `WRITE_EXTERNAL_STORAGE`), then the application reads data on the device\
+      \ and/or writes malware to the device. Though the request for access is common,\
+      \ when used maliciously, adversaries may access files and other sensitive data\
+      \ due to abusing the permission. Multiple applications were shown to be vulnerable\
+      \ against this attack; however, scrutiny of permissions and input validations\
+      \ may mitigate this attack.    \n\nOutside of a mobile device, adversaries may\
+      \ be able to capture traffic by employing a rogue base station or Wi-Fi access\
+      \ point. These devices will allow adversaries to capture network traffic after\
+      \ it has left the device, while it is flowing to its destination. On a local\
+      \ network, enterprise techniques could be used, such as [ARP Cache Poisoning](https://attack.mitre.org/techniques/T1557/002)\
+      \ or [DHCP Spoofing](https://attack.mitre.org/techniques/T1557/003).  \n\n \n\
+      \nIf applications properly encrypt their network traffic, sensitive data may\
+      \ not be accessible to adversaries, depending on the point of capture. For example,\
+      \ properly implementing Apple’s Application Transport Security (ATS) and Android’s\
+      \ Network Security Configuration (NSC) may prevent sensitive data leaks.(Citation:\
+      \ NSC_Android)"
     link: https://attack.mitre.org/techniques/T1638
   - id: T1437
     name: 'Mobile : Application Layer Protocol'
@@ -16457,6 +17053,19 @@ keys:
       of the application source code, manipulation of the update/distribution mechanism
       for that software, or replacing compiled releases with a modified version.
     link: https://attack.mitre.org/techniques/T1474/003
+  - id: T1628.003
+    name: 'Mobile : Conceal Multimedia Files'
+    tide.vocab.stages:
+      - Defense Evasion
+    description: "Adversaries may attempt to hide multimedia files from the user.\
+      \ By doing so, adversaries may conceal captured files, such as pictures, videos\
+      \ and/or screenshots, then later exfiltrate those files.  \n\nSpecific to Android\
+      \ devices, if the `.nomedia` file is present in a folder, multimedia files in\
+      \ that folder will not be visible to the user in the Gallery application. Additionally,\
+      \ other applications are asked not to scan the folder with the `.nomedia` file,\
+      \ effectively making the folder appear invisible to the user.  \n\nThis technique\
+      \ is often used by stalkerware and spyware applications.  "
+    link: https://attack.mitre.org/techniques/T1628/003
   - id: T1636.003
     name: 'Mobile : Contact List'
     tide.vocab.stages:
@@ -16812,6 +17421,20 @@ keys:
       \ overflow to gain access to the device and run as root without interaction\
       \ from the user.  "
     link: https://attack.mitre.org/techniques/T1658
+  - id: T1664
+    name: 'Mobile : Exploitation for Initial Access'
+    tide.vocab.stages:
+      - Initial Access
+    description: "Adversaries may exploit software vulnerabilities to gain initial\
+      \ access to a mobile device. \n\nThis can be accomplished in a variety of ways.\
+      \ Vulnerabilities may be present in applications, services, the underlying operating\
+      \ system, or in the kernel itself. Several well-known mobile device exploits\
+      \ exist, including FORCEDENTRY, StageFright, and BlueBorne. Further, some exploits\
+      \ may be possible to exploit without any user interaction (zero-click), making\
+      \ them particularly dangerous. Mobile operating system vendors are typically\
+      \ very quick to patch such critical bugs, ensuring only a small window where\
+      \ they can be exploited. "
+    link: https://attack.mitre.org/techniques/T1664
   - id: T1404
     name: 'Mobile : Exploitation for Privilege Escalation'
     tide.vocab.stages:
@@ -17125,6 +17748,20 @@ keys:
       legitimately to auto-fill text fields by applications such as password managers.(Citation:
       bitwarden autofill logins)'
     link: https://attack.mitre.org/techniques/T1516
+  - id: T1422.001
+    name: 'Mobile : Internet Connection Discovery'
+    tide.vocab.stages:
+      - Discovery
+    description: 'Adversaries may check for Internet connectivity on compromised systems.
+      This may be performed during automated discovery and can be accomplished in
+      numerous ways such as using `adb shell netstat` for Android.(Citation: adb_commands)
+
+
+      Adversaries may use the results and responses from these requests to determine
+      if the mobile devices are capable of communicating with adversary-owned C2 servers
+      before attempting to connect to them. The results may also be used to identify
+      routes, redirectors, and proxy servers.'
+    link: https://attack.mitre.org/techniques/T1422/001
   - id: T1634.001
     name: 'Mobile : Keychain'
     tide.vocab.stages:
@@ -17583,6 +18220,36 @@ keys:
       \ been jailbroken or rooted, an adversary may be able to access [SMS Messages](https://attack.mitre.org/techniques/T1636/004)\
       \ without the user’s knowledge or approval. "
     link: https://attack.mitre.org/techniques/T1636/004
+  - id: T1521.003
+    name: 'Mobile : SSL Pinning'
+    tide.vocab.stages:
+      - Command and Control
+    description: "Adversaries may use [SSL Pinning](https://attack.mitre.org/techniques/T1521/003)\
+      \  to protect the C2 traffic from being intercepted and analyzed.\n\n[SSL Pinning](https://attack.mitre.org/techniques/T1521/003)\
+      \  is a technique commonly utilized by legitimate websites to ensure that encrypted\
+      \ communications are only allowed with a pre-defined certificate. If another\
+      \ certificate is presented, it could indicate device compromise, traffic interception,\
+      \ or another upstream issue. While benign usages are common, it is also possible\
+      \ for adversaries to abuse this technology to protect malicious C2 traffic.\n\
+      \nIn normal, not pinned SSL validation, when a client connects to a server using\
+      \ HTTPS, it typically checks whether the server’s SSL/TLS certificate is signed\
+      \ by a trusted Certificate Authority (CA) in the device’s trust store. If the\
+      \ certificate is valid and signed by a trusted CA, the connection is established.\
+      \ However, with [SSL Pinning](https://attack.mitre.org/techniques/T1521/003)\
+      \ , the client is configured to trust a specific SSL/TLS certificate or public\
+      \ key, rather than relying on the device’s trust store. This means that even\
+      \ if the server’s certificate is signed by a trusted CA, the client will only\
+      \ establish the connection of the certificate or key is pinned.\n\nThere are\
+      \ two types of [SSL Pinning](https://attack.mitre.org/techniques/T1521/003)\
+      \ :\n\n1.\tCertificate Pinning: The client stores a copy of the server’s certificate\
+      \ and compares it with the certificate received during the SSL handshake. If\
+      \ the certificates match, then the client proceeds with the connection. This\
+      \ approach also works with self-signed certificates.\n\n2.\tPublic Key Pinning:\
+      \ Instead of pinning the entire certificate, the client pins just the public\
+      \ key extracted from the certificate. This is often more flexible, as it allows\
+      \ the server to renew its certificate without having to update the pinned certificate\
+      \ or breaking the SSL connection."
+    link: https://attack.mitre.org/techniques/T1521/003
   - id: T1603
     name: 'Mobile : Scheduled Task/Job'
     tide.vocab.stages:
@@ -17824,19 +18491,23 @@ keys:
     tide.vocab.stages:
       - Discovery
     description: "Adversaries may look for details about the network configuration\
-      \ and settings, such as IP and/or MAC addresses, of operating systems they access\
-      \ or through information discovery of remote systems. \n\n \n\nOn Android, details\
-      \ of onboard network interfaces are accessible to apps through the `java.net.NetworkInterface`\
-      \ class.(Citation: NetworkInterface) Previously, the Android `TelephonyManager`\
-      \ class could be used to gather telephony-related device identifiers, information\
-      \ such as the IMSI, IMEI, and phone number. However, starting with Android 10,\
-      \ only preloaded, carrier, the default SMS, or device and profile owner applications\
-      \ can access the telephony-related device identifiers.(Citation: TelephonyManager)\
-      \ \n\n \n\nOn iOS, gathering network configuration information is not possible\
-      \ without root access. \n\n \n\nAdversaries may use the information from [System\
-      \ Network Configuration Discovery](https://attack.mitre.org/techniques/T1422)\
+      \ and settings, such as IP and/or MAC addresses, of devices they access or through\
+      \ information discovery of remote systems. \n\nAdversaries may use the information\
+      \ from [System Network Configuration Discovery](https://attack.mitre.org/techniques/T1422)\
       \ during automated discovery to shape follow-on behaviors, including determining\
-      \ certain access within the target network and what actions to do next. "
+      \ certain access within the target network and what actions to do next. \n\n\
+      On Android, details of onboard network interfaces are accessible to apps through\
+      \ the `java.net.NetworkInterface` class.(Citation: NetworkInterface) Previously,\
+      \ the Android `TelephonyManager` class could be used to gather telephony-related\
+      \ device identifiers, information such as the IMSI, IMEI, and phone number.\
+      \ However, starting with Android 10, only preloaded, carrier, the default SMS,\
+      \ or device and profile owner applications can access the telephony-related\
+      \ device identifiers.(Citation: TelephonyManager) \n\n \n\nOn iOS, gathering\
+      \ network configuration information is not possible without root access. \n\n\
+      \ \n\nAdversaries may use the information from [System Network Configuration\
+      \ Discovery](https://attack.mitre.org/techniques/T1422) during automated discovery\
+      \ to shape follow-on behaviors, including determining certain access within\
+      \ the target network and what actions to do next. "
     link: https://attack.mitre.org/techniques/T1422
   - id: T1421
     name: 'Mobile : System Network Connections Discovery'
@@ -18044,6 +18715,16 @@ keys:
       \ binary analysis, or enable operational resiliency (since this infrastructure\
       \ may be dynamically changed). \n\n "
     link: https://attack.mitre.org/techniques/T1481
+  - id: T1422.002
+    name: 'Mobile : Wi-Fi Discovery'
+    tide.vocab.stages:
+      - Discovery
+    description: 'Adversaries may search for information about Wi-Fi networks, such
+      as network names and passwords, on compromised systems. Adversaries may use
+      Wi-Fi information as part of [Discovery](https://attack.mitre.org/tactics/TA0032)
+      or [Credential Access](https://attack.mitre.org/tactics/TA0031) activity to
+      support both ongoing and future campaigns. '
+    link: https://attack.mitre.org/techniques/T1422/002
   - id: T0800
     name: 'Industrial : Activate Firmware Update Mode'
     tide.vocab.stages:
@@ -18107,6 +18788,27 @@ keys:
       a system or interface with these native protocols may allow collection and enumeration
       of other attached, communicating servers and devices.
     link: https://attack.mitre.org/techniques/T0802
+  - id: T0895
+    name: 'Industrial : Autorun Image'
+    tide.vocab.stages:
+      - Execution
+    description: "Adversaries may leverage AutoRun functionality or scripts to execute\
+      \ malicious code. Devices configured to enable AutoRun functionality or legacy\
+      \ operating systems may be susceptible to abuse of these features to run malicious\
+      \ code stored on various forms of removeable media (i.e., USB, Disk Images [.ISO]).\
+      \ Commonly, AutoRun or AutoPlay are disabled in many operating systems configurations\
+      \ to mitigate against this technique. If a device is configured to enable AutoRun\
+      \ or AutoPlay, adversaries may execute code on the device by mounting the removable\
+      \ media to the device, either through physical or virtual means. This may be\
+      \ especially relevant for virtual machine environments where disk images may\
+      \ be dynamically mapped to a guest system on a hypervisor.  \n\nAn example could\
+      \ include an adversary gaining access to a hypervisor through the management\
+      \ interface to modify a virtual machine’s hardware configuration. They could\
+      \ then deploy an iso image with a malicious AutoRun script to cause the virtual\
+      \ machine to automatically execute the code contained on the disk image. This\
+      \ would enable the execution of malicious code within a virtual machine without\
+      \ needing any prior remote access to that system.\n"
+    link: https://attack.mitre.org/techniques/T0895
   - id: T0803
     name: 'Industrial : Block Command Message'
     tide.vocab.stages:
@@ -19397,6 +20099,37 @@ keys:
       \ ICS/SCADA vendor websites. After being downloaded, this software infected\
       \ the host computer with a Remote Access Trojan (RAT)."
     link: https://attack.mitre.org/techniques/T0862
+  - id: T0894
+    name: 'Industrial : System Binary Proxy Execution'
+    tide.vocab.stages:
+      - Evasion
+    description: "Adversaries may bypass process and/or signature-based defenses by\
+      \ proxying execution of malicious content with signed, or otherwise trusted,\
+      \ binaries. Binaries used in this technique are often Microsoft-signed files,\
+      \ indicating that they have been either downloaded from Microsoft or are already\
+      \ native in the operating system. (Citation: LOLBAS Project) Binaries signed\
+      \ with trusted digital certificates can typically execute on Windows systems\
+      \ protected by digital signature validation. Several Microsoft signed binaries\
+      \ that are default on Windows installations can be used to proxy execution of\
+      \ other files or commands. Similarly, on Linux systems adversaries may abuse\
+      \ trusted binaries such as split to proxy execution of malicious commands. (Citation:\
+      \ split man page)(Citation: GTFO split)\n\nAdversaries may abuse application\
+      \ binaries installed on a system for proxy execution of malicious code or domain-specific\
+      \ commands. These commands could be used to target local resources on the device\
+      \ or networked devices within the environment through defined APIs ([Execution\
+      \ through API](https://attack.mitre.org/techniques/T0871)) or application-specific\
+      \ programming languages (e.g., MicroSCADA SCIL). Application binaries may be\
+      \ signed by the developer or generally trusted by the operators, analysts, and\
+      \ monitoring tools accustomed to the environment. These applications may be\
+      \ developed and/or directly provided by the device vendor to enable configuration,\
+      \ management, and operation of their devices without many alternatives. \n\n\
+      Adversaries may seek to target these trusted application binaries to execute\
+      \ or send commands without the development of custom malware. For example, adversaries\
+      \ may target a SCADA server binary which has the existing ability to send commands\
+      \ to substation devices, such as through IEC 104 command messages. Proxy execution\
+      \ may still require the development of custom tools to hook into the application\
+      \ binary’s execution.\n\n"
+    link: https://attack.mitre.org/techniques/T0894
   - id: T0857
     name: 'Industrial : System Firmware'
     tide.vocab.stages:
