@@ -257,6 +257,11 @@ keys:
       or other methods. Some methods may be trivial to evade while others may be more
       sophisticated.
     link: https://attack.mitre.org/mitigations/M1010
+  - id: M1059
+    name: 'Mobile : Do Not Mitigate'
+    description: This category is to associate techniques that mitigation might increase
+      risk of compromise and therefore mitigation is not recommended.
+    link: https://attack.mitre.org/mitigations/M1059
   - id: M1009
     name: 'Mobile : Encrypt Network Traffic'
     description: 'Application developers should encrypt all of their application network
@@ -719,6 +724,11 @@ keys:
       or other methods. Some methods may be trivial to evade while others may be more
       sophisticated.
     link: https://attack.mitre.org/mitigations/M1010
+  - id: M1059
+    name: 'Mobile : Do Not Mitigate'
+    description: This category is to associate techniques that mitigation might increase
+      risk of compromise and therefore mitigation is not recommended.
+    link: https://attack.mitre.org/mitigations/M1059
   - id: M1009
     name: 'Mobile : Encrypt Network Traffic'
     description: 'Application developers should encrypt all of their application network
