@@ -197,7 +197,7 @@ class SentinelDeploy(DeployMDR):
 
                 mappings.field_mappings = field_mappings
                 entity_mappings.append(mappings)
-
+        rule.entity_mappings = entity_mappings
         # Add automated query extensions
         rule.query = create_query(mdr_sentinel["query"], data)
 
