@@ -69,7 +69,7 @@ def lookup_deployment_plan(plan: str) -> dict:
         )
 
     else:
-        lookups_path_regex = r"^.*/Lookups\/[^\/]+\/[^\/]+\.csv$"
+        lookups_path_regex = r"Lookups\/[^\/]+\/[^\/]+\.csv$"
         lookup_paths = [
             lookup
             for lookup in diff_calculation("PRODUCTION")
