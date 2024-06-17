@@ -104,6 +104,17 @@ properties:
           type: string
           pattern: '^(CVE-(1999|2\d{3})-(0\d{2}[0-9]|[1-9]\d{3,}))$'
 
+      misp: 
+        title: Related MISP Events
+        type: array
+        description: List of MISP event UUID(s) that are related to this threat vector  
+        markdownDescription: List of MISP **event** UUID(s) that are related to this threat vector 
+        example: 74c11cb4-b903-4541-aaa2-1db925902fb9
+        items: 
+          type: string
+          pattern: '^[a-fA-F\d]{8}(?:\-[a-fA-F\d]{4}){3}\-[a-fA-F\d]{12}$'
+
+
       domains:
         title: Domains
         type: array
