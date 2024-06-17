@@ -185,8 +185,6 @@ class SentinelLookupsDeploy(DeployLookups):
         for lookup in deployment:
             if lookup.endswith(".csv"):
                 lookup.removesuffix(".csv")
-            print("===== DEBUG ====")
-            print(str(self.LOOKUPS_INDEX))
             lookup_content = pd.read_csv(StringIO(self.LOOKUPS_INDEX[lookup]))
             lookup_name = "".join(c for c in lookup if (c.isalnum() or c in [" ", "_"]))
 

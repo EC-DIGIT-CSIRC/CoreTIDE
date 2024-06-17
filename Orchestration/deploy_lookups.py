@@ -77,7 +77,7 @@ def lookup_deployment_plan(plan: str) -> dict:
         ]
 
     for lookup in lookup_paths:
-        lookup_file = str(lookup.rsplit("/")[-1]).removesuffix("csv")
+        lookup_file = str(lookup.rsplit("/")[-1]).removesuffix(".csv")
         lookup_target_system = str(lookup.rsplit("/")[-2]).lower()
 
         if (DEBUG and lookup_file.startswith("DEBUG")) or (
