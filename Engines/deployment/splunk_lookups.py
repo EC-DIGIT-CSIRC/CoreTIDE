@@ -73,7 +73,7 @@ class SplunkLookupsDeploy(DeployLookups):
             host=self.SPLUNK_URL,
             port=self.SPLUNK_PORT,
             token=self.SPLUNK_TOKEN,
-            app=self.SPLUNK_APP,
+            app=self.SPLUNK_APP
         )
 
         # Start deployment routine
