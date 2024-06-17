@@ -55,7 +55,7 @@ class SentinelLookupsDeploy(DeployLookups):
 
         lookup_content = lookup_content.fillna("").astype(str)
 
-        watchlist.display_name = lookup_metadata.get("name") or lookup_name
+        watchlist.display_name = lookup_name
         watchlist.provider = "EC-TIDE"
         watchlist.source = lookup_name + (".csv")
         watchlist.content_type = "text/csv"
