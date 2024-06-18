@@ -15,6 +15,7 @@ from Engines.mutation import (
     reports,
     remove_cdm_validation,
     references,
+    security_domain
 )
 
 ROOT = Path(str(git.Repo(".", search_parent_directories=True).working_dir))
@@ -37,7 +38,7 @@ file_name.run()
 reports.run()
 remove_cdm_validation.run()
 references.run()
-
+security_domain.run()
 
 print("\n" + "Execution Report".center(80, "="))
 

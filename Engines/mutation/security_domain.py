@@ -96,4 +96,8 @@ class MigrateSecurityDomainMDR:
                 log("INFO", "Drilldown section not found, will run a cleanup in case it is not indented properly")
                 self.indent_drilldown_section(MDR_PATH/mdr)
 
-MigrateSecurityDomainMDR().migrate()
+def run():
+    MigrateSecurityDomainMDR().migrate()
+
+if __name__ == "main":
+    run()
