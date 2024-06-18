@@ -50,11 +50,13 @@ non_json_schema_keys = [
     "tide.vocab",
     "tide.vocab.stages",
     "tide.vocab.scoped",
-    "tide.vocab.hints.no-wrap" "tide.template.multiline",
+    "tide.vocab.hints.no-wrap",
+    "tide.template.multiline",
     "tide.template.hide",
     "tide.template.force-required",
     "tide.template.spacer",
     "tide.mdr.parameter",
+    "tide.meta.deprecation"
 ]
 
 
