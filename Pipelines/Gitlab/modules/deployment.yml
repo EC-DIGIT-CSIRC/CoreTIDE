@@ -63,7 +63,7 @@
       when: never
     - if: ($CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH) && ($TIDE_DEPLOYMENT == "ENABLED")
       changes: 
-        - Lookups/*/*
+        - Lookups/*/*.csv
   resource_group: deployment
   needs:
     - 📄 Lookups Validation
