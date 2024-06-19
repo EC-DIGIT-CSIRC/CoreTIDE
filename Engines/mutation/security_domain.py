@@ -75,6 +75,7 @@ class MigrateSecurityDomainMDR:
             with open(MDR_PATH/file_path, "w", encoding="utf-8") as file:
                 for line in buffer:
                     file.write(line)
+            log("SUCCESS", "Rewrote file")
 
 
     def migrate(self):
