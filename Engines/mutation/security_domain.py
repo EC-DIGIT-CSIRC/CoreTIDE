@@ -37,9 +37,11 @@ class MigrateSecurityDomainMDR:
                 log("SUCCESS", "Found and added indent to security_domain")
             buffer.append(line)
         
-        with open(MDR_PATH/file_path, "w", encoding="utf-8") as file:
-            for line in buffer:
-                file.write(line)
+        if buffer != data:
+            with open(MDR_PATH/file_path, "w", encoding="utf-8") as file:
+                for line in buffer:
+                    file.write(line)
+            log("SUCCESS", "Rewrote file")
     
     def uncomment_keyword(self, file_path:Path, keyword:str):
         data = open(MDR_PATH/file_path, encoding="utf-8").readlines()
@@ -50,9 +52,11 @@ class MigrateSecurityDomainMDR:
                 log("SUCCESS", "Found and uncommented target keyword", keyword)
             buffer.append(line)
         
-        with open(MDR_PATH/file_path, "w", encoding="utf-8") as file:
-            for line in buffer:
-                file.write(line)
+        if buffer != data:
+            with open(MDR_PATH/file_path, "w", encoding="utf-8") as file:
+                for line in buffer:
+                    file.write(line)
+                log("SUCCESS", "Rewrote file")
 
     def indent_drilldown_section(self, file_path:Path):
         data = open(MDR_PATH/file_path, encoding="utf-8").readlines()
@@ -67,9 +71,10 @@ class MigrateSecurityDomainMDR:
                     log("SUCCESS", "Indented part of the drilldown section")
             buffer.append(line)
         
-        with open(MDR_PATH/file_path, "w", encoding="utf-8") as file:
-            for line in buffer:
-                file.write(line)
+        if buffer != data:
+            with open(MDR_PATH/file_path, "w", encoding="utf-8") as file:
+                for line in buffer:
+                    file.write(line)
 
 
     def migrate(self):
@@ -99,5 +104,5 @@ class MigrateSecurityDomainMDR:
 def run():
     MigrateSecurityDomainMDR().migrate()
 
-if __name__ == "main":
+if __name__ == "__main__":
     run()
