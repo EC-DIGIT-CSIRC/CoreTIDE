@@ -57,6 +57,11 @@ class SplunkLookupsDeploy(DeployLookups):
         | outputlookup {lookup_name}
         """
 
+        log("INFO", "=============DEBUG===========")
+        print(query)
+        log("INFO", "=============================")
+
+
         log("ONGOING", "Overriding existing lookup from splunk", lookup_name)
         service.jobs.oneshot(query)
 
