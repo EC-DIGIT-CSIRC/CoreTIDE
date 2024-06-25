@@ -54,13 +54,8 @@ class SplunkLookupsDeploy(DeployLookups):
         | mvexpand temp 
         | spath input=temp 
         | fields - _raw _time temp
-        | outputlookup {lookup_name}
+        | outputlookup {lookup_name}.csv
         """
-
-        log("INFO", "=============DEBUG===========")
-        print(query)
-        log("INFO", "=============================")
-
 
         log("ONGOING", "Overriding existing lookup from splunk", lookup_name)
         service.jobs.oneshot(query)
