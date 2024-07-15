@@ -11,47 +11,21 @@ import pandas as pd
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.modules.sentinel import (
-    connect_to_sentinel,
+    SentinelEngineInit,
+    connect_sentinel,
     create_query,
     iso_duration_timedelta,
 )
 from Engines.modules.framework import get_vocab_entry, techniques_resolver
-from Engines.modules.deployment import fetch_config_envvar, Proxy
 from Engines.modules.logs import log
+from Engines.modules.debug import DebugEnvironment
 from Engines.modules.tide import DataTide
-from Engines.modules.plugins import DeployMDR
+#from Engines.modules.plugins import DeployMDR
 
 from azure.mgmt.securityinsight import SecurityInsights
 
 
-class SentinelDeploy(DeployMDR):
-
-    def __init__(self, DEBUG=False):
-
-        self.DEPLOYER_IDENTIFIER = "sentinel"
-        self.DEBUG = DEBUG
-
-        SENTINEL_CONFIG = DataTide.Configurations.Systems.Sentinel
-        self.DEFAULT_CONFIG = SENTINEL_CONFIG.defaults
-        SENTINEL_SETUP = fetch_config_envvar(SENTINEL_CONFIG.setup)
-        SENTINEL_SECRETS = fetch_config_envvar(SENTINEL_CONFIG.secrets)
-
-        if SENTINEL_SETUP["proxy"]:
-            Proxy.set_proxy()
-        else:
-            Proxy.unset_proxy()
-
-        self.AZURE_CLIENT_ID = SENTINEL_SECRETS["azure_client_id"]
-        self.AZURE_CLIENT_SECRET = SENTINEL_SECRETS["azure_client_secret"]
-        self.AZURE_SENTINEL_RESOURCE_GROUP = SENTINEL_SETUP["resource_group"]
-        self.AZURE_SENTINEL_WORKSPACE_NAME = SENTINEL_SETUP["workspace"]
-
-        self.AZURE_SUBSCRIPTION_ID = SENTINEL_SETUP["azure_subscription_id"]
-        self.AZURE_TENANT_ID = SENTINEL_SETUP["azure_tenant_id"]
-
-        self.SPLUNK_SUBSCHEMA = DataTide.TideSchemas.subschemas["systems"][
-            self.DEPLOYER_IDENTIFIER
-        ]["properties"]
+class SentinelDeploy(SentinelEngineInit):
 
     def config_mdr(self, data, client: SecurityInsights):
 
@@ -199,7 +173,7 @@ class SentinelDeploy(DeployMDR):
                 entity_mappings.append(mappings)
         rule.entity_mappings = entity_mappings
         # Add automated query extensions
-        rule.query = create_query(mdr_sentinel["query"], data)
+        rule.query = create_query(data)
 
         # Assign severity, Capping at high which is the maximum in Sentinel
         severity = data["response"]["alert_severity"]
@@ -279,14 +253,17 @@ class SentinelDeploy(DeployMDR):
             raise Exception("DEPLOYMENT NOT FOUND")
 
         # Connect to client that is injected into deployment
-        client = connect_to_sentinel(
-            self.AZURE_CLIENT_ID,
-            self.AZURE_CLIENT_SECRET,
-            self.AZURE_TENANT_ID,
-            self.AZURE_SUBSCRIPTION_ID,
+        client = connect_sentinel(
+            client_id=self.AZURE_CLIENT_ID,
+            client_secret=self.AZURE_CLIENT_SECRET,
+            tenant_id=self.AZURE_TENANT_ID,
+            subscription_id=self.AZURE_SUBSCRIPTION_ID,
+            ssl_enabled=self.SSL_ENABLED
         )
 
         for mdr in deployment:
+            print(deployment)
+            print("HERE", mdr)
             mdr_data = DataTide.Models.mdr[mdr]
 
             # Check if modified MDR contains a platform entry (by safety, but should not happen since
@@ -302,3 +279,6 @@ class SentinelDeploy(DeployMDR):
 
 def declare():
     return SentinelDeploy()
+
+if __name__ == "__main__" and DebugEnvironment.ENABLED:
+    SentinelDeploy().deploy(DebugEnvironment.MDR_DEPLOYMENT_TEST_UUIDS)

@@ -13,7 +13,7 @@ import toml
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.modules.validation import indicator_validation
-from Engines.modules.logs import Colors, log
+from Engines.modules.logs import ANSI, log
 from Engines.modules.files import resolve_paths
 
 ROOT = Path(str(git.Repo(".", search_parent_directories=True).working_dir))
@@ -449,7 +449,7 @@ def run():
             for e in metadata_schema_errors[i]["errors"]:
                 error_table.append(
                     [
-                        f"{Colors.PURPLE}{Colors.BOLD}{i}{Colors.STOP}",
+                        f"{ANSI.Colors.PURPLE}{ANSI.Formatting.BOLD}{i}{ANSI.Formatting.STOP}",
                         e.message.replace("\n", ""),
                     ]
                 )

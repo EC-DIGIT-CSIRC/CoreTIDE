@@ -9,7 +9,7 @@ toolchain_start_time = datetime.now()
 
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
-from Engines.modules.logs import log, Colors, coretide_intro
+from Engines.modules.logs import log, ANSI, coretide_intro
 from Engines.mutation import (
     file_name,
     reports,
@@ -23,13 +23,13 @@ ROOT = Path(str(git.Repo(".", search_parent_directories=True).working_dir))
 print(coretide_intro())
 
 maelstrom = rf"""
-{Colors.ORANGE}
+{ANSI.Colors.ORANGE}
    __  ______   ______   _____________  ____  __  ___
   /  |/  / _ | / __/ /  / __/_  __/ _ \/ __ \/  |/  /
  / /|_/ / __ |/ _// /___\ \  / / / , _/ /_/ / /|_/ / 
 /_/  /_/_/ |_/___/____/___/ /_/ /_/|_|\____/_/  /_/  
-{Colors.BLUE}{Colors.ITALICS}{Colors.BOLD}CoreTIDE Data Mutation Orchestration   
-{Colors.STOP}
+{ANSI.Colors.BLUE}{ANSI.Formatting.ITALICS}{ANSI.Formatting.BOLD}CoreTIDE Data Mutation Orchestration   
+{ANSI.Formatting.STOP}
 """
 
 print(maelstrom)

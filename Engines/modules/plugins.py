@@ -10,9 +10,14 @@ from Engines.modules.tide import DataTide
 from Engines.modules.logs import log
 
 
-class DeployEngine(ABC):
+class PluginTide(ABC):
     pass
 
+class DeployEngine(PluginTide):
+    pass
+
+class ValidationEngine(PluginTide):
+    pass
 
 class DeployMDR(DeployEngine):
     @abstractmethod
@@ -31,8 +36,13 @@ class DeployLookups(DeployEngine):
     def deploy(self, deployment: list[str]):
         """Deploy Lookups onto target systems"""
 
+class ValidateQuery(ValidationEngine):
+    @abstractmethod
+    def validate(self, deployment: list[str]):
+        """Validate that the query can be run by the target system"""
 
-class DeployEnginesLoader:
+
+class PluginEnginesLoader:
     """Return Deployer Classes for all available Deployment Engines"""
 
     class PluginInterface:
@@ -47,16 +57,37 @@ class DeployEnginesLoader:
     def import_plugin(plugin: str) -> PluginInterface:
         return importlib.import_module(plugin)  # type: ignore
 
-    def _generic_loader(self, identifier: str = ""):
+    def _generic_loader(self, tier:PluginTide, identifier: str):
         log("ONGOING", "Initiating deployment plugin routine")
         available_plugins: dict = {}
         CONFIGURATIONS: dict[str, dict] = DataTide.Configurations.Systems.Index
         for system in CONFIGURATIONS:
             plugin_name: str = system + identifier
+            plugin = None
+            
             try:
-                plugin = self.import_plugin(
-                    str("Engines.deployment." + plugin_name)
-                )
+                if isinstance(tier, DeployEngine):
+                    try:
+                        print("PLUGING TIER IS DeployEngine")
+                        plugin = self.import_plugin(
+                            str("Engines.deployment." + plugin_name)
+                        )
+                    except Exception as e:
+                        log("WARNING", "Failed to import plugin", repr(e))
+                elif isinstance(tier, ValidationEngine):
+                    try:
+                        print("PLUGING TIER IS ValidationEngine")
+                        plugin = self.import_plugin(
+                            str("Engines.validation." + plugin_name)
+                        )
+                    except Exception as e:
+                        log("WARNING", "Failed to import plugin", repr(e))
+                else:
+                    log("FATAL", "Deployment Tier is not supported", str(tier))
+            except:
+                log("SKIP", "No deployment plugin found for", plugin_name)
+            
+            if plugin:
                 try:
                     available_plugins[system] = plugin.declare()
                 except Exception as e:
@@ -70,25 +101,25 @@ class DeployEnginesLoader:
                     log("FATAL", repr(e))
                     raise Exception("DEPLOYMENT ENGINE PLUGIN IMPORT ERROR")
                 log("SUCCESS", "Found deployment plugin for", plugin_name)
-            except:
-                log("SKIP", "No deployment plugin found for", plugin_name)
 
         return available_plugins
 
     def mdr_deployers(self) -> dict[str, DeployMDR]:
-        return self._generic_loader()
+        return self._generic_loader(identifier="", tier=DeployEngine())
 
     def lookups_deployers(self) -> dict[str, DeployLookups]:
-        return self._generic_loader(identifier="_lookups")
+        return self._generic_loader(identifier="_lookups", tier=DeployEngine())
 
     def metadata_deployers(self) -> dict[str, DeployMetadata]:
-        return self._generic_loader(identifier="_metadata")
+        return self._generic_loader(identifier="_metadata", tier=DeployEngine())
 
+    def query_validators(self) -> dict[str, ValidateQuery]:
+        return self._generic_loader(identifier="_query", tier=ValidationEngine())
 
-@dataclass
 class DeployTide:
     """Unified interface to interact with deployment engines plugins"""
 
-    mdr = DeployEnginesLoader().mdr_deployers()
-    lookups = DeployEnginesLoader().lookups_deployers()
-    metadata = DeployEnginesLoader().metadata_deployers()
+    mdr = PluginEnginesLoader().mdr_deployers()
+    lookups = PluginEnginesLoader().lookups_deployers()
+    metadata = PluginEnginesLoader().metadata_deployers()
+    query_validation = PluginEnginesLoader().query_validators()

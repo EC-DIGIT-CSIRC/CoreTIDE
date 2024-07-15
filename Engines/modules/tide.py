@@ -399,6 +399,7 @@ class DataTide:
                 tide = dict(Index["tide"])
                 setup = dict(Index["setup"])
                 secrets = dict(Index["secrets"])
+                validation = dict(Index["validation"])
 
         @dataclass(frozen=True)
         class Documentation:
@@ -448,6 +449,7 @@ class DataTide:
             default_responders = str(Index["default_responders"])
             proxy = dict(Index["proxy"])
             metadata_lookup = dict(Index["metadata_lookup"])
+            debug = dict(Index["debug"])
 
         @dataclass(frozen=True)
         class Lookups:

@@ -94,6 +94,7 @@
         - Models Library/Managed Detection Rules/*.yaml
   needs:
     - 🔮 Staging Validation Toolchain
+    - 🔎 Query Validation
   retry: 1
   variables:
     FF_USE_NEW_BASH_EVAL_STRATEGY: "true"
