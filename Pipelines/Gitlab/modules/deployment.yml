@@ -15,6 +15,7 @@
         - Models Library/Managed Detection Rules/*.yaml
   needs:
     - 🔮 Staging Validation Toolchain
+    - 🔎 Query Validation
   retry: 2 # Retrying twice helps with certain systems, like CBC which has random issues
   variables:
     FF_USE_NEW_BASH_EVAL_STRATEGY: "true"

@@ -1,6 +1,7 @@
 from random import randrange
 from datetime import datetime
 import urllib.request
+from urllib.error import HTTPError
 import sys
 import ssl
 from splunklib import client
@@ -8,11 +9,79 @@ import os
 import git
 from io import BytesIO
 from typing import Literal
-
+from abc import ABC
 
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.modules.logs import log
+from Engines.modules.debug import DebugEnvironment
+from Engines.modules.tide import DataTide
+from Engines.modules.deployment import fetch_config_envvar, Proxy
+
+class SplunkEngineInit(ABC):
+    """
+    Utility class used to initialize all constant relevant to operations with Splunk 
+    """
+    def __init__(self):
+        self.DEBUG = DebugEnvironment.ENABLED
+
+        self.DEBUG_STEP = True  # Edits parameters in the saved search object to check which one fails
+
+        SPLUNK_CONFIG = DataTide.Configurations.Systems.Splunk
+        SPLUNK_SETUP = fetch_config_envvar(SPLUNK_CONFIG.setup)
+        SPLUNK_SECRETS = fetch_config_envvar(SPLUNK_CONFIG.secrets)
+        
+        self.DEFAULT_CONFIG = SPLUNK_CONFIG.defaults
+        self.DEPLOYER_IDENTIFIER = "splunk"
+
+        self.SSL_ENABLED:bool = SPLUNK_SETUP["ssl"]
+        if self.DEBUG:
+            self.SSL_ENABLED = DebugEnvironment.SSL_ENABLED
+        self.SPLUNK_URL = SPLUNK_SETUP["url"]
+        self.SPLUNK_PORT = int(SPLUNK_SETUP["port"])
+        self.SPLUNK_APP = SPLUNK_SETUP["app"]
+        self.SPLUNK_TOKEN = SPLUNK_SECRETS["token"]
+
+        if SPLUNK_SETUP["proxy"]:
+            Proxy.set_proxy()
+        else:
+            Proxy.unset_proxy()
+
+        self.CORRELATION_SEARCHES = SPLUNK_SETUP["correlation_searches"]
+        self.SPLUNK_ACTIONS = SPLUNK_SETUP["actions_enabled"]
+        self.STATUS_MODIFIERS = SPLUNK_CONFIG.modifiers
+        self.SPLUNK_DEFAULT_ACTIONS = SPLUNK_SETUP.get("default_actions") or []        
+        
+        self.TIMERANGE_MODE = correct_timerange_mode(SPLUNK_SETUP.get("frequency_scheduling", ""))
+        self.SPLUNK_SUBSCHEMA = DataTide.TideSchemas.subschemas["systems"][
+            self.DEPLOYER_IDENTIFIER
+        ]["properties"]
+        
+        self.LOOKUPS_METADATA_INDEX = DataTide.Lookups.metadata
+        self.LOOKUPS_INDEX = DataTide.Lookups.lookups["sentinel"]
+
+        self.ALERT_SEVERITY_MAPPING = {
+            "Informational": 2,
+            "Low": 3,
+            "Medium": 4,
+            "High": 5,
+            "Critical": 6,
+        }
+
+        # Skewing Setup
+        SKEWING = SPLUNK_SETUP.get("allow_skew")
+        self.SKEWING_VALUE: int | float
+        if SKEWING:
+            self.SKEWING_VALUE = float(
+                SKEWING.replace("%", "e-2")
+            )  # Converts skewing into 2 decimal equivalent
+        else:
+            self.SKEWING_VALUE = 0
+        # Optional added offset
+        self.OFFSET = int(SPLUNK_SETUP.get("schedule_offset", 0)) 
+        log("INFO", "SSL has been set to",
+        str(self.SSL_ENABLED),
+        "This can be adjusted in splunk.toml with the setup.ssl keyword")
 
 def correct_timerange_mode(timerange:str)->Literal["random", "current", "custom"]:
     corrected_timerange:Literal["random", "current", "custom"]
@@ -111,21 +180,26 @@ def cron_to_timeframe(
     return cron
 
 
-def request(url, message, **kwargs):
+def custom_request_handler(url, message):
     method = message["method"].lower()
     data = message.get("body", "") if method == "post" else None
     headers = dict(message.get("headers", []))
     req = urllib.request.Request(url, data, headers)
-
+    response = None
     try:
-        response = urllib.request.urlopen(req)
-
-    except urllib.error.URLError as response:  # type: ignore
-        # Disable SSL certificate validation and try again in case of URL error
-        response = urllib.request.urlopen(req, context=ssl._create_unverified_context())
-
-    except urllib.error.HTTPError as response:  # type: ignore
-        pass  # Propagate HTTP errors via the returned response message
+        if os.environ["TIDE_SPLUNK_SSL_ENABLED"]:
+            response = urllib.request.urlopen(req)
+        else:
+            response = urllib.request.urlopen(req, context=ssl._create_unverified_context())
+    
+    except HTTPError as error:  # type: ignore
+        response = error
+        #Workaround as the Splunk SDK reuses this object and we can't communicate with kwargs
+        if os.getenv("TIDE_SPLUNK_PLUGIN_ALLOW_HTTP_ERRORS") == "True":
+            response.code = 19 #Trick the SDK into not interrupting the return so we can print the details
+            pass  # Propagate HTTP errors via the returned response message
+        else:
+            log("FATAL", f"Received HTTP Error Code {repr(error)}", str(response.read()))
 
     return {
         "status": response.code,  # type: ignore
@@ -135,37 +209,35 @@ def request(url, message, **kwargs):
     }
 
 
-def handler(proxy):
-    proxy_handler = urllib.request.ProxyHandler({"http": proxy, "https": proxy})
-    opener = urllib.request.build_opener(proxy_handler)
-    urllib.request.install_opener(opener)
-    return request
-
-
 def connect_splunk(
     host: str,
     port: str | int,
     token: str,
     app: str,
+    allow_http_errors:bool=False,
+    ssl_enabled:bool=True
 ) -> client.Service:
     port = int(port)
-    proxy_data = os.getenv("https_proxy") or os.getenv("http_proxy")
-    if proxy_data:
-        service = client.connect(
-            handler=handler(proxy_data),
-            host=host,
-            port=port,
-            token=token,
-            autologin=True,
-            app=app,
-            sharing="app",
-        )
-    else:
-        service = client.connect(
-            host=host, port=port, token=token, autologin=True, app=app, sharing="app"
-        )
+    
 
-    print("\n🔗 Successfully connected to Splunk ! ")
+    if allow_http_errors:
+        os.environ["TIDE_SPLUNK_PLUGIN_ALLOW_HTTP_ERRORS"] = "True"
+        log("INFO", "HTTP Errors will be returned with error code 19", "Ensure to handle them appropriately")
+        
+    # Setting this signal over environment variables to workaround how the handler function is passed 
+    os.environ["TIDE_SPLUNK_SSL_ENABLED"] = "True"
+    
+    service = client.connect(
+        handler=custom_request_handler,
+        host=host,
+        port=port,
+        token=token,
+        autologin=True,
+        app=app,
+        sharing="app",
+    )
+
+    log("SUCCESS", "Successfully connected to Splunk !")
 
     return service
 
@@ -185,5 +257,4 @@ def create_query(data: dict) -> str:
 
     macro = f'| eval MDR_UUID="{uuid}", MDR_status="{status}" \n|`soc_macro_auto_mdr_mapping(MDR_UUID)`'
 
-    query = spl + "\n" + macro
-    return query
+    return spl + "\n" + macro

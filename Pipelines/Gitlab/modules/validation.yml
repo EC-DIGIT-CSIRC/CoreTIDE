@@ -27,6 +27,21 @@
   allow_failure:
     exit_codes: 19
 
+🔎 Query Validation:
+  stage: ✅ Validation
+  script:
+    - export DEPLOYMENT_PLAN=STAGING #Temp, needs to be parametized at workflow level
+    - cd $TIDE_CORE_REPO/Orchestration
+    - ls -lah
+    - python validate_query.py
+  variables:
+    FF_USE_NEW_BASH_EVAL_STRATEGY: "true"
+  allow_failure:
+    exit_codes: 19
+  rules:
+    - changes: 
+        - Models Library/Managed Detection Rules/*.yaml
+
 📄 Lookups Validation:
   stage: ✅ Validation
   script:

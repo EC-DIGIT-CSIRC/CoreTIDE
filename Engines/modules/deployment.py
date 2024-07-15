@@ -1,41 +1,195 @@
 import sys
 import os
 import git
-from git.repo import Repo
+import yaml
 import re
-from typing import Literal
+from typing import Any
+from enum import Enum, auto
 from pathlib import Path
+from dataclasses import dataclass
 
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.modules.logs import log
 from Engines.modules.tide import DataTide
+from Engines.modules.debug import DebugEnvironment
 
+from git.repo import Repo
 
 SYSTEMS_CONFIGS_INDEX = DataTide.Configurations.Systems.Index
+PRODUCTION_STATUS = DataTide.Configurations.Deployment.status["production"]
+SAFE_STATUS = DataTide.Configurations.Deployment.status["safe"]
 
+@dataclass
+class DeploymentPlans(Enum):
+    STAGING = auto()
+    PRODUCTION = auto()
+    FULL = auto()
 
-def fetch_config_envvar(config_secrets: dict[str,str]) -> dict[str,str]:
+    @staticmethod
+    def load_from_environment():
+        """
+        Read the DEPLOYMENT_PLAN environment variable and maps it to 
+        DeploymentPlans valid values. In case of an illegal value, 
+        or missing environment variable will raise an exception
+        """
+        SUPPORTED_PLANS = [plan.name for plan in DeploymentPlans]
+        DEPLOYMENT_PLAN = str(os.getenv("DEPLOYMENT_PLAN")) or ""
+        if not DEPLOYMENT_PLAN:
+            log(
+                "FATAL",
+                "No deployment plan, ensure that the CI variable DEPLOYMENT_PLAN is set correctly",
+            )
+            raise Exception("NO DEPLOYMENT PLAN")
+
+        try:
+            DEPLOYMENT_PLAN = DeploymentPlans[DEPLOYMENT_PLAN]
+        except:
+
+                log(
+                    "FATAL",
+                    "The following deployment plan is not supported",
+                    DEPLOYMENT_PLAN,
+                    f"Supported plan : {SUPPORTED_PLANS}",
+                )
+                raise AttributeError("UNSUPPORTED DEPLOYMENT PLAN")
+
+        return DEPLOYMENT_PLAN
+
+def make_deploy_plan(
+    plan: DeploymentPlans,
+    wide_scope = False
+) -> dict[str, list[str]]:
+    """
+    Algorithm which assembles the MDR to deploy, organized per system
+
+    plan: Execution environment used to calculate the acceptable statuses
+    wide_scope: If set to true, will return all statuses regardless of the plan.
+    
+    plan is still required if wide_scope is set to True as it configures the calculation
+    algorithm behaviour. wide_scope is useful to validate all MDR regardless of statuses if
+    using the deploy plan to calculate the MDR that were modified. 
+    """
+    
+    SYSTEMS_DEPLOYMENT = enabled_systems()
+
+    log("INFO", "Compiling MDRs to deploy in plan", plan.name)
+    if wide_scope:
+        log("WARNING", "Wide Scope has been enabled for the deployment plan calculation",
+        "This will assemble the plan with no consideration for statuses. Use with caution.")
+
+    mdr_files = list()
+    deploy_mdr = dict()
+
+    if plan == "FULL":
+        MDR_PATH = Path(DataTide.Configurations.Global.Paths.Tide.mdr)
+        mdr_files = [MDR_PATH / mdr for mdr in os.listdir(MDR_PATH)]
+        log(
+            "ONGOING",
+            "Redeploying complete MDR library",
+            f"[{len(mdr_files)} MDR] are in scope",
+        )
+
+    else:
+        mdr_files = modified_mdr_files(plan)
+
+    for rule in mdr_files:
+        data = yaml.safe_load(open(rule, encoding="utf-8"))
+        name = data["name"]
+        conf_data = data["configurations"]
+        mdr_uuid = data["uuid"]
+
+        for system in conf_data:
+            platform_status = conf_data[system]["status"]
+
+            if system in SYSTEMS_DEPLOYMENT:
+                if wide_scope:
+                    deploy_mdr.setdefault(system, []).append(mdr_uuid)
+                else:
+                    if plan is DeploymentPlans.PRODUCTION:
+                        if platform_status in PRODUCTION_STATUS:
+                            deploy_mdr.setdefault(system, []).append(mdr_uuid)
+                            log(
+                                "SUCCESS",
+                                f"[{system.upper()}][{platform_status}] Identified MDR to deploy in {plan}",
+                                name,
+                            )
+                        else:
+                            log(
+                                "WARNING",
+                                f"[{system.upper()}][{platform_status}] Skipping as cannot be deployed in {plan}",
+                                name,
+                            )
+
+                    elif plan is DeploymentPlans.STAGING:
+                        if (
+                            platform_status not in PRODUCTION_STATUS
+                            and platform_status not in SAFE_STATUS
+                        ):
+                            deploy_mdr.setdefault(system, []).append(mdr_uuid)
+                            log(
+                                "SUCCESS",
+                                f"[{system.upper()}][{platform_status}] Identified MDR to deploy in {plan}",
+                                name,
+                            )
+                        else:
+                            log(
+                                "WARNING",
+                                f"[{system.upper()}][{platform_status}] Skipping as cannot be deployed in {plan}",
+                                name,
+                            )
+
+            else:
+                log(
+                    "FAILURE",
+                    f"[{system.upper()}] is disabled and cannot be deployed to for",
+                    name,
+                )
+
+    return deploy_mdr
+
+def fetch_config_envvar(config_secrets: dict[str,str]) -> dict[str, Any]:
     # Replace placeholder variables with environment
+
+    #Allows to print all errors at once before raising exception
+    missing_envvar_error = False
     for sec in config_secrets.copy():
+        if not config_secrets[sec]:
+            log("SKIP", "Did not found an entry for", sec,
+                "If there are deployment issue, review if it is relevant to configure")
+            continue
         if type(config_secrets[sec]) == str:
-            if config_secrets[sec][0] == "$":
+            if config_secrets[sec].startswith("$"):
                 if config_secrets[sec].removeprefix("$") in os.environ:
                     env_variable = str(config_secrets.pop(sec)).removeprefix("$")
                     config_secrets[sec] = os.environ.get(env_variable, "")
                     log("SUCCESS", "Fetched environment secret", env_variable)
                 else:
-                    log(
-                        "FATAL",
-                        "Could not find expected environment variable",
-                        config_secrets[sec],
-                        "Review configuration file and execution environment",
-                    )
+                    if DebugEnvironment.ENABLED:
+                        log("SKIP", 
+                            "Could not find expected environment variable",
+                            config_secrets[sec],
+                            "Debug Mode identified, continuing - remember that this may break some deployments")
+                    else:
+                        log(
+                            "FATAL",
+                            "Could not find expected environment variable",
+                            config_secrets[sec],
+                            "Review configuration file and execution environment",
+                        )
+                        missing_envvar_error = True
+
+    if missing_envvar_error:
+        log("FATAL",
+            "Some environment variable specified in configuration files were not found",
+            "Review the previous errors to find which ones were missing",
+            "Check your CI settings to ensure these environment variables are properly injected")
+        raise KeyError
 
     return config_secrets
 
 
-def modified_mdr_files(stage: Literal["STAGING", "PRODUCTION"])->list[Path]:
+def modified_mdr_files(plan: DeploymentPlans)->list[Path]:
 
     MDR_PATH = Path(DataTide.Configurations.Global.Paths.Tide.mdr)
     MDR_PATH_RAW = DataTide.Configurations.Global.Paths.Tide._raw["mdr"]
@@ -45,7 +199,7 @@ def modified_mdr_files(stage: Literal["STAGING", "PRODUCTION"])->list[Path]:
         rf"^.*{MDR_PATH_RAW}[^\/]+(\.yaml|\.yml)$"
     )
     mdr_files = [
-        mdr.split("/")[-1] for mdr in diff_calculation(stage) if re.match(mdr_path_regex, mdr)
+        mdr.split("/")[-1] for mdr in diff_calculation(plan) if re.match(mdr_path_regex, mdr)
     ]
     #Extracting only the file name so it can be appended to MDR_PATH
     # which is absolute, and thus more reliable
@@ -55,7 +209,7 @@ def modified_mdr_files(stage: Literal["STAGING", "PRODUCTION"])->list[Path]:
     return mdr_files
 
 
-def diff_calculation(stage: Literal["STAGING", "PRODUCTION"]) -> list:
+def diff_calculation(plan: DeploymentPlans) -> list:
     """
     Calculates the files in scope of deployment based on the execution context.
     
@@ -76,9 +230,9 @@ def diff_calculation(stage: Literal["STAGING", "PRODUCTION"]) -> list:
 
     TARGET = os.getenv("CI_COMMIT_SHA")
 
-    if stage == "PRODUCTION":
+    if plan is DeploymentPlans.PRODUCTION:
         SOURCE = os.getenv("CI_COMMIT_BEFORE_SHA")
-    elif stage == "STAGING":
+    elif plan is DeploymentPlans.STAGING:
         SOURCE = os.getenv("CI_MERGE_REQUEST_DIFF_BASE_SHA")
         if os.getenv("CI_MERGE_REQUEST_EVENT_TYPE") == "merged_result":
             log("INFO", "Currently running a diff calculation for merge results")
@@ -93,7 +247,9 @@ def diff_calculation(stage: Literal["STAGING", "PRODUCTION"]) -> list:
                     )
                     TARGET = mr_correct_parent
                     break
-
+    else:
+        log("FATAL", f"Illegal Deployment Plan {plan.name}/{plan} passed to diff_calculation algorithm")
+        raise KeyError
     log(
         "INFO",
         "Setting source and target commit for the diff calculation to",
@@ -177,15 +333,11 @@ class Proxy:
 
     @staticmethod
     def set_proxy():
-        log("ONGOING", "Setting environment proxy according to CI variables")
-        PROXY_CONFIG = DataTide.Configurations.Deployment.proxy
-
-        if (
-            os.environ.get("DEBUG") == True
-            or os.environ.get("TERM_PROGRAM") == "vscode"
-        ):
+        if DebugEnvironment.ENABLED and not DebugEnvironment.PROXY_ENABLED:
             pass
         else:
+            log("ONGOING", "Setting environment proxy according to CI variables")
+            PROXY_CONFIG = DataTide.Configurations.Deployment.proxy
             PROXY_CONFIG = fetch_config_envvar(PROXY_CONFIG)
             proxy_user = PROXY_CONFIG["proxy_user"]
             proxy_pass = PROXY_CONFIG["proxy_password"]
@@ -202,8 +354,8 @@ class Proxy:
                     + ":"
                     + str(proxy_port)
                 )
-                os.environ["http_proxy"] = proxy
-                os.environ["https_proxy"] = proxy
+                os.environ["HTTP_PROXY"] = proxy
+                os.environ["HTTPS_PROXY"] = proxy
                 log("SUCCESS", "Proxy environment setup successful")
             else:
                 log(
@@ -214,6 +366,6 @@ class Proxy:
 
     @staticmethod
     def unset_proxy():
-        os.environ["http_proxy"] = ""
-        os.environ["https_proxy"] = ""
+        os.environ["HTTP_PROXY"] = ""
+        os.environ["HTTPS_PROXY"] = ""
         log("INFO", "Resetting proxy setup")

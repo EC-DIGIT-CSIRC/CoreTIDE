@@ -9,23 +9,22 @@ from pathlib import Path
 
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
-from Engines.modules.deployment import enabled_systems, enabled_lookup_systems, diff_calculation
-from Engines.modules.logs import log, Colors, coretide_intro
+from Engines.modules.deployment import enabled_systems, enabled_lookup_systems, diff_calculation, DeploymentPlans
+from Engines.modules.logs import log, ANSI, coretide_intro
 from Engines.modules.tide import DataTide
 from Engines.modules.plugins import DeployTide
 
-toolchain_start_time = datetime.now()
 
 print(coretide_intro())
 
 floodcurrent = rf"""
-{Colors.ORANGE}
+{ANSI.Colors.ORANGE}
    ______   ____  ____  ___  _______  _____  ___  _____  ________
   / __/ /  / __ \/ __ \/ _ \/ ___/ / / / _ \/ _ \/ __/ |/ /_  __/
  / _// /__/ /_/ / /_/ / // / /__/ /_/ / , _/ , _/ _//    / / /   
 /_/ /____/\____/\____/____/\___/\____/_/|_/_/|_/___/_/|_/ /_/    
-{Colors.BLUE}{Colors.ITALICS}{Colors.BOLD}CoreTIDE Managed Lookups Deployment Orchestration 
-{Colors.STOP}
+{ANSI.Colors.BLUE}{ANSI.Formatting.ITALICS}{ANSI.Formatting.BOLD}CoreTIDE Managed Lookups Deployment Orchestration 
+{ANSI.Formatting.STOP}
 """
 
 print(floodcurrent)
@@ -48,10 +47,9 @@ REPO_DIR = os.getenv("CI_PROJECT_DIR") or "./"
 JOB_NAME = os.getenv("CI_JOB_NAME")
 
 # We always assume a production deployment for lookups by default
-DEPLOYMENT_PLAN = os.getenv("DEPLOYMENT_PLAN") or "PRODUCTION"
+DEPLOYMENT_PLAN = DeploymentPlans.load_from_environment()
 
-
-def lookup_deployment_plan(plan: str) -> dict:
+def lookup_deployment_plan(plan: DeploymentPlans) -> dict:
 
     lookup_paths = list()
     deploy_lookups = dict()
@@ -72,7 +70,7 @@ def lookup_deployment_plan(plan: str) -> dict:
         lookups_path_regex = r"Lookups\/[^\/]+\/[^\/]+\.csv$"
         lookup_paths = [
             lookup
-            for lookup in diff_calculation("PRODUCTION")
+            for lookup in diff_calculation(DeploymentPlans.PRODUCTION)
             if re.match(lookups_path_regex, lookup)
         ]
 
@@ -153,11 +151,3 @@ for system in lookup_deployment:
             "Ensure there is an adequate plugin present in the Tide Instance",
         )
         raise (Exception("LOOKUP DEPLOYMENT ENGINE NOT FOUND"))
-
-
-print(Colors.GREEN + "Execution Report".center(80, "=") + Colors.STOP)
-
-time_to_execute = datetime.now() - toolchain_start_time
-time_to_execute = "%.2f" % time_to_execute.total_seconds()
-
-log("INFO", "Completed deployment toolchain in", f"{time_to_execute} seconds")

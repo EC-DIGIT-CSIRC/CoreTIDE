@@ -1,41 +1,20 @@
-import os
 import git
 import sys
 
 from cbc_sdk.enterprise_edr import Report, IOC_V2, Watchlist
 from cbc_sdk.rest_api import CBCloudAPI
 
-
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.modules.framework import techniques_resolver
-from Engines.modules.deployment import fetch_config_envvar
 from Engines.modules.logs import log
+from Engines.modules.debug import DebugEnvironment
 from Engines.modules.tide import DataTide
 from Engines.modules.plugins import DeployMDR
+from Engines.modules.carbon_black_cloud import CarbonBlackCloudEngineInit
 
 
-class CarbonBlackCloudDeploy(DeployMDR):
-
-    def __init__(self):
-        self.DEPLOYER_IDENTIFIER = "carbon_black_cloud"
-
-        CBC_CONFIG = DataTide.Configurations.Systems.CarbonBlackCloud
-
-        self.CBC_SECRETS = CBC_CONFIG.secrets
-        CBC_SETUP = fetch_config_envvar(CBC_CONFIG.setup)
-        self.DEFAULT_WATCHLIST = CBC_SETUP["watchlist"]
-        self.CBC_URL = CBC_SETUP["url"]
-
-        self.ORGANIZATIONS = CBC_SETUP["organizations"]
-
-        self.SEVERITY_MAPPING = {
-            "Informational": 1,
-            "Low": 3,
-            "Medium": 6,
-            "High": 8,
-            "Critical": 10,
-        }
+class CarbonBlackCloudDeploy(CarbonBlackCloudEngineInit, DeployMDR):
 
     def deploy_mdr(self, data):
         """
@@ -61,7 +40,7 @@ class CarbonBlackCloudDeploy(DeployMDR):
 
             org = org.strip()  # Remove any whitespace in case there are
             if org in self.CBC_SECRETS:
-                org_secrets = fetch_config_envvar(self.CBC_SECRETS[org])
+                org_secrets = self.CBC_SECRETS[org]
                 org_key = org_secrets.get("org_key")
                 token = org_secrets.get("token")
             else:
@@ -93,7 +72,10 @@ class CarbonBlackCloudDeploy(DeployMDR):
 
             try:
                 service = CBCloudAPI(
-                    url=self.CBC_URL, token=token, org_key=org_key, ssl_verify=False
+                    url=self.CBC_URL,
+                    token=token,
+                    org_key=org_key,
+                    ssl_verify=self.SSL_ENABLED
                 )
                 log(
                     "SUCCESS",
@@ -278,3 +260,6 @@ class CarbonBlackCloudDeploy(DeployMDR):
 
 def declare():
     return CarbonBlackCloudDeploy()
+
+if __name__ == "__main__" and DebugEnvironment.ENABLED:
+    CarbonBlackCloudDeploy().deploy(DebugEnvironment.MDR_DEPLOYMENT_TEST_UUIDS)
