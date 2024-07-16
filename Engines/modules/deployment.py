@@ -34,7 +34,7 @@ class DeploymentPlans(Enum):
         or missing environment variable will raise an exception
         """
         SUPPORTED_PLANS = [plan.name for plan in DeploymentPlans]
-        DEPLOYMENT_PLAN = str(os.getenv("DEPLOYMENT_PLAN")) or ""
+        DEPLOYMENT_PLAN = str(os.getenv("DEPLOYMENT_PLAN")) or None
         if not DEPLOYMENT_PLAN:
             log(
                 "FATAL",
@@ -248,7 +248,7 @@ def diff_calculation(plan: DeploymentPlans) -> list:
                     TARGET = mr_correct_parent
                     break
     else:
-        log("FATAL", f"Illegal Deployment Plan {plan.name}/{plan} passed to diff_calculation algorithm")
+        log("FATAL", f"Illegal Deployment Plan {str(plan)} passed to diff_calculation algorithm")
         raise KeyError
     log(
         "INFO",
