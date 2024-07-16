@@ -35,7 +35,7 @@ print(torrent)
 DEPLOYMENT_PLAN = DeploymentPlans.load_from_environment()
 
 # Status promotion, happening before the main deployment loop
-if DEPLOYMENT_PLAN == DeploymentPlans.PRODUCTION:
+if DEPLOYMENT_PLAN is DeploymentPlans.PRODUCTION:
     pre_deployment = modified_mdr_files(DEPLOYMENT_PLAN)
     log("TITLE", "Pre-deployment Routine")
     PromoteMDR().promote(pre_deployment)
