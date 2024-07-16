@@ -21,7 +21,8 @@ class SplunkMetadataDeploy(SplunkEngineInit, DeployMetadata):
         """
         Specific attributes to the metadata implementation on top of SplunkEngineInit 
         """
-
+        
+        super().__init__()
         MDR_ICON = DataTide.Configurations.Documentation.icons["mdr"]
         self.DEFAULT_RESPONDERS = DataTide.Configurations.Deployment.default_responders
         if os.getenv("TIDE_WIKI_GENERATION") == "GITLAB_WIKI":
