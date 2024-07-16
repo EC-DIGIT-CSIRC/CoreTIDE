@@ -46,6 +46,8 @@
 🚧 MDR Staging Documentation:
   stage: 📖 Documentation
   script:
+    - export DEPLOYMENT_PLAN=STAGING
+
     - cd $TIDE_CORE_REPO
     - git clone $TIDE_WIKI_ACCESS
     - pwd 
