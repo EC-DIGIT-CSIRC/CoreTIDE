@@ -13,7 +13,7 @@ toolchain_start_time = datetime.now()
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.modules.logs import log
-from Engines.modules.deployment import modified_mdr_files
+from Engines.modules.deployment import modified_mdr_files, DeploymentPlans
 
 ROOT = Path(str(git.Repo(".", search_parent_directories=True).working_dir))
 TIDE_CONFIG = toml.load(
@@ -36,7 +36,7 @@ print("\n ⚙️" + SCRIPT_DESCRIPTION + "\n")
 log("TITLE", "Staging Index Reconcilier")
 log("INFO", "Loads a version of the index which adds data from mdr in staging.")
 
-mdr_to_index = modified_mdr_files("STAGING")
+mdr_to_index = modified_mdr_files(DeploymentPlans.STAGING)
 
 if len(mdr_to_index) == 0:  # In case of no deployments possible
     try:
