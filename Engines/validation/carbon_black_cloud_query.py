@@ -26,7 +26,7 @@ class CarbonBlackCloudValidateQuery(CarbonBlackCloudEngineInit, ValidateQuery):
             if result:
                 log("SUCCESS", "The query is a valid CBC search")
             else:
-                log("FAILURE",
+                log("FATAL",
                     f"The CBC query is invalid for : {mdr['name']} ({mdr['uuid']})",
                     # Same error message as displayed on the GUI
                     "Ensure a value is included and slashes, colons, and spaces are manually escaped")
