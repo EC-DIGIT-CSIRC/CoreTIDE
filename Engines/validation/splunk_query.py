@@ -28,7 +28,7 @@ class SplunkValidateQuery(SplunkEngineInit, ValidateQuery):
 
         query = create_query(mdr)
         if not query.startswith("| "):
-            query = "| search" + query
+            query = "| search " + query
             log("INFO",
                 "Adding implicit `| search` as could not find starting command")
 
