@@ -25,7 +25,8 @@ class SplunkEngineInit(ABC):
     def __init__(self):
         self.DEBUG = DebugEnvironment.ENABLED
 
-        self.DEBUG_STEP = True  # Edits parameters in the saved search object to check which one fails
+        # Writes each parameter successively to saved search to identify blocking element
+        self.DEBUG_STEP = True if self.DEBUG else False
 
         SPLUNK_CONFIG = DataTide.Configurations.Systems.Splunk
         SPLUNK_SETUP = fetch_config_envvar(SPLUNK_CONFIG.setup)
