@@ -68,13 +68,13 @@ class SentinelDeploy(SentinelEngineInit):
         if status in ["DISABLED"]:
             rule.enabled = False
 
-        rule.suppression_duration = iso_duration_timedelta(mdr_sentinel["suppression"])
+        rule.suppression_duration = iso_duration_timedelta(mdr_sentinel["alert.suppression"])
         # If the suppression was added by on the MDR, we automatically toggle
-        if mdr_sentinel_raw.get("suppression"):
+        if mdr_sentinel["alert.suppression"]:
             rule.suppression_enabled = True
         else:
             # So we can still carry the default value, be it false or true
-            rule.suppression_enabled = mdr_sentinel.get("suppression_enabled")
+            rule.suppression_enabled = mdr_sentinel.get("alert.suppression_enabled")
 
         if mdr_sentinel.get("scheduling.nrt") == True:
             rule.kind = "NRT"
