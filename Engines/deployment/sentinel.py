@@ -206,7 +206,7 @@ class SentinelDeploy(SentinelEngineInit):
 
             rule.tactics = tactics
             rule.techniques = techniques
-        log("INFO", "DEBUG - Current rule data", str(rule))
+
         return rule
 
     def deploy_mdr(self, data, client: SecurityInsights):
@@ -263,7 +263,6 @@ class SentinelDeploy(SentinelEngineInit):
 
         for mdr in deployment:
             print(deployment)
-            print("HERE", mdr)
             mdr_data = DataTide.Models.mdr[mdr]
 
             # Check if modified MDR contains a platform entry (by safety, but should not happen since
