@@ -206,7 +206,7 @@ class SentinelDeploy(SentinelEngineInit):
 
             rule.tactics = tactics
             rule.techniques = techniques
-
+        log("INFO", "DEBUG - Current rule data", str(rule))
         return rule
 
     def deploy_mdr(self, data, client: SecurityInsights):
