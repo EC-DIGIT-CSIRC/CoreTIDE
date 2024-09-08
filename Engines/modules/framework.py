@@ -442,7 +442,15 @@ def techniques_resolver(model_id: str, recursive=True) -> list:
     techniques = []
 
     # Find the model_type
-    model_type = get_type(model_id)
+    model_type = get_type(model_id, mute=True)
+    
+    # Workaround for old MDR in staging which have their version bumped 
+    if model_type is None:
+        if MODELS_INDEX["mdr"].get(model_id):
+            model_type = "mdr"
+        else:
+            log("FATAL", f"Cannot identify object with UUID : {model_id}")
+    
     # Load Model Data
     model_body = MODELS_INDEX[model_type][model_id]
 
