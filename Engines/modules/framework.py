@@ -445,7 +445,7 @@ def techniques_resolver(model_id: str, recursive=True) -> list:
     techniques = []
 
     # Find the model_type
-    model_type = get_type(model_id, mute=True)
+    model_type = get_type(model_id)
         
     # Load Model Data
     model_body = MODELS_INDEX[model_type][model_id]
