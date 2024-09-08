@@ -27,6 +27,7 @@ from Engines.modules.documentation_components import (
     tlp_doc,
     metadata_doc,
     relations_table,
+    reference_doc
 )
 from Engines.modules.tide import DataTide
 from Engines.modules.logs import log
@@ -100,7 +101,7 @@ def documentation(mdr):
     if MARKDOWN:
         name = f"# {MDR_ICON} {name}"
 
-    uuid_data = mdr["uuid"]
+    uuid_data = mdr["metadata"]["uuid"]
     uuid = f"{get_icon('uuid')} **UUID** : `{uuid_data}`"
     description = mdr.get("description", "").replace("\n", "\n> ")
 
@@ -155,12 +156,12 @@ def documentation(mdr):
     else:
         banner = ""
 
-    # Make References
-    references = mdr.get("references") or ""
-    if references != "":
+    references = mdr.get("references")
+    # To deprecate once everything is migrated to new reference system
+    if type(references) is list:
         references = "- " + "\n- ".join(references)
-    else:
-        references = "_No references mentioned_"
+    elif type(references) is dict:
+        references = reference_doc(mdr.get("references"))
 
     # Add enriched configuration data
     configurations = str()
@@ -294,25 +295,24 @@ def run():
     mdr_doc_count = 0
 
     for mdr_uuid in MODELS_INDEX["mdr"]:
-        if get_type(mdr_uuid, get_version=True) == "mdrv3":
 
-            # Make a file name based on MDR data
-            mdr_data = MODELS_INDEX["mdr"][mdr_uuid]
-            doc_name = mdr_data.get("name").replace("_", " ")
-            doc_file_name = f"{MDR_ICON} {doc_name}.md"
-            doc_file_name = safe_file_name(doc_file_name)
-            doc_path = MDR_WIKI_PATH / doc_file_name
-            print(f"{MDR_ICON} Generating documentation for {doc_name}...")
+        # Make a file name based on MDR data
+        mdr_data = MODELS_INDEX["mdr"][mdr_uuid]
+        doc_name = mdr_data.get("name").replace("_", " ")
+        doc_file_name = f"{MDR_ICON} {doc_name}.md"
+        doc_file_name = safe_file_name(doc_file_name)
+        doc_path = MDR_WIKI_PATH / doc_file_name
+        print(f"{MDR_ICON} Generating documentation for {doc_name}...")
 
-            document = documentation(mdr_data)
+        document = documentation(mdr_data)
 
-            # Replace whitespace in file name as it becomes a path in the Gitlab Wiki
-            if DOCUMENTATION_TYPE == "GLFM":
-                doc_path = Path(str(doc_path).replace(" ", "-"))
+        # Replace whitespace in file name as it becomes a path in the Gitlab Wiki
+        if DOCUMENTATION_TYPE == "GLFM":
+            doc_path = Path(str(doc_path).replace(" ", "-"))
 
-            with open(doc_path, "w+", encoding="utf-8") as output:
-                output.write(document)
-                mdr_doc_count += 1
+        with open(doc_path, "w+", encoding="utf-8") as output:
+            output.write(document)
+            mdr_doc_count += 1
 
 
 if __name__ == "__main__":

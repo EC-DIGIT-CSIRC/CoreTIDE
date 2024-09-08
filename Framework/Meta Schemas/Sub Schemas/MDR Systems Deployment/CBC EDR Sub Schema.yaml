@@ -1,8 +1,16 @@
 required: 
+  - schema
   - status
   - query
 
 properties:
+
+  schema:
+    title: Schema identifier and version
+    type: string
+    description: Identifier of the schema at its current version 
+    const: splunk::2.0
+
   status: 
     title: Status of the use-case
     type: string

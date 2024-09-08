@@ -337,7 +337,7 @@ def log(
             margin=20)
 
     #Using an envvar allows to get around circular dependency issues
-    if os.getenv("TIDE_DEBUG_ENABLED"):
+    if os.getenv("TIDE_DEBUG_ENABLED") or os.environ.get("TERM_PROGRAM") == "vscode":
         log_message = ANSI.stripper(log_message)
 
     if category == "DEBUG" and os.getenv("TIDE_DEBUG_ENABLED"):

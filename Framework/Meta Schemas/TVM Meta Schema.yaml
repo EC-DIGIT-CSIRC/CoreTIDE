@@ -7,22 +7,16 @@ modeldoc: A Threat Vector Model is ...
 $schema: http://json-schema.org/draft-07/schema#
 additionalProperties: false
 
+tide.placeholders:
+  SCHEMA_VERSION: tvm::2.0
+
 required:
-  - id
   - name
   - criticality
   - threat 
   - metadata
 
 properties:
-
-  id:
-    title: Model Identifier
-    type: string
-    description: Identifier as TVMXXXX where XXXX is incremented from the previous model
-    pattern: '(TVM)\d{4}'
-    example: TVM0001
-    default: TVM0000
 
   name: 
     title: Model Name

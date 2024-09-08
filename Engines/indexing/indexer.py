@@ -212,12 +212,11 @@ def indexer(write_index=False) -> dict:
                     if "[DEBUG]" not in model:
                         model_body = yaml.safe_load(open(model_path, encoding="utf-8"))
 
-                        if "uuid" in model_body.keys():
-                            identifier = model_body["uuid"]
+                        identifier = model_body.get("metadata",{}).get("uuid")
+                        if not identifier:
+                            log("FATAL", "Missing identifier from model in file", model)
                         else:
-                            identifier = model_body["id"]
-
-                        model_cat_index[identifier] = model_body
+                            model_cat_index[identifier] = model_body
             models_index[meta_name] = model_cat_index
 
     index["models"] = models_index

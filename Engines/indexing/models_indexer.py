@@ -25,13 +25,7 @@ WIKI_MODEL_DOCUMENTATION_FOLDER = DataTide.Configurations.Global.Paths.Core._raw
     "models_docs_folder"
 ].split("/")[-2]
 GLFM = DataTide.Configurations.Documentation.glfm_doc_target
-
 DEBUG = DataTide.Configurations.DEBUG
-
-if os.getenv("TIDE_WIKI_GENERATION") == "GITLAB_WIKI":
-    WIKI_URL = f"{os.getenv('CI_PROJECT_URL')}/-/wikis/"
-else:
-    WIKI_URL = DataTide.Configurations.Documentation.wiki.get("wiki_link", "")
 
 
 def run():
@@ -60,9 +54,6 @@ def run():
         }
         entries = {}
         registry = DataTide.Models.Index[model_type]
-        base_model_link = (
-            f"{WIKI_MODEL_DOCUMENTATION_FOLDER}/{WIKI_MODEL_FOLDER[model_type]}/"
-        )
 
         for model in registry:
 
@@ -74,15 +65,6 @@ def run():
             entry["tlp"] = model_data["metadata"]["tlp"]
             entry["criticality"] = model_data.get("criticality")
             entry["aliases"] = model_data.get("actor", {}).get("aliases")
-            if model_type == "mdr":
-                link = f"{base_model_link}{ICONS[model_type]} {entry['name']}"
-            else:
-                link = f"{base_model_link}{ICONS[model_type]} [{model}] {entry['name']}"
-            if GLFM:
-                link = link.replace(" ", "-")
-                link = quote(link)
-            link = WIKI_URL + link
-            entry["link"] = link
 
             description = str()
 

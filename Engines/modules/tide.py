@@ -205,7 +205,7 @@ class DataTide:
         Exposes all the configurations of the instance
         """
         Index = dict(IndexTide.load()["models"])
-        """All Models Data Index"""
+        """Index containing model types"""
         tam = dict(Index["tam"])
         """Threat Actor Models Data Index"""
         tvm = dict(Index["tvm"])
@@ -218,6 +218,8 @@ class DataTide:
         """Business Detection Rules Data Index"""
         chaining = IndexTide.compute_chains(tvm)
         """Index of all chaining relationships"""
+        FlatIndex = tam | tvm | cdm | mdr | bdr
+        """Flat Key Value pair structure of all UUIDs in the index"""
 
     @dataclass(frozen=True)
     class Vocabularies:

@@ -6,6 +6,7 @@ from pathlib import Path
 import sys
 
 from typing import Literal, Tuple
+from io import StringIO
 
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
@@ -43,21 +44,6 @@ STAGE_DESCRIPTION_LIMIT = 300
 # and the validation there may not suffer from the same defect.
 VOCAB_GENERATION_ENUM = True
 
-# The metaschema is a superset of JSON Schema in YAML, and thus has extra keys
-# useful for other purposes (documentation, template etc.). They should
-# not break JSON Schemas, but will lead to warnings and is cleaner to remove.
-non_json_schema_keys = [
-    "tide.vocab",
-    "tide.vocab.stages",
-    "tide.vocab.scoped",
-    "tide.vocab.hints.no-wrap",
-    "tide.template.multiline",
-    "tide.template.hide",
-    "tide.template.force-required",
-    "tide.template.spacer",
-    "tide.mdr.parameter",
-    "tide.meta.deprecation"
-]
 
 
 DROPDOWN_TEMPLATE = """
@@ -149,7 +135,7 @@ def make_markdown_dropdown(name, key, field=""):
     criticality = ""
     id_icon = ICONS["id"]
 
-    if get_type(identifier) in TIDE_MODELS:
+    if (get_type(identifier, mute=True) or "") in TIDE_MODELS:
         criticality = key.get("criticality")
         crit_icon = get_icon("criticality")
         if not criticality:
@@ -158,9 +144,7 @@ def make_markdown_dropdown(name, key, field=""):
         else:
             crit_value_icon = get_vocab_entry("criticality", criticality, "icon")
         criticality = f"{crit_icon} **Criticality** : {crit_value_icon} {criticality}"
-
-        link = f"[See in CoreTIDE Wiki]({link})"
-
+    
     if tlp:
         tlp = f" | **{get_icon(tlp, vocab='tlp')}TLP:{tlp.upper()}**"
     if stage:
@@ -362,28 +346,21 @@ def gen_lib_schema(
         return array
 
 
-def del_keys_from_dict(dictionary, keys):
+def remove_tide_keywords(dictionary:dict)->dict:
     """
-    Recursively deletes any array of keys from a nested dictionnary
-    Parameters
-    ----------
-    dictionary : The nested dictionary to delete the keys from
-    keys : string or array of keys to delete
-
-    Returns
-    -------
-    dictionary : TYPE
-        DESCRIPTION.
-
+    The metaschema is a superset of JSON Schema in YAML, and thus has extra keys
+    useful for other purposes (documentation, template etc.). They should
+    not break JSON Schemas, but will lead to warnings and is cleaner to remove.
     """
     # dict_foo is used to avoid errors when iterating and modifying the same
     # dictionary
     dict_foo = dictionary.copy()
     for field in dict_foo.keys():
-        if field in keys:
+        if field.startswith("tide."):
             del dictionary[field]
-        if type(dict_foo[field]) == dict:
-            del_keys_from_dict(dictionary[field], keys)
+        else:
+            if type(dict_foo[field]) is dict:
+                remove_tide_keywords(dictionary[field])
     return dictionary
 
 
@@ -410,18 +387,9 @@ def recomposition_handler(entry_point):
 
             recomp_source_path = SUBSCHEMAS_PATH / subschema_folder / recomp_source
             recomp_data = yaml.safe_load(open(recomp_source_path, encoding="utf-8"))
-
             recomposition[recomp_identifier].update(recomp_data)
 
     return recomposition
-
-
-def definition_handler(entry_point):
-    DEFINITION_FOLDER = Path(PATHS["definitions"])
-    definition_file = DEFINITION_FOLDER / (entry_point + ".meta.yaml")
-    definition = yaml.safe_load(open(definition_file, encoding="utf-8"))
-
-    return definition
 
 
 def gen_json_schema(dictionary):
@@ -447,13 +415,13 @@ def gen_json_schema(dictionary):
 
             if "tide.meta.definition" in dict_foo[field].keys():
                 if (metadef := dict_foo[field]["tide.meta.definition"]) is True:
-                    temp = definition_handler(field)
+                    temp = DataTide.TideSchemas.definitions[field]
                 else:
-                    temp = definition_handler(metadef)
+                    temp = DataTide.TideSchemas.definitions[metadef]
 
-                if depmsg := dict_foo[field].get("tide.meta.deprecation"):
+                if deprecation_message := dict_foo[field].get("tide.meta.deprecation"):
                     temp["title"] = "⚠️ DEPRECATION WARNING"
-                    temp["description"] = "⚠️ DEPRECATED : " + depmsg
+                    temp["description"] = "⚠️ DEPRECATED : " + deprecation_message
 
                 dictionary[field] = temp
 
@@ -473,9 +441,9 @@ def gen_json_schema(dictionary):
                     else:
                         dictionary[field]["title"] = title
 
-                if depmsg := dict_foo[field].get("tide.meta.deprecation"):
+                if deprecation_message := dict_foo[field].get("tide.meta.deprecation"):
                     dict_foo[field]["title"] = "⚠️ DEPRECATION WARNING"
-                    dict_foo[field]["description"] = "⚠️ DEPRECATED : " + depmsg
+                    dict_foo[field]["description"] = "⚠️ DEPRECATED : " + deprecation_message
 
                 # If additionalProperties is not configured, we force it to
                 # False. This prevents the users from adding invalid keys (
@@ -573,18 +541,25 @@ def run():
 
             yaml_input = METASCHEMAS_FOLDER / GLOBAL_CONFIG.metaschemas[meta]
             json_output = JSON_SCHEMA_FOLDER / GLOBAL_CONFIG.json_schemas[meta]
+            
             parsing = yaml.safe_load(open(yaml_input, encoding="utf-8"))
+            placeholders = parsing.get("tide.placeholders") or {}
+
             log("ONGOING", "Generating json schema for : " + str(yaml_input))
             # Generate coretide fields
             generated = gen_json_schema(parsing)
 
             # Removes the extra keys represented in the metaschema
-            cleaned = del_keys_from_dict(generated, non_json_schema_keys)
+            cleaned = remove_tide_keywords(generated)
 
             # Export to json and pretty-print to file
 
             log("ONGOING", "Exporting generated schema to : " + str(json_output))
             output = json.dumps(cleaned, indent=4, sort_keys=False, default=str)
+            for placeholder in placeholders:
+                log("ONGOING", f"Replacing all occurence of placeholder {placeholder} with value {placeholders[placeholder]}")
+                output = output.replace(f"${placeholder}", placeholders[placeholder])
+
             output_file = open((json_output), "w", encoding="utf-8")
             output_file.write(output)
             output_file.close()

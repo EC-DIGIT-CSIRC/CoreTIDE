@@ -54,8 +54,9 @@ else:
 
 def documentation(model):
 
-    model_id = model["id"]
-    model_type = get_type(model_id)
+    model_uuid = model.get("metadata", {}).get("uuid")
+    model_type = get_type(model_uuid)
+    uuid = f"UUID : *{model_uuid}*"
 
     if DOCUMENTATION_TYPE == "MARKDOWN":
         frontmatter_type = DataTide.Configurations.Documentation.object_names[
@@ -66,7 +67,7 @@ def documentation(model):
         frontmatter = ""
 
     model_datafield = DataTide.Configurations.Global.data_fields[model_type]
-    title = f"# {get_icon(get_type(model_id))} {model_id} : {model['name']}"
+    title = f"# {get_icon(model_type)} {model['name']}"
     criticality = criticality_doc(model["criticality"])
     metadata = model.get("metadata") or model.get("meta") or {}
     metadata = {k: v for k, v in metadata.items() if k != "tlp"}
@@ -98,20 +99,20 @@ def documentation(model):
     if classification:
         classification = classification_doc(classification)
 
-    techniques = techniques_resolver(model_id, recursive=False)
+    techniques = techniques_resolver(model_uuid, recursive=False)
     if techniques:
         techniques = rich_attack_links(techniques)
         techniques = f'{get_icon("att&ck")} **ATT&CK Techniques** {techniques}'
 
-    relation_graph = relationships_graph(model_id)
+    relation_graph = relationships_graph(model_uuid)
     relation_table = ""
-    if childs(model_id):
+    if childs(model_uuid):
         relation_table = "\n\n **Descendants** \n\n" + relations_table(
-            model_id, direction="downstream"
+            model_uuid, direction="downstream"
         )
-    if parents(model_id):
+    if parents(model_uuid):
         relation_table += "\n\n **Ascendants** \n\n"
-        relation_table += relations_table(model_id, direction="upstream")
+        relation_table += relations_table(model_uuid, direction="upstream")
 
     if not relation_graph and not relation_table:
         relation_graph = "🚫 No related objects indexed."
@@ -155,7 +156,7 @@ def documentation(model):
             cve = cve_doc(cve)
             expand_description += f"\n\n {cve}"
 
-        chain_diagram, chain_table = chaining_graph(model_id)
+        chain_diagram, chain_table = chaining_graph(model_uuid)
         if chain_diagram and chain_table:
             expand_graphs += "\n\n --- \n\n### ⛓️ Threat Chaining\n\n"
             expand_graphs += chain_diagram + "\n\n"
@@ -163,7 +164,7 @@ def documentation(model):
                 FOLD.format("Expand chaining data", chain_table) + "\n\n --- \n"
             )
 
-    data_table, tags = model_data_table(model[model_datafield], model_id)
+    data_table, tags = model_data_table(model[model_datafield], model_uuid)
 
     if GLFM:
         tags = ""
@@ -210,7 +211,7 @@ def run():
             model_data = MODELS_INDEX[model_type][model]
             doc_name = model_data.get("name").replace("_", " ")
             doc_file_name = (
-                f"{get_icon(model_type)} [{model_data['id']}] {doc_name.strip()}.md"
+                f"{get_icon(model_type)} {doc_name.strip()}.md"
             )
 
             doc_file_name = safe_file_name(doc_file_name)

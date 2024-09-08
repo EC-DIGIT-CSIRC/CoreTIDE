@@ -8,40 +8,44 @@ sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.modules.logs import log
 from Engines.modules.tide import DataTide
+from Engines.modules.files import resolve_configurations
 
 MODELS_INDEX = DataTide.Models.Index
+CONFIGURATIONS = resolve_configurations()
+MODELS_TYPES = CONFIGURATIONS["global"]["models"]
 
 
 def run():
 
-    log("TITLE", "MDR UUIDv4 Validation")
-    log("INFO", "Validates UUID against v4 specification using the standard library")
+    log("TITLE", "tide_object UUIDv4 Validation")
+    log("INFO", "Validates Object UUIDs against the v4 specification")
 
     error_registry = list()
     counter = 0
 
-    for mdr in MODELS_INDEX["mdr"]:
-        mdr_data = MODELS_INDEX["mdr"][mdr]
+    for tide_model in MODELS_TYPES:
+        for tide_object in MODELS_INDEX[tide_model]:
+            tide_object_data = MODELS_INDEX[tide_model][tide_object]
 
-        mdr_uuid = mdr_data["uuid"]
-        mdr_name = mdr_data["name"]
-        mdr_metadata = mdr_data.get("metadata") or mdr_data["meta"]
-        mdr_author = mdr_metadata["author"]
+            tide_object_uuid = tide_object_data["metadata"]["uuid"]
+            tide_object_name = tide_object_data["name"]
+            tide_object_metadata = tide_object_data.get("metadata") or tide_object_data["meta"]
+            tide_object_author = tide_object_metadata["author"]
 
-        try:
-            UUID(mdr_uuid, version=4)
-        except ValueError:
-            error_registry.append(
-                {"MDR Name": mdr_name, "UUID": mdr_uuid, "Author": mdr_author}
-            )
+            try:
+                UUID(tide_object_uuid, version=4)
+            except ValueError:
+                error_registry.append(
+                    {"Object Name": tide_object_name, "UUID": tide_object_uuid, "Author": tide_object_author}
+                )
 
-        counter += 1
+            counter += 1
 
     if error_registry:
         os.environ["VALIDATION_ERROR_RAISED"] = "True"
         log(
             "WARNING",
-            f"⚠️ Successfully validated {counter} MDRs but found",
+            f"⚠️ Successfully validated {counter} tide_objects but found",
             f"{len(error_registry)} invalid ones",
         )
         error_table = pd.DataFrame(error_registry).to_markdown(
@@ -51,7 +55,7 @@ def run():
         log("FAILURE", "Failed UUID validation")
 
     else:
-        log("SUCCESS", "Successfully validated", f"{counter} MDRs")
+        log("SUCCESS", "Successfully validated", f"{counter} tide_objects")
 
 
 if __name__ == "__main__":

@@ -29,7 +29,7 @@ def run():
     for tvm in (index := DataTide.Models.tvm):
         tvm_data = index[tvm]
         tvm_name = tvm_data["name"]
-        tvm_id = tvm_data["id"]
+        tvm_id = tvm_data.get("metadata",{}).get("uuid")
         cve_list = tvm_data[TVM_MODEL_FIELD].get("cve")
         if cve_list:
             broken_cve = []

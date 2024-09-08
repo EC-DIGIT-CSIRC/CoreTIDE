@@ -64,7 +64,7 @@ def remove_blanks(path):
     return True
 
 
-def get_required(metaschema, required_list):
+def get_required(metaschema:dict, required_list:list)->list:
 
     for key in metaschema.keys():
         if key in required_list:
@@ -82,7 +82,7 @@ def get_required(metaschema, required_list):
     return required_list
 
 
-def definition_handler(entry_point):
+def definition_handler(entry_point:str)->dict:
     definition = DataTide.TideSchemas.definitions[entry_point]
     return definition
 
@@ -227,6 +227,8 @@ def gen_template(metaschema, required):
                             content = "|\n'#Type Here"
                     elif "default" in metaschema[key]:
                         content = metaschema[key]["default"]
+                    elif "const" in metaschema[key]:
+                        content = metaschema[key]["const"]
 
                     if keyword_type == "array":
                         if key not in required:
@@ -299,6 +301,7 @@ def run():
             log("ONGOING", "Generating template", str(meta))
 
             parsed = DataTide.TideSchemas.Index[meta]
+            placeholders:dict = parsed.get("tide.placeholders") or {}
             required = get_required(parsed["properties"], parsed["required"])
             required.extend(parsed.get("tide.template.force-required") or [])
             template = gen_template(parsed["properties"], required)
@@ -308,6 +311,10 @@ def run():
 
             replace_strings_in_file(template_path, ["- Comment out"], "#-")
             replace_strings_in_file(template_path, ["blank", "'"], "")
+
+            for placeholder in placeholders:
+                replace_strings_in_file(template_path, [f"${placeholder}"], placeholders[placeholder])
+
             remove_blanks(template_path)
             make_spaces(template_path, parsed["properties"])
 

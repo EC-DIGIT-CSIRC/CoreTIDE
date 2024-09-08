@@ -55,7 +55,7 @@ for mdr in mdr_to_index:
     mdr_data = yaml.safe_load(open(mdr, encoding="utf-8"))
     mdr_name = mdr_data.get("name") or mdr_data["title"]
     log("ONGOING", "Updating the staging index", mdr_name)
-    uuid = mdr_data["uuid"]
+    uuid = mdr_data["metadata"]["uuid"]
     current_stg_index[uuid] = mdr_data
 
 if not os.path.exists(STG_INDEX_PATH):

@@ -15,7 +15,8 @@ from Engines.mutation import (
     reports,
     remove_cdm_validation,
     references,
-    security_domain
+    security_domain,
+    tide_2_uuid_migration
 )
 
 ROOT = Path(str(git.Repo(".", search_parent_directories=True).working_dir))
@@ -39,6 +40,7 @@ reports.run()
 remove_cdm_validation.run()
 references.run()
 security_domain.run()
+tide_2_uuid_migration.run()
 
 print("\n" + "Execution Report".center(80, "="))
 
