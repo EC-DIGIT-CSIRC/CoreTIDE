@@ -8,11 +8,6 @@
     - git clone $TIDE_WIKI_ACCESS
     - pwd 
 
-    # Patch the Staging Index
-    - cd $TIDE_WIKI
-    - python patch_index_new_uuid.py
-    - cd ../
-
     # Generate index. Stores a copy in wiki for Staging documentation
     - cd Engines/indexing/
     - export GENERATE_INDEX_FILE=True
@@ -55,11 +50,6 @@
     - git clone $TIDE_WIKI_ACCESS
     - pwd 
 
-    # Patch the Staging Index
-    - cd $TIDE_WIKI
-    - python patch_index_new_uuid.py
-    - cd ../
-
     # Extract the staging index to Core Root for reconciliation
     - if [ -e $TIDE_WIKI/staging_index.json ]
     -  then cp $TIDE_WIKI/staging_index.json ./
@@ -77,11 +67,6 @@
     - python ./staging_indexer.py # Index generates in the root of the repo
     - cd ../../ #Back within the Core Root directory
     - cp staging_index.json $TIDE_WIKI/
-
-    # Patch the Staging Index
-    - cd $TIDE_WIKI
-    - python patch_index_new_uuid.py
-    - cd ../
 
     - ls -lah
     # Execute documentation toolchain
