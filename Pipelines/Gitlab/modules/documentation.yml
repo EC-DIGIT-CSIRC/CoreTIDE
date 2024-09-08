@@ -12,6 +12,7 @@
     - cd Engines/indexing/
     - export GENERATE_INDEX_FILE=True
     - python ./indexer.py # Index generates in the root of the repo
+    - python ./patch_index_new_uuid.py # Fix the old staging index IDs
     - cd ../../ #Back within the Core Root directory
     - cp index.json $TIDE_WIKI/
 
@@ -50,6 +51,7 @@
     - git clone $TIDE_WIKI_ACCESS
     - pwd 
 
+
     # Extract the staging index to Core Root for reconciliation
     - if [ -e $TIDE_WIKI/staging_index.json ]
     -  then cp $TIDE_WIKI/staging_index.json ./
@@ -64,7 +66,9 @@
     # it back into the wiki for future computations
     - cd Engines/indexing/
     - export GENERATE_INDEX_FILE=True
+    - python ./patch_index_new_uuid.py # Fix the old staging index IDs
     - python ./staging_indexer.py # Index generates in the root of the repo
+    
     - cd ../../ #Back within the Core Root directory
     - cp staging_index.json $TIDE_WIKI/
 
