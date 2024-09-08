@@ -296,7 +296,7 @@ def run():
     mdr_doc_count = 0
 
     for mdr_uuid in MODELS_INDEX["mdr"]:
-
+        print("DEBUG - ", mdr_uuid)
         # Make a file name based on MDR data
         mdr_data = MODELS_INDEX["mdr"][mdr_uuid]
         doc_name = mdr_data.get("name").replace("_", " ")
