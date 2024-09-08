@@ -104,7 +104,7 @@ def create_query(data: dict) -> str:
     Modifies KQL Query to add customizable capabilities
     """
 
-    uuid = data["uuid"]
+    uuid = data["metadata"]["uuid"]
     mdr_sentinel = data["configurations"]["sentinel"]
     kql = mdr_sentinel["query"].strip()
     extend_uuid = f"| extend MDR_UUID = '{uuid}' "

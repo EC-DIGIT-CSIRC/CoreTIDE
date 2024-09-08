@@ -7,8 +7,10 @@ description: Business Driven Detection are non-threat related detection objectiv
 $schema: http://json-schema.org/draft-07/schema#
 additionalProperties: false
 
+tide.placeholders:
+  SCHEMA_VERSION: bdr::2.0
+
 required:
-  - id
   - name
   - criticality
   - request
@@ -16,13 +18,6 @@ required:
 
 properties:
 
-  id:
-    title: Model Identifier
-    type: string
-    description: Identifier as CDMXXXX where XXXX is incremented from the previous model
-    pattern: '(BDR)\d{4}'
-    example: BDR0001
-    default: BDR0000
 
   name: 
     title: Model Name
@@ -42,6 +37,8 @@ properties:
 
   metadata:
     tide.meta.definition: true
+    tide.placeholders:
+      $SCHEMA_VERSION: tvm::2.0
 
   request:
     title: Description of the detection objective

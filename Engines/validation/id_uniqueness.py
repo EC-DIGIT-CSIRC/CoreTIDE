@@ -41,29 +41,26 @@ def run():
 
                 model_body = yaml.safe_load(open(model_path, encoding="utf-8"))
 
-                if "uuid" in model_body.keys():
-                    id = model_body["uuid"]
-                else:
-                    id = model_body["id"]
+                uuid = model_body.get("metadata",{}).get("uuid")
 
                 file_name = model
                 name = model_body["name"]
 
                 # We check if there is a precedent for the id, if not we add as a reference
-                if id not in registry:
-                    registry[id] = {"name": name, "file_name": file_name}
+                if uuid not in registry:
+                    registry[uuid] = {"name": name, "file_name": file_name}
                 # If there is a precedent we move to an error list - allows multiple same mistakes
                 else:
-                    duplicates.append({"id": id, "name": name, "file_name": file_name})
+                    duplicates.append({"uuid": uuid, "name": name, "file_name": file_name})
 
     if duplicates:
         for dup in duplicates:
-            original = registry[dup["id"]]
+            original = registry[dup["uuid"]]
             original_name = original["name"]
             original_file_name = original["file_name"]
             log(
                 "FAILURE",
-                f"Duplicated ID found with {dup['id']} - {dup['name']} @ [{dup['file_name']}]",
+                f"Duplicated ID found with {dup['uuid']} - {dup['name']} @ [{dup['file_name']}]",
                 f"has the same id as {original_name} @ ({original_file_name})",
             )
         log("FATAL", "Cannot have duplicated IDs throughout multiple CoreTIDE objects")

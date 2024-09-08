@@ -4,10 +4,11 @@ description: A Managed Detection Rule is ...
 $schema: http://json-schema.org/draft-07/schema#
 additionalProperties: false
 
+tide.placeholders:
+  SCHEMA_VERSION: mdr::2.0
 
 required:
   - name
-  - uuid
   - response
   - description
   - configurations
@@ -29,20 +30,13 @@ properties:
     description: Verbose, human readable name for the detection rule
     example: New Abnormal Credentials added to Azure AD
 
-  uuid: 
-    title: Unique identifier for the use-case
-    type: string
-    format: uuid
-    description: This an UUID Gen 4 (you can use https://www.uuidgenerator.net/version4 to generate UUIDs) or ALT+SHIFT+U under Visual Studio Code
-    example: 323d548d-17ca-46fa-a7c7-de43302456a1
-
   references:
     tide.meta.definition: true
 
   metadata:
     tide.template.spacer: true
     tide.meta.definition: true
-  
+
   meta:
     tide.template.hide: true
     tide.meta.deprecation: Use metadata keyword instead

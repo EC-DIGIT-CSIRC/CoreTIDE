@@ -89,7 +89,7 @@ class CarbonBlackCloudDeploy(CarbonBlackCloudEngineInit, DeployMDR):
                 )
 
             config_data = data["configurations"][self.DEPLOYER_IDENTIFIER]
-            uuid = data["uuid"]
+            uuid = data["metadata"]["uuid"]
             name = data["name"]
             description = data["description"]
             status = config_data["status"]

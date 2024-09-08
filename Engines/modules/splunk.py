@@ -251,7 +251,7 @@ def create_query(data: dict) -> str:
     Automatically adds certain lines to the analyst defined SPL
     """
 
-    uuid = data["uuid"]
+    uuid = data["metadata"]["uuid"]
     mdr_splunk = data["configurations"]["splunk"]
     status = mdr_splunk["status"]
     spl = mdr_splunk["query"].strip()

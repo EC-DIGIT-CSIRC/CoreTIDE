@@ -5,21 +5,15 @@ $schema: http://json-schema.org/draft-07/schema#
 additionalProperties: false
 
 required:
-  - id
   - name
   - criticality
   - actor
   - metadata
 
-properties:
+tide.placeholders:
+  SCHEMA_VERSION: tam::2.0
 
-  id:
-    title: Model Identifier
-    type: string
-    description: Identifier as TAMXXXX where XXXX is incremented from the previous model
-    pattern: '(TAM)\d{4}'
-    example: TAM0001
-    default: TAM0000
+properties:
 
   name: 
     title: Actor name

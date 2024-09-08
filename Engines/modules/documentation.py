@@ -67,9 +67,8 @@ def object_name(key):
     """
     if key == "Unknown":
         return ""
-    id = key if get_type(key) != "mdr" else ""
     name = model_value(key, "name")
-    name = f"  {get_icon(get_type(key)) or ''} {id} {name}"
+    name = f"  {get_icon(get_type(key)) or ''} {name}"
     return name or key
 
 
@@ -169,90 +168,6 @@ def get_icon(
         return ""
 
 
-# def copy_atomics():
-#    path = WIKI / "atomics"
-#    os.mkdir(path)
-#    for t in ATOMICS_INDEX:
-#        body = ATOMICS_INDEX[t]["doc"]
-#        atomic_technique = ATOMICS_INDEX[t]["attack_technique"]
-#        atomic_name = ATOMICS_INDEX[t]["display_name"].replace("/", " ").replace(":","")
-#        atomic_out = f"{atomic_technique} {atomic_name}.md"
-#
-#        if DOCUMENTATION_TYPE == "GLFM":
-#            atomic_out = f"{get_icon('atomics')} {atomic_out}".replace(" ", "-")
-#            body = body.split("\n",1)[1]
-#
-#        with open(path/atomic_out, "w+", encoding='utf-8') as out:
-#            out.write(body)
-
-
-# def make_attack_recommendations(mapping, techniques):
-#
-#    if mapping == "detection":
-#        mapped = RELATIONSHIPS[RELATIONSHIPS["mapping type"] == "detects"]
-#        mapped = mapped[mapped["source type"] == "datacomponent"]
-#        relevant = mapped[mapped["target ID"].isin(techniques)]
-#
-#    if mapping == "mitigation":
-#        mapped = RELATIONSHIPS[RELATIONSHIPS["mapping type"] == "mitigates"]
-#        mapped = mapped[mapped["source type"] == "mitigation"]
-#        relevant = mapped[mapped["target ID"].isin(techniques)]
-#
-#    relevant = relevant.replace(r'\n',' ', regex=True)
-#    relevant = relevant[['source name', 'target name', 'mapping description']]
-#    relevant = relevant.rename(columns = {'source name':mapping.capitalize(),
-#                                          'target name':'Technique',
-#                                          'mapping description': 'Description'})
-#
-#    relevant = relevant.dropna(subset=['Description'])
-#    relevant = relevant.sort_values(by=['Technique'])
-#
-#    recommendations = relevant.to_markdown(index=False)
-#
-#    return recommendations
-
-# def gen_cloud_recommendations(kind, platform, techniques):
-#
-#
-#    if kind == "detections":
-#        locator = ["Detect"]
-#    elif kind == "controls":
-#        locator = ["Protect", "Respond"]
-#
-#    recommendations = list()
-#
-#    for entry in CLOUD_MAPPINGS_INDEX[platform]:
-#        for t in entry["techniques"]:
-#            if t["id"] in techniques:
-#                if t["technique-scores"][0].get("category") in locator and "comments" in t["technique-scores"][0].keys():
-#                    buf = dict()
-#                    buf["Service"] = entry["name"]
-#                    buf["Technique"] = t["name"]
-#                    buf["Type"] = t["technique-scores"][0].get("category")
-#                    buf["Effectiveness"] = t["technique-scores"][0].get("value")
-#                    buf["Description"] = t["technique-scores"][0].get("comments").replace("\n","")
-#                    recommendations.append(buf)
-#
-#            elif "sub-techniques-scores" in t.keys():
-#                for s in t["sub-techniques-scores"]:
-#                    if s["sub-techniques"][0].get("id") in techniques:
-#                        if s["scores"][0].get("category") in locator:
-#                            buf = dict()
-#                            buf["Service"] = entry["name"]
-#                            buf["Technique"] = s["sub-techniques"][0].get("name")
-#                            buf["Type"] = s["scores"][0].get("category")
-#                            buf["Effectiveness"] = s["scores"][0].get("value")
-#                            buf["Description"] = s["scores"][0].get("comments")
-#                            recommendations.append(buf)
-#
-#    if len(recommendations) == 0:
-#        table = ""
-#    else:
-#        table = pd.DataFrame(recommendations).to_markdown(index=False)
-#
-#    return table
-
-
 def make_attack_link(
     technique: str, fmt: Literal["full", "compact"] = "full", hover=True
 ) -> str:
@@ -308,63 +223,6 @@ def rich_attack_links(
     return rich_techniques
 
 
-# def make_atomics_links(techniques, platforms):
-#    KB_TO_ATOMIC = Path("../atomics/")
-#
-#    mappings = {
-#        "Windows": "windows",
-#        "macOS": "macos",
-#        "Linux": "linux",
-#        "Office 365": "office-365",
-#        "Azure AD": "azure-ad",
-#        "Software Containers": "containers",
-#        "AWS": "iaas:aws",
-#        "Azure": "iaas:azure",
-#        "GCP": "iaas:gcp"
-#        }
-#
-#    atomic_links = list()
-#
-#    for t in techniques:
-#        if t in ATOMICS_INDEX.keys():
-#            for r in ATOMICS_INDEX[t]["atomic_tests"]:
-#                for p in platforms:
-#                    if mappings.get(p) in r["supported_platforms"]:
-#                        index = ATOMICS_INDEX[t]["atomic_tests"].index(r) + 1
-#                        name = r["name"]
-#
-#                        title = f"Atomic Test #{index} {name}"
-#                        full_title = ATOMICS_INDEX[t]["display_name"] + " - " + title
-#                        #Need to fix hyperlinks for atomics, won't work in wiki.
-#
-#
-#                        atomic_technique = ATOMICS_INDEX[t]["attack_technique"]
-#                        atomic_name = ATOMICS_INDEX[t]["display_name"].replace("/", " ").replace(":", "")
-#                        link = f"{atomic_technique} {atomic_name}.md"
-#
-#
-#                        anchor = title.replace("#","").lower()
-#
-#                        if DOCUMENTATION_TYPE == "GLFM":
-#                            link = f"{get_icon('atomics')} {link}".replace(" ", "-")
-#                            if link[-3:] == ".md": #Just by safety in case some technique contain something with this in middle of string
-#                                link = link[:-3]
-#                            anchor = anchor.replace(" ", "-")
-#                        elif DOCUMENTATION_TYPE == "MARKDOWN":
-#                            link = f"{get_icon('atomics')} {link}".replace(" ", "%20")
-#                            anchor = anchor.replace(" ", "%20")
-#
-#
-#                        full_link = f"{KB_TO_ATOMIC.as_posix()}/{link}"
-#
-#
-#
-#                        link = f"[{full_title}]({full_link}#{anchor})"
-#                        atomic_links.append(link)
-#
-#    return atomic_links
-
-
 def backlink_resolver(model_id, raw_link=False):
 
     model_type = get_type(model_id)
@@ -394,10 +252,7 @@ def backlink_resolver(model_id, raw_link=False):
         hover = model_value(model_id, "guidelines")
 
     if model_type == "mdr":
-        if get_type(model_id, get_version=True) == "mdrv2":
-            model_name = model_data["title"].split("$")[0].strip()
-        else:
-            model_name = model_data["name"]
+        model_name = model_data["name"]
 
         backlink_name = model_name.replace("_", " ")
         hover = "&#013;&#010;".join(
@@ -417,8 +272,8 @@ def backlink_resolver(model_id, raw_link=False):
 
     else:
         model_name = model_data["name"].strip()
-        backlink_name = "[{}] {}".format(model_id, model_name)
-        file_link = f"{doc_path}{icon} {backlink_name}"
+        backlink_name = model_name
+        file_link = f"{doc_path}{icon} {model_name}"
 
     if DOCUMENTATION_TYPE == "MARKDOWN":
         file_link = file_link.replace(" ", "%20")

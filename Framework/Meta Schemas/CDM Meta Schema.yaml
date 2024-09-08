@@ -4,22 +4,16 @@ description: CoreTIDE Data Model Specification for Cyber Detection Models
 $schema: http://json-schema.org/draft-07/schema#
 additionalProperties: false
 
+tide.placeholders:
+  SCHEMA_VERSION: cdm::2.0
+
 required:
-  - id
   - name
   - criticality
   - detection
   - metadata
 
 properties:
-
-  id:
-    title: Model Identifier
-    type: string
-    description: Identifier as CDMXXXX where XXXX is incremented from the previous model
-    pattern: '(CDM)\d{4}'
-    example: CDM0001
-    default: CDM0000
 
   name: 
     title: Model Name

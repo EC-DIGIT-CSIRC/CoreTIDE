@@ -52,9 +52,10 @@ class SplunkMetadataDeploy(SplunkEngineInit, DeployMetadata):
             entry = dict()
             # Could load from index, but this is fast enough for lookup update purposes
             body = DataTide.Models.mdr[mdr]
+            mdr_uuid = body["metadata"]["uuid"]
             log("ONGOING", "Generating Lookup entry", body["name"])
 
-            techniques = techniques_resolver(body.get("uuid"))
+            techniques = techniques_resolver(mdr_uuid)
             if techniques:
                 techniques = ", ".join(techniques)
             else:
@@ -65,7 +66,7 @@ class SplunkMetadataDeploy(SplunkEngineInit, DeployMetadata):
             for system in configurations:
                 entry[f"MDR_status_{system}"] = configurations[system]["status"]
             metadata = body.get("metadata") or body["meta"]
-            entry["MDR_UUID"] = body.get("uuid")
+            entry["MDR_UUID"] = mdr_uuid
             entry["MDR_name"] = body.get("name")
             entry["MDR_author"] = metadata.get("author")
             entry["MDR_version"] = metadata.get("version")

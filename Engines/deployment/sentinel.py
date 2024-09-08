@@ -35,7 +35,6 @@ class SentinelDeploy(SentinelEngineInit):
         mdr_sentinel_raw = data["configurations"]["sentinel"]
         status = mdr_sentinel_raw["status"]
 
-        # TODO Add modifiers to Sentinel
         status_parameters = get_vocab_entry("status", status, "attributes_override")
         if status_parameters is dict:
             status_parameters = status_parameters.get(self.DEPLOYER_IDENTIFIER)
@@ -186,7 +185,7 @@ class SentinelDeploy(SentinelEngineInit):
         rule.description = data["description"]
 
         # Auto-enrich with techniques resolver
-        techniques = techniques_resolver(data["uuid"])
+        techniques = techniques_resolver(data["metadata"]["uuid"])
         if techniques:
             tactics = list()
             for t in techniques:
@@ -215,7 +214,7 @@ class SentinelDeploy(SentinelEngineInit):
         """
 
         mdr_name = data["name"]
-        mdr_uuid = data["uuid"]
+        mdr_uuid = data["metadata"]["uuid"]
         mdr_status = data["configurations"][self.DEPLOYER_IDENTIFIER]["status"]
 
         if mdr_status in ["REMOVED"]:
