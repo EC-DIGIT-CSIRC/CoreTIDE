@@ -18,7 +18,7 @@ TIDE_CONFIG = toml.load(
 )
 
 PROJECT_NAME = os.getenv("CI_PROJECT_NAME")
-STG_INDEX_PATH = ROOT / TIDE_CONFIG["paths"]["core"]["staging_index_output"]
+STG_INDEX_PATH = ROOT / TIDE_CONFIG["paths"]["tide"]["staging_index_output"]
 
 MAPPING_PATH = ROOT / TIDE_CONFIG["paths"]["core"]["tide_indexes"]
 MAPPING = json.load(open(MAPPING_PATH/"legacy_uuid_mapping.json"))
