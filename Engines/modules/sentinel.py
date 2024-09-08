@@ -103,8 +103,8 @@ def create_query(data: dict) -> str:
     """
     Modifies KQL Query to add customizable capabilities
     """
-
-    uuid = data["metadata"]["uuid"]
+    # Backwards compatible with 1.0 data model
+    uuid = data.get("uuid") or data["metadata"]["uuid"]
     mdr_sentinel = data["configurations"]["sentinel"]
     kql = mdr_sentinel["query"].strip()
     extend_uuid = f"| extend MDR_UUID = '{uuid}' "

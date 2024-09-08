@@ -36,7 +36,7 @@ class SplunkDeploy(SplunkEngineInit, DeployMDR):
         config = dict()
 
         # Before processing MDR data, adding config configuration
-        uuid = mdr["metadata"]["uuid"]
+        uuid = mdr.get("uuid") or mdr["metadata"]["uuid"]
         name = mdr["name"]
         description = mdr["description"]
         mdr_splunk = mdr["configurations"]["splunk"]

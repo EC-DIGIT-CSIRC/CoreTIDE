@@ -29,6 +29,7 @@ class SentinelDeploy(SentinelEngineInit):
 
     def config_mdr(self, data, client: SecurityInsights):
 
+        mdr_uuid = data.get("uuid") or data["metadata"]["uuid"]
         rule = client.alert_rules.models.ScheduledAlertRule()
         rule.name = data["name"]
         rule.description = data["description"]
@@ -185,7 +186,7 @@ class SentinelDeploy(SentinelEngineInit):
         rule.description = data["description"]
 
         # Auto-enrich with techniques resolver
-        techniques = techniques_resolver(data["metadata"]["uuid"])
+        techniques = techniques_resolver(mdr_uuid)
         if techniques:
             tactics = list()
             for t in techniques:
@@ -214,7 +215,7 @@ class SentinelDeploy(SentinelEngineInit):
         """
 
         mdr_name = data["name"]
-        mdr_uuid = data["metadata"]["uuid"]
+        mdr_uuid = data.get("uuid") or data["metadata"]["uuid"]
         mdr_status = data["configurations"][self.DEPLOYER_IDENTIFIER]["status"]
 
         if mdr_status in ["REMOVED"]:
