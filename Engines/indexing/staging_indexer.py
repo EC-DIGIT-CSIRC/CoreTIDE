@@ -55,7 +55,9 @@ for mdr in mdr_to_index:
     mdr_data = yaml.safe_load(open(mdr, encoding="utf-8"))
     mdr_name = mdr_data.get("name") or mdr_data["title"]
     log("ONGOING", "Updating the staging index", mdr_name)
-    uuid = mdr_data["metadata"]["uuid"]
+    
+    # TODO Backwards compatible with OpenTIDE 1.0, to deprecate at some point
+    uuid = mdr_data.get("uuid") or mdr_data["metadata"]["uuid"]
     current_stg_index[uuid] = mdr_data
 
 if not os.path.exists(STG_INDEX_PATH):

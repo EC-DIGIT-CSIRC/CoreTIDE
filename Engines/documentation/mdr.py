@@ -101,7 +101,8 @@ def documentation(mdr):
     if MARKDOWN:
         name = f"# {MDR_ICON} {name}"
 
-    uuid_data = mdr["metadata"]["uuid"]
+    # TODO Backwards compatible with OpenTIDE 1.0, to deprecate at some point
+    uuid_data = mdr.get("uuid") or mdr["metadata"]["uuid"]
     uuid = f"{get_icon('uuid')} **UUID** : `{uuid_data}`"
     description = mdr.get("description", "").replace("\n", "\n> ")
 
