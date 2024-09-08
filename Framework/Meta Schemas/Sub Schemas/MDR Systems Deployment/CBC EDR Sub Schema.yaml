@@ -9,7 +9,7 @@ properties:
     title: Schema identifier and version
     type: string
     description: Identifier of the schema at its current version 
-    const: splunk::2.0
+    const: carbon_black_cloud::2.0
 
   status: 
     title: Status of the use-case
