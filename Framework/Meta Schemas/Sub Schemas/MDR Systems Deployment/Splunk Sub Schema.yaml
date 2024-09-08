@@ -1,5 +1,5 @@
 required: 
-  - schema
+  #- schema #To be enabled at a later date. Must be part of the public release
   - status
   - query
   - scheduling
@@ -11,6 +11,7 @@ properties:
     type: string
     description: Identifier of the schema at its current version 
     const: splunk::2.0
+    tide.template.force-required: True
 
   status: 
     title: Status of the use-case
