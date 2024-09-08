@@ -97,7 +97,7 @@ def make_deploy_plan(
         data = yaml.safe_load(open(rule, encoding="utf-8"))
         name = data["name"]
         conf_data = data["configurations"]
-        mdr_uuid = data.get("id") or data["metadata"]["uuid"]
+        mdr_uuid = data.get("uuid") or data["metadata"]["uuid"]
 
         for system in conf_data:
             platform_status = conf_data[system]["status"]
