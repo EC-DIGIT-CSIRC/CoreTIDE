@@ -420,6 +420,9 @@ def get_type(model_uuid:str, mute:bool=False):
 
     schema = model_body.get("metadata", {}).get("schema")
     if not schema:
+        #TODO For backwards compatibility with MDR still on 1.0. To be deprecated.
+        if model_body.get("configurations"):
+            return "mdr"
         if mute:
             return None
         else:
@@ -443,14 +446,7 @@ def techniques_resolver(model_id: str, recursive=True) -> list:
 
     # Find the model_type
     model_type = get_type(model_id, mute=True)
-    
-    # Workaround for old MDR in staging which have their version bumped 
-    if model_type is None:
-        if MODELS_INDEX["mdr"].get(model_id):
-            model_type = "mdr"
-        else:
-            log("FATAL", f"Cannot identify object with UUID : {model_id}")
-    
+        
     # Load Model Data
     model_body = MODELS_INDEX[model_type][model_id]
 
