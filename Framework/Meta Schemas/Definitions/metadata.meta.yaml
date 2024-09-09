@@ -9,7 +9,7 @@ required:
   - created
   - modified
   - author
-  - schema
+  #- schema #TODO This is for backward compatibility. Ensure 
 
 properties:
 
@@ -26,6 +26,7 @@ properties:
     type: string
     description: Identifier of the schema at its current version 
     const: $SCHEMA_VERSION
+    tide.template.force-required: True
   
   version:
     title: Version
