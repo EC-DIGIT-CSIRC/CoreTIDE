@@ -17,7 +17,7 @@ from Engines.templates.tide_indexes import fetch_tide_index_template
 
 def patch_tide_1_for_staging(LEGACY_UUID_MAPPING, model:dict, model_type:str)->dict:
     """
-    Patch on the fly object in staging with new UUIDs to pass validation.
+    Dynamic Micro-Patching on the fly object in staging with new UUIDs to pass validation.
     Once merged to main they will be migrated definitely.
     TODO - Remove before public release, as only concerns existing repositories
     """
@@ -30,21 +30,22 @@ def patch_tide_1_for_staging(LEGACY_UUID_MAPPING, model:dict, model_type:str)->d
         if "uuid" in model:
             model["metadata"]["uuid"] = model["uuid"]
         elif "id" in model:
+            old_id = model.pop("id")
             if LEGACY_UUID_MAPPING:
                 if model["id"] in LEGACY_UUID_MAPPING:
-                    model["metadata"]["uuid"] = LEGACY_UUID_MAPPING[model["id"]]["uuid"]
-                    log("INFO", f"Adding temporary new UUID to {model}", f"{model['id']} => {model['metadata']['uuid']}")
+                    model["metadata"]["uuid"] = LEGACY_UUID_MAPPING[old_id]["uuid"]
+                    log("INFO", f"Adding temporary new UUID to {model}", f"{old_id} => {model['metadata']['uuid']}")
 
                 else:
-                    model["metadata"]["uuid"] = uuid.uuid4()
-                    log("INFO", f"Adding temporary UUID to {model}", f"{model['id']} => {model['metadata']['uuid']}")
-
+                    model["metadata"]["uuid"] = str(uuid.uuid4())
+                    log("INFO", f"Adding temporary UUID to {model}", f"{old_id} => {model['metadata']['uuid']}")
+                    
             else:
-                model["metadata"]["uuid"] = uuid.uuid4()
+                model["metadata"]["uuid"] = str(uuid.uuid4())
                 log("INFO", f"Adding temporary UUID to {model}", model["metadata"]["uuid"])
 
         else:
-            model["metadata"]["uuid"] = uuid.uuid4()
+            model["metadata"]["uuid"] = str(uuid.uuid4())
             log("INFO", f"Adding temporary UUID to {model}", model["metadata"]["uuid"])
 
     if not model.get("metadata", {}).get("schema"):
