@@ -13,6 +13,11 @@ required:
 tide.placeholders:
   SCHEMA_VERSION: tam::2.0
 
+tide.template.force-required:
+  - metadata
+  - schema
+  - uuid
+
 properties:
 
   name: 

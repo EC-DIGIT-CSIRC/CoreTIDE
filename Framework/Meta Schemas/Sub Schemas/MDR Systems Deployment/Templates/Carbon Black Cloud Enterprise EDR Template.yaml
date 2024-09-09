@@ -1,4 +1,4 @@
-  schema: splunk::2.0
+  schema: carbon_black_cloud::2.0
   status: DEVELOPMENT
   #contributors:
     #-

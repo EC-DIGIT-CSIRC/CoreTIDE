@@ -64,7 +64,7 @@ def remove_blanks(path):
     return True
 
 
-def get_required(metaschema:dict, required_list:list)->list:
+def get_required(metaschema, required_list):
 
     for key in metaschema.keys():
         if key in required_list:
@@ -82,7 +82,7 @@ def get_required(metaschema:dict, required_list:list)->list:
     return required_list
 
 
-def definition_handler(entry_point:str)->dict:
+def definition_handler(entry_point):
     definition = DataTide.TideSchemas.definitions[entry_point]
     return definition
 
@@ -98,10 +98,15 @@ def gen_template(metaschema, required):
                     key = "#" + key
                 if metadef is True:
                     temp = definition_handler(key.replace("#", ""))
+                    definition_required = temp.get("required", [])
+                    definition_required.extend(temp.get("tide.template.force-required", []))
                 else:
                     temp = definition_handler(metadef)
+                    definition_required = temp.get("required", [])
+                    definition_required.extend(temp.get("tide.template.force-required", []))
+
                 template = gen_template(
-                    {key.replace("#", ""): temp}, required=temp.get("required", [])
+                    {key.replace("#", ""): temp}, required=definition_required
                 )
                 template = (
                     template.get(key)
@@ -337,6 +342,8 @@ def run():
 
                 log("ONGOING", "Generating template", subschema_name)
                 required = get_required(parsed["properties"], parsed["required"])
+                required.extend(parsed.get("tide.template.force-required") or [])
+
                 subschema_template = gen_template(parsed["properties"], required)
 
                 with open(subschema_template_path, "w+") as output:

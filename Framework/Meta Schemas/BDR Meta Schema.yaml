@@ -16,6 +16,11 @@ required:
   - request
   - metadata
 
+tide.template.force-required:
+  - metadata
+  - schema
+  - uuid
+
 properties:
 
 

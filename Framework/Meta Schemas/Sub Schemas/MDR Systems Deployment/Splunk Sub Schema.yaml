@@ -4,6 +4,9 @@ required:
   - query
   - scheduling
 
+tide.template.force-required:
+  - schema
+
 properties:
 
   schema:
@@ -11,7 +14,6 @@ properties:
     type: string
     description: Identifier of the schema at its current version 
     const: splunk::2.0
-    tide.template.force-required: True
 
   status: 
     title: Status of the use-case

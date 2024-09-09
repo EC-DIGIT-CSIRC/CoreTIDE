@@ -13,6 +13,11 @@ required:
   - detection
   - metadata
 
+tide.template.force-required:
+  - metadata
+  - schema
+  - uuid
+
 properties:
 
   name: 

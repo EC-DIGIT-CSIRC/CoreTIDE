@@ -3,6 +3,9 @@ required:
   - status
   - query
 
+tide.template.force-required:
+  - schema
+
 properties:
 
   schema:
@@ -10,7 +13,6 @@ properties:
     type: string
     description: Identifier of the schema at its current version 
     const: carbon_black_cloud::2.0
-    tide.template.force-required: True
 
   status: 
     title: Status of the use-case

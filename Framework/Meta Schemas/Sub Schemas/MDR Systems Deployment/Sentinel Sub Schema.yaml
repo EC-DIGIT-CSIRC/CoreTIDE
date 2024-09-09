@@ -4,6 +4,9 @@ required:
   - query
   - scheduling
 
+tide.template.force-required:
+  - schema
+
 if:
   allOf:
     - properties:
