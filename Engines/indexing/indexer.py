@@ -32,7 +32,7 @@ def patch_tide_1_for_staging(LEGACY_UUID_MAPPING, model:dict, model_type:str)->d
         elif "id" in model:
             old_id = model.pop("id")
             if LEGACY_UUID_MAPPING:
-                if model["id"] in LEGACY_UUID_MAPPING:
+                if old_id in LEGACY_UUID_MAPPING:
                     model["metadata"]["uuid"] = LEGACY_UUID_MAPPING[old_id]["uuid"]
                     log("INFO", f"Adding temporary new UUID to {model}", f"{old_id} => {model['metadata']['uuid']}")
 
