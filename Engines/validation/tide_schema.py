@@ -66,7 +66,7 @@ def patch_tide_1_id(model:dict, model_type:str)->dict:
                         f"field: detection.vectors , {old} => {new_uuid}")
                 else:
                     updated_ids.append(old)
-            model["threat"]["actors"] = updated_ids
+            model["detection"]["vectors"] = updated_ids
 
         if old:=model.get("detection_model"):
             if old in LEGACY_UUID_MAPPING:
