@@ -6,6 +6,7 @@ from pathlib import Path
 import sys
 import toml
 import git
+import uuid
 from pprint import pprint
 
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
@@ -13,6 +14,80 @@ sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 from Engines.modules.files import resolve_paths, resolve_configurations
 from Engines.modules.logs import log
 from Engines.templates.tide_indexes import fetch_tide_index_template
+
+def patch_tide_1_for_staging(LEGACY_UUID_MAPPING, model:dict, model_type:str)->dict:
+    """
+    Patch on the fly object in staging with new UUIDs to pass validation.
+    Once merged to main they will be migrated definitely.
+    TODO - Remove before public release, as only concerns existing repositories
+    """
+    if os.getenv("CI_COMMIT_REF_NAME") == "main":
+        log("SKIP", "Not patching for validation, in main")
+        return model
+    
+    log("ONGOING", "Evaluating patching validation requirements")
+    if not model.get("metadata", {}).get("uuid"):
+        if "uuid" in model:
+            model["metadata"]["uuid"] = model["uuid"]
+        elif "id" in model:
+            if LEGACY_UUID_MAPPING:
+                if model["id"] in LEGACY_UUID_MAPPING:
+                    model["metadata"]["uuid"] = LEGACY_UUID_MAPPING[model["id"]]["uuid"]
+                    log("INFO", f"Adding temporary new UUID to {model}", f"{model['id']} => {model['metadata']['uuid']}")
+
+                else:
+                    model["metadata"]["uuid"] = uuid.uuid4()
+                    log("INFO", f"Adding temporary UUID to {model}", f"{model['id']} => {model['metadata']['uuid']}")
+
+            else:
+                model["metadata"]["uuid"] = uuid.uuid4()
+                log("INFO", f"Adding temporary UUID to {model}", model["metadata"]["uuid"])
+
+        else:
+            model["metadata"]["uuid"] = uuid.uuid4()
+            log("INFO", f"Adding temporary UUID to {model}", model["metadata"]["uuid"])
+
+    if not model.get("metadata", {}).get("schema"):
+        schema_identifier = model_type.lower() + "::2.0"
+        model["metadata"]["schema"] = model_type.lower() + "::2.0"
+        log("INFO", "Adding schema identifier", f"{model['name']} => {schema_identifier}")
+
+    
+    if LEGACY_UUID_MAPPING:
+        if old_ids:=model.get("threat", {}).get("actors"):
+            updated_ids = []
+            for old in old_ids:
+                if old in LEGACY_UUID_MAPPING:
+                    new_uuid = LEGACY_UUID_MAPPING[old]["uuid"]
+                    updated_ids.append(new_uuid)
+                    log("INFO",
+                        f"Updated old ids in model {model['name']}",
+                        f"field: threat.vectors , {old} => {new_uuid}")
+                else:
+                    updated_ids.append(old)
+            model["threat"]["actors"] = updated_ids
+
+        if old_ids:=model.get("detection", {}).get("vectors"):
+            updated_ids = []
+            for old in old_ids:
+                if old in LEGACY_UUID_MAPPING:
+                    new_uuid = LEGACY_UUID_MAPPING[old]["uuid"]
+                    updated_ids.append(new_uuid)
+                    log("INFO",
+                        f"Updated old ids in model {model['name']}",
+                        f"field: detection.vectors , {old} => {new_uuid}")
+                else:
+                    updated_ids.append(old)
+            model["detection"]["vectors"] = updated_ids
+
+        if old:=model.get("detection_model"):
+            if old in LEGACY_UUID_MAPPING:
+                new_uuid = LEGACY_UUID_MAPPING[old]["uuid"]
+                log("INFO",
+                    f"Updated old ids in model {model['name']}",
+                    f"field: detection_model , {old} => {new_uuid}")
+
+    return model
 
 
 def indexer(write_index=False) -> dict:
@@ -44,6 +119,17 @@ def indexer(write_index=False) -> dict:
     LOOKUPS_PATH = PATHS["lookups"]
     TIDE_INDEXES_PATH = PATHS["tide_indexes"]
     OUTPUT_PATH = PATHS["index_output"]
+
+
+    # TODO Remove for public release
+    # Makes backwards compatibility measures for OpenTIDE 1.0 down to index level
+    try:
+        LEGACY_UUID_MAPPING = json.load(open(TIDE_INDEXES_PATH / "legacy_uuid_mapping.json"))
+        log("SUCCESS", "Found a legacy ID to UUID Mapping")
+    except:
+        log("SKIP", "Did not find a legacy id to uuid mapping")
+        LEGACY_UUID_MAPPING = None
+        pass
     # Controls whether the index should keep in memory or export to a file
     # In-memory is helpful when index is used to accelerate functions, like
     # for example to enrich deployment tags.
@@ -211,7 +297,7 @@ def indexer(write_index=False) -> dict:
 
                     if "[DEBUG]" not in model:
                         model_body = yaml.safe_load(open(model_path, encoding="utf-8"))
-
+                        model_body = patch_tide_1_for_staging(LEGACY_UUID_MAPPING, model_body, meta_name)
                         #TODO Backward compatibility measure. To remove.
                         identifier = model_body.get("uuid") or model_body.get("metadata",{}).get("uuid")
                         if not identifier:
