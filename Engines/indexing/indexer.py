@@ -25,7 +25,7 @@ def patch_tide_1_for_staging(LEGACY_UUID_MAPPING, model:dict, model_type:str)->d
         log("SKIP", "Not patching for validation, in main")
         return model
     
-    log("ONGOING", "Evaluating patching validation requirements")
+    log("ONGOING", f"Evaluating patching validation requirements for {model['name']}")
     if not model.get("metadata", {}).get("uuid"):
         if "uuid" in model:
             model["metadata"]["uuid"] = model["uuid"]

@@ -17,7 +17,7 @@ MODELS_TYPES = CONFIGURATIONS["global"]["models"]
 
 def run():
 
-    log("TITLE", "tide_object UUIDv4 Validation")
+    log("TITLE", "TIDE Objects UUIDv4 Validation")
     log("INFO", "Validates Object UUIDs against the v4 specification")
 
     error_registry = list()
@@ -34,7 +34,7 @@ def run():
 
             try:
                 UUID(tide_object_uuid, version=4)
-            except ValueError:
+            except:
                 error_registry.append(
                     {"Object Name": tide_object_name, "UUID": tide_object_uuid, "Author": tide_object_author}
                 )
