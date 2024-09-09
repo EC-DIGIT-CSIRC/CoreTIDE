@@ -27,7 +27,7 @@ def run():
         for tide_object in MODELS_INDEX[tide_model]:
             tide_object_data = MODELS_INDEX[tide_model][tide_object]
 
-            tide_object_uuid = tide_object_data["metadata"]["uuid"]
+            tide_object_uuid = tide_object_data.get("uuid") or tide_object_data["metadata"]["uuid"]
             tide_object_name = tide_object_data["name"]
             tide_object_metadata = tide_object_data.get("metadata") or tide_object_data["meta"]
             tide_object_author = tide_object_metadata["author"]
