@@ -61,7 +61,6 @@ properties:
 
   detection_model: 
     title: CoreTIDE Cyber Detection Model
-    type: string
     tide.vocab: cdm
     description: CDM that this detection rule is implementing.
     example: CDM0016

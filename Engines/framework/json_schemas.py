@@ -216,10 +216,7 @@ def gen_lib_schema(
                     # buffer["type"] = "string"
                     buffer["markdownDescription"] = dropdown
 
-                aliases = ""
-                if key_data.get("aliases"):
-                    aliases = "|" + "/".join(key_data["aliases"])
-                tips = (key_data.get("name") or "") + aliases
+                tips = (key_data.get("name") or "") 
                 helper = value + " #" + tips.strip()
                 if not no_wrap:
                     if len(helper) > 60:
@@ -235,7 +232,7 @@ def gen_lib_schema(
                             .replace("used", " ")
                             .replace("Using", " ")
                         )
-                        helper = helper.strip()[:57] + "..."
+
                 # Due to line breaks in vscode
                 copied = buffer.copy()
                 array.append(copied)
