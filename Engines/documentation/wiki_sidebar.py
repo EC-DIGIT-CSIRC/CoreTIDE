@@ -107,19 +107,12 @@ def sidebar_link(model_id):
 
     doc_path = WIKI_MODEL_DOCUMENTATION_FOLDER + "/"+ DOCUMENTATION_CONFIG.object_names[model_type]
 
-    if model_type == "mdr":
-        model_name = model.get("name") or model.get("title").split("$")[0].strip()
-        model_name.replace("_", " ")
-        # status = model.get("status")
-        # backlink_name = "[{}] {}".format(status,model_name)
-        backlink_name = model_name
-        file_link = f"/{doc_path}/{icon} {model_name}"
-
-    else:
-        model_name = model["name"].strip()
-        model_name.replace("_", " ")
-        backlink_name = "[{}] {}".format(model_id, model_name)
-        file_link = f"/{doc_path}/{icon} {backlink_name}"
+    model_name = model.get("name")
+    model_name.replace("_", " ")
+    # status = model.get("status")
+    # backlink_name = "[{}] {}".format(status,model_name)
+    backlink_name = model_name
+    file_link = f"/{doc_path}/{icon} {model_name}"
 
     if GLFM:
         file_link = file_link.replace(" ", "-").replace("_", "-")
