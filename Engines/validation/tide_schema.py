@@ -3,6 +3,7 @@ from tabulate import tabulate
 import os
 import git
 import sys
+import json
 
 
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
@@ -12,6 +13,57 @@ from Engines.modules.logs import log
 
 JSONSCHEMAS_INDEX = DataTide.JsonSchemas.Index
 MODELS_INDEX = DataTide.Models.Index
+
+try:
+    LEGACY_UUID_MAPPING = json.load(open(DataTide.Configurations.Global.Paths.Tide.tide_indexes / "legacy_uuid_mapping.json"))
+except:
+    log("SKIP", "Did not find a legacy id to uuid mapping")
+    LEGACY_UUID_MAPPING = None
+    pass
+
+def patch_tide_1_id(model:dict)->dict:
+    """
+    Patch on the fly object in staging with new UUIDs to pass validation.
+    Once merged to main they will be migrated definitely.
+    TODO - Remove before public release, as only concerns existing repositories
+    """
+    if os.getenv("CI_COMMIT_REF_NAME") == "main":
+        return model
+    if LEGACY_UUID_MAPPING:
+        if old_ids:=model.get("threat", {}).get("actors"):
+            updated_ids = []
+            for old in old_ids:
+                if old in LEGACY_UUID_MAPPING:
+                    new_uuid = LEGACY_UUID_MAPPING[old]["uuid"]
+                    updated_ids.append(new_uuid)
+                    log("INFO",
+                        f"Updated old ids in model {model['name']}",
+                        f"field: threat.vectors , {old} => {new_uuid}")
+                else:
+                    updated_ids.append(old)
+            model["threat"]["actors"] = updated_ids
+
+        if old_ids:=model.get("detection", {}).get("vectors"):
+            updated_ids = []
+            for old in old_ids:
+                if old in LEGACY_UUID_MAPPING:
+                    new_uuid = LEGACY_UUID_MAPPING[old]["uuid"]
+                    updated_ids.append(new_uuid)
+                    log("INFO",
+                        f"Updated old ids in model {model['name']}",
+                        f"field: detection.vectors , {old} => {new_uuid}")
+                else:
+                    updated_ids.append(old)
+            model["threat"]["actors"] = updated_ids
+
+        if old:=model.get("detection_model"):
+            if old in LEGACY_UUID_MAPPING:
+                new_uuid = LEGACY_UUID_MAPPING[old]["uuid"]
+                log("INFO",
+                    f"Updated old ids in model {model['name']}",
+                    f"field: detection_model , {old} => {new_uuid}")
+
+    return model
 
 def run():
 
@@ -33,6 +85,7 @@ def run():
                 count += 1
 
                 body = MODELS_INDEX[schema][model]
+                body = patch_tide_1_id(body)
                 metadata = body.get("metadata") or body["meta"]
                 metadata["created"] = str(metadata["created"])
                 metadata["modified"] = str(metadata["modified"])
