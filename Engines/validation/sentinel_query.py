@@ -25,10 +25,11 @@ from datetime import timedelta
 class SentinelValidateQuery(SentinelEngineInit, ValidateQuery):
 
     def check_query(self, mdr:dict, service:LogsQueryClient):
+        mdr_uuid = mdr.get("uuid") or mdr["metadata"]["uuid"]
         query:str = mdr["configurations"][self.DEPLOYER_IDENTIFIER].get("query")
         if not query:
             os.environ["VALIDATION_ERROR_RAISED"] = "True"
-            log("FATAL", "Missing query in MDR", f"{mdr.get('name')} ({mdr.get('uuid')})")
+            log("FATAL", "Missing query in MDR", f"{mdr.get('name')} ({mdr_uuid})")
             return
 
         query = create_query(mdr) + " | limit 1"
@@ -43,7 +44,7 @@ class SentinelValidateQuery(SentinelEngineInit, ValidateQuery):
             log("DEBUG", "Full error message", str(error))
             try:
                 log("FATAL",
-                    f"The KQL query is invalid for : {mdr['name']} ({mdr['uuid']})",
+                    f"The KQL query is invalid for : {mdr['name']} ({mdr_uuid})",
                     error.error.innererror["innererror"]["message"], #type: ignore
                     f"Review the error and ensure your search can work in the relevant Sentinel workspace ({self.AZURE_SENTINEL_WORKSPACE_NAME})") 
             except:
@@ -69,6 +70,7 @@ class SentinelValidateQuery(SentinelEngineInit, ValidateQuery):
         # Start deployment routine
         for mdr in deployment:
             mdr_data:dict = DataTide.Models.mdr[mdr]
+            mdr_uuid = mdr_data.get("uuid") or mdr_data["metadata"]["uuid"]
 
             # Check if modified MDR contains a platform entry (by safety, but should not happen since
             # the orchestrator will filter for the platform)
@@ -76,7 +78,7 @@ class SentinelValidateQuery(SentinelEngineInit, ValidateQuery):
                 # Connection routine, if not connected yet.
                 log("ONGOING",
                     "Validating KQL Query",
-                    f"{mdr_data['name']} ({mdr_data['uuid']}")
+                    f"{mdr_data['name']} ({mdr_uuid}")
                 self.check_query(mdr_data, service)
             else:
                 log(

@@ -19,11 +19,11 @@ from Engines.modules.tide import DataTide
 class SplunkValidateQuery(SplunkEngineInit, ValidateQuery):
 
     def check_query(self, mdr:dict, service:client.Service):
-        
+        mdr_uuid = mdr.get("uuid") or mdr["metadata"]["uuid"]
         query:str = mdr["configurations"][self.DEPLOYER_IDENTIFIER].get("query")
         if not query:
             os.environ["VALIDATION_ERROR_RAISED"] = "True"
-            log("FATAL", "Missing query in MDR", f"{mdr.get('name')} ({mdr.get('uuid')})")
+            log("FATAL", "Missing query in MDR", f"{mdr.get('name')} ({mdr_uuid})")
             return
 
         query = create_query(mdr)
@@ -45,7 +45,7 @@ class SplunkValidateQuery(SplunkEngineInit, ValidateQuery):
                 log("DEBUG", "Parsed Body", parsing) 
                 for message in parsing["messages"]:
                     log("FATAL",
-                        f"The SPL query is invalid for : {mdr['name']} ({mdr['uuid']})",
+                        f"The SPL query is invalid for : {mdr['name']} ({mdr_uuid})",
                         message.get("text", ""),
                         "Review the error and ensure it can run on the Splunk Search console")
                 os.environ["VALIDATION_ERROR_RAISED"] = "True"
@@ -83,6 +83,7 @@ class SplunkValidateQuery(SplunkEngineInit, ValidateQuery):
         # Start deployment routine
         for mdr in deployment:
             mdr_data:dict = DataTide.Models.mdr[mdr]
+            mdr_uuid = mdr_data.get("uuid") or mdr_data["metadata"]["uuid"]
 
             # Check if modified MDR contains a platform entry (by safety, but should not happen since
             # the orchestrator will filter for the platform)
@@ -90,7 +91,7 @@ class SplunkValidateQuery(SplunkEngineInit, ValidateQuery):
                 # Connection routine, if not connected yet.
                 log("ONGOING",
                     "Validating SPL Query",
-                    f"{mdr_data['name']} ({mdr_data['uuid']}")
+                    f"{mdr_data['name']} ({mdr_uuid}")
                 self.check_query(mdr_data, service)
             else:
                 log(
