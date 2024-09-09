@@ -212,7 +212,8 @@ def indexer(write_index=False) -> dict:
                     if "[DEBUG]" not in model:
                         model_body = yaml.safe_load(open(model_path, encoding="utf-8"))
 
-                        identifier = model_body.get("metadata",{}).get("uuid")
+                        #TODO Backward compatibility measure. To remove.
+                        identifier = model_body.get("uuid") or model_body.get("metadata",{}).get("uuid")
                         if not identifier:
                             log("FATAL", "Missing identifier from model in file", model)
                         else:
