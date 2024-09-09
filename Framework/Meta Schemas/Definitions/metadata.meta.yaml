@@ -3,13 +3,13 @@ type: object
 tide.template.spacer: true
 description: Non technical indicators helping with overall data management
 required:
-  - uuid
+  #- uuid #TODO This is for backward compatibility. Ensure to enable it in the future
+  #- schema #TODO This is for backward compatibility. Ensure to enable it in the future
   - version
   - tlp
   - created
   - modified
   - author
-  #- schema #TODO This is for backward compatibility. Ensure 
 
 properties:
 
@@ -20,6 +20,7 @@ properties:
     description: According to UUIDv4 specification. You can use https://www.uuidgenerator.net/version4 to generate UUIDs.
     example: 323d548d-17ca-46fa-a7c7-de43302456a1
     pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$
+    tide.template.force-required: True
   
   schema:
     title: Schema identifier and version
