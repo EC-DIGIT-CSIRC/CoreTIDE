@@ -15,7 +15,7 @@ from Engines.modules.files import resolve_paths, resolve_configurations
 from Engines.modules.logs import log
 from Engines.templates.tide_indexes import fetch_tide_index_template
 
-def patch_tide_1_for_staging(LEGACY_UUID_MAPPING, model:dict, model_type:str)->dict:
+def micro_patching_tide_1(LEGACY_UUID_MAPPING:dict, model:dict, model_type:str)->dict:
     """
     Dynamic Micro-Patching on the fly object in staging with new UUIDs to pass validation.
     Once merged to main they will be migrated definitely.
@@ -34,19 +34,19 @@ def patch_tide_1_for_staging(LEGACY_UUID_MAPPING, model:dict, model_type:str)->d
             if LEGACY_UUID_MAPPING:
                 if old_id in LEGACY_UUID_MAPPING:
                     model["metadata"]["uuid"] = LEGACY_UUID_MAPPING[old_id]["uuid"]
-                    log("INFO", f"Adding temporary new UUID to {model}", f"{old_id} => {model['metadata']['uuid']}")
+                    log("INFO", f"Adding temporary new UUID to {model['name']}", f"{old_id} => {model['metadata']['uuid']}")
 
                 else:
                     model["metadata"]["uuid"] = str(uuid.uuid4())
-                    log("INFO", f"Adding temporary UUID to {model}", f"{old_id} => {model['metadata']['uuid']}")
+                    log("INFO", f"Adding temporary UUID to {model['name']}", f"{old_id} => {model['metadata']['uuid']}")
                     
             else:
                 model["metadata"]["uuid"] = str(uuid.uuid4())
-                log("INFO", f"Adding temporary UUID to {model}", model["metadata"]["uuid"])
+                log("INFO", f"Adding temporary UUID to {model['name']}", model["metadata"]["uuid"])
 
         else:
             model["metadata"]["uuid"] = str(uuid.uuid4())
-            log("INFO", f"Adding temporary UUID to {model}", model["metadata"]["uuid"])
+            log("INFO", f"Adding temporary UUID to {model['name']}", model["metadata"]["uuid"])
 
     if not model.get("metadata", {}).get("schema"):
         schema_identifier = model_type.lower() + "::2.0"
@@ -298,8 +298,11 @@ def indexer(write_index=False) -> dict:
 
                     if "[DEBUG]" not in model:
                         model_body = yaml.safe_load(open(model_path, encoding="utf-8"))
-                        model_body = patch_tide_1_for_staging(LEGACY_UUID_MAPPING, model_body, meta_name)
+                        
                         #TODO Backward compatibility measure. To remove.
+                        if LEGACY_UUID_MAPPING:
+                            model_body = micro_patching_tide_1(LEGACY_UUID_MAPPING, model_body, meta_name)
+                        
                         identifier = model_body.get("uuid") or model_body.get("metadata",{}).get("uuid")
                         if not identifier:
                             log("FATAL", "Missing identifier from model in file", model)
