@@ -4,6 +4,7 @@ import os
 import git
 import sys
 import json
+import uuid
 
 
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
@@ -21,7 +22,7 @@ except:
     LEGACY_UUID_MAPPING = None
     pass
 
-def patch_tide_1_id(model:dict)->dict:
+def patch_tide_1_id(model:dict, model_type:str)->dict:
     """
     Patch on the fly object in staging with new UUIDs to pass validation.
     Once merged to main they will be migrated definitely.
@@ -29,6 +30,17 @@ def patch_tide_1_id(model:dict)->dict:
     """
     if os.getenv("CI_COMMIT_REF_NAME") == "main":
         return model
+    
+    if not model.get("metadata", {}).get("uuid"):
+        if "uuid" in model:
+            model["metadata"]["uuid"] = model["uuid"]
+        else:
+            model["metadata"]["uuid"] = uuid.uuid4()
+
+    if not model.get("metadata", {}).get("schema"):
+        model["metadata"]["schema"] = model_type.lower() + "::2.0"
+
+    
     if LEGACY_UUID_MAPPING:
         if old_ids:=model.get("threat", {}).get("actors"):
             updated_ids = []
@@ -85,7 +97,7 @@ def run():
                 count += 1
 
                 body = MODELS_INDEX[schema][model]
-                body = patch_tide_1_id(body)
+                body = patch_tide_1_id(body, schema)
                 metadata = body.get("metadata") or body["meta"]
                 metadata["created"] = str(metadata["created"])
                 metadata["modified"] = str(metadata["modified"])
