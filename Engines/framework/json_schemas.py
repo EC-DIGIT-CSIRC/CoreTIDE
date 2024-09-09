@@ -476,10 +476,13 @@ def gen_json_schema(dictionary):
 
                     # When the type is set to string, oneOf allows only one value
                     # to be selected
-                    field_types = dict_foo[field]["type"]
-                    field_types = (
-                        [field_types] if type(field_types) is str() else field_types
-                    )
+                    if "type" in dict_foo[field]:
+                        field_types = dict_foo[field]["type"]
+                        field_types = (
+                            [field_types] if type(field_types) is str() else field_types
+                        )
+                    else:
+                        field_types = None
 
                     temp = {}
                     if VOCAB_GENERATION_ENUM:
@@ -502,7 +505,10 @@ def gen_json_schema(dictionary):
                             scoped=scoped,
                         )
 
-                    if "string" in field_types:
+                    # When no field type is present, assume it's a direct string
+                    if field_types is None:
+                        dictionary[field].update(temp)
+                    elif "string" in field_types:
                         dictionary[field].update(temp)
                     elif "array" in field_types:
                         dictionary[field]["items"] = temp
