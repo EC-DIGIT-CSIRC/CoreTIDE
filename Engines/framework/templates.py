@@ -89,8 +89,9 @@ def definition_handler(entry_point):
 
 def gen_template(metaschema, required):
     body = {}
-    for key in metaschema.keys():
-
+    print(type(metaschema))
+    for key in metaschema:
+        
         if not metaschema[key].get("tide.template.hide"):
 
             if metadef := metaschema[key.replace("#", "")].get("tide.meta.definition"):
@@ -117,7 +118,7 @@ def gen_template(metaschema, required):
 
             else:
                 keyword_type = (
-                    metaschema[key].get("type") or "object"
+                    metaschema[key].get("type") or "string"
                 )  # Assuming object by default to circumvent validations errors
 
                 # If multiple types are accepted, considering only the first one in list for template
