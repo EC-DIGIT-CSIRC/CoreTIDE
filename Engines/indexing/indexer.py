@@ -28,7 +28,7 @@ def micro_patching_tide_1(LEGACY_UUID_MAPPING:dict, model:dict, model_type:str)-
     log("ONGOING", f"Evaluating patching validation requirements for {model['name']}")
     if not model.get("metadata", {}).get("uuid"):
         if "uuid" in model:
-            model["metadata"]["uuid"] = model["uuid"]
+            model["metadata"]["uuid"] = model.pop("uuid")
         elif "id" in model:
             old_id = model.pop("id")
             if LEGACY_UUID_MAPPING:
