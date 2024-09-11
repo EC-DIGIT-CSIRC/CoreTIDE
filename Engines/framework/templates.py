@@ -89,7 +89,6 @@ def definition_handler(entry_point):
 
 def gen_template(metaschema, required):
     body = {}
-    print(type(metaschema))
     for key in metaschema:
         
         if not metaschema[key].get("tide.template.hide"):

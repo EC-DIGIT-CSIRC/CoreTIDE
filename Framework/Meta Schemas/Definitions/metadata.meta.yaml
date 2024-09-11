@@ -3,17 +3,13 @@ type: object
 tide.template.spacer: true
 description: Non technical indicators helping with overall data management
 required:
-  #- uuid #TODO This is for backward compatibility. Ensure to enable it in the future
-  #- schema #TODO This is for backward compatibility. Ensure to enable it in the future
+  - uuid
+  - schema
   - version
   - tlp
   - created
   - modified
   - author
-
-tide.template.force-required:
-  - uuid
-  - schema
   
 properties:
 

@@ -15,8 +15,6 @@ required:
 
 tide.template.force-required:
   - metadata
-  - schema
-  - uuid
 
 anyOf:
   - required:
@@ -31,14 +29,6 @@ properties:
     type: string
     description: Verbose, human readable name for the detection rule
     example: New Abnormal Credentials added to Azure AD
-
-  uuid:
-    title: LEGACY UUID - DO NOT USE
-    type: string
-    description: Legacy location for UUID used for backward compatibility. For all new object, use new location under metadata.
-    pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$
-    tide.meta.deprecation: Use UUID under metadata instead
-    tide.template.hide: True
 
   references:
     tide.meta.definition: true
