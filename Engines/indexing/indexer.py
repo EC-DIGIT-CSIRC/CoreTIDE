@@ -29,6 +29,7 @@ def micro_patching_tide_1(LEGACY_UUID_MAPPING:dict, model:dict, model_type:str)-
     if not model.get("metadata", {}).get("uuid"):
         if "uuid" in model:
             model["metadata"]["uuid"] = model.pop("uuid")
+            log("INFO", f"Relocating UUID in {model['name']} to new location")
         elif "id" in model:
             old_id = model.pop("id")
             if LEGACY_UUID_MAPPING:
