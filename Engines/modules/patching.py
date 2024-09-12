@@ -10,7 +10,6 @@ sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.modules.files import resolve_paths
 from Engines.modules.logs import log
-from Engines.modules.deployment import DeploymentPlans
 
 class Tide2Patching:
     """
@@ -37,7 +36,7 @@ class Tide2Patching:
         LEGACY_UUID_MAPPING = self.LEGACY_UUID_MAPPING
         
         if os.getenv("CI_COMMIT_REF_NAME") == "main":
-            if os.getenv("DEPLOYMENT_PLAN") not in DeploymentPlans:
+            if os.getenv("DEPLOYMENT_PLAN") not in ["PRODUCTION", "STAGING"]:
                 log("SKIP", "Not patching for validation, in main")
                 return model
         
