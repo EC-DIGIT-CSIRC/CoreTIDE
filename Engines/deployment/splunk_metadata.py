@@ -54,7 +54,6 @@ class SplunkMetadataDeploy(SplunkEngineInit, DeployMetadata):
             body = DataTide.Models.mdr[mdr]
             mdr_uuid = body.get("uuid") or body["metadata"]["uuid"]
             log("ONGOING", "Generating Lookup entry", body["name"])
-            log("FATAL", str(body))
             
             techniques = techniques_resolver(mdr_uuid)
             if techniques:

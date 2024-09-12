@@ -103,5 +103,6 @@ class Tide2Patching:
                     log("INFO",
                         f"Updated old ids in model {model['name']}",
                         f"field: detection_model , {old} => {new_uuid}")
+                    model["detection_model"] = new_uuid
 
         return model
