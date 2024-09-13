@@ -44,6 +44,11 @@ for system in deployment_list:
         "Validating the query in the MDR against the system"
     )
 
+    if system == "carbon_black_cloud":
+        log("SKIP", "Skipping CBC Query validation",
+            "Under Maintenance, API returns previously unseen 401 errors")
+        continue
+
     if system in DeployTide.query_validation:
         DeployTide.query_validation[system].validate(deployment=deployment_list[system])
     else:
