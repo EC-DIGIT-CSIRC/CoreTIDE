@@ -34,7 +34,7 @@
     - rm -rf $TIDE_CORE_REPO
     - git add -A
     - if ! git diff-index --quiet HEAD; then
-    -   git pull origin/$CI_DEFAULT_BRANCH
+    -   git pull origin $CI_DEFAULT_BRANCH
     -   git commit -m "[CoreTIDE] MDR Status Promotion $CI_COMMIT_MESSAGE"
     -   git push $TIDE_REPO_ACCESS HEAD:$CI_COMMIT_REF_NAME
     - fi
