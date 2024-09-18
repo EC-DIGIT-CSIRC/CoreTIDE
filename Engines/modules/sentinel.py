@@ -99,7 +99,7 @@ def iso_duration_timedelta(duration: str) -> timedelta:
     return delta
 
 
-def create_query(data: dict) -> str:
+def build_query(data: dict) -> str:
     """
     Modifies KQL Query to add customizable capabilities
     """
@@ -110,3 +110,14 @@ def create_query(data: dict) -> str:
     extend_uuid = f"| extend MDR_UUID = '{uuid}' "
 
     return kql + extend_uuid
+
+def build_description(data: dict) -> str:
+    """
+    Modifies MDR Description to add customizable capabilities
+    """
+    # Backwards compatible with 1.0 data model
+    uuid = data.get("uuid") or data["metadata"]["uuid"]
+    description = data["description"]
+    uuid_header = f"uuid::{uuid}::description::"
+
+    return uuid_header + description

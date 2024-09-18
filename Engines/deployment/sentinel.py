@@ -13,7 +13,8 @@ sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 from Engines.modules.sentinel import (
     SentinelEngineInit,
     connect_sentinel,
-    create_query,
+    build_query,
+    build_description
     iso_duration_timedelta,
 )
 from Engines.modules.framework import get_vocab_entry, techniques_resolver
@@ -32,7 +33,7 @@ class SentinelDeploy(SentinelEngineInit):
         mdr_uuid = data.get("uuid") or data["metadata"]["uuid"]
         rule = client.alert_rules.models.ScheduledAlertRule()
         rule.name = data["name"]
-        rule.description = data["description"]
+        rule.description = build_description(data)
         mdr_sentinel_raw = data["configurations"]["sentinel"]
         status = mdr_sentinel_raw["status"]
 
