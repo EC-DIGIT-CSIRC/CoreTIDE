@@ -14,7 +14,7 @@ from Engines.modules.sentinel import (
     SentinelEngineInit,
     connect_sentinel,
     build_query,
-    build_description
+    build_description,
     iso_duration_timedelta,
 )
 from Engines.modules.framework import get_vocab_entry, techniques_resolver
