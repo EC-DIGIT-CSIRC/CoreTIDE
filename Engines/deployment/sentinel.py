@@ -174,7 +174,7 @@ class SentinelDeploy(SentinelEngineInit):
                 entity_mappings.append(mappings)
         rule.entity_mappings = entity_mappings
         # Add automated query extensions
-        rule.query = create_query(data)
+        rule.query = build_query(data)
 
         # Assign severity, Capping at high which is the maximum in Sentinel
         severity = data["response"]["alert_severity"]
