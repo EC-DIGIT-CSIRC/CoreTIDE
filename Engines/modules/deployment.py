@@ -11,7 +11,7 @@ from dataclasses import dataclass
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.modules.logs import log
-from Engines.modules.tide import DataTide
+from Engines.modules.tide import DataTide, HelperTide
 from Engines.modules.debug import DebugEnvironment
 
 from git.repo import Repo
@@ -148,45 +148,6 @@ def make_deploy_plan(
 
     return deploy_mdr
 
-def fetch_config_envvar(config_secrets: dict[str,str]) -> dict[str, Any]:
-    # Replace placeholder variables with environment
-
-    #Allows to print all errors at once before raising exception
-    missing_envvar_error = False
-    for sec in config_secrets.copy():
-        if not config_secrets[sec]:
-            log("SKIP", "Did not found an entry for", sec,
-                "If there are deployment issue, review if it is relevant to configure")
-            continue
-        if type(config_secrets[sec]) == str:
-            if config_secrets[sec].startswith("$"):
-                if config_secrets[sec].removeprefix("$") in os.environ:
-                    env_variable = str(config_secrets.pop(sec)).removeprefix("$")
-                    config_secrets[sec] = os.environ.get(env_variable, "")
-                    log("SUCCESS", "Fetched environment secret", env_variable)
-                else:
-                    if DebugEnvironment.ENABLED:
-                        log("SKIP", 
-                            "Could not find expected environment variable",
-                            config_secrets[sec],
-                            "Debug Mode identified, continuing - remember that this may break some deployments")
-                    else:
-                        log(
-                            "FATAL",
-                            "Could not find expected environment variable",
-                            config_secrets[sec],
-                            "Review configuration file and execution environment",
-                        )
-                        missing_envvar_error = True
-
-    if missing_envvar_error:
-        log("FATAL",
-            "Some environment variable specified in configuration files were not found",
-            "Review the previous errors to find which ones were missing",
-            "Check your CI settings to ensure these environment variables are properly injected")
-        raise KeyError
-
-    return config_secrets
 
 
 def modified_mdr_files(plan: DeploymentPlans)->list[Path]:
@@ -338,7 +299,7 @@ class Proxy:
         else:
             log("ONGOING", "Setting environment proxy according to CI variables")
             PROXY_CONFIG = DataTide.Configurations.Deployment.proxy
-            PROXY_CONFIG = fetch_config_envvar(PROXY_CONFIG)
+            PROXY_CONFIG = HelperTide.fetch_config_envvar(PROXY_CONFIG)
             proxy_user = PROXY_CONFIG["proxy_user"]
             proxy_pass = PROXY_CONFIG["proxy_password"]
             proxy_host = PROXY_CONFIG["proxy_host"]

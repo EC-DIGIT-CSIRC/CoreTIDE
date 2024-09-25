@@ -263,7 +263,7 @@ def make_spaces(template_path, metaschema):
         )
         key_type = get_value_metaschema(key.replace("#", ""), metaschema, "type")
         if key_type == "object" or spacer:
-            if spacer is not False:
+            if spacer != False:
                 spaced.append("\n")
 
         spaced.append(line)

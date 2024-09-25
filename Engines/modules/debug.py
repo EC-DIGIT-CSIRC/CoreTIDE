@@ -6,7 +6,7 @@ from importlib import import_module
 import git 
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
-from Engines.modules.tide import DataTide
+from Engines.modules.tide import DataTide, HelperTide
 
 @dataclass
 class DebugEnvironment:
@@ -15,8 +15,7 @@ class DebugEnvironment:
     debugging to facilitate local development
     """
     ENABLED = False
-    if (os.environ.get("DEBUG") == "True"
-        or os.environ.get("TERM_PROGRAM") == "vscode"):
+    if HelperTide.is_debug():
         print("[INFO] DEBUG Mode is activated")
         try:
             import_module("Engines.modules.local_secrets")

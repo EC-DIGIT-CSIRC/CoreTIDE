@@ -10,10 +10,10 @@ from azure.identity import ClientSecretCredential
 
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
-from Engines.modules.tide import DataTide
+from Engines.modules.tide import DataTide, HelperTide
 from Engines.modules.logs import log
 from Engines.modules.debug import DebugEnvironment
-from Engines.modules.deployment import fetch_config_envvar, Proxy
+from Engines.modules.deployment import Proxy
 
 class SentinelEngineInit(ABC):
 
@@ -24,8 +24,8 @@ class SentinelEngineInit(ABC):
 
         SENTINEL_CONFIG = DataTide.Configurations.Systems.Sentinel
         self.DEFAULT_CONFIG = SENTINEL_CONFIG.defaults
-        SENTINEL_SETUP = fetch_config_envvar(SENTINEL_CONFIG.setup)
-        SENTINEL_SECRETS = fetch_config_envvar(SENTINEL_CONFIG.secrets)
+        SENTINEL_SETUP = HelperTide.fetch_config_envvar(SENTINEL_CONFIG.setup)
+        SENTINEL_SECRETS = HelperTide.fetch_config_envvar(SENTINEL_CONFIG.secrets)
 
         if SENTINEL_SETUP["proxy"]:
             Proxy.set_proxy()

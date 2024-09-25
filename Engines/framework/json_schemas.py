@@ -72,7 +72,22 @@ FOLDABLE = """
 </details>
 """.strip()
 
-
+def fetch_config_parameter_list(dot_path:str)->list:
+    config_index = DataTide.Configurations.Index
+    config_path = dot_path.split(".")
+    key = config_path[0]
+    while key != config_path[-1]:
+        if key in config_index:
+            config_index = config_index[key]
+            key = config_path[config_path.index(key) + 1]
+        else:
+            raise ValueError(f"Key : {key} could not be found in path {dot_path}")
+    
+    if type(config_index[key]) is list:
+        return config_index[key]
+    else:
+        raise ValueError(f"Config path {dot_path} must be a valid path to a list parameter")
+    
 def stage_documentation(field: str, stages: str | list) -> str:
 
     vocab_stages = VOCAB_INDEX[field]["metadata"].get("stages")
@@ -457,6 +472,14 @@ def gen_json_schema(dictionary):
                 if "recomposition" in dict_foo[field].keys():
                     temp = recomposition_handler(dict_foo[field]["recomposition"])
                     dictionary[field]["properties"] = temp
+
+                # Handles the case when a list of values has to be fetched from
+                # the configuration files.
+                if dict_foo[field].get("tide.config.parameter-list"):
+                    values_list = fetch_config_parameter_list(dict_foo[field]["tide.config.parameter-list"])
+                    dictionary[field]["items"] = {}
+                    dictionary[field]["items"]["enum"] = values_list
+                    dictionary[field]["items"]["uniqueItems"] = True
 
                 if dict_foo[field].get("tide.vocab"):
                     if type(dict_foo[field]["tide.vocab"]) is str:

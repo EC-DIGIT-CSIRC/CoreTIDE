@@ -3,7 +3,8 @@ import git
 import sys
 from pathlib import Path
 import json
-from typing import Literal, Dict, Tuple
+from typing import Literal, Dict, Tuple, Never, overload, Any
+from enum import Enum, auto
 from functools import cache
 
 from dataclasses import dataclass
@@ -14,6 +15,117 @@ from Engines.indexing.indexer import indexer
 from Engines.modules.logs import log
 
 ROOT = Path(str(git.Repo(".", search_parent_directories=True).working_dir))
+
+class PlatformsEnum(Enum):
+    DEFENDER_FOR_ENDPOINT = auto()
+    CARBON_BLACK_CLOUD = auto()
+    SPLUNK = auto()
+    SENTINEL = auto()
+
+# Configuration Models. Used to facilitate type hinting
+@dataclass
+class PlatformConfigModel:
+    enabled: bool
+    identifier: str
+    name: str
+    subschema: str
+    description: str
+    tenants: list[str]
+    tags: list[str]
+
+
+@dataclass
+class ModifiersConditionsModel:
+    status: None | str = None
+    tags: list[Never] | list[str] | None = None
+    tenants: list[Never] | list[str] | None = None
+    description: str | None = None
+    stop_further_matches: bool = False
+
+@dataclass
+class ModifiersConfigModel:
+    conditions: ModifiersConditionsModel
+    modifications: dict
+
+@dataclass
+class TenantsSetupModel:
+    proxy: bool
+    ssl: bool
+
+@dataclass
+class TenantsDefenderForEndpointSetupModel(TenantsSetupModel):
+    tenant_id: str
+    client_id: str
+    secret_id: str
+    client_secret: str
+
+@dataclass 
+class TenantsConfigModel:
+    name: str
+    description: str
+    deployment: Literal["ALWAYS", "STAGING", "PRODUCTION"]
+    setup: TenantsSetupModel
+
+@dataclass
+class TenantsDefenderForEndpointConfigModel(TenantsConfigModel):
+    setup:TenantsDefenderForEndpointSetupModel
+
+class HelperTide:
+    @staticmethod
+    def is_debug()->bool:
+        """
+        Provides an interface to discover whether the current execution
+        context is considered to be in a debugging scenario.
+        """
+        if (
+            os.environ.get("DEBUG") == True
+            or os.environ.get("TERM_PROGRAM") == "vscode"
+        ):
+            return True
+        else:
+            return False
+
+    @staticmethod
+    def fetch_config_envvar(config_secrets: dict[str,str]) -> dict[str, Any]:
+        # Replace placeholder variables with environment
+
+        #Allows to print all errors at once before raising exception
+        missing_envvar_error = False
+        for sec in config_secrets.copy():
+            if not config_secrets[sec]:
+                log("SKIP", "Did not found an entry for", sec,
+                    "If there are deployment issue, review if it is relevant to configure")
+                continue
+            if type(config_secrets[sec]) == str:
+                if config_secrets[sec].startswith("$"):
+                    if config_secrets[sec].removeprefix("$") in os.environ:
+                        env_variable = str(config_secrets.pop(sec)).removeprefix("$")
+                        config_secrets[sec] = os.environ.get(env_variable, "")
+                        log("SUCCESS", "Fetched environment secret", env_variable)
+                    else:
+                        if HelperTide.is_debug():
+                            log("SKIP", 
+                                "Could not find expected environment variable",
+                                config_secrets[sec],
+                                "Debug Mode identified, continuing - remember that this may break some deployments")
+                        else:
+                            log(
+                                "FATAL",
+                                "Could not find expected environment variable",
+                                config_secrets[sec],
+                                "Review configuration file and execution environment",
+                            )
+                            missing_envvar_error = True
+
+        if missing_envvar_error:
+            log("FATAL",
+                "Some environment variable specified in configuration files were not found",
+                "Review the previous errors to find which ones were missing",
+                "Check your CI settings to ensure these environment variables are properly injected")
+            raise KeyError
+
+        return config_secrets
+
 
 class IndexTide:
     """
@@ -167,18 +279,66 @@ class IndexTide:
             return IndexTide.load()["paths"]["tide"]
 
     @staticmethod
-    def is_debug()->bool:
-        """
-        Provides an interface to discover whether the current execution
-        context is considered to be in a debugging scenario.
-        """
-        if (
-            os.environ.get("DEBUG") == True
-            or os.environ.get("TERM_PROGRAM") == "vscode"
-        ):
-            return True
-        else:
-            return False
+    def load_platform_config(platform_config:dict, platform:PlatformsEnum)->PlatformConfigModel:
+        if not platform_config:
+            log("FATAL", f"Could not find any platform configuration for platform f{platform.name}",
+            "Ensure that the platform configuration section is present")
+            raise NotImplementedError("Missing Configuration Segment")
+
+        return PlatformConfigModel(**platform_config)
+    
+    @staticmethod
+    def load_modifiers_config(modifiers_config:list[dict])->list[ModifiersConfigModel] | list[Never]:
+        if not modifiers_config:
+            return []
+        
+        modifiers = []
+        for modifier in modifiers_config:
+            if ("conditions" not in modifiers) or ("modification" not in modifiers):
+                log("FATAL", "Could not load the modifier configuration, does not contain 'conditions' or 'modifications key'",
+                    str(modifier))
+                continue
+
+            conditions = ModifiersConditionsModel(**modifier["conditions"])
+            modifications:dict = modifier["modifications"]
+            
+            modifiers.append(ModifiersConfigModel(conditions, modifications))
+        
+        return modifiers
+
+    @overload
+    @staticmethod
+    def load_tenants_config(tenants_config:list[dict], platform:Literal[PlatformsEnum.DEFENDER_FOR_ENDPOINT])->list[TenantsDefenderForEndpointConfigModel]:
+        ...
+    @overload
+    @staticmethod
+    def load_tenants_config(tenants_config:list[dict], platform:Literal[PlatformsEnum.DEFENDER_FOR_ENDPOINT])->list[TenantsDefenderForEndpointConfigModel]:
+        ...
+    @staticmethod
+    def load_tenants_config(tenants_config:list[dict], platform:PlatformsEnum):
+        if not tenants_config:
+            log("FATAL", f"Could not find any tenant information for platform f{platform.name}",
+                "Ensure that at least one tenant is present in the platform configuration TOML file")
+            raise NotImplementedError("Missing Configuration Segment")
+        tenants = []
+        for tenant in tenants_config:
+            if "setup" not in tenant:
+                log("FATAL", f"Could not find a tenant setup configuration for platform {platform.name}",
+                    "Ensure that the setup section is correctly entered in platform configuration TOML file")
+                print(str(tenant))
+                raise NotImplementedError("Missing Configuration Segment")
+
+            match platform:
+                case PlatformsEnum.DEFENDER_FOR_ENDPOINT:
+                    setup_with_secrets = HelperTide.fetch_config_envvar(tenant.pop("setup"))
+                    setup = TenantsDefenderForEndpointSetupModel(**setup_with_secrets)
+
+                case _:
+                    raise NotImplementedError(f"Platform {platform.name} is not recognized")
+
+            tenants.append(TenantsConfigModel(**tenant, setup=setup))
+
+        return tenants
 
 
 class DataTide:
@@ -303,7 +463,7 @@ class DataTide:
     @dataclass(frozen=True)
     class Configurations:
         Index = dict(IndexTide.load()["configurations"])
-        DEBUG = IndexTide.is_debug()
+        DEBUG = HelperTide.is_debug()
         """Discovers whether the current execution context is considered
         to be a debugging one"""
         
@@ -402,6 +562,17 @@ class DataTide:
                 setup = dict(Index["setup"])
                 secrets = dict(Index["secrets"])
                 validation = dict(Index["validation"])
+
+            @dataclass(frozen=True)
+            class DefenderForEndpoint:
+                Index = dict(
+                    IndexTide.load()["configurations"]["systems"]["defender_for_endpoint"]
+                )
+                platform = IndexTide.load_platform_config(dict(Index["platform"]), PlatformsEnum.DEFENDER_FOR_ENDPOINT)
+                modifiers = IndexTide.load_modifiers_config(Index["modifiers"])
+                tenants = IndexTide.load_tenants_config(Index["tenants"], PlatformsEnum.DEFENDER_FOR_ENDPOINT)
+
+
 
         @dataclass(frozen=True)
         class Documentation:

@@ -15,8 +15,8 @@ sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.modules.logs import log
 from Engines.modules.debug import DebugEnvironment
-from Engines.modules.tide import DataTide
-from Engines.modules.deployment import fetch_config_envvar, Proxy
+from Engines.modules.tide import DataTide, HelperTide
+from Engines.modules.deployment import Proxy
 
 class SplunkEngineInit(ABC):
     """
@@ -29,8 +29,8 @@ class SplunkEngineInit(ABC):
         self.DEBUG_STEP = True if self.DEBUG else False
 
         SPLUNK_CONFIG = DataTide.Configurations.Systems.Splunk
-        SPLUNK_SETUP = fetch_config_envvar(SPLUNK_CONFIG.setup)
-        SPLUNK_SECRETS = fetch_config_envvar(SPLUNK_CONFIG.secrets)
+        SPLUNK_SETUP = HelperTide.fetch_config_envvar(SPLUNK_CONFIG.setup)
+        SPLUNK_SECRETS = HelperTide.fetch_config_envvar(SPLUNK_CONFIG.secrets)
         
         self.DEFAULT_CONFIG = SPLUNK_CONFIG.defaults
         self.DEPLOYER_IDENTIFIER = "splunk"
