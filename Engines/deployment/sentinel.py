@@ -33,7 +33,6 @@ class SentinelDeploy(SentinelEngineInit):
         mdr_uuid = data.get("uuid") or data["metadata"]["uuid"]
         rule = client.alert_rules.models.ScheduledAlertRule()
         rule.name = data["name"]
-        rule.description = build_description(data)
         mdr_sentinel_raw = data["configurations"]["sentinel"]
         status = mdr_sentinel_raw["status"]
 
@@ -91,9 +90,9 @@ class SentinelDeploy(SentinelEngineInit):
 
         details_overrides = client.alert_rules.models.AlertDetailsOverride()
         details_overrides.alert_display_name_format = mdr_sentinel.get("alert.title")
-        details_overrides.alert_description_format = mdr_sentinel.get(
+        details_overrides.alert_description_format = build_description(data, mdr_sentinel.get(
             "alert.description"
-        )
+        ))
         dynamic_properties = mdr_sentinel.get("alert.dynamic_properties")
         if dynamic_properties:
             alert_dynamic_properties = []
@@ -184,7 +183,7 @@ class SentinelDeploy(SentinelEngineInit):
 
         # Human readable name and description on the console
         rule.display_name = data["name"]
-        rule.description = data["description"]
+        rule.description = build_description(data)
 
         # Auto-enrich with techniques resolver
         techniques = techniques_resolver(mdr_uuid)
