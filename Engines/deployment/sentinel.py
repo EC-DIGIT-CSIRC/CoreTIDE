@@ -90,7 +90,7 @@ class SentinelDeploy(SentinelEngineInit):
 
         details_overrides = client.alert_rules.models.AlertDetailsOverride()
         details_overrides.alert_display_name_format = mdr_sentinel.get("alert.title")
-        if alert_description:=mdr_sentinel.get("alert.description")
+        if alert_description:=mdr_sentinel.get("alert.description"):
             details_overrides.alert_description_format = build_description(data, alert_description)
         dynamic_properties = mdr_sentinel.get("alert.dynamic_properties")
         if dynamic_properties:
