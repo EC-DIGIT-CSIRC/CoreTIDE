@@ -9,8 +9,41 @@ stages:
 
 include: 
   - local: '/Pipelines/Gitlab/modules/reporting.yml'
+    rules:
+      - if: $TIDE_CORE_SETUP == "LOCAL"
   - local: '/Pipelines/Gitlab/modules/mutation.yml'
+    rules:
+      - if: $TIDE_CORE_SETUP == "LOCAL"
   - local: '/Pipelines/Gitlab/modules/validation.yml'
+    rules:
+      - if: $TIDE_CORE_SETUP == "LOCAL"
   - local: '/Pipelines/Gitlab/modules/documentation.yml'
+    rules:
+      - if: $TIDE_CORE_SETUP == "LOCAL"
   - local: '/Pipelines/Gitlab/modules/framework.yml'
+    rules:
+      - if: $TIDE_CORE_SETUP == "LOCAL"
   - local: '/Pipelines/Gitlab/modules/deployment.yml'
+    rules:
+      - if: $TIDE_CORE_SETUP == "LOCAL"
+  - remote: 'https://code.europa.eu/ec-digit-s2/opentide/coretide/-/raw/core/Pipelines/Gitlab/modules/reporting.yml'
+    rules:
+      - if: $TIDE_CORE_SETUP == "REMOTE"
+  - remote: 'https://code.europa.eu/ec-digit-s2/opentide/coretide/-/raw/core/Pipelines/Gitlab/modules/mutation.yml'
+    rules:
+      - if: $TIDE_CORE_SETUP == "REMOTE"
+  - remote: 'https://code.europa.eu/ec-digit-s2/opentide/coretide/-/raw/core/Pipelines/Gitlab/modules/validation.yml'
+    rules:
+      - if: $TIDE_CORE_SETUP == "REMOTE"
+  - remote: 'https://code.europa.eu/ec-digit-s2/opentide/coretide/-/raw/core/Pipelines/Gitlab/modules/documentation.yml'
+    rules:
+      - if: $TIDE_CORE_SETUP == "REMOTE"
+  - remote: 'https://code.europa.eu/ec-digit-s2/opentide/coretide/-/raw/core/Pipelines/Gitlab/modules/framework.yml'
+    rules:
+      - if: $TIDE_CORE_SETUP == "REMOTE"
+  - remote: 'https://code.europa.eu/ec-digit-s2/opentide/coretide/-/raw/core/Pipelines/Gitlab/modules/deployment.yml'
+    rules:
+      - if: $TIDE_CORE_SETUP == "REMOTE"
+  - remote: 'https://code.europa.eu/ec-digit-s2/opentide/coretide/-/raw/core/Pipelines/Gitlab/tide.yml'
+    rules:
+      - if: $TIDE_CORE_SETUP == "REMOTE"
