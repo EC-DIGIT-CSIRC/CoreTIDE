@@ -384,19 +384,24 @@ def recomposition_handler(entry_point):
     # Generate a list of pivots
     for entry in recompositions:
         data = recompositions[entry]
-        if data["tide"]["enabled"] == True:
+        enabled = False
 
+        if data.get("tide"):
+            config_keyword = "tide"
+        else:
+            config_keyword = "platform"
+
+        if data[config_keyword]["enabled"] == True:
             # recomp_entry = dict()
             recomp_identifier = entry
             recomposition[recomp_identifier] = dict()
-            recomposition[recomp_identifier]["title"] = data["tide"]["name"]
-            recomposition[recomp_identifier]["description"] = data["tide"][
+            recomposition[recomp_identifier]["title"] = data[config_keyword]["name"]
+            recomposition[recomp_identifier]["description"] = data[config_keyword][
                 "description"
             ]
             recomposition[recomp_identifier]["type"] = "object"
 
-            recomp_source = data["tide"]["subschema"] + ".yaml"
-
+            recomp_source = data[config_keyword]["subschema"] + ".yaml"
             recomp_source_path = SUBSCHEMAS_PATH / subschema_folder / recomp_source
             recomp_data = yaml.safe_load(open(recomp_source_path, encoding="utf-8"))
             recomposition[recomp_identifier].update(recomp_data)

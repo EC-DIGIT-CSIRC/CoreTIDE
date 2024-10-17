@@ -39,7 +39,10 @@ class SplunkEngineInit(ABC):
         if self.DEBUG:
             self.SSL_ENABLED = DebugEnvironment.SSL_ENABLED
         self.SPLUNK_URL = SPLUNK_SETUP["url"]
-        self.SPLUNK_PORT = int(SPLUNK_SETUP["port"])
+        try:
+            self.SPLUNK_PORT = int(SPLUNK_SETUP["port"])
+        except:
+            self.SPLUNK_PORT = SPLUNK_SETUP["port"]
         self.SPLUNK_APP = SPLUNK_SETUP["app"]
         self.SPLUNK_TOKEN = SPLUNK_SECRETS["token"]
 

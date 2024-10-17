@@ -5,7 +5,7 @@ import traceback
 
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
-from Engines.modules.deployment import make_deploy_plan, DeploymentPlans
+from Engines.modules.deployment import make_deploy_plan, DeploymentStrategy
 from Engines.modules.logs import log, ANSI, coretide_intro
 from Engines.modules.plugins import DeployTide
 from Engines.modules.tide import DataTide
@@ -23,7 +23,7 @@ torrent = rf"""
 {ANSI.Formatting.STOP}
 """
 
-DEPLOYMENT_PLAN = DeploymentPlans.load_from_environment()
+DEPLOYMENT_PLAN = DeploymentStrategy.load_from_environment()
 
 # Refetches the deployment plan, so it can read the MDR after modification
 # and assess the correct latest status

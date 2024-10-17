@@ -1,0 +1,33 @@
+[platform]
+enabled = true
+identifier = "defender_for_endpoint"
+name = "Microsoft Defender for Endpoint"
+subschema = "MDE EDR"
+description = """Defender for Endpoint is a comprehensive, cloud-native endpoint
+security solution that delivers visibility and AI-powered cyberthreat protection
+to help stop cyberattacks across Windows, macOS, Linux, Android, iOS, and IoT devices.
+"""
+tenants = ["PANDEV", "PANPROD"]  #List all target platform tenants here, will be picked up by MDR Schema.
+flags = ["Detection Rule", "Supporting", "Signal Risk Contributor"]
+device_groups = ["All Windows", "Mobile Workstations", "MacOS"]
+
+[[modifiers]]
+[modifiers.conditions] #All conditions within the block are AND
+status = ["IMPROVEMENT", "STAGING"] # Conditions within the list are OR
+tenants = ["PANDEV"]
+description = "Qualified rules in prod tenant should not collect investigation package"
+[modifiers.modifications]
+actions = {}
+#"function::prefix".name = "TEST"
+
+[[tenants]]
+name = "PANDEV"
+description = "Development Environment"
+deployment = "ALWAYS" #STAGING, PRODUCTION, MANUAL (only when defined in MDR) or ALWAYS
+[tenants.setup]
+proxy = true
+ssl = false
+tenant_id = "$MDE_TENANT_ID"
+client_id = "$MDE_CLIENT_ID"
+client_secret = "$MDE_CLIENT_SECRET"
+secret_id = "$MDE_SECRET_ID"

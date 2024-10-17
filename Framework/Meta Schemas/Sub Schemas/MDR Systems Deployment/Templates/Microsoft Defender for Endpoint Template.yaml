@@ -6,6 +6,9 @@
   #tenants:
     #-
   
+  #flags:
+    #-
+  
   #scheduling: 
   
   alert:
@@ -31,7 +34,7 @@
       #restrict_app_execution: true
   
     #files:
-      #allow/block:
+      #allow_block:
         #action: 
         #column: 
         #groups:

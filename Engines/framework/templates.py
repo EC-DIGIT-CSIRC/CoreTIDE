@@ -133,8 +133,13 @@ def gen_template(metaschema, required):
                         recomp_entries = dict()
                         for entry in CONFIG_INDEX[recomp_cat]:
                             recomp_entry = CONFIG_INDEX[recomp_cat][entry]
-                            if recomp_entry["tide"]["enabled"] == True:
-                                recomp_entries[f"#{entry}"] = "blank"
+                            try:
+                                if recomp_entry["tide"]["enabled"] == True:
+                                    recomp_entries[f"#{entry}"] = "blank"
+                            except:
+                                if recomp_entry["platform"]["enabled"] == True:
+                                    recomp_entries[f"#{entry}"] = "blank"
+
                         body[key] = recomp_entries
 
                     else:
@@ -327,8 +332,19 @@ def run():
         subschema_type_folder = RECOMPOSITION[recomp]
         for entry in CONFIG_INDEX[recomp]:
             recomp_entry = CONFIG_INDEX[recomp][entry]
-            if recomp_entry["tide"]["enabled"] == True:
-                subschema_name = recomp_entry["tide"]["name"]
+            enabled = False
+            try:
+                if recomp_entry["tide"]["enabled"] == True:
+                    enabled = True
+            except:
+                if recomp_entry["platform"]["enabled"] == True:
+                    enabled = True
+
+            if enabled:
+                try:
+                    subschema_name = recomp_entry["tide"]["name"]
+                except:
+                    subschema_name = recomp_entry["platform"]["name"]
 
                 subchema_template_name = f"{subschema_name} Template.yaml"
                 subschema_template_path = (

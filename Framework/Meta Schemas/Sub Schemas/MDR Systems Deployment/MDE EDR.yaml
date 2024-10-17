@@ -1,6 +1,7 @@
 required: 
   #- schema #To be enabled at a later date. Must be part of the public release
   - status
+  - scheduling
   - query
   - alert
 
@@ -31,14 +32,21 @@ properties:
       type: string
       format: email
 
-
   tenants: 
     title: Organizations
     icon: 🏢
     description: Override the default organizations and deploy to selected tenants only.
     type: array
     tide.template.spacer: true
-    tide.config.parameter-list: systems.defender_for_endpoint.setup.tenants
+    tide.config.parameter-list: systems.defender_for_endpoint.platform.tenants
+
+  flags:
+    title: Flags
+    icon: 🚩
+    description: Flags allow to customize the rule behaviour using the modifiers framework
+    type: array
+    tide.template.spacer: true
+    tide.config.parameter-list: systems.defender_for_endpoint.platform.flags
 
   scheduling:
     title: Rule Schedule
@@ -84,27 +92,25 @@ properties:
         description: |
           Threat Category assigned to the alert triggered by the detection rule.
         example: Malware
-        type: array
-        items:
-          type: string
-          enum:
-            - Command and control
-            - Lateral movement
-            - Malware
-            - Persistence
-            - Privilege escalation
-            - Ransomware
-            - Suspicious activity
-            - Unwanted software
-            - Exploit
-            - Initial access
-            - Execution
-            - Exfiltration
-            - Collection
-            - Credential access
-            - Defense evasion
-            - Discovery
-            - Impact 
+        type: str
+        enum:
+          - Command and control
+          - Lateral movement
+          - Malware
+          - Persistence
+          - Privilege escalation
+          - Ransomware
+          - Suspicious activity
+          - Unwanted software
+          - Exploit
+          - Initial access
+          - Execution
+          - Exfiltration
+          - Collection
+          - Credential access
+          - Defense evasion
+          - Discovery
+          - Impact 
 
       severity:
         title: Alert Severity
@@ -256,7 +262,7 @@ properties:
         type: object
         properties:
 
-          allow/block:
+          allow_block:
             title: Allow/Block Files
             description: |
               Describes a response action that allows or blocks a file to run on devices controlled by Microsoft Defender for Endpoint.
@@ -323,7 +329,7 @@ properties:
                     description: |
                       Device groups to which this response action will be applied to
                     type: array
-                    tide.config.parameter-list: systems.defender_for_endpoint.setup.device_groups
+                    tide.config.parameter-list: systems.defender_for_endpoint.platform.device_groups
 
           quarantine_file:
             title: Stop and Quarantine File
@@ -367,7 +373,7 @@ properties:
         description: |
           Device groups to which this response action will be applied to
         type: array
-        tide.config.parameter-list: systems.defender_for_endpoint.setup.device_groups
+        tide.config.parameter-list: systems.defender_for_endpoint.platform.device_groups
 
   query: 
     title: Defender For Endpoint Detection Rule

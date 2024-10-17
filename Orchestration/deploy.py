@@ -7,7 +7,7 @@ import traceback
 
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
-from Engines.modules.deployment import enabled_systems, modified_mdr_files, make_deploy_plan, DeploymentPlans
+from Engines.modules.deployment import enabled_systems, modified_mdr_files, make_deploy_plan, DeploymentStrategy
 from Engines.modules.logs import log, ANSI, coretide_intro
 from Engines.modules.tide import DataTide, IndexTide
 from Engines.mutation.promotion import PromoteMDR
@@ -32,10 +32,10 @@ torrent = rf"""
 
 print(torrent)
 
-DEPLOYMENT_PLAN = DeploymentPlans.load_from_environment()
+DEPLOYMENT_PLAN = DeploymentStrategy.load_from_environment()
 
 # Status promotion, happening before the main deployment loop
-if DEPLOYMENT_PLAN is DeploymentPlans.PRODUCTION:
+if DEPLOYMENT_PLAN is DeploymentStrategy.PRODUCTION:
     pre_deployment = modified_mdr_files(DEPLOYMENT_PLAN)
     log("TITLE", "Pre-deployment Routine")
     PromoteMDR().promote(pre_deployment)

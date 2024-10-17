@@ -13,7 +13,7 @@ toolchain_start_time = datetime.now()
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.modules.logs import log
-from Engines.modules.deployment import modified_mdr_files, DeploymentPlans
+from Engines.modules.deployment import modified_mdr_files, DeploymentStrategy
 from Engines.modules.files import resolve_paths
 
 ROOT = Path(str(git.Repo(".", search_parent_directories=True).working_dir))
@@ -39,7 +39,7 @@ print("\n ⚙️" + SCRIPT_DESCRIPTION + "\n")
 log("TITLE", "Staging Index Reconcilier")
 log("INFO", "Loads a version of the index which adds data from mdr in staging.")
 
-mdr_to_index = modified_mdr_files(DeploymentPlans.STAGING)
+mdr_to_index = modified_mdr_files(DeploymentStrategy.STAGING)
 
 if len(mdr_to_index) == 0:  # In case of no deployments possible
     try:

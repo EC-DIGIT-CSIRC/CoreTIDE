@@ -1,80 +1,178 @@
 import sys 
 import requests 
+import json
 
 import git
 
 from dataclasses import dataclass, asdict
-from typing import Literal, Never, ClassVar, overload
+from typing import Literal, Never, ClassVar, Sequence, overload, Any, Optional
+from enum import Enum, auto
 
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.modules.logs import log
 from Engines.modules.debug import DebugEnvironment
-from Engines.modules.tide import DataTide, TenantsDefenderForEndpointConfigModel
+from Engines.modules.tide import DataTide
+from Engines.modules.models import TideConfigs
 from Engines.modules.deployment import Proxy
 from Engines.modules.errors import TideErrors
 
-@dataclass
-class QueryConditionModel:
-    query_text: str
-
-@dataclass
-class OrganizationalScopeModel:
-    scope_type = Literal["deviceGroup"]
-    scope_names = list[str]
-
-@dataclass
-class ImpactedAssetsModel:
-    odata_type = str
-    identifier = Literal["deviceId"]
-
-@dataclass
-class AlertTemplateModel:
-    title: str
-    description: str
-    severity: str
-    category: str
-    mitre_techniques: ClassVar[list[Never] | list[str]] = []
-    impacted_assets: ClassVar[list[Never] | list[ImpactedAssetsModel]] = []
-    recommended_actions: ClassVar[None | str] = None
-
-@dataclass
-class ResponseActionModel:
-    odata_type: str
-    identifier: str
-    isolation_type: ClassVar[str | None] = None
-    device_group_names: ClassVar[list[str] | None] = None
-
-@dataclass
-class DetectionActionModel:
-    alert_template: AlertTemplateModel
-    response_actions: list[ResponseActionModel]
-    organizational_scope: ClassVar[None | OrganizationalScopeModel] = None
-
-@dataclass
-class ScheduleModel:
-    period: str
-
-@dataclass
-class DetectionRuleModel:
-    detector_id: str
-    display_name: str
-    is_enabled: bool
-    created_by = Literal["EC-TIDE Automation"]
-    query_condition: QueryConditionModel
-    schedule: ScheduleModel
-    detection_action: DetectionActionModel
-
-
-class DefenderForEndpointService:
+class Severity(str, Enum):
+    informational = "informational"
+    low = "low"
+    medium = "medium"
+    high = "high"
     
-    def __init__(self, tenant_config:TenantsDefenderForEndpointConfigModel) -> None:
+class SeverityMapping(Enum):
+    Informational = Severity.informational
+    Low = Severity.low
+    Medium = Severity.medium
+    High = Severity.high
+    Critical = Severity.high 
+
+@dataclass
+class DetectionRule:    
+    
+    @dataclass
+    class QueryCondition:
+        queryText: str
+
+    @dataclass
+    class Schedule:
+        period: Literal["0", "1H", "3H", "12H", "24H"]
+
+    @dataclass
+    class DetectionAction:
+        
+        @dataclass
+        class AlertTemplate:
+            
+            @dataclass
+            class ImpactedAsset:
+                odata_type: str
+                identifier: str
+
+            title: str
+            description: str
+            severity: Severity
+            category: str
+            mitreTechniques: Optional[Sequence[Never] | Sequence[str]] = None
+            impactedAssets: Optional[Sequence[Never] | Sequence[ImpactedAsset]] = None 
+            recommendedActions: Optional[str] = None
+
+        @dataclass
+        class ResponseAction:
+            odata_type: str
+            identifier: Any = "deviceId"
+            isolationType: Optional[str] = None
+            deviceGroupNames: Sequence[str] | None = None
+
+        @dataclass
+        class OrganizationalScope:
+            scopeType = "deviceGroup"
+            scopeNames = list[str]
+
+        alertTemplate: AlertTemplate
+        responseActions: Sequence[ResponseAction]
+        organizationalScope: Optional[OrganizationalScope] = None
+       
+    displayName: str
+    queryCondition: QueryCondition
+    schedule: Schedule
+    detectionAction: DetectionAction
+    isEnabled: bool = False
+
+GOOD_TEST = """
+{
+  "displayName": "ANOTHER RULE NAME",
+  "isEnabled": true,
+  "queryCondition": {
+    "queryText": "DeviceProcessEvents | take 1"
+  },
+  "schedule": {
+    "period": "12H"
+  },
+  "detectionAction": {
+    "alertTemplate": {
+      "title": "ANOTHER RULE NAME",
+      "description": "Some alert description",
+      "severity": "medium",
+      "category": "Execution",
+      "recommendedActions": null,
+      "mitreTechniques": [],
+      "impactedAssets": [
+        {
+          "@odata.type": "#microsoft.graph.security.impactedDeviceAsset",
+          "identifier": "deviceId"
+        }
+      ]
+    },
+    "organizationalScope": null,
+    "responseActions": [
+      {
+        "@odata.type": "#microsoft.graph.security.isolateDeviceResponseAction",
+        "identifier": "deviceId",
+        "isolationType": "full"
+      }
+    ]
+  }
+}
+"""
+
+TEST = """
+{
+    "displayName": "MDR Deployment Testing Template 5",
+    "queryCondition": {
+        "queryText": "DeviceFileEvents \\n| take 10"
+    },
+    "schedule": {
+        "period": "0"
+    },
+    "detectionAction": {
+        "alertTemplate": {
+            "title": "Test Deployment 5",
+            "description": "This MDR is used for testing deployment, documentation and\\nother automations. If this triggers an alert, please close and\\nreport back to amine.besson@ext.ec.europa.eu.\\n",
+            "severity": "low",
+            "category": "Execution",
+            "mitreTechniques": [],
+            "impactedAssets": [
+                {
+                    "@odata.type": "#microsoft.graph.security.impactedDeviceAsset",
+                    "identifier": "deviceId"
+                }
+            ],
+            "recommendedActions": "Do something about it ! <3\\n"
+        },
+        "responseActions": [
+            {
+            "@odata.type": "#microsoft.graph.security.isolateDeviceResponseAction",
+            "identifier": "deviceId",
+            "isolationType": "full"
+            },
+
+            {
+                "@odata.type": "#microsoft.graph.security.restrictAppExecutionResponseAction",
+                "identifier": "deviceId"
+            }
+        ],
+        "organizationalScope": null
+    },
+    "isEnabled": true
+}
+"""
+class DefenderForEndpointService:
+    """
+    Interface to connect and deploy MDRs to MDE. Initialized on a single
+    tenant basis.
+    """
+    def __init__(self, tenant_config:TideConfigs.Systems.DefenderForEndpoint.Tenant) -> None:
 
         self.DEBUG = DebugEnvironment.ENABLED
-        self.DEPLOYER_IDENTIFIER = "defender_for_endpoint"
-        self.GRAPH_API_ENDPOINT = "https://graph.microsoft.com/beta/security/rules/detectionRule"
+        self.DEPLOYER_IDENTIFIER = DataTide.Configurations.Systems.DefenderForEndpoint.platform.identifier
+        self.OAUTH_TOKEN_ENDPOINT = "https://login.microsoftonline.com/{tenant_id}/oauth2/v2.0/token"
+        self.GRAPH_API_ENDPOINT = "https://graph.microsoft.com/beta/security/rules/detectionRules"
         self.tenant_config = tenant_config
-        
+
         if tenant_config.setup.proxy:
             Proxy.set_proxy()
         else:
@@ -97,33 +195,44 @@ class DefenderForEndpointService:
                 "scope":"https://graph.microsoft.com/.default"}
         
         response = requests.post(data=data,
-                                 url=f"https://login.microsoftonline.com/{tenant_id}/oauth2/v2.0/token")
+                                 url=self.OAUTH_TOKEN_ENDPOINT.format(tenant_id=tenant_id))
         
         if response.status_code == 200:
+            log("DEBUG",
+                f"Successfully authenticated against {self.tenant_config.name}",
+                str(response.json()))
             return response.json()["access_token"]
+
         else:
             log("FATAL",
                 f"Cannot authenticate against {self.tenant_config.name}",
-                "Ensure your tenant configuration is correct")
+                str(response.json()))
             raise TideErrors.TenantConnectionError("Cannot authenticate with the tenant configuration")
 
-    def create_detection_rule(self, rule:DetectionRuleModel)->int:
+    def create_detection_rule(self, rule:DetectionRule)->int:
         rule_body = asdict(rule)
-        rule_body = self.camelify(rule_body)
+        
+        # Replace odata_type to @odata.type ans re-dump into a JSON body
+        rule_body = json.dumps(asdict(rule))
+        rule_body = rule_body.replace("odata_type", "@odata.type")
+        rule_body = json.loads(rule_body)
+        #rule_body = json.loads(TEST)
+        print(json.dumps(rule_body, indent=4))
+        
         request = self.session.post(url=self.GRAPH_API_ENDPOINT,
                                     json=rule_body)
 
         if request.status_code == 201:
+            log("SUCCESS", "Created rule in MDE", str(request.json()))
             return int(request.json()["id"])
         else:
             log("FATAL",
                 f"Failed to create detection rule in tenant {self.tenant_config.name}",
-                str(rule_body))
+                str(request.json()))
             raise TideErrors.DetectionRuleCreationFailed
 
-    def update_detection_rule(self, rule:DetectionRuleModel, rule_id:int):
+    def update_detection_rule(self, rule:DetectionRule, rule_id:int):
         rule_body = asdict(rule)
-        rule_body = self.camelify(rule_body)
         request = self.session.patch(url=self.GRAPH_API_ENDPOINT + f"/{rule_id}",
                                      json=rule_body)
         if request.status_code != 200:
@@ -140,6 +249,8 @@ class DefenderForEndpointService:
                 "Double check scope permissions, and whether the ID actually exists")
             raise TideErrors.DetectionRuleDeletionFailed
 
+
+'''
     @overload
     def camelify(self, input:dict[str,dict])->dict[str,dict]: ...
     @overload
@@ -186,9 +297,4 @@ class DefenderForEndpointService:
                     camel_dictionary[snake_to_camel(key)] = value
         
             return camel_dictionary
-
-
-
-
-for tenant in DataTide.Configurations.Systems.DefenderForEndpoint.tenants:
-    DefenderForEndpointService(tenant)
+'''

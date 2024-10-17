@@ -3,72 +3,23 @@ import git
 import sys
 from pathlib import Path
 import json
-from typing import Literal, Dict, Tuple, Never, overload, Any
-from enum import Enum, auto
+from typing import Literal, Dict, Mapping, Tuple, Never, overload, Any, Sequence, Mapping, Union
 from functools import cache
+from abc import ABC
+from importlib import import_module
 
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.indexing.indexer import indexer
 from Engines.modules.logs import log
+from Engines.modules.models import SystemConfig, TideModels, DetectionSystems, TideConfigs, TideDefinitionsModels
 
 ROOT = Path(str(git.Repo(".", search_parent_directories=True).working_dir))
 
-class PlatformsEnum(Enum):
-    DEFENDER_FOR_ENDPOINT = auto()
-    CARBON_BLACK_CLOUD = auto()
-    SPLUNK = auto()
-    SENTINEL = auto()
 
 # Configuration Models. Used to facilitate type hinting
-@dataclass
-class PlatformConfigModel:
-    enabled: bool
-    identifier: str
-    name: str
-    subschema: str
-    description: str
-    tenants: list[str]
-    tags: list[str]
-
-
-@dataclass
-class ModifiersConditionsModel:
-    status: None | str = None
-    tags: list[Never] | list[str] | None = None
-    tenants: list[Never] | list[str] | None = None
-    description: str | None = None
-    stop_further_matches: bool = False
-
-@dataclass
-class ModifiersConfigModel:
-    conditions: ModifiersConditionsModel
-    modifications: dict
-
-@dataclass
-class TenantsSetupModel:
-    proxy: bool
-    ssl: bool
-
-@dataclass
-class TenantsDefenderForEndpointSetupModel(TenantsSetupModel):
-    tenant_id: str
-    client_id: str
-    secret_id: str
-    client_secret: str
-
-@dataclass 
-class TenantsConfigModel:
-    name: str
-    description: str
-    deployment: Literal["ALWAYS", "STAGING", "PRODUCTION"]
-    setup: TenantsSetupModel
-
-@dataclass
-class TenantsDefenderForEndpointConfigModel(TenantsConfigModel):
-    setup:TenantsDefenderForEndpointSetupModel
 
 class HelperTide:
     @staticmethod
@@ -88,9 +39,20 @@ class HelperTide:
     @staticmethod
     def fetch_config_envvar(config_secrets: dict[str,str]) -> dict[str, Any]:
         # Replace placeholder variables with environment
-
+        print("SECRETS IN ENVVAR REPLACE ", str(config_secrets))
         #Allows to print all errors at once before raising exception
         missing_envvar_error = False
+        
+        if HelperTide.is_debug():
+            try:
+                import_module("Engines.modules.local_secrets")
+            except:
+                print("[FAILURE]",
+                    "Could not find local python file at `Engines.modules.local_secrets` to set secret environment variables",
+                    "Parts of this module may not work properly",
+                    "Refer to the relevant TOML conguration file to find which variables may be necessary")
+
+
         for sec in config_secrets.copy():
             if not config_secrets[sec]:
                 log("SKIP", "Did not found an entry for", sec,
@@ -123,6 +85,8 @@ class HelperTide:
                 "Review the previous errors to find which ones were missing",
                 "Check your CI settings to ensure these environment variables are properly injected")
             raise KeyError
+
+        print("SECRETS AFTER ENVVAR REPLACE ", str(config_secrets))
 
         return config_secrets
 
@@ -278,17 +242,102 @@ class IndexTide:
         if tier == "tide":
             return IndexTide.load()["paths"]["tide"]
 
+                
+
+class SystemLoader:
+
     @staticmethod
-    def load_platform_config(platform_config:dict, platform:PlatformsEnum)->PlatformConfigModel:
+    def load_defender_for_endpoint(mdr_config:dict[str, Any])->TideModels.MDR.Configurations.DefenderForEndpoint:
+    
+        DefenderForEndpoint = TideModels.MDR.Configurations.DefenderForEndpoint
+        
+        tenants:list[str] = mdr_config.pop("contributors", None)
+        flags:list[str] = mdr_config.pop("flags", None)
+        contributors:list[str] = mdr_config.pop("tenants", None)
+
+        alert = DefenderForEndpoint.Alert(**mdr_config.pop("alert"))
+        impacted_entities = DefenderForEndpoint.ImpactedEntities(**mdr_config.pop("impacted_entities"))
+        group_scoping = DefenderForEndpoint.GroupScoping(**mdr_config.pop("scope"))
+
+        response_actions = None 
+        if mdr_config.get("actions"):
+            actions:dict = mdr_config.pop("actions")
+            devices = files = None
+
+            if actions.get("devices"):
+                devices = DefenderForEndpoint.ResponseActions.DeviceActions(**actions.pop("devices"))
+            if actions.get("files"):
+                FileActions = DefenderForEndpoint.ResponseActions.FileActions
+                allow_block_action = None
+                if actions["files"].get("allow_block"):
+                    allow_block = actions["files"].pop("allow_block", None)
+                    device_groups = FileActions.FileAllowBlockAction.GroupScoping(**allow_block.pop("groups"))
+                    allow_block_action = FileActions.FileAllowBlockAction(**allow_block,
+                                                                        groups=device_groups)                    
+
+                quarantine_file = actions["files"].pop("quarantine_files", None)
+                files = DefenderForEndpoint.ResponseActions.FileActions(allow_block=allow_block_action,
+                                                                        quarantine_file=quarantine_file)
+
+            if devices or files:
+                response_actions = DefenderForEndpoint.ResponseActions(devices=devices,
+                                                                        files=files)
+        return DefenderForEndpoint(**mdr_config,
+                                    contributors=contributors,
+                                    flags=flags,
+                                    tenants=tenants,
+                                    alert=alert,
+                                    impacted_entities=impacted_entities,
+                                    actions=response_actions,
+                                    scope=group_scoping)
+
+
+class TideLoader:
+
+    @staticmethod
+    def load_mdr(mdr_data:dict)->TideModels.MDR:
+        
+        
+        metadata = TideDefinitionsModels.TideObjectMetadata(**mdr_data.pop("metadata"))
+        response_config = mdr_data.pop("response", {})
+        if response_config:
+            response = TideModels.MDR.Response(**response_config)
+        references = TideDefinitionsModels.TideObjectReferences(**mdr_data.pop("references", {}))
+
+        configurations = TideModels.MDR.Configurations()
+        system_configurations:dict[str,Any] = mdr_data.pop("configurations")
+        
+        if system_configurations.get("defender_for_endpoint"):
+            configurations.defender_for_endpoint = SystemLoader.load_defender_for_endpoint(system_configurations.pop("defender_for_endpoint"))
+
+        return TideModels.MDR(**mdr_data,
+                                metadata=metadata,
+                                response=response,
+                                references=references,
+                                configurations=configurations)
+
+
+    @overload
+    @staticmethod
+    def load_platform_config(platform_config:dict, system:Literal[DetectionSystems.DEFENDER_FOR_ENDPOINT])->TideConfigs.Systems.DefenderForEndpoint.Platform: # type: ignore
+        ...
+    @staticmethod
+    def load_platform_config(platform_config:dict, system:DetectionSystems):
         if not platform_config:
-            log("FATAL", f"Could not find any platform configuration for platform f{platform.name}",
+            log("FATAL", f"Could not find any platform configuration for platform f{system.name}",
             "Ensure that the platform configuration section is present")
             raise NotImplementedError("Missing Configuration Segment")
 
-        return PlatformConfigModel(**platform_config)
+        match system:
+
+            case DetectionSystems.DEFENDER_FOR_ENDPOINT:
+                return TideConfigs.Systems.DefenderForEndpoint.Platform(**platform_config)
+
+            case _:
+                return SystemConfig.Platform(**platform_config)
     
     @staticmethod
-    def load_modifiers_config(modifiers_config:list[dict])->list[ModifiersConfigModel] | list[Never]:
+    def load_modifiers_config(modifiers_config:list[dict])->Sequence[SystemConfig.Modifiers] | list[Never]:
         if not modifiers_config:
             return []
         
@@ -299,23 +348,15 @@ class IndexTide:
                     str(modifier))
                 continue
 
-            conditions = ModifiersConditionsModel(**modifier["conditions"])
+            conditions = SystemConfig.Modifiers.Conditions(**modifier["conditions"])
             modifications:dict = modifier["modifications"]
             
-            modifiers.append(ModifiersConfigModel(conditions, modifications))
+            modifiers.append(SystemConfig.Modifiers(conditions, modifications))
         
         return modifiers
 
-    @overload
     @staticmethod
-    def load_tenants_config(tenants_config:list[dict], platform:Literal[PlatformsEnum.DEFENDER_FOR_ENDPOINT])->list[TenantsDefenderForEndpointConfigModel]:
-        ...
-    @overload
-    @staticmethod
-    def load_tenants_config(tenants_config:list[dict], platform:Literal[PlatformsEnum.DEFENDER_FOR_ENDPOINT])->list[TenantsDefenderForEndpointConfigModel]:
-        ...
-    @staticmethod
-    def load_tenants_config(tenants_config:list[dict], platform:PlatformsEnum):
+    def load_tenants_config(tenants_config:Sequence[dict], platform:DetectionSystems):
         if not tenants_config:
             log("FATAL", f"Could not find any tenant information for platform f{platform.name}",
                 "Ensure that at least one tenant is present in the platform configuration TOML file")
@@ -329,17 +370,17 @@ class IndexTide:
                 raise NotImplementedError("Missing Configuration Segment")
 
             match platform:
-                case PlatformsEnum.DEFENDER_FOR_ENDPOINT:
+                case DetectionSystems.DEFENDER_FOR_ENDPOINT:
                     setup_with_secrets = HelperTide.fetch_config_envvar(tenant.pop("setup"))
-                    setup = TenantsDefenderForEndpointSetupModel(**setup_with_secrets)
+                    print("SECRETS ", str(setup_with_secrets))
+                    setup = TideConfigs.Systems.DefenderForEndpoint.Tenant.Setup(**setup_with_secrets)
 
                 case _:
                     raise NotImplementedError(f"Platform {platform.name} is not recognized")
 
-            tenants.append(TenantsConfigModel(**tenant, setup=setup))
+            tenants.append(SystemConfig.Tenant(**tenant, setup=setup))
 
         return tenants
-
 
 class DataTide:
     """Unified programmatic interface to access all data in the
@@ -374,6 +415,8 @@ class DataTide:
         """Cyber Detection Models Data Index"""
         mdr = dict(Index["mdr"])
         """Managed Detection Rules Data Index"""
+        MDR = {uuid:TideLoader.load_mdr(data) for (uuid, data) in dict(Index["mdr"]).items()}
+        """Model Mapped Managed Detection Rules Data Index"""
         bdr = dict(Index["bdr"])
         """Business Detection Rules Data Index"""
         chaining = IndexTide.compute_chains(tvm)
@@ -563,15 +606,15 @@ class DataTide:
                 secrets = dict(Index["secrets"])
                 validation = dict(Index["validation"])
 
-            @dataclass(frozen=True)
-            class DefenderForEndpoint:
-                Index = dict(
+            @dataclass
+            class DefenderForEndpoint(TideConfigs.Systems.DefenderForEndpoint):
+                raw = dict(
                     IndexTide.load()["configurations"]["systems"]["defender_for_endpoint"]
                 )
-                platform = IndexTide.load_platform_config(dict(Index["platform"]), PlatformsEnum.DEFENDER_FOR_ENDPOINT)
-                modifiers = IndexTide.load_modifiers_config(Index["modifiers"])
-                tenants = IndexTide.load_tenants_config(Index["tenants"], PlatformsEnum.DEFENDER_FOR_ENDPOINT)
-
+                platform = TideLoader.load_platform_config(dict(raw["platform"]), DetectionSystems.DEFENDER_FOR_ENDPOINT)
+                modifiers = TideLoader.load_modifiers_config(raw["modifiers"])
+                tenants = TideLoader.load_tenants_config(raw["tenants"], DetectionSystems.DEFENDER_FOR_ENDPOINT)
+                defaults = dict(raw.get("defaults", {}))
 
 
         @dataclass(frozen=True)
