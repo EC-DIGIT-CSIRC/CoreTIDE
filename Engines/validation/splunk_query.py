@@ -43,7 +43,7 @@ class SplunkValidateQuery(SplunkEngineInit, ValidateQuery):
                 
                 if reason:= response.get("reason"):
                     if reason == "Temporary Redirect":
-                        if "Network Error" in response["body"].read():
+                        if "Network Error" in str(response["body"].read()):
                             log("FAILURE",
                                 "We encountered an unexpected error, which has shown empirically to be related to time-out",
                                 "The query is assumed to be valid, be aware that if deployment fails it may be related to the query")
