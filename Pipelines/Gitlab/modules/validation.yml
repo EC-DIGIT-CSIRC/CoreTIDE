@@ -2,6 +2,8 @@
 🔮 Validation Toolchain:
   stage: ✅ Validation
   script:
+    - git fetch --all
+    - git add .
     - git rebase origin/$CI_DEFAULT_BRANCH #Allows to pull latest mutation if there are
     - cd $TIDE_CORE_REPO/Orchestration/
     - python validate.py
