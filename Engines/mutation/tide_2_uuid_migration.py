@@ -26,9 +26,15 @@ def id_to_uuid_mapper():
 
     mapping = dict()
     for model in MODELS_TYPES:
+        
         if model == "mdr":
             continue
+        
         for file in sorted(os.listdir(PATHS[model])):
+            
+            if not file.endswith("yaml"):
+                continue
+            
             data = yaml.safe_load(open(PATHS[model] / file, encoding="utf-8"))
             old_id:str = data.get("id")
             if not old_id:
