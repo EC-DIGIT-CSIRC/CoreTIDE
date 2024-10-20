@@ -48,7 +48,7 @@ def id_to_uuid_mapper():
             log("INFO", f"Processing {old_id} - {name}", new_uuid)
             mapping[old_id] = {"uuid": new_uuid, "name": name}
 
-    export:dict = json.load(open(TIDE_INDEXES_PATH/MAPPING_FILE))
+    export:dict = json.load(open(TIDE_INDEXES_PATH/MAPPING_FILE, "w"))
     export.update(mapping)
     json.dump(export, open(TIDE_INDEXES_PATH/MAPPING_FILE, "w"), indent=6)
     log("SUCCESS", "Updated and re-exported mapping")
