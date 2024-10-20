@@ -9,3 +9,4 @@ GitPython
 splunk-sdk
 carbon-black-cloud-sdk
 toml
+pypdf 
