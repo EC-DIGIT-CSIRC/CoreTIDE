@@ -80,6 +80,9 @@ class MigrateSecurityDomainMDR:
 
     def migrate(self):
         for mdr in os.listdir(PATHS["mdr"]):
+            
+            if not mdr.endswith("yaml"):
+                continue
 
             data = yaml.safe_load(open(MDR_PATH/mdr, encoding="utf-8"))
             mdr_name = data["name"]

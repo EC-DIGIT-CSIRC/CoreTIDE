@@ -30,7 +30,10 @@ def run():
     log("INFO", "Remove unused validation block from CDM")
 
     for file in os.listdir(CDM_FOLDER):
-
+        
+        if not file.endswith("yaml"):
+            continue
+        
         file_path = CDM_FOLDER / file
         file_content = open(file_path, "r", encoding="utf-8").read()
 
