@@ -1,4 +1,3 @@
-import os
 import git
 import pandas as pd
 import time
@@ -11,36 +10,14 @@ start_time = time.time()
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.modules.logs import log
-from Engines.modules.deployment import fetch_config_envvar, Proxy
-from Engines.modules.sentinel import connect_to_sentinel
-from Engines.modules.tide import DataTide
+from Engines.modules.debug import DebugEnvironment
+from Engines.modules.sentinel import connect_sentinel, SentinelEngineInit
 from Engines.modules.plugins import DeployLookups
 
 from azure.mgmt.securityinsight import SecurityInsights
 
 
-class SentinelLookupsDeploy(DeployLookups):
-    def __init__(self):
-        DEBUG = True
-
-        self.LOOKUPS_METADATA_INDEX = DataTide.Lookups.metadata
-        self.LOOKUPS_INDEX = DataTide.Lookups.lookups["sentinel"]
-
-        SENTINEL_CONFIG = DataTide.Configurations.Systems.Sentinel
-        SENTINEL_SETUP = fetch_config_envvar(SENTINEL_CONFIG.setup)
-        SENTINEL_SECRETS = fetch_config_envvar(SENTINEL_CONFIG.secrets)
-
-        if SENTINEL_SETUP["proxy"]:
-            Proxy.set_proxy()
-        else:
-            Proxy.unset_proxy()
-
-        self.AZURE_CLIENT_ID = SENTINEL_SECRETS["azure_client_id"]
-        self.AZURE_CLIENT_SECRET = SENTINEL_SECRETS["azure_client_secret"]
-        self.AZURE_SENTINEL_RESOURCE_GROUP = SENTINEL_SETUP["resource_group"]
-        self.AZURE_SENTINEL_WORKSPACE_NAME = SENTINEL_SETUP["workspace"]
-        self.AZURE_SUBSCRIPTION_ID = SENTINEL_SETUP["azure_subscription_id"]
-        self.AZURE_TENANT_ID = SENTINEL_SETUP["azure_tenant_id"]
+class SentinelLookupsDeploy(SentinelEngineInit, DeployLookups):
 
     def deploy_lookup(
         self, lookup_name: str, lookup_content: pd.DataFrame, client: SecurityInsights
@@ -55,7 +32,7 @@ class SentinelLookupsDeploy(DeployLookups):
 
         lookup_content = lookup_content.fillna("").astype(str)
 
-        watchlist.display_name = lookup_metadata.get("name") or lookup_name
+        watchlist.display_name = lookup_name
         watchlist.provider = "EC-TIDE"
         watchlist.source = lookup_name + (".csv")
         watchlist.content_type = "text/csv"
@@ -164,6 +141,9 @@ class SentinelLookupsDeploy(DeployLookups):
         return True
 
     def deploy(self, deployment: list[str], DEBUG=False):
+        if not deployment:
+            raise Exception("DEPLOYMENT NOT FOUND")
+
         log("ONGOING", "Sentinel Watchlist Deployer")
         log(
             "INFO",
@@ -174,18 +154,18 @@ class SentinelLookupsDeploy(DeployLookups):
         if DEBUG:
             deployment = ["TIDE_LD_999_Debug.csv"]
 
-        client = connect_to_sentinel(
-            self.AZURE_CLIENT_ID,
-            self.AZURE_CLIENT_SECRET,
-            self.AZURE_TENANT_ID,
-            self.AZURE_SUBSCRIPTION_ID,
+        client = connect_sentinel(
+            client_id=self.AZURE_CLIENT_ID,
+            client_secret=self.AZURE_CLIENT_SECRET,
+            tenant_id=self.AZURE_TENANT_ID,
+            subscription_id=self.AZURE_SUBSCRIPTION_ID,
+            ssl_enabled=self.SSL_ENABLED
         )
 
         # Start deployment routine
         for lookup in deployment:
             if lookup.endswith(".csv"):
                 lookup.removesuffix(".csv")
-
             lookup_content = pd.read_csv(StringIO(self.LOOKUPS_INDEX[lookup]))
             lookup_name = "".join(c for c in lookup if (c.isalnum() or c in [" ", "_"]))
 
@@ -203,3 +183,6 @@ class SentinelLookupsDeploy(DeployLookups):
 
 def declare():
     return SentinelLookupsDeploy()
+
+if __name__ == "__main__" and DebugEnvironment.ENABLED:
+    SentinelLookupsDeploy().deploy(DebugEnvironment.LOOKUP_DEPLOYMENT_TEST_FILES)

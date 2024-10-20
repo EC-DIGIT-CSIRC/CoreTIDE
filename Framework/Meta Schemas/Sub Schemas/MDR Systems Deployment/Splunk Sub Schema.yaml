@@ -1,9 +1,19 @@
 required: 
+  #- schema #To be enabled at a later date. Must be part of the public release
   - status
   - query
   - scheduling
 
+tide.template.force-required:
+  - schema
+
 properties:
+
+  schema:
+    title: Schema identifier and version
+    type: string
+    description: Identifier of the schema at its current version 
+    const: splunk::2.0
 
   status: 
     title: Status of the use-case
@@ -193,12 +203,30 @@ properties:
             description: A custom secondary search.
             tide.mdr.parameter: action.notable.param.drilldown_search
 
+      security_domain:
+        title: Security Domain
+        icon: 🛡️
+        type: string
+        tide.template.spacer: true
+        description: Categorization of the notable event
+        example: Threat
+        tide.mdr.parameter: action.notable.param.security_domain
+        enum:
+          - Access
+          - Endpoint
+          - Network
+          - Threat
+          - Identity
+          - Audit 
+
   security_domain:
     title: Security Domain
     icon: 🛡️
     type: string
     tide.template.spacer: true
-    description: Categorization of the notable event
+    description: This keyword is deprecated and only kept for compatibility reasons. You are expected to use security_domain nested under notable.
+    tide.template.hide: True
+    tide.meta.deprecation: security_domain is now nested under the notable block
     example: Threat
     tide.mdr.parameter: action.notable.param.security_domain
     enum:

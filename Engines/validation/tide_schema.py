@@ -3,6 +3,8 @@ from tabulate import tabulate
 import os
 import git
 import sys
+import json
+import uuid
 
 
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
@@ -12,6 +14,7 @@ from Engines.modules.logs import log
 
 JSONSCHEMAS_INDEX = DataTide.JsonSchemas.Index
 MODELS_INDEX = DataTide.Models.Index
+
 
 def run():
 
@@ -27,6 +30,7 @@ def run():
 
         if schema in MODELS_INDEX:
             schema_data = JSONSCHEMAS_INDEX[schema]
+            v = Draft7Validator(schema_data)
 
             for model in MODELS_INDEX[schema]:
                 count += 1
@@ -49,7 +53,7 @@ def run():
                         if body["references"] == {}:
                             del body["references"]
 
-                v = Draft7Validator(schema_data)
+                
                 errors = list()
                 errors = sorted(v.iter_errors(body), key=lambda e: e.path)
 
@@ -61,30 +65,24 @@ def run():
                             )
 
                 if len(errors) != 0:
-                    buf = dict()
-
-                    buf["category"] = schema.upper()
-                    buf["errors"] = errors
-
-                    errorslist[model] = buf
+                    name = f"{body['name']} ({model})"
+                    errorslist[name] = errors
 
             stats[schema.upper()] = count
             overall += count
 
-    errortable = [["Object", "Category", "Error"]]
-
-    for i in errorslist:
-        for error in errorslist[i]["errors"]:
+    for model_name in errorslist:
+        for error in errorslist[model_name]:
             if type(error) is not str:
                 error = error.message.replace("\n", "")
-            errortable.append([i, errorslist[i]["category"], error])
+                if len(error) > 160:
+                    error = error[:160] + f" [...Truncated Error Message]"
+            log("FATAL", f"Failed validation in Object - {model_name}", error)
 
-    errortable = tabulate(errortable, headers="firstrow", tablefmt="fancy_grid")
     if len(errorslist) != 0:
-        print(
-            "⚠️ CoreTIDE objects currently do not match up to the metaschemas. Review the files before running the validation again: \n\n"
-            + errortable
-        )
+        log("FATAL", "Failed Schema Validation",
+            "CoreTIDE objects currently do not match up to the metaschemas",
+            "Review the files before running the validation again" )
         os.environ["VALIDATION_ERROR_RAISED"] = "True"
 
     else:
@@ -94,7 +92,8 @@ def run():
             statstable.append([y, stats[y]])
         statstable = tabulate(statstable, headers="firstrow")
 
-        print(f"✅Successfully verified {overall} coretide objects : \n\n{statstable}")
+        log("SUCCESS", f"Successfully verified {overall} coretide objects")
+        print(statstable)
 
 
 if __name__ == "__main__":

@@ -35,7 +35,7 @@ OUT_PATH = Path(WIKI_PATH) / "home.md"
 CHARS_CLIP = 150
 NAV_INDEX_FIELDS = {
     "tam": [
-        "id",
+        "uuid",
         "name",
         "criticality",
         "tlp",
@@ -50,7 +50,7 @@ NAV_INDEX_FIELDS = {
         "platforms",
     ],
     "tvm": [
-        "id",
+        "uuid",
         "name",
         "criticality",
         "tlp",
@@ -66,7 +66,7 @@ NAV_INDEX_FIELDS = {
         "leverage",
     ],
     "cdm": [
-        "id",
+        "uuid",
         "name",
         "criticality",
         "tlp",
@@ -81,7 +81,7 @@ NAV_INDEX_FIELDS = {
         "artifacts",
     ],
     "bdr": [
-        "id",
+        "uuid",
         "name",
         "criticality",
         "tlp",
@@ -92,14 +92,13 @@ NAV_INDEX_FIELDS = {
         "domains",
     ],
     "mdr": [
+        "uuid",
         "name",
         "description",
         "statuses",
-        "schema version",
         "att&ck",
         "detection_model",
-        "system",
-        "uuid",
+        "system"
     ],
 }
 
@@ -147,63 +146,41 @@ def build_searches(model_type):
                 row[value] = techniques
 
             elif model_type == "mdr":
-                version = get_type(entry, get_version=True)
 
-                if value == "schema version":
-                    version_display = str()
-                    if version == "mdrv2":
-                        version_display = "MDRv2"
-                    elif version == "mdrv3":
-                        version_display = "✨MDRv3✨"
-                    row[schema_version] = version_display
+                if value == "statuses":
 
-                elif value == "statuses":
+                    # Build a key value dict of systems and their status
+                    statuses = dict()
+                    configurations = model_value_doc(entry, "configurations") or {}
+                    for system in configurations:
+                        sys_status = configurations[system]["status"]  # type: ignore
+                        statuses[system] = sys_status
 
-                    if version == "mdrv3":
-                        # Build a key value dict of systems and their status
-                        statuses = dict()
-                        configurations = model_value_doc(entry, "configurations") or {}
-                        for system in configurations:
-                            sys_status = configurations[system]["status"]  # type: ignore
-                            statuses[system] = sys_status
-
-                        # Pretty print statuses
-                        statuses = ", ".join(
-                            [f"{k.capitalize()}:{v}" for k, v in statuses.items()]
-                        )
-                        row[mdr_statuses] = statuses
-                    else:
-                        row[mdr_statuses] = model_value_doc(entry, "status")
+                    # Pretty print statuses
+                    statuses = ", ".join(
+                        [f"{k.capitalize()}:{v}" for k, v in statuses.items()]
+                    )
+                    row[mdr_statuses] = statuses
 
                 elif value == "name":
-                    if version == "mdrv2":
-                        mdr_name = str(model_value_doc(entry, "title"))
-                        mdr_name = mdr_name.split("$")[0].strip()
-                    else:
-                        mdr_name = model_value_doc(entry, "name")
+                    mdr_name = model_value_doc(entry, "name")
                     row[value] = mdr_name
 
                 # List
                 elif value == "att&ck":
-                    if version == "mdrv3":
-                        model_value = (
-                            techniques_resolver(str(model_value_doc(entry, "uuid")))
-                            or ""
-                        )
-                        if model_value:
-                            model_value = ", ".join(model_value)
-                        row[mdr_attack_technique] = model_value
+                    model_value = (
+                        techniques_resolver(str(model_value_doc(entry, "uuid")))
+                        or ""
+                    )
+                    if model_value:
+                        model_value = ", ".join(model_value)
+                    row[mdr_attack_technique] = model_value
 
                 # Custom ways of returning data beside field listing
                 elif value == "system":
-                    if version == "mdrv2":
-                        model_value = MODELS_INDEX[model_type][entry]["rule"][
-                            "alert"
-                        ].keys()
-                    else:
-                        model_value = MODELS_INDEX[model_type][entry][
-                            "configurations"
-                        ].keys()
+                    model_value = MODELS_INDEX[model_type][entry][
+                        "configurations"
+                    ].keys()
 
                     model_value = [s.capitalize() for s in model_value]
                     model_value = ", ".join(model_value)
@@ -247,8 +224,6 @@ def build_searches(model_type):
         index.append(row)
 
     df = pd.DataFrame(index)
-    if "id" in df.columns:
-        df = df.sort_values(by=["id"])
 
     rename_mapping = {
         c: f"{get_field_title(c, METASCHEMAS_INDEX[model_type]['properties'])}"

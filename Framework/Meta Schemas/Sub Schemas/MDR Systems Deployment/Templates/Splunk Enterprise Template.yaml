@@ -1,3 +1,4 @@
+  schema: splunk::2.0
   status: DEVELOPMENT
   #contributors:
     #-
@@ -26,7 +27,7 @@
       #search: |
         #Type Here
   
-  #security_domain: 
+    #security_domain: 
   
   #risk:
     #message: 

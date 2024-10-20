@@ -82,18 +82,17 @@ class IndexTide:
 
         RECONCILED_INDEX = index.copy()
         STG_INDEX = json.load(open(Path(STAGING_INDEX_PATH)))
-        MDR_INDEX = RECONCILED_INDEX
         BANNER_MESSAGE = "⚠️ This documentation reflects the latest staging deployment from this MDR. Production status on mainline is, but staging deployment is currently overriding it"
         added_mdr = list()
         updated_mdr = list()
 
         for mdr in STG_INDEX:
-            if mdr not in MDR_INDEX:
-                MDR_INDEX[mdr] = STG_INDEX[mdr]
+            if mdr not in RECONCILED_INDEX["models"]["mdr"]:
+                RECONCILED_INDEX["models"]["mdr"][mdr] = STG_INDEX[mdr]
                 added_mdr.append(mdr)
             else:
                 main_mdr_metadata = (
-                    MDR_INDEX[mdr].get("meta") or MDR_INDEX[mdr]["metadata"]
+                    RECONCILED_INDEX["models"]["mdr"][mdr].get("meta") or RECONCILED_INDEX["models"]["mdr"][mdr]["metadata"]
                 )
                 main_version = main_mdr_metadata["version"]
                 stg_mdr_metadata = (
@@ -114,9 +113,9 @@ class IndexTide:
                     )
 
                     updated_mdr = list()
-                    MDR_INDEX[mdr] = STG_INDEX[mdr]
-                    if MDR_INDEX[mdr].get("meta"):
-                        MDR_INDEX[mdr]["metadata"] = MDR_INDEX[mdr].pop(
+                    RECONCILED_INDEX["models"]["mdr"][mdr] = STG_INDEX[mdr]
+                    if RECONCILED_INDEX["models"]["mdr"][mdr].get("meta"):
+                        RECONCILED_INDEX["models"]["mdr"][mdr]["metadata"] = RECONCILED_INDEX["models"]["mdr"][mdr].pop(
                             "meta"
                         )  # Renaming meta to metadata in the fly to accomodate renaming
                     global TIDE_MDR_STAGING_BANNER
@@ -206,7 +205,7 @@ class DataTide:
         Exposes all the configurations of the instance
         """
         Index = dict(IndexTide.load()["models"])
-        """All Models Data Index"""
+        """Index containing model types"""
         tam = dict(Index["tam"])
         """Threat Actor Models Data Index"""
         tvm = dict(Index["tvm"])
@@ -219,6 +218,8 @@ class DataTide:
         """Business Detection Rules Data Index"""
         chaining = IndexTide.compute_chains(tvm)
         """Index of all chaining relationships"""
+        FlatIndex = tam | tvm | cdm | mdr | bdr
+        """Flat Key Value pair structure of all UUIDs in the index"""
 
     @dataclass(frozen=True)
     class Vocabularies:
@@ -400,6 +401,7 @@ class DataTide:
                 tide = dict(Index["tide"])
                 setup = dict(Index["setup"])
                 secrets = dict(Index["secrets"])
+                validation = dict(Index["validation"])
 
         @dataclass(frozen=True)
         class Documentation:
@@ -449,6 +451,7 @@ class DataTide:
             default_responders = str(Index["default_responders"])
             proxy = dict(Index["proxy"])
             metadata_lookup = dict(Index["metadata_lookup"])
+            debug = dict(Index["debug"])
 
         @dataclass(frozen=True)
         class Lookups:

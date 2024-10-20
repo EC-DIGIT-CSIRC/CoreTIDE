@@ -6,6 +6,7 @@ from pathlib import Path
 import sys
 import toml
 import git
+import uuid
 from pprint import pprint
 
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
@@ -13,7 +14,7 @@ sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 from Engines.modules.files import resolve_paths, resolve_configurations
 from Engines.modules.logs import log
 from Engines.templates.tide_indexes import fetch_tide_index_template
-
+from Engines.modules.patching import Tide2Patching
 
 def indexer(write_index=False) -> dict:
     SKIPS = ["logsources", "ram", "mdrv2", "lookup_metadata"]
@@ -44,6 +45,8 @@ def indexer(write_index=False) -> dict:
     LOOKUPS_PATH = PATHS["lookups"]
     TIDE_INDEXES_PATH = PATHS["tide_indexes"]
     OUTPUT_PATH = PATHS["index_output"]
+
+
     # Controls whether the index should keep in memory or export to a file
     # In-memory is helpful when index is used to accelerate functions, like
     # for example to enrich deployment tags.
@@ -201,6 +204,9 @@ def indexer(write_index=False) -> dict:
 
     models_index = dict()
 
+    #TODO Backward compatibility measure. To remove.
+    patch = Tide2Patching()
+
     for meta_name in METASCHEMAS:
         if meta_name not in SKIPS:
             model_cat_index = dict()
@@ -211,13 +217,15 @@ def indexer(write_index=False) -> dict:
 
                     if "[DEBUG]" not in model:
                         model_body = yaml.safe_load(open(model_path, encoding="utf-8"))
-
-                        if "uuid" in model_body.keys():
-                            identifier = model_body["uuid"]
+                        
+                        #TODO Backward compatibility measure. To remove.
+                        model_body = patch.tide_1_patch(model_body, meta_name)
+                        
+                        identifier = model_body.get("uuid") or model_body.get("metadata",{}).get("uuid")
+                        if not identifier:
+                            log("FATAL", "Missing identifier from model in file", model)
                         else:
-                            identifier = model_body["id"]
-
-                        model_cat_index[identifier] = model_body
+                            model_cat_index[identifier] = model_body
             models_index[meta_name] = model_cat_index
 
     index["models"] = models_index

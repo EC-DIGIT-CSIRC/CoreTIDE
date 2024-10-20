@@ -13,15 +13,18 @@ toolchain_start_time = datetime.now()
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.modules.logs import log
-from Engines.modules.deployment import modified_mdr_files
+from Engines.modules.deployment import modified_mdr_files, DeploymentPlans
+from Engines.modules.files import resolve_paths
 
 ROOT = Path(str(git.Repo(".", search_parent_directories=True).working_dir))
 TIDE_CONFIG = toml.load(
     open(ROOT / "Configurations/global.toml", encoding="utf-8")
 )
-
+PATHS = resolve_paths()
 PROJECT_NAME = os.getenv("CI_PROJECT_NAME")
 STG_INDEX_PATH = ROOT / TIDE_CONFIG["paths"]["core"]["staging_index_output"]
+
+LEGACY_ID_MAPPING = json.load(open(PATHS["tide_indexes"] / "legacy_uuid_mapping.json" ))
 
 DEPLOYMENT_PLAN = os.getenv("DEPLOYMENT_PLAN")
 
@@ -36,7 +39,7 @@ print("\n ⚙️" + SCRIPT_DESCRIPTION + "\n")
 log("TITLE", "Staging Index Reconcilier")
 log("INFO", "Loads a version of the index which adds data from mdr in staging.")
 
-mdr_to_index = modified_mdr_files("STAGING")
+mdr_to_index = modified_mdr_files(DeploymentPlans.STAGING)
 
 if len(mdr_to_index) == 0:  # In case of no deployments possible
     try:
@@ -53,9 +56,14 @@ current_stg_index = dict()
 # In this context, the deployment give the absolute path to each modified files
 for mdr in mdr_to_index:
     mdr_data = yaml.safe_load(open(mdr, encoding="utf-8"))
+    if old_id:=mdr_data.get("detection_model"):
+        if old_id in LEGACY_ID_MAPPING:
+            mdr_data["detection_model"] = LEGACY_ID_MAPPING[old_id]["uuid"]
     mdr_name = mdr_data.get("name") or mdr_data["title"]
     log("ONGOING", "Updating the staging index", mdr_name)
-    uuid = mdr_data["uuid"]
+    
+    # TODO Backwards compatible with OpenTIDE 1.0, to deprecate at some point
+    uuid = mdr_data.get("uuid") or mdr_data["metadata"]["uuid"]
     current_stg_index[uuid] = mdr_data
 
 if not os.path.exists(STG_INDEX_PATH):

@@ -8,11 +8,11 @@ from pathlib import Path
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 from Engines.modules.tide import DataTide
 
-ATTACK_PATH = Path(DataTide.Configurations.Global.Paths.Index["att&ck"])
+RESOURCES_PATH = Path(DataTide.Configurations.Global.Paths.Index["resources"])
 ATTACK_RESOURCES = DataTide.Configurations.Resources.attack
-enterprise = ATTACK_PATH / ATTACK_RESOURCES["enterprise"]
-mobile = ATTACK_PATH / ATTACK_RESOURCES["mobile"]
-ics = ATTACK_PATH / ATTACK_RESOURCES["ics"]
+enterprise = RESOURCES_PATH / ATTACK_RESOURCES["enterprise"]
+mobile = RESOURCES_PATH / ATTACK_RESOURCES["mobile"]
+ics = RESOURCES_PATH / ATTACK_RESOURCES["ics"]
 
 vocab_folder = Path(DataTide.Configurations.Global.Paths.Core.vocabularies)
 techniques_vocab = r"ATT&CK Techniques.yaml"
@@ -37,10 +37,11 @@ def gen_techniques_vocab(attack_table, out_file, prefix=None):
 
     df = pd.read_excel(attack_table, sheet_name="techniques")
     df = df[["ID", "name", "tactics", "description", "url"]]
-    df = df.rename(columns={"ID": "id", "tactics": "stage", "url": "link"})
+    df = df.rename(columns={"ID": "id", "tactics": "tide.vocab.stages", "url": "link"})
     keys = df.to_dict("records")
 
     for p in keys:
+        print(p)
         p["name"] = prefix + p["name"]
         p["tide.vocab.stages"] = [
             (

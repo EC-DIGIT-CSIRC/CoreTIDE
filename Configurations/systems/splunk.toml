@@ -8,6 +8,7 @@ visualize your data to quickly act on insights from across your technology lands
 
 [setup]
 proxy = false
+ssl = false #Disable SSL in case of connectivity issues (only in trusted environment)
 url = "$SPLUNK_URL"
 port = "$SPLUNK_PORT"
 app = "$SPLUNK_APP" # App the searches will be deployed to.

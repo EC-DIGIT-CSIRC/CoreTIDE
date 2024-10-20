@@ -46,10 +46,9 @@ RAW_PATHS = DataTide.Configurations.Global.Paths._raw.copy()
 RAW_WIKI_PATH = RAW_PATHS["wiki_docs_folder"]
 LOOKUP_DOCS_FOLDER = Path(str(RAW_PATHS["lookup_docs"]).removeprefix(RAW_WIKI_PATH))
 SPECS = Path(str(RAW_PATHS["schemas_docs_folder"]).removeprefix(RAW_WIKI_PATH))
-
+VOCABS_DOCS = Path(str(RAW_PATHS["vocabularies_docs"]).removeprefix(RAW_WIKI_PATH))
 
 DOC_TITLES = DOCUMENTATION_CONFIG.titles
-VOCABS_DOCS = Path(str(PATHS_CONFIG["vocabularies_docs"]).removeprefix(RAW_WIKI_PATH))
 SKIP_VOCABS = DOCUMENTATION_CONFIG.skip_vocabularies
 WIKI_PATH = PATHS_CONFIG["wiki_docs_folder"]
 OUT_PATH = Path(WIKI_PATH) / "_sidebar.md"
@@ -108,19 +107,12 @@ def sidebar_link(model_id):
 
     doc_path = WIKI_MODEL_DOCUMENTATION_FOLDER + "/"+ DOCUMENTATION_CONFIG.object_names[model_type]
 
-    if model_type == "mdr":
-        model_name = model.get("name") or model.get("title").split("$")[0].strip()
-        model_name.replace("_", " ")
-        # status = model.get("status")
-        # backlink_name = "[{}] {}".format(status,model_name)
-        backlink_name = model_name
-        file_link = f"/{doc_path}/{icon} {model_name}"
-
-    else:
-        model_name = model["name"].strip()
-        model_name.replace("_", " ")
-        backlink_name = "[{}] {}".format(model_id, model_name)
-        file_link = f"/{doc_path}/{icon} {backlink_name}"
+    model_name = model.get("name")
+    model_name.replace("_", " ")
+    # status = model.get("status")
+    # backlink_name = "[{}] {}".format(status,model_name)
+    backlink_name = model_name
+    file_link = f"/{doc_path}/{icon} {model_name}"
 
     if GLFM:
         file_link = file_link.replace(" ", "-").replace("_", "-")

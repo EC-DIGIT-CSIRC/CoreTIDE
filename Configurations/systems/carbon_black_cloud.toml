@@ -9,10 +9,14 @@ operations centers (SOCs) and incident response (IR) teams."""
 
 [setup]
 proxy = false
+ssl = true #Disable SSL in case of connectivity issues (only in trusted environment)
 url = "$CBC_URL"
 watchlist = "" #Can be overriden by MDR schema
 #Default organizations the MDR can deploy to. Can be overriden by MDR schema
 organizations = [] 
+
+[validation]
+organization = "" #The org where the query validation is executed on
 
 [secrets]
 # For every organization, add org.org_key and org.token pointing to envvars

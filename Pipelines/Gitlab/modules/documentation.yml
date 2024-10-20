@@ -7,7 +7,7 @@
     - cd $TIDE_CORE_REPO
     - git clone $TIDE_WIKI_ACCESS
     - pwd 
-  
+
     # Generate index. Stores a copy in wiki for Staging documentation
     - cd Engines/indexing/
     - export GENERATE_INDEX_FILE=True
@@ -46,7 +46,6 @@
 🚧 MDR Staging Documentation:
   stage: 📖 Documentation
   script:
-    - git rebase origin/$CI_DEFAULT_BRANCH #Allows to pull latest mutation if there are
     - cd $TIDE_CORE_REPO
     - git clone $TIDE_WIKI_ACCESS
     - pwd 
@@ -95,6 +94,7 @@
         - Models Library/Managed Detection Rules/*.yaml
   needs:
     - 🔮 Staging Validation Toolchain
+    - 🔎 Query Validation
   retry: 1
   variables:
     FF_USE_NEW_BASH_EVAL_STRATEGY: "true"

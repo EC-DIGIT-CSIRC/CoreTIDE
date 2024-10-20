@@ -89,8 +89,8 @@ def definition_handler(entry_point):
 
 def gen_template(metaschema, required):
     body = {}
-    for key in metaschema.keys():
-
+    for key in metaschema:
+        
         if not metaschema[key].get("tide.template.hide"):
 
             if metadef := metaschema[key.replace("#", "")].get("tide.meta.definition"):
@@ -98,10 +98,15 @@ def gen_template(metaschema, required):
                     key = "#" + key
                 if metadef is True:
                     temp = definition_handler(key.replace("#", ""))
+                    definition_required = temp.get("required", [])
+                    definition_required.extend(temp.get("tide.template.force-required", []))
                 else:
                     temp = definition_handler(metadef)
+                    definition_required = temp.get("required", [])
+                    definition_required.extend(temp.get("tide.template.force-required", []))
+
                 template = gen_template(
-                    {key.replace("#", ""): temp}, required=temp.get("required", [])
+                    {key.replace("#", ""): temp}, required=definition_required
                 )
                 template = (
                     template.get(key)
@@ -112,7 +117,7 @@ def gen_template(metaschema, required):
 
             else:
                 keyword_type = (
-                    metaschema[key].get("type") or "object"
+                    metaschema[key].get("type") or "string"
                 )  # Assuming object by default to circumvent validations errors
 
                 # If multiple types are accepted, considering only the first one in list for template
@@ -227,6 +232,8 @@ def gen_template(metaschema, required):
                             content = "|\n'#Type Here"
                     elif "default" in metaschema[key]:
                         content = metaschema[key]["default"]
+                    elif "const" in metaschema[key]:
+                        content = metaschema[key]["const"]
 
                     if keyword_type == "array":
                         if key not in required:
@@ -299,6 +306,7 @@ def run():
             log("ONGOING", "Generating template", str(meta))
 
             parsed = DataTide.TideSchemas.Index[meta]
+            placeholders:dict = parsed.get("tide.placeholders") or {}
             required = get_required(parsed["properties"], parsed["required"])
             required.extend(parsed.get("tide.template.force-required") or [])
             template = gen_template(parsed["properties"], required)
@@ -308,6 +316,10 @@ def run():
 
             replace_strings_in_file(template_path, ["- Comment out"], "#-")
             replace_strings_in_file(template_path, ["blank", "'"], "")
+
+            for placeholder in placeholders:
+                replace_strings_in_file(template_path, [f"${placeholder}"], placeholders[placeholder])
+
             remove_blanks(template_path)
             make_spaces(template_path, parsed["properties"])
 
@@ -330,6 +342,8 @@ def run():
 
                 log("ONGOING", "Generating template", subschema_name)
                 required = get_required(parsed["properties"], parsed["required"])
+                required.extend(parsed.get("tide.template.force-required") or [])
+
                 subschema_template = gen_template(parsed["properties"], required)
 
                 with open(subschema_template_path, "w+") as output:

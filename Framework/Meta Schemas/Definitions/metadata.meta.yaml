@@ -3,14 +3,30 @@ type: object
 tide.template.spacer: true
 description: Non technical indicators helping with overall data management
 required:
-  - tlp
+  - uuid
+  - schema
   - version
+  - tlp
   - created
   - modified
   - author
-
+  
 properties:
 
+  uuid: 
+    title: Universally unique identifier of the Tide Object
+    type: string
+    format: uuid
+    description: According to UUIDv4 specification. You can use https://www.uuidgenerator.net/version4 to generate UUIDs.
+    example: 323d548d-17ca-46fa-a7c7-de43302456a1
+    pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$
+  
+  schema:
+    title: Schema identifier and version
+    type: string
+    description: Identifier of the schema at its current version 
+    const: $SCHEMA_VERSION
+  
   version:
     title: Version
     type: integer
@@ -60,4 +76,3 @@ properties:
     items:
       type: string
       format: email
-    

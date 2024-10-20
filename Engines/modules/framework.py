@@ -2,7 +2,7 @@ import os
 import git
 import uuid
 import sys
-from typing import Literal
+from typing import Literal, overload
 
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
@@ -385,11 +385,8 @@ def childs(model_id: str) -> list:
     CHILDS_INDEX = MODELS_INDEX[child_type]
     for child in CHILDS_INDEX:
         if child_type == "mdr":
-            child_version = get_type(child, get_version=True)
-            if child_version == "mdrv2":
-                data = "tags"
-            else:
-                data = None
+            data = None
+        
         if data:
             if model_id in CHILDS_INDEX[child].get(data, {}).get(reference, []):
                 implementations.append(child)
@@ -398,36 +395,41 @@ def childs(model_id: str) -> list:
                 implementations.append(child)
 
     return implementations
-
-
-def get_type(model_id: str, get_version=False):
+@overload
+def get_type(model_uuid:str)->str:
+    ...
+@overload
+def get_type(model_uuid:str, mute:Literal[True])->str|None:
+    ...
+@overload
+def get_type(model_uuid:str, mute:Literal[False])->str:
+    ...
+def get_type(model_uuid:str, mute:bool=False):
     """
-    Return the model type based on the model id format
+    Return the model type based on the schema identifier format.
     """
 
-    try:
-        # Testing if model_id is a uuid, which would mean an MDR
-        uuid.UUID(model_id)
-        if get_version == True:
-            model_body = MODELS_INDEX["mdr"][model_id]
-            if "configurations" not in model_body.keys():
-                return "mdrv2"
-            else:
-                return "mdrv3"
-        else:
-            return "mdr"
+    model_body = DataTide.Models.FlatIndex.get(model_uuid, {})
 
-    except:
-        model_type = model_id[:3].lower()
-        # Catch-all in case the uuid is not valid, so we don't truncate the
-        # erroneuous string.
-        if (
-            model_type in MODELS_INDEX.keys() or model_type == "rpt"
-        ):  # Special case for reports
-            return model_type
+    if not model_body:
+        if mute:
+            return None
         else:
-            return "mdr"
+            log("FATAL", "UUID does not exist in the index of Tide Objects", model_uuid)
+            raise Exception
 
+    schema = model_body.get("metadata", {}).get("schema")
+    if not schema:
+        #TODO For backwards compatibility with MDR still on 1.0. To be deprecated.
+        if model_body.get("configurations"):
+            return "mdr"
+        if mute:
+            return None
+        else:
+            log("FATAL", "Missing schema identifier in object", model_body.get("name", "NAME NOT FOUND"))
+            raise Exception
+        
+    return schema.split("::")[0]
 
 def techniques_resolver(model_id: str, recursive=True) -> list:
     """
@@ -444,6 +446,7 @@ def techniques_resolver(model_id: str, recursive=True) -> list:
 
     # Find the model_type
     model_type = get_type(model_id)
+        
     # Load Model Data
     model_body = MODELS_INDEX[model_type][model_id]
 

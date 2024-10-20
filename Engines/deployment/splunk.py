@@ -9,87 +9,24 @@ import pandas as pd
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.modules.splunk import (
+    SplunkEngineInit,
     connect_splunk,
     cron_to_timeframe,
     create_query,
     splunk_timerange,
-    correct_timerange_mode
 )
 from Engines.modules.framework import (
     get_value_metaschema,
     techniques_resolver,
-    get_vocab_entry,
 )
-from Engines.modules.deployment import fetch_config_envvar, Proxy
 from Engines.modules.logs import log
+from Engines.modules.debug import DebugEnvironment
 from Engines.modules.tide import DataTide
 
 from Engines.modules.plugins import DeployMDR
 
 
-class SplunkDeploy(DeployMDR):
-
-    def __init__(self):
-
-        if (
-            os.environ.get("DEBUG") == "True"
-            or os.environ.get("TERM_PROGRAM") == "vscode"
-        ):
-            self.DEBUG = True  # Killswitch for all debug behaviours
-            log("INFO", "DEBUG Mode is activated")
-        else:
-            self.DEBUG = False
-
-        self.DEBUG_STEP = False  # Edits parameters in the saved search object to check which one fails
-        self.DEBUG_FILES_UUID = [
-            "701b9c83-15f9-411d-bf3f-d11597b62f8b"
-        ]  # Target a specific file to pickup
-
-        self.DEPLOYER_IDENTIFIER = "splunk"
-        SPLUNK_CONFIG = DataTide.Configurations.Systems.Splunk
-        self.DEFAULT_CONFIG = SPLUNK_CONFIG.defaults
-        SPLUNK_SETUP = fetch_config_envvar(SPLUNK_CONFIG.setup)
-        SPLUNK_SECRETS = fetch_config_envvar(SPLUNK_CONFIG.secrets)
-
-        self.SPLUNK_URL = SPLUNK_SETUP["url"]
-        self.SPLUNK_PORT = SPLUNK_SETUP["port"]
-        self.SPLUNK_APP = SPLUNK_SETUP["app"]
-        self.SPLUNK_TOKEN = SPLUNK_SECRETS["token"]
-
-        if SPLUNK_SETUP["proxy"]:
-            Proxy.set_proxy()
-        else:
-            Proxy.unset_proxy()
-
-        self.CORRELATION_SEARCHES = SPLUNK_SETUP["correlation_searches"]
-        self.SPLUNK_ACTIONS = SPLUNK_SETUP["actions_enabled"]
-        self.STATUS_MODIFIERS = SPLUNK_CONFIG.modifiers
-        self.SPLUNK_DEFAULT_ACTIONS = SPLUNK_SETUP.get("default_actions") or []        
-        
-        self.TIMERANGE_MODE = correct_timerange_mode(SPLUNK_SETUP.get("frequency_scheduling", ""))
-        self.SPLUNK_SUBSCHEMA = DataTide.TideSchemas.subschemas["systems"][
-            self.DEPLOYER_IDENTIFIER
-        ]["properties"]
-
-        self.ALERT_SEVERITY_MAPPING = {
-            "Informational": 2,
-            "Low": 3,
-            "Medium": 4,
-            "High": 5,
-            "Critical": 6,
-        }
-
-        # Skewing Setup
-        SKEWING = SPLUNK_SETUP.get("allow_skew")
-        self.SKEWING_VALUE: int | float
-        if SKEWING:
-            self.SKEWING_VALUE = float(
-                SKEWING.replace("%", "e-2")
-            )  # Converts skewing into 2 decimal equivalent
-        else:
-            self.SKEWING_VALUE = 0
-        # Optional added offset
-        self.OFFSET = int(SPLUNK_SETUP.get("schedule_offset", 0)) 
+class SplunkDeploy(SplunkEngineInit, DeployMDR):
 
     def config_mdr(self, mdr):
         """
@@ -99,7 +36,7 @@ class SplunkDeploy(DeployMDR):
         config = dict()
 
         # Before processing MDR data, adding config configuration
-        uuid = mdr["uuid"]
+        uuid = mdr.get("uuid") or mdr["metadata"]["uuid"]
         name = mdr["name"]
         description = mdr["description"]
         mdr_splunk = mdr["configurations"]["splunk"]
@@ -371,68 +308,66 @@ class SplunkDeploy(DeployMDR):
             if attribute in deploy_config:
                 second_stage[attribute] = deploy_config.pop(attribute)
 
-        if not self.DEBUG:
-            # Check if saved search already exists or create a new one
-            search_exists = False
-            try:
-                selected_search = service.saved_searches[name]
-                search_exists = True
-            except:
-                selected_search = service.saved_searches.create(name, search=query)
+        from pprint import pprint
+        pprint(deploy_config)
 
+        # Check if saved search already exists or create a new one
+        search_exists = False
+        try:
+            selected_search = service.saved_searches[name]
+            search_exists = True
+        except:
+            selected_search = service.saved_searches.create(name, search=query)
+
+        if search_exists:
+            log("INFO", "✨ Found existing saved search")
+        else:
+            log("ONGOING", "🆕 Creating a new search...")
+
+        if mdr_splunk["status"] == "REMOVED":
             if search_exists:
-                log("INFO", "✨ Found existing saved search")
+                service.saved_searches.delete(name)
+                log("WARNING", f"🗑️ Deleted splunk alert: {name}")
+                return None
+
             else:
-                log("ONGOING", "🆕 Creating a new search...")
+                log(
+                    "SKIP", f"🗑️ [INFO] Saved search {name} was already non existent"
+                )
 
-            if mdr_splunk["status"] == "REMOVED":
-                if search_exists:
-                    service.saved_searches.delete(name)
-                    log("WARNING", f"🗑️ Deleted splunk alert: {name}")
-                    return None
+        # Debugging output; sets attribute one by one
+        if self.DEBUG_STEP:
+            for k, v in deploy_config.items():
+                log("ONGOING", f"Updating value {k} with {v}")
+                selected_search.update(**{k: v})
 
-                else:
-                    log(
-                        "SKIP", f"🗑️ [INFO] Saved search {name} was already non existent"
-                    )
-
-            # Debugging output; sets attribute one by one
-            if self.DEBUG_STEP:
-                for k, v in deploy_config.items():
-                    log("DEBUG", f"Updating value {k} with {v}")
+            if second_stage:
+                for k, v in second_stage.items():
+                    log("ONGOING", f"Updating value {k} with {v}")
                     selected_search.update(**{k: v})
 
-                if second_stage:
-                    for k, v in second_stage.items():
-                        log("DEBUG", f"Updating value {k} with {v}")
-                        selected_search.update(**{k: v})
+        else:
+            selected_search.update(**deploy_config)
 
-            else:
-                selected_search.update(**deploy_config)
-
-                # Rolling out attributes with dependencies that will block the deployment if out of order.
-                if second_stage:
-                    selected_search.update(**second_stage)
+            # Rolling out attributes with dependencies that will block the deployment if out of order.
+            if second_stage:
+                selected_search.update(**second_stage)
         log("SUCCESS", "Deployed on Splunk", name)
 
         return True
 
     def deploy(self, deployment: list[str]):
 
-        deployment = self.DEBUG_FILES_UUID if not deployment else deployment
-
         if not deployment:
             raise Exception("DEPLOYMENT NOT FOUND")
 
-        if not self.DEBUG:
-            service = connect_splunk(
-                host=self.SPLUNK_URL,
-                port=self.SPLUNK_PORT,
-                token=self.SPLUNK_TOKEN,
-                app=self.SPLUNK_APP,
-            )
-        else:
-            service = "DEBUG"
+        service = connect_splunk(
+            host=self.SPLUNK_URL,
+            port=self.SPLUNK_PORT,
+            token=self.SPLUNK_TOKEN,
+            app=self.SPLUNK_APP,
+            ssl_enabled=self.SSL_ENABLED
+        )
 
         # Start deployment routine
         for mdr in deployment:
@@ -452,3 +387,6 @@ class SplunkDeploy(DeployMDR):
 
 def declare():
     return SplunkDeploy()
+
+if __name__ == "__main__" and DebugEnvironment.ENABLED:
+    SplunkDeploy().deploy(DebugEnvironment.MDR_DEPLOYMENT_TEST_UUIDS)
