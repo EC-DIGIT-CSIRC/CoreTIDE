@@ -43,7 +43,7 @@
   rules:
     - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
       changes: 
-        - Models/Managed Detection Rules/*.yaml
+        - ./Models/Managed Detection Rules/*.yaml
 
 📄 Lookups Validation:
   stage: ✅ Validation
