@@ -68,7 +68,7 @@ class PluginEnginesLoader:
             # Skip plugin load if system is not enabled, as will
             # create initialization problems if the CI variables 
             # were not correctly set
-            if not CONFIGURATIONS[system].get("enabled", False):
+            if not CONFIGURATIONS[system].get("tide", {}).get("enabled", False):
                 log("SKIP",
                     "Not loading system plugin, as is not marked as enabled",
                     system)
