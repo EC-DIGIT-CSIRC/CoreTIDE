@@ -36,6 +36,7 @@ class SplunkEngineInit(ABC):
         self.DEPLOYER_IDENTIFIER = "splunk"
 
         self.SSL_ENABLED:bool = SPLUNK_SETUP["ssl"]
+        log("INFO", f"SSL Verification has been configured to {str(self.SSL_ENABLED)}")
         if self.DEBUG:
             self.SSL_ENABLED = DebugEnvironment.SSL_ENABLED
         self.SPLUNK_URL = SPLUNK_SETUP["url"]
@@ -191,6 +192,7 @@ def custom_request_handler(url, message):
         if os.environ["TIDE_SPLUNK_SSL_ENABLED"]:
             response = urllib.request.urlopen(req)
         else:
+            log("INFO", "SSL Verification set to False, creating unverified context")
             response = urllib.request.urlopen(req, context=ssl._create_unverified_context())
     
     except HTTPError as error:  # type: ignore
@@ -216,7 +218,7 @@ def connect_splunk(
     token: str,
     app: str,
     allow_http_errors:bool=False,
-    ssl_enabled:bool=True
+    ssl_enabled:bool=False
 ) -> client.Service:
     port = int(port)
     
@@ -226,7 +228,7 @@ def connect_splunk(
         log("INFO", "HTTP Errors will be returned with error code 19", "Ensure to handle them appropriately")
         
     # Setting this signal over environment variables to workaround how the handler function is passed 
-    os.environ["TIDE_SPLUNK_SSL_ENABLED"] = "True"
+    os.environ["TIDE_SPLUNK_SSL_ENABLED"] = str(ssl_enabled)
     
     service = client.connect(
         handler=custom_request_handler,
@@ -235,7 +237,7 @@ def connect_splunk(
         token=token,
         autologin=True,
         app=app,
-        sharing="app",
+        sharing="app"
     )
 
     log("SUCCESS", "Successfully connected to Splunk !")
