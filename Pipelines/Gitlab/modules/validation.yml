@@ -42,7 +42,7 @@
     exit_codes: 19
   rules:
     - changes: 
-        - Models Library/Managed Detection Rules/*.yaml
+        - Models/Managed Detection Rules/*.yaml
 
 📄 Lookups Validation:
   stage: ✅ Validation
