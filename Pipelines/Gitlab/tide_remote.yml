@@ -10,9 +10,9 @@ stages:
   - 🚀 Deployment
 
 include: 
-  - remote: 'https://code.europa.eu/ec-digit-s2/opentide/coretide/-/raw/core/Pipelines/Gitlab/modules/reporting.yml'
-  - remote: 'https://code.europa.eu/ec-digit-s2/opentide/coretide/-/raw/core/Pipelines/Gitlab/modules/mutation.yml'
-  - remote: 'https://code.europa.eu/ec-digit-s2/opentide/coretide/-/raw/core/Pipelines/Gitlab/modules/validation.yml'
+  - remote: 'https://code.europa.eu/ec-digit-s2/opentide/coretide/-/raw/core/Pipelines/Gitlab/modules/deployment.yml'
   - remote: 'https://code.europa.eu/ec-digit-s2/opentide/coretide/-/raw/core/Pipelines/Gitlab/modules/documentation.yml'
   - remote: 'https://code.europa.eu/ec-digit-s2/opentide/coretide/-/raw/core/Pipelines/Gitlab/modules/framework.yml'
-  - remote: 'https://code.europa.eu/ec-digit-s2/opentide/coretide/-/raw/core/Pipelines/Gitlab/modules/deployment.yml'
+  - remote: 'https://code.europa.eu/ec-digit-s2/opentide/coretide/-/raw/core/Pipelines/Gitlab/modules/mutation.yml'
+  - remote: 'https://code.europa.eu/ec-digit-s2/opentide/coretide/-/raw/core/Pipelines/Gitlab/modules/reporting.yml'
+  - remote: 'https://code.europa.eu/ec-digit-s2/opentide/coretide/-/raw/core/Pipelines/Gitlab/modules/validation.yml'

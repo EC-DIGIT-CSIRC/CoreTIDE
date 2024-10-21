@@ -29,7 +29,7 @@
   allow_failure:
     exit_codes: 19
 
-🔎 Query Validation:
+🔎 Staging Query Validation:
   stage: ✅ Validation
   script:
     - export DEPLOYMENT_PLAN=STAGING #Temp, needs to be parametized at workflow level
@@ -41,7 +41,8 @@
   allow_failure:
     exit_codes: 19
   rules:
-    - changes: 
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+      changes: 
         - Models/Managed Detection Rules/*.yaml
 
 📄 Lookups Validation:
