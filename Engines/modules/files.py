@@ -56,6 +56,7 @@ def resolve_configurations() -> dict[str, dict]:
                     # Currently only used for specific nesting under systems config,
                     # such as certificates
                     elif os.path.isdir(configuration_path / entry / config):
+                        config_index[entry][config] = dict()
                         for file in os.listdir(configuration_path / entry / config):
                             if file.endswith("crt"):
                                 file_name = file.removesuffix(".crt")
