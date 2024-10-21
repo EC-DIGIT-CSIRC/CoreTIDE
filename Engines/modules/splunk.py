@@ -189,20 +189,22 @@ def custom_request_handler(url, message):
     headers = dict(message.get("headers", []))
     req = urllib.request.Request(url, data, headers)
     response = None
+    CUSTOM_SERVER_CERTIFICATES = DataTide.Configurations.Systems.Certificates.Index
+    log("INFO", "Found the following custom server certificates on the Tide Instance",
+        str(CUSTOM_SERVER_CERTIFICATES.keys()))
     try:
         if os.environ["TIDE_SPLUNK_SSL_ENABLED"] == "True":
-            try:
-                response = urllib.request.urlopen(req)
-            except URLError:
-                host = urlparse(url).hostname
-                log("FAILURE",
-                    "Failed to achieve connection, trying to extract server certificate and trust it",
-                    f"Server Host : {host}")
-                server_certificate = ssl.get_server_certificate((host, 443))
-                log("ONGOING", f"Extracted server certificate on host {host}", str(server_certificate))
-                server_ssl_context = ssl.create_default_context(cadata=server_certificate)
-                log("ONGOING", "Created new SSL context, trusting the server certificate")
+            host = urlparse(url).hostname
+            if host in CUSTOM_SERVER_CERTIFICATES:
+                server_certificate_chain = CUSTOM_SERVER_CERTIFICATES[host]
+                log("ONGOING",
+                    "Found the following server certificate chain in custom certificates",
+                    str(server_certificate_chain))
+                server_ssl_context = ssl.create_default_context(cadata=server_certificate_chain)
+                log("ONGOING", "Created a custom SSL context with the server certificate chain")
                 response = urllib.request.urlopen(req, context=server_ssl_context)
+
+            response = urllib.request.urlopen(req)
 
         else:
             log("INFO", "SSL Verification set to False, creating unverified context")

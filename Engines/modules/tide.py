@@ -374,6 +374,9 @@ class DataTide:
         class Systems:
             Index = dict(IndexTide.load()["configurations"]["systems"])
 
+            @dataclass
+            class Certificates:
+                Index = dict(IndexTide.load()["configurations"]["systems"]["certificates"])
             @dataclass(frozen=True)
             class Splunk:
                 Index = dict(IndexTide.load()["configurations"]["systems"]["splunk"])
