@@ -195,6 +195,8 @@ def custom_request_handler(url, message):
     try:
         if os.environ["TIDE_SPLUNK_SSL_ENABLED"] == "True":
             host = urlparse(url).hostname
+            log("ONGOING", "Attempting to make an HTTPS connection to host", host)
+            
             if host in CUSTOM_SERVER_CERTIFICATES:
                 server_certificate_chain = CUSTOM_SERVER_CERTIFICATES[host]
                 log("ONGOING",
@@ -203,7 +205,7 @@ def custom_request_handler(url, message):
                 server_ssl_context = ssl.create_default_context(cadata=server_certificate_chain)
                 log("ONGOING", "Created a custom SSL context with the server certificate chain")
                 response = urllib.request.urlopen(req, context=server_ssl_context)
-
+            
             response = urllib.request.urlopen(req)
 
         else:
