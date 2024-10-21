@@ -44,24 +44,14 @@ def resolve_configurations() -> dict[str, dict]:
             elif os.path.isdir(configuration_path / entry):
                 config_index[entry] = dict()
                 for config in os.listdir(configuration_path / entry):
-                    if os.path.isfile(configuration_path / entry / config):
-                        configuration = toml.load(
-                            open(configuration_path / entry / config, encoding="utf-8")
-                        )
-                        config = configuration.get("tide", {}).get(
-                            "identifier"
-                        ) or config.removesuffix(".toml")
-                        config_index[entry][config] = configuration
+                    configuration = toml.load(
+                        open(configuration_path / entry / config, encoding="utf-8")
+                    )
+                    config = configuration.get("tide", {}).get(
+                        "identifier"
+                    ) or config.removesuffix(".toml")
+                    config_index[entry][config] = configuration
 
-                    # Currently only used for specific nesting under systems config,
-                    # such as certificates
-                    elif os.path.isdir(configuration_path / entry / config):
-                        config_index[entry][config] = dict()
-                        for file in os.listdir(configuration_path / entry / config):
-                            if file.endswith("crt"):
-                                file_name = file.removesuffix(".crt")
-                                file_content = open(configuration_path / entry / config / file, encoding="utf-8").read()
-                                config_index[entry][config][file_name] = file_content
 
         return config_index
 

@@ -181,9 +181,6 @@ def indexer(write_index=False) -> dict:
         recomp_data = index["configurations"][recomp]
 
         for data in recomp_data:
-
-            if type(recomp_data[data]) is not dict:
-                continue
             
             obj_counter += 1
             sub_name = recomp_data[data]["tide"]["name"]

@@ -189,23 +189,8 @@ def custom_request_handler(url, message):
     headers = dict(message.get("headers", []))
     req = urllib.request.Request(url, data, headers)
     response = None
-    CUSTOM_SERVER_CERTIFICATES = DataTide.Configurations.Systems.Certificates.Index
-    log("INFO", "Found the following custom server certificates on the Tide Instance",
-        str(CUSTOM_SERVER_CERTIFICATES.keys()))
     try:
         if os.environ["TIDE_SPLUNK_SSL_ENABLED"] == "True":
-            host = urlparse(url).hostname
-            log("ONGOING", "Attempting to make an HTTPS connection to host", host)
-            
-            if host in CUSTOM_SERVER_CERTIFICATES:
-                server_certificate_chain = CUSTOM_SERVER_CERTIFICATES[host]
-                log("ONGOING",
-                    "Found the following server certificate chain in custom certificates",
-                    str(server_certificate_chain))
-                server_ssl_context = ssl.create_default_context(cadata=server_certificate_chain)
-                log("ONGOING", "Created a custom SSL context with the server certificate chain")
-                response = urllib.request.urlopen(req, context=server_ssl_context)
-            
             response = urllib.request.urlopen(req)
 
         else:
@@ -220,6 +205,9 @@ def custom_request_handler(url, message):
             pass  # Propagate HTTP errors via the returned response message
         else:
             log("FATAL", f"Received HTTP Error Code {repr(error)}", str(response.read()))
+
+    if not response:
+        log("FATAL", "Unexpected error, no Splunk network response was returned")
 
     return {
         "status": response.code,  # type: ignore
