@@ -52,7 +52,7 @@ class SplunkEngineInit(ABC):
             if not self.SPLUNK_USERNAME:
                 log("FATAL", "No Splunk Username found, ensure to provision one in splunk.toml")
                 raise Exception
-            if not self.SPLUNK_TOKEN:
+            if not self.SPLUNK_PASSWORD:
                 log("FATAL", "No Splunk Password found, ensure to provision one in splunk.toml")
                 raise Exception
 
