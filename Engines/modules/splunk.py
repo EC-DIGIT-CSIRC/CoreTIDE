@@ -194,7 +194,7 @@ def custom_request_handler(url, message):
             try:
                 response = urllib.request.urlopen(req)
             except URLError:
-                host = urlparse(url).netloc
+                host = urlparse(url).hostname
                 log("FAILURE",
                     "Failed to achieve connection, trying to extract server certificate and trust it",
                     f"Server Host : {host}")
