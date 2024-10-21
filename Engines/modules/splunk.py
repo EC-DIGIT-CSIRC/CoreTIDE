@@ -192,7 +192,8 @@ def custom_request_handler(url, message):
         if os.environ["TIDE_SPLUNK_SSL_ENABLED"] == "True":
             import certifi
             log("INFO", "Adding Root CAs", str(certifi.where()))
-            response = urllib.request.urlopen(req, cafile=certifi.where())
+            context = ssl.create_default_context(cafile=certifi.where())
+            response = urllib.request.urlopen(req, context=context)
         else:
             log("INFO", "SSL Verification set to False, creating unverified context")
             response = urllib.request.urlopen(req, context=ssl._create_unverified_context())
