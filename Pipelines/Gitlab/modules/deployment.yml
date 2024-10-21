@@ -12,7 +12,7 @@
       when: never
     - if: ($CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH) && ($TIDE_DEPLOYMENT == "ENABLED")
       changes: 
-        - Models Library/Managed Detection Rules/*.yaml
+        - Models/Managed Detection Rules/*.yaml
   needs:
     - 🔮 Staging Validation Toolchain
     - 🔎 Query Validation
@@ -43,7 +43,7 @@
       when: never
     - if: ($CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH) && ($TIDE_DEPLOYMENT == "ENABLED")
       changes: 
-        - Models Library/Managed Detection Rules/*.yaml
+        - Models/Managed Detection Rules/*.yaml
   needs:
     - 🔮 Validation Toolchain
   retry: 2
