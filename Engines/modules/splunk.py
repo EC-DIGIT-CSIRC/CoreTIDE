@@ -201,6 +201,9 @@ def custom_request_handler(url, message):
         response = error
         #Workaround as the Splunk SDK reuses this object and we can't communicate with kwargs
         if os.getenv("TIDE_SPLUNK_PLUGIN_ALLOW_HTTP_ERRORS") == "True":
+            log("INFO", "Engaged custom mode to handle HTTP error and pass them downstream")
+            log("SKIP", f"Received HTTP Error Code {response.code} from Splunk",
+                "Converting back to a custom error code to pass the error downstream")
             response.code = 19 #Trick the SDK into not interrupting the return so we can print the details
             pass  # Propagate HTTP errors via the returned response message
         else:
@@ -213,12 +216,17 @@ def custom_request_handler(url, message):
         "status": response.code,  # type: ignore
         "reason": response.msg,  # type: ignore
         "headers": dict(response.info()),  # type: ignore
-        "body": BytesIO(response.read()),  # type: ignore
+        "body": response.read(),  # type: ignore
     }
 
     log("INFO", "Splunk returned the following message", str(message))
 
-    return message
+    return {
+        "status": response.code,  # type: ignore
+        "reason": response.msg,  # type: ignore
+        "headers": dict(response.info()),  # type: ignore
+        "body": BytesIO(response.read()),  # type: ignore
+    }
 
 
 def connect_splunk(
