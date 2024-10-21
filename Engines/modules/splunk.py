@@ -1,7 +1,8 @@
 from random import randrange
 from datetime import datetime
 import urllib.request
-from urllib.error import HTTPError
+from urllib.error import HTTPError, URLError
+from urllib.parse import urlparse
 import sys
 import ssl
 from splunklib import client
@@ -190,10 +191,19 @@ def custom_request_handler(url, message):
     response = None
     try:
         if os.environ["TIDE_SPLUNK_SSL_ENABLED"] == "True":
-            import certifi
-            log("INFO", "Adding Root CAs", str(certifi.where()))
-            context = ssl.create_default_context(cafile=certifi.where())
-            response = urllib.request.urlopen(req, context=context)
+            try:
+                response = urllib.request.urlopen(req)
+            except URLError:
+                host = urlparse(url).netloc
+                log("FAILURE",
+                    "Failed to achieve connection, trying to extract server certificate and trust it",
+                    f"Server Host : {host}")
+                server_certificate = ssl.get_server_certificate((host, 443))
+                log("ONGOING", f"Extracted server certificate on host {host}", str(server_certificate))
+                server_ssl_context = ssl.create_default_context(cadata=server_certificate)
+                log("ONGOING", "Created new SSL context, trusting the server certificate")
+                response = urllib.request.urlopen(req, context=server_ssl_context)
+
         else:
             log("INFO", "SSL Verification set to False, creating unverified context")
             response = urllib.request.urlopen(req, context=ssl._create_unverified_context())
