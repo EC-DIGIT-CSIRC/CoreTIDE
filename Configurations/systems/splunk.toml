@@ -23,7 +23,10 @@ default_actions = ["notable"] # When no actions parameters were identified as pa
 enabled = true
 
 [secrets]
+# Either provide a Splunk API token, or a username/password combination
 token = "$SPLUNK_TOKEN"
+#username = "$SPLUNK_USERNAME"
+#password = "$SPLUNK_PASSWORD"
 
 [modifiers]
 # Modifiers are used to change the deployment behaviour based on the status of a MDR.

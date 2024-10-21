@@ -1,8 +1,8 @@
 from random import randrange
 from datetime import datetime
+from typing import Optional
 import urllib.request
-from urllib.error import HTTPError, URLError
-from urllib.parse import urlparse
+from urllib.error import HTTPError
 import sys
 import ssl
 from splunklib import client
@@ -43,7 +43,18 @@ class SplunkEngineInit(ABC):
         self.SPLUNK_URL = SPLUNK_SETUP["url"]
         self.SPLUNK_PORT = int(SPLUNK_SETUP["port"])
         self.SPLUNK_APP = SPLUNK_SETUP["app"]
-        self.SPLUNK_TOKEN = SPLUNK_SECRETS["token"]
+        self.SPLUNK_TOKEN = SPLUNK_SECRETS.get("token")
+        self.SPLUNK_USERNAME = SPLUNK_SECRETS.get("username")
+        self.SPLUNK_PASSWORD = SPLUNK_SECRETS.get("password")
+
+        if not self.SPLUNK_TOKEN:
+            log("INFO", "No Splunk Token found, username/password login will be privileged")
+            if not self.SPLUNK_USERNAME:
+                log("FATAL", "No Splunk Username found, ensure to provision one in splunk.toml")
+                raise Exception
+            if not self.SPLUNK_TOKEN:
+                log("FATAL", "No Splunk Password found, ensure to provision one in splunk.toml")
+                raise Exception
 
         if SPLUNK_SETUP["proxy"]:
             Proxy.set_proxy()
@@ -199,6 +210,12 @@ def custom_request_handler(url, message):
     
     except HTTPError as error:  # type: ignore
         response = error
+        if response.code == 404:
+            log("FATAL",
+                "Received error code 404 from Splunk when trying to reach URL",
+                url,
+                "Confirm if your credentials are correct.\
+                    If using API tokens, confirm that your setup works (e.g. no KV Store configuration errors)")
         #Workaround as the Splunk SDK reuses this object and we can't communicate with kwargs
         if os.getenv("TIDE_SPLUNK_PLUGIN_ALLOW_HTTP_ERRORS") == "True":
             log("INFO", "Engaged custom mode to handle HTTP error and pass them downstream")
@@ -212,15 +229,6 @@ def custom_request_handler(url, message):
     if not response:
         log("FATAL", "Unexpected error, no Splunk network response was returned")
 
-    message = {
-        "status": response.code,  # type: ignore
-        "reason": response.msg,  # type: ignore
-        "headers": dict(response.info()),  # type: ignore
-        "body": response.read(),  # type: ignore
-    }
-
-    log("INFO", "Splunk returned the following message", str(message))
-
     return {
         "status": response.code,  # type: ignore
         "reason": response.msg,  # type: ignore
@@ -232,13 +240,16 @@ def custom_request_handler(url, message):
 def connect_splunk(
     host: str,
     port: str | int,
-    token: str,
     app: str,
     allow_http_errors:bool=False,
-    ssl_enabled:bool=False
+    ssl_enabled:bool=False,
+    username:Optional[str]=None,
+    password:Optional[str]=None,
+    token:Optional[str]=None,
 ) -> client.Service:
     port = int(port)
     
+
 
     if allow_http_errors:
         os.environ["TIDE_SPLUNK_PLUGIN_ALLOW_HTTP_ERRORS"] = "True"
@@ -247,15 +258,33 @@ def connect_splunk(
     # Setting this signal over environment variables to workaround how the handler function is passed 
     os.environ["TIDE_SPLUNK_SSL_ENABLED"] = str(ssl_enabled)
     
-    service = client.connect(
-        handler=custom_request_handler,
-        host=host,
-        port=port,
-        token=token,
-        autologin=True,
-        app=app,
-        sharing="app"
-    )
+    if token:
+        service = client.connect(
+            handler=custom_request_handler,
+            host=host,
+            port=port,
+            token=token,
+            autologin=True,
+            app=app,
+            sharing="app"
+        )
+    elif username and password:
+        service = client.connect(
+            handler=custom_request_handler,
+            host=host,
+            port=port,
+            username=username,
+            password=password,
+            autologin=True,
+            app=app,
+            sharing="app"
+        )
+
+    else:
+        log("FATAL",
+            "To log into Splunk, either provide an API token, or a username/password combination")
+    
+        raise Exception
 
     log("SUCCESS", "Successfully connected to Splunk !")
 
