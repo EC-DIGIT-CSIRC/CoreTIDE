@@ -209,12 +209,16 @@ def custom_request_handler(url, message):
     if not response:
         log("FATAL", "Unexpected error, no Splunk network response was returned")
 
-    return {
+    message = {
         "status": response.code,  # type: ignore
         "reason": response.msg,  # type: ignore
         "headers": dict(response.info()),  # type: ignore
         "body": BytesIO(response.read()),  # type: ignore
     }
+
+    log("INFO", "Splunk returned the following message", str(message))
+
+    return message
 
 
 def connect_splunk(
