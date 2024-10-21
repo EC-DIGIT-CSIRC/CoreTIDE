@@ -24,7 +24,7 @@ enabled = true
 
 [secrets]
 # Either provide a Splunk API token, or a username/password combination
-token = "$SPLUNK_TOKEN"
+#token = "$SPLUNK_TOKEN"
 #username = "$SPLUNK_USERNAME"
 #password = "$SPLUNK_PASSWORD"
 
