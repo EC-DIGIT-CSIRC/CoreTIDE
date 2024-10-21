@@ -91,7 +91,7 @@
       when: never
     - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
       changes: 
-        - Models Library/Managed Detection Rules/*.yaml
+        - Models/Managed Detection Rules/*.yaml
   needs:
     - 🔮 Staging Validation Toolchain
     - 🔎 Staging Query Validation
