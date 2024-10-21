@@ -84,14 +84,26 @@ class SplunkValidateQuery(SplunkEngineInit, ValidateQuery):
         if not deployment:
             raise Exception("DEPLOYMENT NOT FOUND")
 
-        service = connect_splunk(
+        if self.SPLUNK_TOKEN:
+            log("ONGOING", "Logging to Splunk using API Token")
+            service = connect_splunk(
                 host=self.SPLUNK_URL,
                 port=self.SPLUNK_PORT,
                 token=self.SPLUNK_TOKEN,
                 app=self.SPLUNK_APP,
-                allow_http_errors=True,
                 ssl_enabled=self.SSL_ENABLED
             )
+        else:
+            log("ONGOING", "Logging to Splunk using Username/Password combination")
+            service = connect_splunk(
+                host=self.SPLUNK_URL,
+                port=self.SPLUNK_PORT,
+                username=self.SPLUNK_USERNAME,
+                password=self.SPLUNK_PASSWORD,
+                app=self.SPLUNK_APP,
+                ssl_enabled=self.SSL_ENABLED
+            )
+
         # Start deployment routine
         for mdr in deployment:
             mdr_data:dict = DataTide.Models.mdr[mdr]
