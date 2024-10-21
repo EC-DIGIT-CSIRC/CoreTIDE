@@ -189,7 +189,7 @@ def custom_request_handler(url, message):
     req = urllib.request.Request(url, data, headers)
     response = None
     try:
-        if os.environ["TIDE_SPLUNK_SSL_ENABLED"]:
+        if os.environ["TIDE_SPLUNK_SSL_ENABLED"] == "True":
             response = urllib.request.urlopen(req)
         else:
             log("INFO", "SSL Verification set to False, creating unverified context")
