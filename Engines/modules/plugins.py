@@ -43,7 +43,7 @@ class ValidateQuery(ValidationEngine):
 
 
 class PluginEnginesLoader:
-    """Return Deployer Classes for all available Deployment Engines"""
+    """Return Deployer Classes for all available Deployment Engines"""        
 
     class PluginInterface:
         """Represents a plugin interface. A plugin has a single declare function."""
@@ -65,6 +65,15 @@ class PluginEnginesLoader:
             plugin_name: str = system + identifier
             plugin = None
             
+            # Skip plugin load if system is not enabled, as will
+            # create initialization problems if the CI variables 
+            # were not correctly set
+            if not CONFIGURATIONS[system].get("enabled", False):
+                log("SKIP",
+                    "Not loading system plugin, as is not marked as enabled",
+                    system)
+                continue
+
             try:
                 if isinstance(tier, DeployEngine):
                     try:
@@ -76,7 +85,6 @@ class PluginEnginesLoader:
                         log("WARNING", "Failed to import plugin", repr(e))
                 elif isinstance(tier, ValidationEngine):
                     try:
-                        print("PLUGING TIER IS ValidationEngine")
                         plugin = self.import_plugin(
                             str("Engines.validation." + plugin_name)
                         )
