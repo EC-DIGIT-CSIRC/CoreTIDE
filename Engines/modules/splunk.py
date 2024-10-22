@@ -308,6 +308,9 @@ def create_query(data: dict) -> str:
     #status = mdr_splunk["status"]
     spl = mdr_splunk["query"].strip()
 
+    # For example, one interesting use case could be to trigger dynamic 
+    # macros based on the MDR UUID, for example to enrich alert description
+    # or other purposes 
     #macro = f'| eval MDR_UUID="{uuid}", MDR_status="{status}" \n|`soc_macro_auto_mdr_mapping(MDR_UUID)`'
-
+    #spl = spl + macro
     return spl
