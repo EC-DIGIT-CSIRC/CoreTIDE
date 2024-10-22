@@ -298,13 +298,16 @@ def create_query(data: dict) -> str:
     """
     Automatically adds certain lines to the analyst defined SPL
     """
+    # You can customize the SPL on the fly here, 
+    # by modifying the query before returning it to
+    # other modules
 
     # Backwards compatible with 1.0 data model
-    uuid = data.get("uuid") or data["metadata"]["uuid"]
+    #uuid = data.get("uuid") or data["metadata"]["uuid"]
     mdr_splunk = data["configurations"]["splunk"]
-    status = mdr_splunk["status"]
+    #status = mdr_splunk["status"]
     spl = mdr_splunk["query"].strip()
 
-    macro = f'| eval MDR_UUID="{uuid}", MDR_status="{status}" \n|`soc_macro_auto_mdr_mapping(MDR_UUID)`'
+    #macro = f'| eval MDR_UUID="{uuid}", MDR_status="{status}" \n|`soc_macro_auto_mdr_mapping(MDR_UUID)`'
 
-    return spl + "\n" + macro
+    return spl
