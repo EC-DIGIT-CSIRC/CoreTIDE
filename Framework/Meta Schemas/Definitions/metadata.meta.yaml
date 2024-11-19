@@ -14,7 +14,7 @@ required:
 properties:
 
   uuid: 
-    title: Universally unique identifier of the Tide Object
+    title: UUID
     type: string
     format: uuid
     description: According to UUIDv4 specification. You can use https://www.uuidgenerator.net/version4 to generate UUIDs.
