@@ -276,7 +276,7 @@ def chaining_graph(tvm):
         return br_data
 
     header_data = "\n".join(
-        [f"{v}[{v} {mermaid_breakspace(mermaid_sanitizer(str(model_value(v, 'name'))))}]" for v in header]
+        [f"{v}[{mermaid_breakspace(mermaid_sanitizer(str(model_value(v, 'name'))))}]" for v in header]
     )
 
     vector_links = "\n".join(vector_links)
