@@ -231,7 +231,7 @@ def chaining_graph(tvm):
                         direction = graph_properties[prop].get("direction")
                         node = str()
                         if prop == "actors":
-                            value = f"{value} - {model_value(value, 'name')}"
+                            value = f"{model_value(value, 'name')}"
 
                         if shape == "database":
                             node = f"{value.replace(' ','')}[({value})]"
