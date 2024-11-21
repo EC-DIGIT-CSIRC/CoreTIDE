@@ -297,9 +297,9 @@ def backlink_resolver(model_uuid:str,
     backlink = f'[{backlink_name}]({file_link} "{hover}")'
     
     if raw_link:
-        return file_link
         if raw_hover:
             return file_link, hover
+        return file_link
     
     return backlink
 
