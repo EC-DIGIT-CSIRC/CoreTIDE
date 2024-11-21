@@ -53,14 +53,15 @@ def criticality_doc(criticality_data: str) -> str:
 def metadata_doc(metadata: dict, model_type: str) -> str:
     metaschema = INDEX["metaschemas"][model_type]["properties"]
     # Make metadata footer
-    meta = list()
+    meta = dict()
     for k in metadata:
         meta_title = get_field_title(k, metaschema)
         if meta_title:
-            meta.append(meta_title + " : " + str(metadata[k]))
+            meta[meta_title] = str(metadata[k])
         else:
             log("DEBUG", f"Missing title in metaschema : {metaschema} for key : {k}")
-    metadata_doc_markdown = ", ".join(meta)
+    
+    metadata_doc_markdown = " **|** ".join([f"`{m}`" for m in meta])
 
     return metadata_doc_markdown
 

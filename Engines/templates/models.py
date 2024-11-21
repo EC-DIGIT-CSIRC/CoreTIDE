@@ -2,8 +2,6 @@ MODEL_DOC_TEMPLATE = '''{frontmatter}
 
 {title}
 
-{uuid}
-
 {criticality}
 
 {tlp}
@@ -15,7 +13,7 @@ MODEL_DOC_TEMPLATE = '''{frontmatter}
 
 ---
 
-`{metadata}`
+{metadata}
 
 
 ## 👁️ Description

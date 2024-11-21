@@ -103,7 +103,6 @@ def documentation(mdr):
 
     # TODO Backwards compatible with OpenTIDE 1.0, to deprecate at some point
     uuid_data = mdr.get("uuid") or mdr["metadata"]["uuid"]
-    uuid = f"{get_icon('uuid')} **UUID** : `{uuid_data}`"
     description = mdr.get("description", "").replace("\n", "\n> ")
 
     techniques = techniques_resolver(uuid_data)
@@ -269,7 +268,6 @@ def documentation(mdr):
         banner=banner,
         tlp=tlp,
         techniques=techniques,
-        uuid=uuid_data,
         metadata=metadata,
         description=description,
         cdm=cdm,

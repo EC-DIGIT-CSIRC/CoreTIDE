@@ -56,7 +56,6 @@ def documentation(model):
 
     model_uuid = model.get("metadata", {}).get("uuid")
     model_type = get_type(model_uuid)
-    uuid = f"UUID : *{model_uuid}*"
 
     if DOCUMENTATION_TYPE == "MARKDOWN":
         frontmatter_type = DataTide.Configurations.Documentation.object_names[
@@ -171,7 +170,21 @@ def documentation(model):
     else:
         tags = "#" + ", #".join(tags)
 
-    doc = MODEL_DOC_TEMPLATE.format(**locals())
+    doc = MODEL_DOC_TEMPLATE.format(frontmatter=frontmatter,
+                                    title=title,
+                                    criticality=criticality,
+                                    tlp=tlp,
+                                    techniques=techniques,
+                                    expand_header=expand_header,
+                                    metadata=metadata,
+                                    description=description,
+                                    expand_description=expand_description,
+                                    relation_graph=relation_graph,
+                                    relation_table=relation_table,
+                                    expand_graphs=expand_graphs,
+                                    data_table=data_table,
+                                    references=references,
+                                    tags=tags)
 
     return doc
 

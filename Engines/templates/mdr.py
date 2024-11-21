@@ -13,11 +13,9 @@ TEMPLATEv3 = '''{frontmatter}
 
 {techniques}
 
-{uuid}
-
 ---
 
-`{metadata}`
+{metadata}
 
 ## 👁️‍🗨️ Description
 
