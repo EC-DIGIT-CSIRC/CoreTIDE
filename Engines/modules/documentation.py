@@ -223,7 +223,7 @@ def rich_attack_links(
     return rich_techniques
 
 
-def backlink_resolver(model_id, raw_link=False):
+def backlink_resolver(model_id, raw_link=False, raw_hover=False):
 
     model_type = get_type(model_id)
     model_data = dict()
@@ -286,6 +286,8 @@ def backlink_resolver(model_id, raw_link=False):
     hover = sanitize_hover(str(hover))
     backlink = f'[{backlink_name}]({file_link} "{hover}")'
     if raw_link:
+        if raw_hover:
+            return backlink, hover
         backlink = file_link
     return backlink
 
