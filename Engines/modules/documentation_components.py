@@ -61,6 +61,10 @@ def metadata_doc(metadata: dict, model_type: str) -> str:
         else:
             log("DEBUG", f"Missing title in metaschema : {metaschema} for key : {k}")
     
+    for m in meta:
+        if type(meta[m]) is list:
+            meta[m] = ", ".join(meta[m])
+    
     metadata_doc_markdown = " **|** ".join([f"`{m} : {meta[m]}`" for m in meta])
 
     return metadata_doc_markdown
