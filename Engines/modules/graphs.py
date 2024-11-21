@@ -283,11 +283,11 @@ def chaining_graph(tvm):
         return f"<a href='{backlink}' title='{hover}'>{name}</a>"
 
     header_data = "\n".join(
-        [f"{v}[{mermaid_breakspace(mermaid_sanitizer(str(model_value(v, 'name'))))}]" for v in header]
+        [f"{v}[{vector_node_hyperlink(v)}]" for v in header]
     )
 
     vector_links = "\n".join(vector_links)
 
-    diagram = f"```%%securityLevel=loose%%\n\nmermaid\n\nflowchart LR\n\n{header_data}\n\n{killchain_subgraphs}\n\n{properties_graph}\n\n{vector_links}\n\n```"
+    diagram = f"```mermaid\n%%securityLevel=loose%%\n\nflowchart LR\n\n{header_data}\n\n{killchain_subgraphs}\n\n{properties_graph}\n\n{vector_links}\n\n```"
 
     return diagram, table
