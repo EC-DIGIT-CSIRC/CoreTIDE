@@ -276,7 +276,7 @@ def chaining_graph(tvm):
         return br_data
 
     def vector_node_hyperlink(model_uuid:str)->str:
-        backlink, hover = backlink_resolver(model_uuid, raw_link=True)
+        backlink, hover = backlink_resolver(model_uuid, raw_link=True, raw_hover=True)
         name = mermaid_sanitizer(str(model_value(v, 'name')))
         name = mermaid_breakspace(name)
         
