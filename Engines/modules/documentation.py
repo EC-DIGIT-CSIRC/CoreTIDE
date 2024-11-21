@@ -223,7 +223,10 @@ def rich_attack_links(
     return rich_techniques
 
 
-def backlink_resolver(model_uuid, raw_link=False, raw_hover=False):
+def backlink_resolver(model_uuid:str,
+                        raw_link:bool=False,
+                        raw_hover:bool=False,
+                        hover_length:int=150):
     """
     Formats a markdown link to the model, using localized paths.
 
@@ -289,11 +292,15 @@ def backlink_resolver(model_uuid, raw_link=False, raw_hover=False):
         file_link = file_link.replace(" ", "-").replace("_", "-")
 
     hover = sanitize_hover(str(hover))
+    if len(hover) > hover_length:
+        hover = hover[hover_length:] + "..."  
     backlink = f'[{backlink_name}]({file_link} "{hover}")'
+    
     if raw_link:
+        return file_link
         if raw_hover:
-            return backlink, hover
-        backlink = file_link
+            return file_link, hover
+    
     return backlink
 
 

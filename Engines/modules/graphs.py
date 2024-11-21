@@ -280,7 +280,7 @@ def chaining_graph(tvm):
         name = mermaid_sanitizer(str(model_value(v, 'name')))
         name = mermaid_breakspace(name)
         
-        return f"<a href='{backlink}' title='{hover}'>{name}</a>"
+        return f"<a href='{backlink}'>{name}</a>"
 
     header_data = "\n".join(
         [f"{v}[{vector_node_hyperlink(v)}]" for v in header]
