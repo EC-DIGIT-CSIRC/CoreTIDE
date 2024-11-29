@@ -8,7 +8,7 @@
   - rm -rf $TIDE_CORE_REPO #Delete injected Core
   - git add -A
   - if ! git diff-index --quiet HEAD; then
-  -   git commit -m "[CoreTIDE] Objects Mutation $CI_COMMIT_MESSAGE"
+  -   git commit -m "[CoreTIDE] Objects Mutation"
   -   git rebase origin/$CI_DEFAULT_BRANCH
   -   git push $TIDE_REPO_ACCESS HEAD:$CI_COMMIT_REF_NAME
   - fi

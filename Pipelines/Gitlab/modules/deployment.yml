@@ -12,9 +12,10 @@
       when: never
     - if: ($CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH) && ($TIDE_DEPLOYMENT == "ENABLED")
       changes: 
-        - Models Library/Managed Detection Rules/*.yaml
+        - Models/Managed Detection Rules/*.yaml
   needs:
     - 🔮 Staging Validation Toolchain
+    - 🔎 Staging Query Validation
   retry: 2 # Retrying twice helps with certain systems, like CBC which has random issues
   variables:
     FF_USE_NEW_BASH_EVAL_STRATEGY: "true"
@@ -25,6 +26,7 @@
   stage: 🚀 Deployment
   environment: MDR Production
   script:
+    - git rebase origin/$CI_DEFAULT_BRANCH 
     - export DEPLOYMENT_PLAN=PRODUCTION
     - cd $TIDE_CORE_REPO/Orchestration/
     - python deploy.py
@@ -32,8 +34,8 @@
     - rm -rf $TIDE_CORE_REPO
     - git add -A
     - if ! git diff-index --quiet HEAD; then
-    -   git commit -m "[CoreTIDE] MDR Status Promotion $CI_COMMIT_MESSAGE"
-    -   git rebase origin/$CI_DEFAULT_BRANCH
+    -   git pull $TIDE_REPO_ACCESS
+    -   git commit -m "[CoreTIDE] MDR Status Promotion"
     -   git push $TIDE_REPO_ACCESS HEAD:$CI_COMMIT_REF_NAME
     - fi
   rules:
@@ -41,10 +43,11 @@
       when: never
     - if: ($CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH) && ($TIDE_DEPLOYMENT == "ENABLED")
       changes: 
-        - Models Library/Managed Detection Rules/*.yaml
+        - Models/Managed Detection Rules/*.yaml
   needs:
     - 🔮 Validation Toolchain
   retry: 2
+  resource_group: deployment
   variables:
     FF_USE_NEW_BASH_EVAL_STRATEGY: "true"
   allow_failure:
@@ -54,6 +57,7 @@
   stage: 🚀 Deployment
   environment: Lookups Production
   script:
+    - export DEPLOYMENT_PLAN=PRODUCTION
     - git rebase origin/$CI_DEFAULT_BRANCH #Allows to pull latest mutation if there are
     - cd $TIDE_CORE_REPO/Orchestration/
     - python deploy_lookups.py
@@ -62,7 +66,7 @@
       when: never
     - if: ($CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH) && ($TIDE_DEPLOYMENT == "ENABLED")
       changes: 
-        - Data Model/Lookups/*/*
-      
+        - Lookups/*/*.csv
+  resource_group: deployment
   needs:
     - 📄 Lookups Validation
