@@ -14,6 +14,7 @@ CoreTIDE is planned to go open source for the benefit of the European and beyond
 
 - [Lightning Talk] Hack.lu 2023 : [TIDeMEC(CoreTIDE) : A Detection Engineering Platform Homegrown At The EC](https://www.youtube.com/watch?v=lng-87nRTGQ)
 - [Slides] FIRST Technical Colloquium Amsterdam 2024 : [CoreTIDE: the First Project of the OpenTIDE Family](https://www.first.org/resources/papers/amsterdam24/Benson-Housmann-Seguy-CoreTIDE-FIRST-TC-Amsterdam-2024.pdf) 
+- [Paper] [The OpenTIDE Whitepaper](https://code.europa.eu/groups/ec-digit-s2/opentide/-/wikis/uploads/e66f0f311d758449b350ff4f96105898/OpenTIDE_White_Paper.pdf) 
 
 CoreTIDE is a platform that has been built for the better part of the past 2 years at the EC, and builds on top of years of astute observations of what goes wrong in the detection engineering field. It is an opinionated end-to-end platform, data model, framework and solution built on top of DevOps and as-code principles, with an emphasis on traceability, consistency, safety and automation. The data model of TIDeMEC scales from the input of a threat intelligence signal to the deployment of a detection rule whilst maintaining programmatic relations between actors, threat, detection objectives, and rules.
 
