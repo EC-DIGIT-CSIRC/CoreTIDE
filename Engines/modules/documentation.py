@@ -16,7 +16,7 @@ from Engines.modules.logs import log
 from Engines.modules.tide import DataTide
 
 VOCAB_INDEX = DataTide.Vocabularies.Index
-DOCUMENTATION_TYPE = DataTide.Configurations.Documentation.documentation_type
+DOCUMENTATION_TARGET = DataTide.Configurations.Documentation.documentation_target
 ICONS = DataTide.Configurations.Documentation.icons
 DOCUMENTATION_CONFIG = DataTide.Configurations.Documentation
 CONFIG_INDEX = DataTide.Configurations.Index
@@ -283,12 +283,12 @@ def backlink_resolver(model_uuid:str,
         backlink_name = model_name
         file_link = f"{doc_path}{icon} {model_name}"
 
-    if DOCUMENTATION_TYPE == "MARKDOWN":
+    if DOCUMENTATION_TARGET == "generic":
         file_link = file_link.replace(" ", "%20")
         if model_type != "rpt":
             file_link += ".md"
 
-    elif DOCUMENTATION_TYPE == "GLFM":
+    elif DOCUMENTATION_TARGET == "gitlab":
         file_link = file_link.replace(" ", "-").replace("_", "-")
 
     hover = sanitize_hover(str(hover))
