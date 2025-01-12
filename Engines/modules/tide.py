@@ -395,7 +395,7 @@ class DataTide:
 
 
             Index = dict(IndexTide.load()["configurations"]["documentation"])
-            documentation_target = str(Index["documentation_target"])
+            documentation_target = str(Index.get("documentation_target"))
             scope = list(Index["scope"])
             skip_model_keys = list(Index["skip_model_keys"])
             skip_vocabularies = list(Index["skip_model_keys"])
