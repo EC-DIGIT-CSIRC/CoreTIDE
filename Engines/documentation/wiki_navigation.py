@@ -276,7 +276,7 @@ def run():
         
         nav_index = construct_navigation_index(model)
         navigation_index_path = MODELS_DOCS_PATH / (MODELS_NAME[model] + ".md")
-        navigation_index_path = navigation_index_path.replace(" ", "-")
+        navigation_index_path = Path(str(navigation_index_path).replace(" ", "-"))
 
         with open(navigation_index_path, "w+", encoding="utf-8") as out:
             out.write(nav_index)
