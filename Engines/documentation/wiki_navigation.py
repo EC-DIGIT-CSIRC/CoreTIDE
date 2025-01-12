@@ -17,20 +17,27 @@ from Engines.modules.documentation import (
     get_field_title,
     make_json_table,
 )
-from Engines.templates.wiki_navigation import NAV_INDEX_TEMPLATE
 from Engines.modules.logs import log
 from Engines.modules.tide import DataTide
+from Engines.modules.debug import DebugEnvironment
 
-GLFM = DataTide.Configurations.Documentation.glfm_doc_target
+DOCUMENTATION_TARGET = DataTide.Configurations.Documentation.documentation_target
+COVER_PAGES_ENABLED = DataTide.Configurations.Documentation.gitlab.get("model_cover_pages", False)
+
+# For testing purposes, enabling this script to execute
+if DebugEnvironment.ENABLED:
+    DOCUMENTATION_TARGET = "gitlab"
+    COVER_PAGES_ENABLED = True
+
 MODELS_INDEX = DataTide.Models.Index
 METASCHEMAS_INDEX = DataTide.TideSchemas.Index
 ICONS = DataTide.Configurations.Documentation.icons
 
-DOCUMENTATION_TYPE = "GLFM"
 PATHS_CONFIG = DataTide.Configurations.Global.Paths.Index
 
-WIKI_PATH = PATHS_CONFIG["wiki_docs_folder"]
-OUT_PATH = Path(WIKI_PATH) / "home.md"
+MODELS_DOCS_PATH = Path(DataTide.Configurations.Global.Paths.Core.models_docs_folder)
+MODELS_SCOPE = DataTide.Configurations.Documentation.scope
+MODELS_NAME = DataTide.Configurations.Documentation.object_names
 
 CHARS_CLIP = 150
 NAV_INDEX_FIELDS = {
@@ -90,7 +97,7 @@ NAV_INDEX_FIELDS = {
 MODELS = NAV_INDEX_FIELDS.keys()
 
 
-def build_searches(model_type):
+def build_search(model_type):
 
     index = list()
     index_data = MODELS_INDEX[model_type]
@@ -216,50 +223,30 @@ def build_searches(model_type):
     }
     df = df.rename(columns=rename_mapping)
 
-    nav_index = str()
-    if DOCUMENTATION_TYPE == "GLFM":
-        # Seems to force json tables to fit the screen, and will squeeze down
-        # up to the number of characters in the wrap function.
-        nav_index = make_json_table(df)
-
-    elif DOCUMENTATION_TYPE == "MARKDOWN":
-        nav_index = df.to_markdown()
+    nav_index = make_json_table(df)
 
     return nav_index
 
 
-def construct_navigation_index(models):
+def construct_navigation_index(model):
 
-    html_foldable = """
-<details><summary><h3>{}</h3></summary>
+    icon = ICONS[model]
+    model_title = DataTide.Configurations.Documentation.object_names[model]
 
-{}
+    log("ONGOING", "Generating navigation index for", model_title)
 
-</details>
-"""
-    searches = str()
-    obj = dict()
+    count = len(MODELS_INDEX[model])
 
-    for model_type in models:
+    summary = f"{icon} {count} {model_title}"
+    details = build_search(model)
 
-        icon = ICONS[model_type]
-        model_title = DataTide.Configurations.Documentation.object_names[model_type]
-
-        print(f"{icon} Generating navigation index for {model_title}...")
-
-        count = len(MODELS_INDEX[model_type])
-
-        html_summary = f"{icon} {count} {model_title}"
-        html_details = build_searches(model_type)
-        foldable = html_foldable.format(html_summary, html_details)
-        searches += f"\n\n{foldable}\n\n"
-
-    nav_index = NAV_INDEX_TEMPLATE.format(**locals())
+    nav_index = summary + "\n\n" + details
 
     return nav_index
 
 
 def run():
+
 
     log("TITLE", "Wiki Navigation Index")
     log(
@@ -267,24 +254,37 @@ def run():
         "Assembles tables exposing CoreTIDE data to make the dataset easier to navigate",
     )
 
-    if not os.path.exists(WIKI_PATH):
-        log("ONGOING", "Create wiki folder")
-        WIKI_PATH.mkdir(parents=True)
+    if DOCUMENTATION_TARGET != "gitlab":
+        log("SKIP",
+            "This is a Gitlab Wiki only feature",
+            f"documentation_target is currently set to : {DOCUMENTATION_TARGET}",
+            "If you are running OpenTIDE in Gitlab, we advise to change this configuration \
+                to 'gitlab' to enjoy all documentation features")
+        return 
 
-    nav_index = construct_navigation_index(MODELS)
-    with open(OUT_PATH, "w+", encoding="utf-8") as out:
-        out.write(nav_index)
+    if not COVER_PAGES_ENABLED:
+        log("SKIP",
+            "Disabled in configuration",
+            "Not generating cover pages as set to false or missing key",
+            "You can enable this feature by setting gitlab.model_cover_pages to True in documentation.toml")
+        return
+    
+    if not os.path.exists(MODELS_DOCS_PATH):
+        log("ONGOING", "Create wiki and documentation folder")
+        MODELS_DOCS_PATH.mkdir(parents=True)
 
-    doc_format_log = str()
-    if DOCUMENTATION_TYPE == "MARKDOWN":
-        doc_format_log = "✒️ standard markdown"
-    elif DOCUMENTATION_TYPE == "GLFM":
-        doc_format_log = "🦊 Gitlab Flavored Markdown"
+    for model in MODELS:
+        log("ONGOING", "Generating navigation index for model type", model)
+        
+        nav_index = construct_navigation_index(model)
+        navigation_index_path = MODELS_DOCS_PATH / (MODELS_NAME[model] + ".md")
 
-    time_to_execute = "%.2f" % (time.time() - start_time)
+        with open(navigation_index_path, "w+", encoding="utf-8") as out:
+            out.write(nav_index)
+
+        time_to_execute = "%.2f" % (time.time() - start_time)
 
     print("\n⏱️ Generated navigation index in {} seconds".format(time_to_execute))
-    print("✅ Successfully built CoreTIDE documentation in {}".format(doc_format_log))
 
 
 if __name__ == "__main__":

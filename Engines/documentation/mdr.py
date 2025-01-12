@@ -35,7 +35,7 @@ from Engines.modules.deployment import enabled_systems
 
 ROOT = Path(str(git.Repo(".", search_parent_directories=True).working_dir))
 
-DOCUMENTATION_TYPE = DataTide.Configurations.Documentation.documentation_type
+DOCUMENTATION_TARGET = DataTide.Configurations.Documentation.documentation_target
 DEFAULT_RESPONDERS = DataTide.Configurations.Deployment.default_responders
 SYSTEMS_CONFIG = DataTide.Configurations.Systems.Index
 VOCAB_INDEX = DataTide.Vocabularies.Index
@@ -61,8 +61,6 @@ MDR_METASCHEMA = DataTide.TideSchemas.mdr["properties"]
 WIKI = Path(DataTide.Configurations.Global.Paths.Core.models_docs_folder)
 MDR_WIKI_PATH = WIKI / DataTide.Configurations.Documentation.object_names["mdr"]
 
-MARKDOWN = False
-GLFM = False
 
 # Fetch relevant subschemas
 # Since we mutate SYSTEMS_SUBSCHEMA, creates conflict with other Engines.modules. hence the copy()
@@ -73,18 +71,12 @@ for sub in SYSTEMS_SUBSCHEMAS.copy():
     SYSTEMS_SUBSCHEMAS[sub] = new_data
 
 
-if DOCUMENTATION_TYPE == "MARKDOWN":
-    MARKDOWN = True
-elif DOCUMENTATION_TYPE == "GLFM":
-    GLFM = True
 
-if GLFM:
+if DOCUMENTATION_TARGET == "gitlab":
     MDR_WIKI_PATH = Path(str(MDR_WIKI_PATH).replace(" ", "-"))
     print("🦊 Configured to use Gitlab Flavored Markdown")
 
-
 start_time = time.time()
-
 
 def documentation(mdr):
 
@@ -93,12 +85,13 @@ def documentation(mdr):
 
     frontmatter_type = DataTide.Configurations.Documentation.object_names["mdr"]
     frontmatter = f"---\ntype: {frontmatter_type}\n---"
-    if GLFM:
+    
+    if DOCUMENTATION_TARGET == "gitlab":
         frontmatter = ""
 
     name = mdr["name"]
 
-    if MARKDOWN:
+    if DOCUMENTATION_TARGET == "generic":
         name = f"# {MDR_ICON} {name}"
 
     # TODO Backwards compatible with OpenTIDE 1.0, to deprecate at some point
@@ -134,7 +127,7 @@ def documentation(mdr):
     playbook_col = get_field_title("playbook", MDR_METASCHEMA)
     if not playbook_data:
         playbook_data = "No playbook was defined for this detection rule"
-        if GLFM:
+        if DOCUMENTATION_TARGET == "gitlab":
             playbook_data = f"[-{playbook_data}-]"
     else:
         playbook_name = playbook_data.split("/")[-1]
@@ -151,7 +144,7 @@ def documentation(mdr):
     if "TIDE_MDR_STAGING_BANNER" in globals():
         banner = globals()["TIDE_MDR_STAGING_BANNER"].get(uuid_data) or ""
         if banner:
-            if GLFM:
+            if DOCUMENTATION_TARGET == "gitlab":
                 banner = f"⚠️ [-{banner.replace('⚠️', '')}-]"
     else:
         banner = ""
@@ -237,7 +230,7 @@ def documentation(mdr):
             system_name += "[DISABLED]"
             banner = "This system is not enabled in your System Configurations, "\
                 "this documentation is only informational"
-            if GLFM:
+            if DOCUMENTATION_TARGET == "gitlab":
                 banner = f"[- {banner} -]"
             table = banner + "\n\n" + table
                 
@@ -306,7 +299,7 @@ def run():
         document = documentation(mdr_data)
 
         # Replace whitespace in file name as it becomes a path in the Gitlab Wiki
-        if DOCUMENTATION_TYPE == "GLFM":
+        if DOCUMENTATION_TARGET == "gitlab":
             doc_path = Path(str(doc_path).replace(" ", "-"))
 
         with open(doc_path, "w+", encoding="utf-8") as output:

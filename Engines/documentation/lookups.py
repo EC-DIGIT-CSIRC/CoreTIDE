@@ -18,7 +18,7 @@ from Engines.templates.lookups import LOOKUP_TEMPLATE
 
 LOOKUPS_INDEX = DataTide.Lookups.lookups
 LOOKUPS_METADATA_INDEX = DataTide.Lookups.metadata
-GLFM = DataTide.Configurations.Documentation.glfm_doc_target
+DOCUMENTATION_TARGET = DataTide.Configurations.Documentation.documentation_target
 
 LOOKUP_DOCS_FOLDER = Path(DataTide.Configurations.Global.Paths.Core.lookup_docs)
 
@@ -38,7 +38,7 @@ def lookup_documentation(lookup, lookup_metadata, system):
 
     df_lookup = pd.read_csv(StringIO(lookup))
 
-    if GLFM:
+    if DOCUMENTATION_TARGET == "gitlab":
         lookup_table = make_json_table(df_lookup)
     else:
         lookup_table = df_lookup.to_markdown()
@@ -48,13 +48,13 @@ def lookup_documentation(lookup, lookup_metadata, system):
         no_metadata_banner = (
             "⚠️ Consider adding a lookup metadata file to enrich documentation"
         )
-        if GLFM:
+        if DOCUMENTATION_TARGET == "gitlab":
             no_metadata_banner = f"[-{no_metadata_banner}-]"
         banner += no_metadata_banner
     
     if system not in ENABLED_LOOKUPS_SYSTEMS:
         not_enabled_banner = f"🚫 This system was not enabled to deploy lookups. To enable it, configure Configurations/{system}.toml > tide > enabled"
-        if GLFM:
+        if DOCUMENTATION_TARGET == "gitlab":
             not_enabled_banner = f"\n\n[-{not_enabled_banner}-]"
         banner += not_enabled_banner
 
@@ -73,7 +73,7 @@ def lookup_documentation(lookup, lookup_metadata, system):
                 "👉 Show column documentation", column_description
             )
 
-        if GLFM:
+        if DOCUMENTATION_TARGET == "gitlab":
             title = ""
 
     lookup_doc = LOOKUP_TEMPLATE.format(
@@ -121,7 +121,7 @@ def run():
             if not os.path.exists(LOOKUP_DOCS_FOLDER / system_lookups):
                 os.mkdir(LOOKUP_DOCS_FOLDER / system_lookups)
 
-            if GLFM:
+            if DOCUMENTATION_TARGET == "gitlab":
                 output_path = Path(str(output_path).replace(" ", "-"))
 
             with open(output_path, "w+", encoding="utf-8") as output:
