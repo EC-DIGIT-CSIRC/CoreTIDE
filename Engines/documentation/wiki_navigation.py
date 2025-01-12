@@ -35,7 +35,7 @@ ICONS = DataTide.Configurations.Documentation.icons
 
 PATHS_CONFIG = DataTide.Configurations.Global.Paths.Index
 
-MODELS_DOCS_PATH = DataTide.Configurations.Documentation.models_docs_folder
+MODELS_DOCS_PATH = Path(DataTide.Configurations.Global.Paths.Core.models_docs_folder)
 MODELS_SCOPE = DataTide.Configurations.Documentation.scope
 MODELS_NAME = DataTide.Configurations.Documentation.object_names
 
@@ -233,8 +233,6 @@ def construct_navigation_index(model):
     icon = ICONS[model]
     model_title = DataTide.Configurations.Documentation.object_names[model]
 
-    log("ONGOING", "Generating navigation index for", model_title)
-
     count = len(MODELS_INDEX[model])
 
     summary = f"{icon} {count} {model_title}"
@@ -277,13 +275,13 @@ def run():
         log("ONGOING", "Generating navigation index for model type", model)
         
         nav_index = construct_navigation_index(model)
-        navigation_index_path = MODELS_DOCS_PATH / (MODELS_NAME[model].replace(" ", "-") + ".md")
-        print(navigation_index_path)
+        navigation_index_path = MODELS_DOCS_PATH / (MODELS_NAME[model] + ".md")
+        navigation_index_path = navigation_index_path.replace(" ", "-")
+
         with open(navigation_index_path, "w+", encoding="utf-8") as out:
             out.write(nav_index)
 
-        time_to_execute = "%.2f" % (time.time() - start_time)
-
+    time_to_execute = "%.2f" % (time.time() - start_time)
     print("\n⏱️ Generated navigation index in {} seconds".format(time_to_execute))
 
 
