@@ -1,4 +1,4 @@
-scope = [ "tam", "tvm", "cdm", "bdr" ]
+scope = [ "tvm", "cdm", "bdr" ]
 skip_model_keys = ["description",
                             "guidelines",
                             "aliases",
