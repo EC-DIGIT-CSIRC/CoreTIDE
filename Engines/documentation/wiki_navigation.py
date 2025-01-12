@@ -34,21 +34,6 @@ OUT_PATH = Path(WIKI_PATH) / "home.md"
 
 CHARS_CLIP = 150
 NAV_INDEX_FIELDS = {
-    "tam": [
-        "uuid",
-        "name",
-        "criticality",
-        "tlp",
-        "description",
-        "implementations",
-        "aliases",
-        "tier",
-        "level",
-        "objectives",
-        "att&ck",
-        "domains",
-        "platforms",
-    ],
     "tvm": [
         "uuid",
         "name",
