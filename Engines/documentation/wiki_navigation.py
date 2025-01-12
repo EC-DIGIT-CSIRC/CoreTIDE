@@ -228,6 +228,13 @@ def build_search(model_type):
     return nav_index
 
 
+CENTER_TEXT = """
+<div align="center">
+
+### {icon} {count} {model_title}
+</div>
+"""
+
 def construct_navigation_index(model):
 
     icon = ICONS[model]
@@ -235,7 +242,9 @@ def construct_navigation_index(model):
 
     count = len(MODELS_INDEX[model])
 
-    summary = f"{icon} {count} {model_title}"
+    summary = CENTER_TEXT.format(icon=icon,
+                                count=count,
+                                model_title=model_title)
     details = build_search(model)
 
     nav_index = summary + "\n\n" + details
