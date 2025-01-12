@@ -24,6 +24,8 @@ from Engines.modules.debug import DebugEnvironment
 DOCUMENTATION_TARGET = DataTide.Configurations.Documentation.documentation_target
 COVER_PAGES_ENABLED = DataTide.Configurations.Documentation.gitlab.get("model_cover_pages", False)
 
+print(DataTide.Configurations.Documentation.Index)
+
 # For testing purposes, enabling this script to execute
 if DebugEnvironment.ENABLED:
     DOCUMENTATION_TARGET = "gitlab"
