@@ -24,7 +24,6 @@ WIKI_MODEL_FOLDER = DataTide.Configurations.Documentation.object_names
 WIKI_MODEL_DOCUMENTATION_FOLDER = DataTide.Configurations.Global.Paths.Core._raw[
     "models_docs_folder"
 ].split("/")[-2]
-GLFM = DataTide.Configurations.Documentation.glfm_doc_target
 DEBUG = DataTide.Configurations.DEBUG
 
 
