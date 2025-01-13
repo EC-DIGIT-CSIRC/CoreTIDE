@@ -41,7 +41,7 @@ MODELS_DOCS_PATH = Path(str(DataTide.Configurations.Global.Paths.Core.models_doc
 MODELS_SCOPE = DataTide.Configurations.Documentation.scope
 MODELS_NAME = DataTide.Configurations.Documentation.object_names
 
-DEPRECATED_STATUSES = ["DISABLED", "DEPRECATED"]
+DEPRECATED_STATUSES = ["DISABLED", "REMOVED"]
 
 CHARS_CLIP = 150
 NAV_INDEX_FIELDS = {
