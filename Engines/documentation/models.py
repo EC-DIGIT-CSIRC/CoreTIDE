@@ -44,6 +44,10 @@ MODELS_DOCS_PATH = Path(DataTide.Configurations.Global.Paths.Core.models_docs_fo
 MODELS_SCOPE = DataTide.Configurations.Documentation.scope
 
 DOCUMENTATION_TARGET = DataTide.Configurations.Documentation.documentation_target
+if DOCUMENTATION_TARGET == "gitlab":
+    UUID_PERMALINKS = DataTide.Configurations.Documentation.gitlab.get("uuid_permalinks", False)
+else:
+    UUID_PERMALINKS = False
 
 MODELS_INDEX = DataTide.Models.Index
 MODELS_NAME = DataTide.Configurations.Documentation.object_names
@@ -223,11 +227,15 @@ def run():
         for model in MODELS_INDEX[model_type]:
 
             # Make a file name based on  data
-            model_data = MODELS_INDEX[model_type][model]
-            doc_name = model_data.get("name").replace("_", " ")
-            doc_file_name = (
-                f"{get_icon(model_type)} {doc_name.strip()}.md"
-            )
+            model_data:dict = MODELS_INDEX[model_type][model]
+            
+            if UUID_PERMALINKS:
+                doc_file_name = model_data.get("metadata",{}).get("uuid") + ".md"
+            else:
+                doc_name = model_data.get("name","").replace("_", " ")
+                doc_file_name = (
+                    f"{get_icon(model_type)} {doc_name.strip()}.md"
+                )
 
             doc_file_name = safe_file_name(doc_file_name)
             doc_path = doc_type_path / doc_file_name
