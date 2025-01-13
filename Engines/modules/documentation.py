@@ -17,6 +17,10 @@ from Engines.modules.tide import DataTide
 
 VOCAB_INDEX = DataTide.Vocabularies.Index
 DOCUMENTATION_TARGET = DataTide.Configurations.Documentation.documentation_target
+if DOCUMENTATION_TARGET == "gitlab":
+    UUID_PERMALINKS = DataTide.Configurations.Documentation.gitlab.get("uuid_permalinks", False)
+else:
+    UUID_PERMALINKS = False
 ICONS = DataTide.Configurations.Documentation.icons
 DOCUMENTATION_CONFIG = DataTide.Configurations.Documentation
 CONFIG_INDEX = DataTide.Configurations.Index
@@ -290,6 +294,8 @@ def backlink_resolver(model_uuid:str,
 
     elif DOCUMENTATION_TARGET == "gitlab":
         file_link = file_link.replace(" ", "-").replace("_", "-")
+        if UUID_PERMALINKS:
+            file_link = model_data.get("metadata",{}).get("uuid")
 
     hover = sanitize_hover(str(hover))
     if len(hover) > hover_length:
