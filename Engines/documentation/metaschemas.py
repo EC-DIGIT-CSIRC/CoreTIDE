@@ -197,7 +197,9 @@ def run():
             subschema = SUBSCHEMAS_INDEX[recomp][sub]
             sub_template = TEMPLATES_INDEX[recomp][sub]
             subschema_name = name_subschema_doc(recomp, sub)
-            print(f"{icon} Generating documentation for {subschema_name}")
+
+            log("ONGOING", "Generating Sub Schema Documentation", subschema_name)
+
             doc = gen_schema_md(subschema, sub_template)
             output_path = SCHEMA_DOCS_PATH / (subschema_name + ".md")
         

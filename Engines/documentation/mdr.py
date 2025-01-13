@@ -87,17 +87,18 @@ def documentation(mdr):
     doc = str()
     mdr_configs = mdr["configurations"]
 
-    frontmatter_type = DataTide.Configurations.Documentation.object_names["mdr"]
-    frontmatter = f"---\ntype: {frontmatter_type}\n---"
-    
-    if DOCUMENTATION_TARGET == "gitlab":
-        frontmatter = ""
-
     name = mdr["name"]
 
     if DOCUMENTATION_TARGET == "generic":
         name = f"# {MDR_ICON} {name}"
 
+    if DOCUMENTATION_TARGET == "gitlab":
+        name = ""
+        if UUID_PERMALINKS:
+            frontmatter = f"---\ntitle: {MDR_ICON} {name}\n---"
+        else:
+            frontmatter = ""
+    
     # TODO Backwards compatible with OpenTIDE 1.0, to deprecate at some point
     uuid_data = mdr.get("uuid") or mdr["metadata"]["uuid"]
     description = mdr.get("description", "").replace("\n", "\n> ")
@@ -291,10 +292,17 @@ def run():
     mdr_doc_count = 0
 
     for mdr_uuid in MODELS_INDEX["mdr"]:
-        print("DEBUG - ", mdr_uuid)
+        
         # Make a file name based on MDR data
         mdr_data = MODELS_INDEX["mdr"][mdr_uuid]
-        log("ONGOING", "Generating MDR Documentation", mdr_data.get("name"))
+        mdr_name = mdr_data.get("name")
+        mdr_uuid = mdr_data.get("metadata").get("uuid")
+        
+        log("ONGOING",
+            "Generating MDR Documentation",
+            mdr_name,
+            mdr_uuid
+            )
 
         if UUID_PERMALINKS:
             doc_file_name = mdr_data.get("metadata").get("uuid")+ ".md"
