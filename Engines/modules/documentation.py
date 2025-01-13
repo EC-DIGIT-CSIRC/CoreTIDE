@@ -428,10 +428,13 @@ def model_value_doc(model_id, key, with_icon=False, max_chars=None, legacy=False
 def name_subschema_doc(
     recomposition: str, identifier: str, with_icon: bool = True
 ) -> str:
-    SUFFIX = "Sub Schema"
+    
+    SUFFIX = "Schema"
+    
     subschema_name = str()
     composition_name = str()
     recomp_config = CONFIG_INDEX[recomposition][identifier]
+    
     if recomp_config:
         subschema_name = recomp_config["tide"]["subschema"]
         composition_name = recomp_config["tide"]["name"]
@@ -443,7 +446,7 @@ def name_subschema_doc(
             f"Defaulting to taking {identifier} base name",
             "You can add a custom subschema name in config.yaml",
         )
-        subschema_name = composition_name + SUFFIX
+        subschema_name = recomposition.title() + " : " +  composition_name + SUFFIX
 
         if not composition_name:
             log(

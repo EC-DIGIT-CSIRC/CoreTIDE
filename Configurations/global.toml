@@ -25,8 +25,8 @@ subschemas = "Framework/Meta Schemas/Sub Schemas/"
 definitions = "Framework/Meta Schemas/Definitions/"
 wiki_docs_folder = "wiki/"
 models_docs_folder = "wiki/Models/"
-schemas_docs_folder = "wiki/Specifications/"
-vocabularies_docs = "wiki/Vocabularies/"
+schemas_docs_folder = "wiki/Framework/Schemas/"
+vocabularies_docs = "wiki/Framework/Vocabularies/"
 resources = "External/"
 
 [metaschemas]
