@@ -87,18 +87,17 @@ def documentation(mdr):
     doc = str()
     mdr_configs = mdr["configurations"]
 
-    name = mdr["name"]
+    name = f"{MDR_ICON} {mdr['name']}"
+    frontmatter = ""
 
     if DOCUMENTATION_TARGET == "generic":
-        name = f"# {MDR_ICON} {name}"
+        name = "# " + name
 
     if DOCUMENTATION_TARGET == "gitlab":
-        name = ""
         if UUID_PERMALINKS:
-            frontmatter = f"---\ntitle: {MDR_ICON} {name}\n---"
-        else:
-            frontmatter = ""
-    
+            frontmatter = f"---\ntitle: {name}\n---"
+        name = ""    
+
     # TODO Backwards compatible with OpenTIDE 1.0, to deprecate at some point
     uuid_data = mdr.get("uuid") or mdr["metadata"]["uuid"]
     description = mdr.get("description", "").replace("\n", "\n> ")
