@@ -62,17 +62,15 @@ def documentation(model):
 
     model_uuid = model.get("metadata", {}).get("uuid")
     model_type = get_type(model_uuid)
+    title = f"# {get_icon(model_type)} {model['name']}"
 
-    if DOCUMENTATION_TARGET == "generic":
-        frontmatter_type = DataTide.Configurations.Documentation.object_names[
-            model_type
-        ].replace("/", "")
-        frontmatter = f"---\ntype: {frontmatter_type}\n---"
-    elif DOCUMENTATION_TARGET == "gitlab":
-        frontmatter = ""
+    if DOCUMENTATION_TARGET == "gitlab":
+        if UUID_PERMALINKS:
+            frontmatter = f"---\ntitle: {title}\n---"
+        else:
+            frontmatter = ""
 
     model_datafield = DataTide.Configurations.Global.data_fields[model_type]
-    title = f"# {get_icon(model_type)} {model['name']}"
     criticality = criticality_doc(model["criticality"])
     metadata = model.get("metadata") or model.get("meta") or {}
     metadata = {k: v for k, v in metadata.items() if k != "tlp"}
@@ -228,11 +226,13 @@ def run():
 
             # Make a file name based on  data
             model_data:dict = MODELS_INDEX[model_type][model]
-            
+            model_name = model_data["name"]
+            model_uuid = model_data.get("metadata",{}).get("uuid")
+
             if UUID_PERMALINKS:
-                doc_file_name = model_data.get("metadata",{}).get("uuid") + ".md"
+                doc_file_name = model_uuid + ".md"
             else:
-                doc_name = model_data.get("name","").replace("_", " ")
+                doc_name = model_name.replace("_", " ")
                 doc_file_name = (
                     f"{get_icon(model_type)} {doc_name.strip()}.md"
                 )
@@ -244,7 +244,11 @@ def run():
             if DOCUMENTATION_TARGET == "gitlab":
                 doc_path = Path(str(doc_path).replace(" ", "-"))
 
-            log("ONGOING", "Generating documentation", doc_file_name)
+            log("ONGOING",
+                "Generating documentation",
+                model_name,
+                model_uuid)
+            
             document = documentation(model_data)
 
             with open(doc_path, "w+", encoding="utf-8") as output:
