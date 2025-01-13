@@ -12,7 +12,6 @@ from Engines.modules.logs import coretide_intro, ANSI
 # and reconcile the staging index for MDRs which are in a Merge Request
 from Engines.documentation import (
     mdr,
-    lookups,
     metaschemas,
     models,
     vocabularies,
@@ -33,7 +32,6 @@ vortex = rf"""
 
 vocabularies.run()
 metaschemas.run()
-lookups.run()
 models.run()
 mdr.run()
 wiki_navigation.run()
