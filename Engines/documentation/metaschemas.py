@@ -190,9 +190,6 @@ def run():
             with open(output_path, "w+", encoding='utf-8') as output:
                 output.write(doc)
 
-
-
-
     #Sub Schema Documentation
     for recomp in SUBSCHEMAS_INDEX:
         for sub in SUBSCHEMAS_INDEX[recomp]:

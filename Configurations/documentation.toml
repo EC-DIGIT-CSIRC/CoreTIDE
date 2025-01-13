@@ -38,11 +38,11 @@ rpt = "Intelligence Reports"
 lookup_metadata = "Lookup Metadata"
 
 [titles]
-tam = "Threat Actor Models Data Model Reference"
-tvm = "Threat Vector Models Data Model Reference"
-cdm = "Cyber Detection Models Data Model Reference"
-mdr = "Managed Detection Rules Data Model Reference"
-bdr = "Business Detection Rules Data Model Reference"
+tam = "Threat Actor Schema"
+tvm = "Threat Vector Schema"
+cdm = "Detection Objectives Schema"
+mdr = "Detection Rules Schema"
+bdr = "Business Detection Schema"
 
 [icons]
 tam = "👺"
