@@ -62,14 +62,16 @@ def documentation(model):
 
     model_uuid = model.get("metadata", {}).get("uuid")
     model_type = get_type(model_uuid)
-    title = f"# {get_icon(model_type)} {model['name']}"
-
+    title = f"{get_icon(model_type)} {model['name']}"
+    frontmatter = ""
+    
     if DOCUMENTATION_TARGET == "gitlab":
         if UUID_PERMALINKS:
-            frontmatter = f"---\ntitle: {title}\n---"
-        else:
-            frontmatter = ""
-
+            frontmatter = f"---\ntitle: {title}\n---"            
+        title = ""
+    elif DOCUMENTATION_TARGET == "generic":
+        title = "# " + title
+        
     model_datafield = DataTide.Configurations.Global.data_fields[model_type]
     criticality = criticality_doc(model["criticality"])
     metadata = model.get("metadata") or model.get("meta") or {}
@@ -245,7 +247,7 @@ def run():
                 doc_path = Path(str(doc_path).replace(" ", "-"))
 
             log("ONGOING",
-                "Generating documentation",
+                f"Generating {model_type.upper()} documentation",
                 model_name,
                 model_uuid)
             

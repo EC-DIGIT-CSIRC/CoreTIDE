@@ -293,9 +293,9 @@ def backlink_resolver(model_uuid:str,
             file_link += ".md"
 
     elif DOCUMENTATION_TARGET == "gitlab":
-        file_link = file_link.replace(" ", "-").replace("_", "-")
         if UUID_PERMALINKS:
             file_link = doc_path + model_data.get("metadata",{}).get("uuid")
+        file_link = file_link.replace(" ", "-").replace("_", "-")
 
     hover = sanitize_hover(str(hover))
     if len(hover) > hover_length:
