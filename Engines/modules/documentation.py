@@ -294,6 +294,8 @@ def backlink_resolver(model_uuid:str,
 
     elif DOCUMENTATION_TARGET == "gitlab":
         if UUID_PERMALINKS:
+            print("DEBUG - DOC PATH", str(doc_path))
+            print("DEBUG - MODEL", str(model_data))
             file_link = doc_path + model_data.get("metadata",{}).get("uuid")
         file_link = file_link.replace(" ", "-").replace("_", "-")
 
