@@ -253,7 +253,6 @@ def documentation(mdr):
     doc = TEMPLATEv3.format(
         frontmatter=frontmatter,
         name=name,
-        banner=banner,
         tlp=tlp,
         techniques=techniques,
         metadata=metadata,
