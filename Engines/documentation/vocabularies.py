@@ -18,10 +18,9 @@ from Engines.templates.models import VOCABS_DOC_TEMPLATE
 
 ROOT = Path(str(git.Repo(".", search_parent_directories=True).working_dir))
 
-GLFM = DataTide.Configurations.Documentation.glfm_doc_target
 VOCAB_INDEX = DataTide.Vocabularies.Index
 ICONS = DataTide.Configurations.Documentation.icons
-DOCUMENTATION_TYPE = DataTide.Configurations.Documentation.documentation_type
+DOCUMENTATION_TARGET = DataTide.Configurations.Documentation.documentation_target
 VOCAB_DOCS_PATH = Path(DataTide.Configurations.Global.Paths.Core.vocabularies_docs)
 SKIP_VOCABS = DataTide.Configurations.Documentation.skip_vocabularies
 
@@ -102,18 +101,16 @@ def make_vocab_doc(vocab_field, vocabulary):
                 buffer["Description"] = stage.get("description")
                 stage_doc.append(buffer)
             stages = pd.DataFrame(stage_doc).to_markdown(index=False)
-
-    if DOCUMENTATION_TYPE == "GLFM":
-        title = ""
-    else:
-        title = "# " + name
-
+    
     df = df.replace("\n", ". ", regex=True)
     table = str()
-    if DOCUMENTATION_TYPE == "GLFM":
-        table = make_json_table(df)
 
-    elif DOCUMENTATION_TYPE == "MARKDOWN":
+    if DOCUMENTATION_TARGET == "gitlab":
+        title = ""
+        table = make_json_table(df)
+        
+    elif DOCUMENTATION_TARGET == "generic":
+        title = "# " + name
         table = df.to_markdown(index=False)
 
     documentation = VOCABS_DOC_TEMPLATE.format(
@@ -152,14 +149,14 @@ def run():
                 output_name = icon + " " + name + ".md"
                 output_path = VOCAB_DOCS_PATH / output_name
 
-                if DOCUMENTATION_TYPE == "GLFM":
+                if DOCUMENTATION_TARGET == "gitlab":
                     output_path = Path(str(output_path).replace(" ", "-"))
 
                 with open(output_path, "w+", encoding="utf-8") as output:
                     output.write(documentation)
 
     doc_format_log = str()
-    if GLFM:
+    if DOCUMENTATION_TARGET == "gitlab":
         doc_format_log = "🦊 Gitlab Flavored Markdown"
     else:
         doc_format_log = "✒️ standard markdown"

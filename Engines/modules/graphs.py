@@ -231,7 +231,7 @@ def chaining_graph(tvm):
                         direction = graph_properties[prop].get("direction")
                         node = str()
                         if prop == "actors":
-                            value = f"{value} - {model_value(value, 'name')}"
+                            value = f"{model_value(value, 'name')}"
 
                         if shape == "database":
                             node = f"{value.replace(' ','')}[({value})]"
@@ -276,7 +276,7 @@ def chaining_graph(tvm):
         return br_data
 
     header_data = "\n".join(
-        [f"{v}[{v} {mermaid_breakspace(mermaid_sanitizer(str(model_value(v, 'name'))))}]" for v in header]
+        [f"{v}[{mermaid_sanitizer(mermaid_sanitizer(str(model_value(v, 'name'))))}]" for v in header]
     )
 
     vector_links = "\n".join(vector_links)

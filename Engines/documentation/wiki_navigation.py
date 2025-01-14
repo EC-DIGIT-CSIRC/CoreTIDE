@@ -3,7 +3,9 @@ import os
 import git
 import time
 import sys
+
 from pathlib import Path
+from typing import Literal, Optional, Tuple
 
 start_time = time.time()
 
@@ -17,38 +19,32 @@ from Engines.modules.documentation import (
     get_field_title,
     make_json_table,
 )
-from Engines.templates.wiki_navigation import NAV_INDEX_TEMPLATE
 from Engines.modules.logs import log
 from Engines.modules.tide import DataTide
+from Engines.modules.debug import DebugEnvironment
 
-GLFM = DataTide.Configurations.Documentation.glfm_doc_target
+DOCUMENTATION_TARGET = DataTide.Configurations.Documentation.documentation_target
+COVER_PAGES_ENABLED = DataTide.Configurations.Documentation.gitlab.get("model_cover_pages", False)
+
+# For testing purposes, enabling this script to execute
+if DebugEnvironment.ENABLED:
+    DOCUMENTATION_TARGET = "gitlab"
+    COVER_PAGES_ENABLED = True
+
 MODELS_INDEX = DataTide.Models.Index
 METASCHEMAS_INDEX = DataTide.TideSchemas.Index
 ICONS = DataTide.Configurations.Documentation.icons
 
-DOCUMENTATION_TYPE = "GLFM"
 PATHS_CONFIG = DataTide.Configurations.Global.Paths.Index
 
-WIKI_PATH = PATHS_CONFIG["wiki_docs_folder"]
-OUT_PATH = Path(WIKI_PATH) / "home.md"
+MODELS_DOCS_PATH = Path(str(DataTide.Configurations.Global.Paths.Core.models_docs_folder).replace(" ", "-"))
+MODELS_SCOPE = DataTide.Configurations.Documentation.scope
+MODELS_NAME = DataTide.Configurations.Documentation.object_names
+
+DEPRECATED_STATUSES = ["DISABLED", "REMOVED"]
 
 CHARS_CLIP = 150
 NAV_INDEX_FIELDS = {
-    "tam": [
-        "uuid",
-        "name",
-        "criticality",
-        "tlp",
-        "description",
-        "implementations",
-        "aliases",
-        "tier",
-        "level",
-        "objectives",
-        "att&ck",
-        "domains",
-        "platforms",
-    ],
     "tvm": [
         "uuid",
         "name",
@@ -97,15 +93,14 @@ NAV_INDEX_FIELDS = {
         "description",
         "statuses",
         "att&ck",
-        "detection_model",
-        "system"
+        "detection_model"    
     ],
 }
 
 MODELS = NAV_INDEX_FIELDS.keys()
 
 
-def build_searches(model_type):
+def build_search(model_type, mdr_status:Optional[Literal["ACTIVE", "DEPRECATED"]]=None):
 
     index = list()
     index_data = MODELS_INDEX[model_type]
@@ -125,8 +120,30 @@ def build_searches(model_type):
 
     for entry in index_data:
         row = dict()
-        for value in NAV_INDEX_FIELDS[model_type]:
+        
+        # Logic to retain only MDR in the correct status, to allow breaking
+        # the table into two
+        if model_type == "mdr":
+            configurations = model_value_doc(entry, "configurations") or {}
+            status_check = list()
 
+            for system in configurations:
+                sys_status = configurations[system]["status"]  # type: ignore
+
+                if mdr_status == "ACTIVE":
+                    if sys_status not in DEPRECATED_STATUSES:
+                        status_check.append(system)
+
+                elif mdr_status == "DEPRECATED":
+                    if sys_status in DEPRECATED_STATUSES:
+                        status_check.append(system)
+
+            if not status_check:
+                continue
+
+        
+        for value in NAV_INDEX_FIELDS[model_type]:
+            
             if value == "implementations":
                 relations = relations_list(entry, mode="count", direction="downstream")
                 implementations = []
@@ -154,7 +171,11 @@ def build_searches(model_type):
                     configurations = model_value_doc(entry, "configurations") or {}
                     for system in configurations:
                         sys_status = configurations[system]["status"]  # type: ignore
-                        statuses[system] = sys_status
+                        if mdr_status == "ACTIVE" and sys_status not in DEPRECATED_STATUSES:
+                            statuses[system] = sys_status
+
+                        elif mdr_status == "DEPRECATED" and sys_status in DEPRECATED_STATUSES:
+                            statuses[system] = sys_status
 
                     # Pretty print statuses
                     statuses = ", ".join(
@@ -175,16 +196,6 @@ def build_searches(model_type):
                     if model_value:
                         model_value = ", ".join(model_value)
                     row[mdr_attack_technique] = model_value
-
-                # Custom ways of returning data beside field listing
-                elif value == "system":
-                    model_value = MODELS_INDEX[model_type][entry][
-                        "configurations"
-                    ].keys()
-
-                    model_value = [s.capitalize() for s in model_value]
-                    model_value = ", ".join(model_value)
-                    row[system_column] = model_value
 
                 else:
                     model_value = model_value_doc(
@@ -231,50 +242,69 @@ def build_searches(model_type):
     }
     df = df.rename(columns=rename_mapping)
 
-    nav_index = str()
-    if DOCUMENTATION_TYPE == "GLFM":
-        # Seems to force json tables to fit the screen, and will squeeze down
-        # up to the number of characters in the wrap function.
-        nav_index = make_json_table(df)
-
-    elif DOCUMENTATION_TYPE == "MARKDOWN":
-        nav_index = df.to_markdown()
+    nav_index = make_json_table(df)
 
     return nav_index
 
 
-def construct_navigation_index(models):
+CENTER_TEXT = """
+<div align="center">
 
-    html_foldable = """
-<details><summary><h3>{}</h3></summary>
-
-{}
-
-</details>
+### {icon} {count} {model_title}
+</div>
 """
-    searches = str()
-    obj = dict()
 
-    for model_type in models:
+def construct_navigation_index(model):
 
-        icon = ICONS[model_type]
-        model_title = DataTide.Configurations.Documentation.object_names[model_type]
+    icon = ICONS[model]
+    model_title = DataTide.Configurations.Documentation.object_names[model]
+    nav_index = str()
 
-        print(f"{icon} Generating navigation index for {model_title}...")
+    def count_mdr_statuses()->Tuple[int,int]:
+        active_mdr = dict()
+        deprecated_mdr = dict()
+        for mdr in MODELS_INDEX["mdr"]:
+            for system in MODELS_INDEX["mdr"][mdr]["configurations"]:
+                if MODELS_INDEX["mdr"][mdr]["configurations"][system]["status"] in DEPRECATED_STATUSES:
+                    deprecated_mdr[mdr] = MODELS_INDEX["mdr"][mdr]
+                else:
+                    active_mdr[mdr] = MODELS_INDEX["mdr"][mdr]
 
-        count = len(MODELS_INDEX[model_type])
+        return len(active_mdr), len(deprecated_mdr)
 
-        html_summary = f"{icon} {count} {model_title}"
-        html_details = build_searches(model_type)
-        foldable = html_foldable.format(html_summary, html_details)
-        searches += f"\n\n{foldable}\n\n"
 
-    nav_index = NAV_INDEX_TEMPLATE.format(**locals())
+    if model == "mdr":
+        active_mdr_count, deprecated_mdr_count = count_mdr_statuses()
+        
+        active_mdr_title = "Active " + model_title
+        active_mdr_summary = CENTER_TEXT.format(icon=icon,
+                                                count=active_mdr_count,
+                                                model_title=active_mdr_title)
+        active_mdr_details = build_search(model, mdr_status="ACTIVE")
+        
+        deprecated_mdr_title = "Deprecated " + model_title
+        deprecated_mdr_summary = CENTER_TEXT.format(icon=icon,
+                                                    count=deprecated_mdr_count,
+                                                    model_title=deprecated_mdr_title)
+        deprecated_mdr_details = build_search(model, mdr_status="DEPRECATED")
+
+        nav_index = active_mdr_summary + "\n\n" + active_mdr_details
+        nav_index += "\n\n---\n" + deprecated_mdr_summary + "\n\n" + deprecated_mdr_details
+
+    else:
+        count = len(MODELS_INDEX[model])
+        summary = CENTER_TEXT.format(icon=icon,
+                                    count=count,
+                                    model_title=model_title)
+
+        details = build_search(model)
+        nav_index = summary + "\n\n" + details
 
     return nav_index
 
 
 def run():
+
 
     log("TITLE", "Wiki Navigation Index")
     log(
@@ -282,24 +312,37 @@ def run():
         "Assembles tables exposing CoreTIDE data to make the dataset easier to navigate",
     )
 
-    if not os.path.exists(WIKI_PATH):
-        log("ONGOING", "Create wiki folder")
-        WIKI_PATH.mkdir(parents=True)
+    if DOCUMENTATION_TARGET != "gitlab":
+        log("SKIP",
+            "This is a Gitlab Wiki only feature",
+            f"documentation_target is currently set to : {DOCUMENTATION_TARGET}",
+            "If you are running OpenTIDE in Gitlab, we advise to change this configuration \
+                to 'gitlab' to enjoy all documentation features")
+        return 
 
-    nav_index = construct_navigation_index(MODELS)
-    with open(OUT_PATH, "w+", encoding="utf-8") as out:
-        out.write(nav_index)
+    if not COVER_PAGES_ENABLED:
+        log("SKIP",
+            "Disabled in configuration",
+            "Not generating cover pages as set to false or missing key",
+            "You can enable this feature by setting gitlab.model_cover_pages to True in documentation.toml")
+        return
 
-    doc_format_log = str()
-    if DOCUMENTATION_TYPE == "MARKDOWN":
-        doc_format_log = "✒️ standard markdown"
-    elif DOCUMENTATION_TYPE == "GLFM":
-        doc_format_log = "🦊 Gitlab Flavored Markdown"
+    if not os.path.exists(MODELS_DOCS_PATH):
+        log("ONGOING", "Create wiki and documentation folder")
+        MODELS_DOCS_PATH.mkdir(parents=True)
+
+    for model in MODELS:
+        log("ONGOING", "Generating navigation index for model type", model)
+        
+        nav_index = construct_navigation_index(model)
+        navigation_index_path = MODELS_DOCS_PATH / (MODELS_NAME[model] + ".md")
+        navigation_index_path = Path(str(navigation_index_path).replace(" ", "-"))
+
+        with open(navigation_index_path, "w+", encoding="utf-8") as out:
+            out.write(nav_index)
 
     time_to_execute = "%.2f" % (time.time() - start_time)
-
     print("\n⏱️ Generated navigation index in {} seconds".format(time_to_execute))
-    print("✅ Successfully built CoreTIDE documentation in {}".format(doc_format_log))
 
 
 if __name__ == "__main__":

@@ -14,7 +14,7 @@ from azure.core.exceptions import HttpResponseError
 
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
-from Engines.modules.sentinel import create_query, SentinelEngineInit
+from Engines.modules.sentinel import SentinelEngineInit, build_query
 from Engines.modules.plugins import ValidateQuery
 from Engines.modules.logs import log
 from Engines.modules.debug import DebugEnvironment
@@ -32,7 +32,7 @@ class SentinelValidateQuery(SentinelEngineInit, ValidateQuery):
             log("FATAL", "Missing query in MDR", f"{mdr.get('name')} ({mdr_uuid})")
             return
 
-        query = create_query(mdr) + " | limit 1"
+        query = build_query(mdr) + " | limit 1"
 
         try:
             service.query_workspace(workspace_id=self.AZURE_SENTINEL_WORKSPACE_ID,

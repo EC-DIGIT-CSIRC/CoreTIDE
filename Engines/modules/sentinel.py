@@ -2,6 +2,7 @@ import sys
 import os
 from datetime import timedelta
 from abc import ABC
+from typing import Optional 
 
 import git
 
@@ -111,13 +112,14 @@ def build_query(data: dict) -> str:
 
     return kql + extend_uuid
 
-def build_description(data: dict) -> str:
+def build_description(data: dict, description:Optional[str]=None) -> str:
     """
     Modifies MDR Description to add customizable capabilities
     """
     # Backwards compatible with 1.0 data model
     uuid = data.get("uuid") or data["metadata"]["uuid"]
-    description = data["description"]
+    if not description:
+        description = data["description"]
     uuid_header = f"uuid::{uuid}::description::"
 
     return uuid_header + description

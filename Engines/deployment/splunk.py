@@ -3,6 +3,7 @@ import git
 import sys
 import json
 from typing import Literal
+from pprint import pprint
 
 import pandas as pd
 
@@ -308,32 +309,32 @@ class SplunkDeploy(SplunkEngineInit, DeployMDR):
             if attribute in deploy_config:
                 second_stage[attribute] = deploy_config.pop(attribute)
 
-        from pprint import pprint
         pprint(deploy_config)
 
         # Check if saved search already exists or create a new one
-        search_exists = False
         try:
             selected_search = service.saved_searches[name]
-            search_exists = True
+            log("INFO", "Found existing saved search", name)
         except:
-            selected_search = service.saved_searches.create(name, search=query)
-
-        if search_exists:
-            log("INFO", "✨ Found existing saved search")
-        else:
-            log("ONGOING", "🆕 Creating a new search...")
-
-        if mdr_splunk["status"] == "REMOVED":
-            if search_exists:
-                service.saved_searches.delete(name)
-                log("WARNING", f"🗑️ Deleted splunk alert: {name}")
+            # Special case for removed rules, do not bother with recreating
+            if status == "REMOVED":
+                log(
+                    "SKIP",
+                    f"Saved search was already non existent, no action required",
+                    name
+                )
                 return None
 
+            # For all other rules, create a new saved search
             else:
-                log(
-                    "SKIP", f"🗑️ [INFO] Saved search {name} was already non existent"
-                )
+                log("ONGOING", "Will create a new saved search", name)
+                selected_search = service.saved_searches.create(name, search=query)
+
+        # Steps to handle REMOVED rules
+        if status == "REMOVED":
+            service.saved_searches.delete(name)
+            log("WARNING", f"Deleted splunk alert", name)
+            return None
 
         # Debugging output; sets attribute one by one
         if self.DEBUG_STEP:

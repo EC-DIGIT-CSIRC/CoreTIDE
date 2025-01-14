@@ -127,13 +127,13 @@ properties:
       guidelines: 
         title: Guidelines
         type: string
-        special: multiline
+        tide.template.multiline: true
         description: Detailed technical explanation of the detection objective, and goals to implement it , in short sentences
         example: Lookup file modification logs, and chart statistics of access across 5 min intervals
 
       tuning: 
         title: Tuning
         type: string
-        special: multiline
+        tide.template.multiline: true
         description: Recommendations to tune out false positives without damaging the alert
         example: Some development workstations may be prone to false positive, but be mindful that production servers should not be whitelisted

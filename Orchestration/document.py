@@ -16,9 +16,8 @@ from Engines.documentation import (
     metaschemas,
     models,
     vocabularies,
-    wiki_navigation,
-    wiki_sidebar,
-)
+    wiki_navigation
+    )
 
 print(coretide_intro())
 
@@ -38,4 +37,3 @@ lookups.run()
 models.run()
 mdr.run()
 wiki_navigation.run()
-wiki_sidebar.run()

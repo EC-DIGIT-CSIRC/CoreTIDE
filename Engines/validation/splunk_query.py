@@ -40,6 +40,16 @@ class SplunkValidateQuery(SplunkEngineInit, ValidateQuery):
             status = response["status"]
             
             if status == 19:
+                
+                if reason:= response.get("reason"):
+                    if reason == "Temporary Redirect":
+                        if "Network Error" in str(response["body"].read()):
+                            log("FAILURE",
+                                "We encountered an unexpected error, which has shown empirically to be related to time-out",
+                                "The query is assumed to be valid, be aware that if deployment fails it may be related to the query")
+                            os.environ["VALIDATION_WARNING_RAISED"] = "True"
+                            return
+
                 parsing = response["body"].read()
                 parsing = json.loads(parsing) #type: ignore
                 log("DEBUG", "Parsed Body", parsing) 
@@ -49,17 +59,19 @@ class SplunkValidateQuery(SplunkEngineInit, ValidateQuery):
                         message.get("text", ""),
                         "Review the error and ensure it can run on the Splunk Search console")
                 os.environ["VALIDATION_ERROR_RAISED"] = "True"
-            
+                return
+                
             elif status == 200:
                 parsing = response["body"].read()
                 parsing = json.loads(parsing) #type: ignore
                 log("SUCCESS", "The query is a valid SPL that can be parsed by Splunk")
+                return
             
             else:
                 log("FATAL",
                 "Unexpected Error Code",
                 str(response))
-
+                return
 
         except Exception as e:
             log("FATAL",

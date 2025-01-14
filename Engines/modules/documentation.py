@@ -16,7 +16,7 @@ from Engines.modules.logs import log
 from Engines.modules.tide import DataTide
 
 VOCAB_INDEX = DataTide.Vocabularies.Index
-DOCUMENTATION_TYPE = DataTide.Configurations.Documentation.documentation_type
+DOCUMENTATION_TARGET = DataTide.Configurations.Documentation.documentation_target
 ICONS = DataTide.Configurations.Documentation.icons
 DOCUMENTATION_CONFIG = DataTide.Configurations.Documentation
 CONFIG_INDEX = DataTide.Configurations.Index
@@ -223,14 +223,22 @@ def rich_attack_links(
     return rich_techniques
 
 
-def backlink_resolver(model_id, raw_link=False):
+def backlink_resolver(model_uuid:str,
+                        raw_link:bool=False,
+                        raw_hover:bool=False,
+                        hover_length:int=150):
+    """
+    Formats a markdown link to the model, using localized paths.
 
-    model_type = get_type(model_id)
+    raw_link: returns the raw link, without markdown link formatting
+    raw_hover: in combination with raw_link, returns a tuple with the cursor hovering content
+    """
+    model_type = get_type(model_uuid)
     model_data = dict()
     file_link = backlink_name = icon = str()
 
     if model_type != "rpt":
-        model_data = MODELS_INDEX[model_type][model_id]
+        model_data = MODELS_INDEX[model_type][model_uuid]
         icon = ICONS[model_type]
 
     doc_path = "../" + DOCUMENTATION_CONFIG.object_names[model_type] + "/"
@@ -247,26 +255,26 @@ def backlink_resolver(model_id, raw_link=False):
         return [f"[{s}] : {status}" for s, status in system_statuses.items()]
 
     if model_type in ["tam", "tvm", "bdr"]:
-        hover = model_value(model_id, "description")
+        hover = model_value(model_uuid, "description")
     if model_type in ["cdm"]:
-        hover = model_value(model_id, "guidelines")
+        hover = model_value(model_uuid, "guidelines")
 
     if model_type == "mdr":
         model_name = model_data["name"]
 
         backlink_name = model_name.replace("_", " ")
         hover = "&#013;&#010;".join(
-            mdr_statuses(model_id)
+            mdr_statuses(model_uuid)
         )  # Magic entity codes to break in tooltips
-        mdr_description = model_value(model_id, "description") or ""
+        mdr_description = model_value(model_uuid, "description") or ""
         mdr_description = mdr_description
         hover += f"&#013;&#010;&#013;&#010;{mdr_description}"
         file_link = f"{doc_path}{icon} {model_name}"
 
     elif model_type == "rpt":
-        report_data = get_vocab_entry("reports", model_id)
+        report_data = get_vocab_entry("reports", model_uuid)
         if type(report_data) is dict:
-            backlink_name = f"{model_id} - {report_data['name']}"
+            backlink_name = f"{model_uuid} - {report_data['name']}"
             hover = report_data["description"]
             file_link = f"{doc_path}{report_data['file_name']}"
 
@@ -275,18 +283,24 @@ def backlink_resolver(model_id, raw_link=False):
         backlink_name = model_name
         file_link = f"{doc_path}{icon} {model_name}"
 
-    if DOCUMENTATION_TYPE == "MARKDOWN":
+    if DOCUMENTATION_TARGET == "generic":
         file_link = file_link.replace(" ", "%20")
         if model_type != "rpt":
             file_link += ".md"
 
-    elif DOCUMENTATION_TYPE == "GLFM":
+    elif DOCUMENTATION_TARGET == "gitlab":
         file_link = file_link.replace(" ", "-").replace("_", "-")
 
     hover = sanitize_hover(str(hover))
+    if len(hover) > hover_length:
+        hover = hover[hover_length:] + "..."  
     backlink = f'[{backlink_name}]({file_link} "{hover}")'
+    
     if raw_link:
-        backlink = file_link
+        if raw_hover:
+            return file_link, hover
+        return file_link
+    
     return backlink
 
 

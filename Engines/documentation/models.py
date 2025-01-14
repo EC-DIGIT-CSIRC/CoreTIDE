@@ -41,10 +41,12 @@ from Engines.templates.models import MODEL_DOC_TEMPLATE
 
 ROOT = Path(str(git.Repo(".", search_parent_directories=True).working_dir))
 MODELS_DOCS_PATH = Path(DataTide.Configurations.Global.Paths.Core.models_docs_folder)
-MODELS_SCOPE = DataTide.Configurations.Documentation.scope.copy()
-GLFM = DataTide.Configurations.Documentation.glfm_doc_target
-DOCUMENTATION_TYPE = DataTide.Configurations.Documentation.documentation_type
+MODELS_SCOPE = DataTide.Configurations.Documentation.scope
+
+DOCUMENTATION_TARGET = DataTide.Configurations.Documentation.documentation_target
+
 MODELS_INDEX = DataTide.Models.Index
+MODELS_NAME = DataTide.Configurations.Documentation.object_names
 
 if DataTide.Configurations.Documentation.cve.get("proxy"):
     Proxy.set_proxy()
@@ -56,14 +58,13 @@ def documentation(model):
 
     model_uuid = model.get("metadata", {}).get("uuid")
     model_type = get_type(model_uuid)
-    uuid = f"UUID : *{model_uuid}*"
 
-    if DOCUMENTATION_TYPE == "MARKDOWN":
+    if DOCUMENTATION_TARGET == "generic":
         frontmatter_type = DataTide.Configurations.Documentation.object_names[
             model_type
         ].replace("/", "")
         frontmatter = f"---\ntype: {frontmatter_type}\n---"
-    elif DOCUMENTATION_TYPE == "GLFM":
+    elif DOCUMENTATION_TARGET == "gitlab":
         frontmatter = ""
 
     model_datafield = DataTide.Configurations.Global.data_fields[model_type]
@@ -77,7 +78,7 @@ def documentation(model):
     expand_description = ""
     expand_graphs = ""
 
-    if DOCUMENTATION_TYPE == "GLFM":
+    if DOCUMENTATION_TARGET == "gitlab":
         title = ""
 
     references = model.get("references")
@@ -116,7 +117,7 @@ def documentation(model):
 
     if not relation_graph and not relation_table:
         relation_graph = "🚫 No related objects indexed."
-        if DOCUMENTATION_TYPE == "GLFM":
+        if DOCUMENTATION_TARGET == "gitlab":
             GitlabMarkdown.negative_diff(relation_graph)
 
     if model_type == "tam":
@@ -166,12 +167,26 @@ def documentation(model):
 
     data_table, tags = model_data_table(model[model_datafield], model_uuid)
 
-    if GLFM:
+    if DOCUMENTATION_TARGET == "gitlab":
         tags = ""
     else:
         tags = "#" + ", #".join(tags)
 
-    doc = MODEL_DOC_TEMPLATE.format(**locals())
+    doc = MODEL_DOC_TEMPLATE.format(frontmatter=frontmatter,
+                                    title=title,
+                                    criticality=criticality,
+                                    tlp=tlp,
+                                    techniques=techniques,
+                                    expand_header=expand_header,
+                                    metadata=metadata,
+                                    description=description,
+                                    expand_description=expand_description,
+                                    relation_graph=relation_graph,
+                                    relation_table=relation_table,
+                                    expand_graphs=expand_graphs,
+                                    data_table=data_table,
+                                    references=references,
+                                    tags=tags)
 
     return doc
 
@@ -191,9 +206,9 @@ def run():
 
         doc_type_path = (
             MODELS_DOCS_PATH
-            / DataTide.Configurations.Documentation.object_names[model_type]
+            / MODELS_NAME[model_type]
         )
-        if DOCUMENTATION_TYPE == "GLFM":
+        if DOCUMENTATION_TARGET== "gitlab":
             doc_type_path = Path(str(doc_type_path).replace(" ", "-"))
 
         # Remove everything in the doc folder for the model
@@ -218,7 +233,7 @@ def run():
             doc_path = doc_type_path / doc_file_name
 
             # Replace whitespace in file name as it becomes a path in the Gitlab MODELS_DOCS_PATH
-            if DOCUMENTATION_TYPE == "GLFM":
+            if DOCUMENTATION_TARGET == "gitlab":
                 doc_path = Path(str(doc_path).replace(" ", "-"))
 
             log("ONGOING", "Generating documentation", doc_file_name)
@@ -228,9 +243,9 @@ def run():
                 output.write(document)
                 doc_count += 1
 
-    if DOCUMENTATION_TYPE == "MARKDOWN":
+    if DOCUMENTATION_TARGET == "generic":
         doc_format_log = "✒️ standard markdown"
-    elif DOCUMENTATION_TYPE == "GLFM":
+    elif DOCUMENTATION_TARGET == "gitlab":
         doc_format_log = "🦊 Gitlab Flavored Markdown"
     else:
         doc_format_log = ""

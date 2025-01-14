@@ -8,13 +8,12 @@ from typing import Tuple, Literal
 
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
-# from Engines.modules.index import CONFIG, INDEX, SKIP_KEYS, DOCUMENTATION_TYPE, DEFINITIONS_INDEX
 from Engines.modules.tide import DataTide, IndexTide
 
 CONFIG = DataTide.Configurations
 INDEX = DataTide.Index
 SKIP_KEYS = DataTide.Configurations.Documentation.skip_model_keys
-DOCUMENTATION_TYPE = DataTide.Configurations.Documentation.documentation_type
+DOCUMENTATION_TARGET = DataTide.Configurations.Documentation.documentation_target
 DEFINITIONS_INDEX = DataTide.TideSchemas.definitions
 
 from Engines.modules.framework import (
@@ -53,14 +52,19 @@ def criticality_doc(criticality_data: str) -> str:
 def metadata_doc(metadata: dict, model_type: str) -> str:
     metaschema = INDEX["metaschemas"][model_type]["properties"]
     # Make metadata footer
-    meta = list()
+    meta = dict()
     for k in metadata:
         meta_title = get_field_title(k, metaschema)
         if meta_title:
-            meta.append(meta_title + " : " + str(metadata[k]))
+            meta[meta_title] = metadata[k]
         else:
             log("DEBUG", f"Missing title in metaschema : {metaschema} for key : {k}")
-    metadata_doc_markdown = ", ".join(meta)
+    
+    for m in meta:
+        if type(meta[m]) is list:
+            meta[m] = ", ".join(meta[m])
+        
+    metadata_doc_markdown = " **|** ".join([f"`{m} : {meta[m]}`" for m in meta])
 
     return metadata_doc_markdown
 
@@ -141,8 +145,8 @@ def relations_table(
             if trunk:
                 branch_data = {}
                 branch_data[get_type(trunk[0])] = "<br>".join(
-                    [backlink_resolver(b) for b in trunk if b != "Unknown"]
-                )
+                    [backlink_resolver(b) for b in trunk if b != "Unknown"] #type: ignore
+                ) #type: ignore
                 return branch_data
 
     data = []
@@ -314,7 +318,7 @@ def cve_doc(cve_list: list[str]) -> str:
                 cve_doc_list.append(f"[💔 {broken_vuln}]({CVE_DB_LINK}{broken_vuln})")
 
             cve_error_banner = "⚠️ ERROR : Could not successfully retrieve CVE Details, double check the broken links below to confirm the CVE ID exists."
-            if DOCUMENTATION_TYPE == "GLFM":
+            if DOCUMENTATION_TARGET == "gitlab":
                 cve_error_banner = GitlabMarkdown.negative_diff(cve_error_banner)
             cve_data = "- " + "\n- ".join(cve_doc_list)
             cve_data = cve_error_banner + "\n\n" + cve_data

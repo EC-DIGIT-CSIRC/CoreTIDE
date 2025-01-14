@@ -1,4 +1,7 @@
-scope = [ "tam", "tvm", "cdm", "bdr" ]
+documentation_target = "gitlab" #generic: common features for markdown wikis
+                                #gitlab : enables gitlab wiki specific features
+
+scope = [ "tvm", "cdm", "bdr" ]
 skip_model_keys = ["description",
                             "guidelines",
                             "aliases",
@@ -15,6 +18,10 @@ skip_vocabularies = ["mitigation",
                     "logsources",
                     "nist",
                     "att&ck"]
+
+[gitlab]
+model_cover_pages = true #Creates a cover page for the model sub-folder
+                        #using JSON Tables to facilitate searches
 
 [cve]
 default_db_link = "https://nvd.nist.gov/vuln/detail/"

@@ -14,7 +14,7 @@ required:
 properties:
 
   uuid: 
-    title: Universally unique identifier of the Tide Object
+    title: UUID
     type: string
     format: uuid
     description: According to UUIDv4 specification. You can use https://www.uuidgenerator.net/version4 to generate UUIDs.
@@ -22,8 +22,9 @@ properties:
     pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$
   
   schema:
-    title: Schema identifier and version
+    title: Schema Identifier
     type: string
+    icon: 🧱
     description: Identifier of the schema at its current version 
     const: $SCHEMA_VERSION
   
@@ -70,7 +71,7 @@ properties:
     example: amine.besson@ext.ec.europa.eu
 
   contributors:
-    title: Research Contributors
+    title: Contributors
     type: array
     description: Individuals who supported creating, enriching or informing the information contained in the document. 
     items:

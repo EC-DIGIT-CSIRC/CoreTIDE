@@ -204,21 +204,6 @@ class IndexTide:
         return RECONCILED_INDEX
 
     @staticmethod
-    def compute_doc_target() -> Tuple[Literal["GLFM", "MARKDOWN"], bool, bool]:
-        if (glfm := os.environ.get("DOCUMENTATION_TYPE")) == "GLFM":
-            documentation_type = glfm
-            raw_md_doc_target = False
-            glfm_doc_target = True
-            print("🦊 Configured to use Gitlab Flavored Markdown")
-
-        else:
-            documentation_type = "MARKDOWN"
-            raw_md_doc_target = True
-            glfm_doc_target = False
-
-        return documentation_type, glfm_doc_target, raw_md_doc_target
-
-    @staticmethod
     def compute_chains(tvm_index: dict) -> dict:
         chain = dict()
         for tvm in (n := tvm_index):
@@ -621,19 +606,19 @@ class DataTide:
         class Documentation:
             """Parameters describing how documentation should be generated."""
 
+
             Index = dict(IndexTide.load()["configurations"]["documentation"])
+            documentation_target = str(Index.get("documentation_target"))
             scope = list(Index["scope"])
             skip_model_keys = list(Index["skip_model_keys"])
             skip_vocabularies = list(Index["skip_model_keys"])
+            gitlab = dict(Index.get("gitlab", {}))
             cve = dict(Index["cve"])
             wiki = dict(Index.get("wiki",{}))
             object_names = dict(Index["object_names"])
             titles = dict(Index["titles"])
             icons = dict(Index["icons"])
             indexes = dict(Index["indexes"])
-            (documentation_type, glfm_doc_target, raw_md_doc_target) = (
-                IndexTide.compute_doc_target()
-            )
             models_docs_folder: Path = Path(
                 IndexTide.load()["configurations"]["global"]["paths"]["core"][
                     "models_docs_folder"
@@ -641,7 +626,7 @@ class DataTide:
             )
             models_docs_folder = (
                 Path(str(models_docs_folder).replace(" ", "-"))
-                if glfm_doc_target
+                if documentation_target == "gitlab"
                 else models_docs_folder
             )
 
