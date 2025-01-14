@@ -172,9 +172,9 @@ def documentation(mdr):
             ]  # Keep only the string after the last separator
             # system_data[new_key] = system_data.pop(key)
             key_name = get_field_title(cleaned_key, SYSTEMS_SUBSCHEMAS[s])
-            param_description = get_value_metaschema(
+            param_description:str = get_value_metaschema(
                 cleaned_key, metaschema=SYSTEMS_SUBSCHEMAS[s], retrieve="description"
-            )
+            ) #type: ignore
             param_name = get_value_metaschema(
                 cleaned_key,
                 metaschema=SYSTEMS_SUBSCHEMAS[s],
@@ -194,28 +194,10 @@ def documentation(mdr):
                     f"**{enriched_value}** : {get_vocab_description(cleaned_key, data)}"
                 )
 
-            # TODO Better Sentinel Entities Handling
-            # TODO Pretty print dictionaries in general
-            # Convert list to joined string
-
-            if type(data) is list:
-                if type(data[0]) is not dict:
-                    data = ", ".join(data)
-                else:
-                    data = data[0]
-
-            # Prevents from being rendered with mathematical expression formatting
-            if type(data) is str:
-                data = data.replace("$", r"\$")
-                data = data.replace("\n", "")
-
-            if type(data) is dict:
-                data = str(data)
-
             buffer["Parameter"] = key_name
             buffer["System Config"] = param_name
-            buffer["Description"] = param_description
-            buffer["Config"] = data
+            buffer["Description"] = param_description.replace("$", r"\$").replace("\n", " ")
+            buffer["Config"] = str(data).replace("$", r"\$").replace("\n", " ")
 
             config_data.append(buffer)
 
