@@ -13,6 +13,7 @@ sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.indexing.indexer import indexer
 from Engines.modules.logs import log
+from Engines.modules.patching import Tide2Patching
 
 ROOT = Path(str(git.Repo(".", search_parent_directories=True).working_dir))
 
@@ -87,9 +88,12 @@ class IndexTide:
         added_mdr = list()
         updated_mdr = list()
 
+        patch = Tide2Patching()
+
         for mdr in STG_INDEX:
             if mdr not in RECONCILED_INDEX["models"]["mdr"]:
-                RECONCILED_INDEX["models"]["mdr"][mdr] = STG_INDEX[mdr]
+                log("INFO", "Patching MDR in staging index", mdr)
+                RECONCILED_INDEX["models"]["mdr"][mdr] = patch.tide_1_patch(STG_INDEX[mdr], "mdr")
                 added_mdr.append(mdr)
             else:
                 main_mdr_metadata = (
