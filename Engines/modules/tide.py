@@ -93,7 +93,9 @@ class IndexTide:
         for mdr in STG_INDEX:
             if mdr not in RECONCILED_INDEX["models"]["mdr"]:
                 log("INFO", "Patching MDR in staging index", mdr)
+                print("OLD MODEL :", str(STG_INDEX[mdr]))
                 RECONCILED_INDEX["models"]["mdr"][mdr] = patch.tide_1_patch(STG_INDEX[mdr], "mdr")
+                print("NEW MODEL :", RECONCILED_INDEX["models"]["mdr"][mdr])
                 added_mdr.append(mdr)
             else:
                 main_mdr_metadata = (
