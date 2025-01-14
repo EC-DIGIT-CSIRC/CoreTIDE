@@ -332,7 +332,6 @@ def parents(id: str) -> list:
     model_type = get_type(id)
     parents = []
     parent_mappings = {
-        "tvm": {"data": "threat", "parent": "actors"},
         "cdm": {"data": "detection", "parent": "vectors"},
         "mdr": {"parent": "detection_model"},
     }
