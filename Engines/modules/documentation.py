@@ -254,7 +254,7 @@ def backlink_resolver(model_uuid:str,
 
         return [f"[{s}] : {status}" for s, status in system_statuses.items()]
 
-    if model_type in ["tam", "tvm", "bdr"]:
+    if model_type in ["tvm", "bdr"]:
         hover = model_value(model_uuid, "description")
     if model_type in ["cdm"]:
         hover = model_value(model_uuid, "guidelines")

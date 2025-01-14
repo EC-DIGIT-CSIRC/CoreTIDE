@@ -158,25 +158,18 @@ def relations_table(
         trunk_data = unfold_trunk({trunk: tree[trunk]}) or {}  # type: ignore
 
         if direction == "downstream":
-            if model_type in ["tam"]:
-                trunk_data["tvm"] = (
-                    None if "tvm" not in trunk_data else trunk_data["tvm"]
-                )
-            if model_type in ["tam", "tvm"]:
+
+            if model_type == "tvm":
                 trunk_data["cdm"] = (
                     None if "cdm" not in trunk_data else trunk_data["cdm"]
                 )
-            if model_type in ["tam", "tvm", "cdm", "bdr"]:
+            if model_type in ["tvm", "cdm", "bdr"]:
                 trunk_data["mdr"] = (
                     None if "mdr" not in trunk_data else trunk_data["mdr"]
                 )
 
         elif direction == "upstream":
             if "bdr" not in trunk_data:
-                if model_type in ["mdr", "cdm", "tvm"]:
-                    trunk_data["tam"] = (
-                        None if "tam" not in trunk_data else trunk_data["tam"]
-                    )
                 if model_type in ["mdr", "cdm"]:
                     trunk_data["tvm"] = (
                         None if "tvm" not in trunk_data else trunk_data["tvm"]

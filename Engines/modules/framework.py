@@ -367,7 +367,6 @@ def childs(model_id: str) -> list:
     implementations = []
 
     mappings = {
-        "tam": {"child_type": "tvm", "data": "threat", "reference": "actors"},
         "tvm": {"child_type": "cdm", "data": "detection", "reference": "vectors"},
         "cdm": {"child_type": "mdr", "reference": "detection_model"},
         "bdr": {"child_type": "mdr", "reference": "detection_model"},
@@ -478,9 +477,6 @@ def techniques_resolver(model_id: str, recursive=True) -> list:
 
     if model_type == "tvm":
         techniques = model_body["threat"]["att&ck"]
-
-    if model_type == "tam":
-        techniques = model_body["actor"]["att&ck"]
 
     # Deduplicate techniques in case they were present
     # across multiple
