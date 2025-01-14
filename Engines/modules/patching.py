@@ -42,6 +42,11 @@ class Tide2Patching:
                     return model
         
         log("ONGOING", f"Evaluating patching validation requirements for {model['name']}")
+        
+        if not model.get("metadata"):
+            log("INFO", "Missing metadata section", "Transferring meta section to metadata")
+            model["metadata"] = model.pop("meta")
+        
         if not model.get("metadata", {}).get("uuid"):
             if "uuid" in model:
                 model["metadata"]["uuid"] = model.pop("uuid")
