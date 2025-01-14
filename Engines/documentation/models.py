@@ -91,6 +91,8 @@ def documentation(model):
         references = "- " + "\n- ".join(references)
     elif type(references) is dict:
         references = reference_doc(model.get("references"))
+    if references:
+        references = "### 🔗 References\n\n" + references
 
     description = model[model_datafield].get("description") or model[
         model_datafield
@@ -108,6 +110,8 @@ def documentation(model):
     if techniques:
         techniques = rich_attack_links(techniques)
         techniques = f'{get_icon("att&ck")} **ATT&CK Techniques** {techniques}'
+    else:
+        techniques = ""
 
     relation_graph = relationships_graph(model_uuid)
     relation_table = ""
@@ -155,7 +159,8 @@ def documentation(model):
     if DOCUMENTATION_TARGET == "gitlab":
         tags = ""
     else:
-        tags = "#" + ", #".join(tags)
+        tags = "#### 🏷️ Tags\n\n"
+        tags += "#" + ", #".join(tags)
 
     doc = MODEL_DOC_TEMPLATE.format(frontmatter=frontmatter,
                                     title=title,
