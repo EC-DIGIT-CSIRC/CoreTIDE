@@ -38,7 +38,6 @@ TEMPLATEv3 = '''{frontmatter}
 
 {queries}
 
-### 🔗 References
 
 {references}
 

@@ -150,6 +150,8 @@ def documentation(mdr):
         references = "- " + "\n- ".join(references)
     elif type(references) is dict:
         references = reference_doc(mdr.get("references"))
+    if references:
+        references = "### 🔗 References\n\n" + references
 
     # Add enriched configuration data
     configurations = str()
