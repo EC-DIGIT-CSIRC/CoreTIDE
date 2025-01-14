@@ -38,7 +38,7 @@ class Tide2Patching:
         if os.getenv("CI_COMMIT_REF_NAME") == "main":
             if os.getenv("DEPLOYMENT_PLAN") not in ["PRODUCTION", "STAGING"]:
                 if model_type != "mdr": # Allowing this option for Staging MDR documentation patching
-                    log("SKIP", "Not patching for validation, in main")
+                    log("SKIP", "Not patching for validation, in main", model.get("name", ""))
                     return model
         
         log("ONGOING", f"Evaluating patching validation requirements for {model['name']}")
