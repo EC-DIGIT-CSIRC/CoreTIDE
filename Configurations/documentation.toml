@@ -4,7 +4,6 @@ documentation_target = "gitlab" #generic: common features for markdown wikis
 scope = [ "tvm", "cdm", "bdr" ]
 skip_model_keys = ["description",
                             "guidelines",
-                            "aliases",
                             "terrain",
                             "tuning",
                             "att&ck",
@@ -12,8 +11,8 @@ skip_model_keys = ["description",
                             "vectors",
                             "justification",
                             "chaining",
-                            "cve",
-                            "att&ck_groups"]
+                            "cve"]
+
 skip_vocabularies = ["mitigation",
                     "logsources",
                     "nist",
@@ -31,7 +30,6 @@ retrieve_details = true
 proxy = false
 
 [object_names]
-tam = "Threat Actors"
 tvm = "Threat Vectors"
 cdm = "Detection Models"
 mdr = "Detection Rules"
@@ -47,7 +45,6 @@ mdr = "Detection Rules Schema"
 bdr = "Business Detection Schema"
 
 [icons]
-tam = "👺"
 tvm = "☣️"
 cdm = "🛡️"
 mdr = "🚨"
@@ -102,11 +99,4 @@ duration = "⌛"
 throttling = "🗜️"
 threshold = "⚖️"
 query = "🔎"
-
-[indexes]
-tam = "Threat Actors Navigation Index"
-tvm = "Threat Vectors Navigation Index"
-cdm = "Detection Models Navigation Index"
-bdr = "Business Detection Requests Navigation Index"
-mdr = "Detection Rules Navigation Index"
 

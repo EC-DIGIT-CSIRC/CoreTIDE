@@ -3,7 +3,9 @@ import os
 import git
 import time
 import sys
+
 from pathlib import Path
+from typing import Literal, Optional, Tuple
 
 start_time = time.time()
 
@@ -35,9 +37,11 @@ ICONS = DataTide.Configurations.Documentation.icons
 
 PATHS_CONFIG = DataTide.Configurations.Global.Paths.Index
 
-MODELS_DOCS_PATH = Path(DataTide.Configurations.Global.Paths.Core.models_docs_folder)
+MODELS_DOCS_PATH = Path(str(DataTide.Configurations.Global.Paths.Core.models_docs_folder).replace(" ", "-"))
 MODELS_SCOPE = DataTide.Configurations.Documentation.scope
 MODELS_NAME = DataTide.Configurations.Documentation.object_names
+
+DEPRECATED_STATUSES = ["DISABLED", "REMOVED"]
 
 CHARS_CLIP = 150
 NAV_INDEX_FIELDS = {
@@ -89,15 +93,14 @@ NAV_INDEX_FIELDS = {
         "description",
         "statuses",
         "att&ck",
-        "detection_model",
-        "system"
+        "detection_model"    
     ],
 }
 
 MODELS = NAV_INDEX_FIELDS.keys()
 
 
-def build_search(model_type):
+def build_search(model_type, mdr_status:Optional[Literal["ACTIVE", "DEPRECATED"]]=None):
 
     index = list()
     index_data = MODELS_INDEX[model_type]
@@ -117,8 +120,30 @@ def build_search(model_type):
 
     for entry in index_data:
         row = dict()
-        for value in NAV_INDEX_FIELDS[model_type]:
+        
+        # Logic to retain only MDR in the correct status, to allow breaking
+        # the table into two
+        if model_type == "mdr":
+            configurations = model_value_doc(entry, "configurations") or {}
+            status_check = list()
 
+            for system in configurations:
+                sys_status = configurations[system]["status"]  # type: ignore
+
+                if mdr_status == "ACTIVE":
+                    if sys_status not in DEPRECATED_STATUSES:
+                        status_check.append(system)
+
+                elif mdr_status == "DEPRECATED":
+                    if sys_status in DEPRECATED_STATUSES:
+                        status_check.append(system)
+
+            if not status_check:
+                continue
+
+        
+        for value in NAV_INDEX_FIELDS[model_type]:
+            
             if value == "implementations":
                 relations = relations_list(entry, mode="count", direction="downstream")
                 implementations = []
@@ -146,7 +171,11 @@ def build_search(model_type):
                     configurations = model_value_doc(entry, "configurations") or {}
                     for system in configurations:
                         sys_status = configurations[system]["status"]  # type: ignore
-                        statuses[system] = sys_status
+                        if mdr_status == "ACTIVE" and sys_status not in DEPRECATED_STATUSES:
+                            statuses[system] = sys_status
+
+                        elif mdr_status == "DEPRECATED" and sys_status in DEPRECATED_STATUSES:
+                            statuses[system] = sys_status
 
                     # Pretty print statuses
                     statuses = ", ".join(
@@ -167,16 +196,6 @@ def build_search(model_type):
                     if model_value:
                         model_value = ", ".join(model_value)
                     row[mdr_attack_technique] = model_value
-
-                # Custom ways of returning data beside field listing
-                elif value == "system":
-                    model_value = MODELS_INDEX[model_type][entry][
-                        "configurations"
-                    ].keys()
-
-                    model_value = [s.capitalize() for s in model_value]
-                    model_value = ", ".join(model_value)
-                    row[system_column] = model_value
 
                 else:
                     model_value = model_value_doc(
@@ -239,15 +258,47 @@ def construct_navigation_index(model):
 
     icon = ICONS[model]
     model_title = DataTide.Configurations.Documentation.object_names[model]
+    nav_index = str()
 
-    count = len(MODELS_INDEX[model])
+    def count_mdr_statuses()->Tuple[int,int]:
+        active_mdr = dict()
+        deprecated_mdr = dict()
+        for mdr in MODELS_INDEX["mdr"]:
+            for system in MODELS_INDEX["mdr"][mdr]["configurations"]:
+                if MODELS_INDEX["mdr"][mdr]["configurations"][system]["status"] in DEPRECATED_STATUSES:
+                    deprecated_mdr[mdr] = MODELS_INDEX["mdr"][mdr]
+                else:
+                    active_mdr[mdr] = MODELS_INDEX["mdr"][mdr]
 
-    summary = CENTER_TEXT.format(icon=icon,
-                                count=count,
-                                model_title=model_title)
-    details = build_search(model)
+        return len(active_mdr), len(deprecated_mdr)
 
-    nav_index = summary + "\n\n" + details
+
+    if model == "mdr":
+        active_mdr_count, deprecated_mdr_count = count_mdr_statuses()
+        
+        active_mdr_title = "Active " + model_title
+        active_mdr_summary = CENTER_TEXT.format(icon=icon,
+                                                count=active_mdr_count,
+                                                model_title=active_mdr_title)
+        active_mdr_details = build_search(model, mdr_status="ACTIVE")
+        
+        deprecated_mdr_title = "Deprecated " + model_title
+        deprecated_mdr_summary = CENTER_TEXT.format(icon=icon,
+                                                    count=deprecated_mdr_count,
+                                                    model_title=deprecated_mdr_title)
+        deprecated_mdr_details = build_search(model, mdr_status="DEPRECATED")
+
+        nav_index = active_mdr_summary + "\n\n" + active_mdr_details
+        nav_index += "\n\n---\n" + deprecated_mdr_summary + "\n\n" + deprecated_mdr_details
+
+    else:
+        count = len(MODELS_INDEX[model])
+        summary = CENTER_TEXT.format(icon=icon,
+                                    count=count,
+                                    model_title=model_title)
+
+        details = build_search(model)
+        nav_index = summary + "\n\n" + details
 
     return nav_index
 
@@ -275,7 +326,7 @@ def run():
             "Not generating cover pages as set to false or missing key",
             "You can enable this feature by setting gitlab.model_cover_pages to True in documentation.toml")
         return
-    
+
     if not os.path.exists(MODELS_DOCS_PATH):
         log("ONGOING", "Create wiki and documentation folder")
         MODELS_DOCS_PATH.mkdir(parents=True)

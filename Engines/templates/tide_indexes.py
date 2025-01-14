@@ -1,12 +1,5 @@
 from typing import Literal
 
-TIDE_INDEX_TAM = {
-"description": "Internal Reference to CoreTIDE existing threat actor models",
-"icon": "👹",
-"name": "Threat Actors",
-"model": True,
-}
-
 TIDE_INDEX_TVM = {
 "description": "Internal Reference to CoreTIDE existing threat actor vectors",
 "name": "Threat Vectors",
@@ -38,10 +31,8 @@ TIDE_INDEX_REPORT = {
 "model": True,
 }
 
-def fetch_tide_index_template(model_type:Literal["tam", "tvm","cdm", "bdr", "report"]):
+def fetch_tide_index_template(model_type:Literal["tvm","cdm", "bdr", "report"]):
     match model_type:
-        case "tam":
-            return  TIDE_INDEX_TAM
         case "tvm":
             return  TIDE_INDEX_TVM
         case "cdm":

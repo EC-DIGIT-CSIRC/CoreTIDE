@@ -192,8 +192,6 @@ class DataTide:
         """
         Index = dict(IndexTide.load()["models"])
         """Index containing model types"""
-        tam = dict(Index["tam"])
-        """Threat Actor Models Data Index"""
         tvm = dict(Index["tvm"])
         """Threat Vector Models Data Index"""
         cdm = dict(Index["cdm"])
@@ -204,7 +202,7 @@ class DataTide:
         """Business Detection Rules Data Index"""
         chaining = IndexTide.compute_chains(tvm)
         """Index of all chaining relationships"""
-        FlatIndex = tam | tvm | cdm | mdr | bdr
+        FlatIndex =  tvm | cdm | mdr | bdr
         """Flat Key Value pair structure of all UUIDs in the index"""
 
     @dataclass(frozen=True)
@@ -223,8 +221,6 @@ class DataTide:
         """
 
         Index = dict(IndexTide.load()["json_schemas"])
-        tam = dict(Index.get("tam", {}))
-        """Threat Actor Model JSON Schema"""
         tvm = dict(Index.get("tvm", {}))
         """Threat Vector Model JSON Schema"""
         cdm = dict(Index.get("cdm", {}))
@@ -241,8 +237,6 @@ class DataTide:
         """
 
         Index = dict(IndexTide.load()["templates"])
-        tam = str(Index.get("tam"))
-        """Threat Actor Model Object Template"""
         tvm = str(Index.get("tvm"))
         """Threat Vector Model Object Template"""
         cdm = str(Index.get("cdm"))
@@ -263,8 +257,6 @@ class DataTide:
         subschemas = dict(IndexTide.load()["subschemas"])
         definitions = dict(IndexTide.load()["definitions"])
         templates = dict(IndexTide.load()["templates"])
-        tam = dict(Index["tam"])
-        """Threat Actor Model Tide Schema"""
         tvm = dict(Index["tvm"])
         """Threat Vector Model Tide Schema"""
         cdm = dict(Index["cdm"])
@@ -342,7 +334,6 @@ class DataTide:
                     Only use for specific use cases, for any others prefer
                     the other attributes which are precomputed"""
                     
-                    tam = Index["tam"]
                     tvm = Index["tvm"]
                     cdm = Index["cdm"]
                     mdr = Index["mdr"]
@@ -404,7 +395,6 @@ class DataTide:
             object_names = dict(Index["object_names"])
             titles = dict(Index["titles"])
             icons = dict(Index["icons"])
-            indexes = dict(Index["indexes"])
             models_docs_folder: Path = Path(
                 IndexTide.load()["configurations"]["global"]["paths"]["core"][
                     "models_docs_folder"

@@ -40,7 +40,8 @@ def run():
     EXPORT_INDENT = 0
     if DEBUG:
         EXPORT_INDENT = 4
-    model_index = {}
+    
+    model_index = json.load(open(TIDE_INDEXES_PATH / "models.json"))
 
     for model_type in MODEL_SCOPE:
 
@@ -68,8 +69,6 @@ def run():
             description = str()
 
             match model_type:
-                case "tam":
-                    description = model_data.get("actor", {}).get("description")
                 case "tvm":
                     description = model_data.get("threat", {}).get("description")
                 case "cdm":

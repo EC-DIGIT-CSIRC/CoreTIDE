@@ -124,25 +124,6 @@ def documentation(model):
         if DOCUMENTATION_TARGET == "gitlab":
             GitlabMarkdown.negative_diff(relation_graph)
 
-    if model_type == "tam":
-        misp = model[model_datafield].get("misp") or ""
-        if misp:
-            expand_header += f"\n\n{get_icon('misp')} **MISP Galaxy UUID** : `{misp}`"
-
-        attack_group = model[model_datafield].get("att&ck_groups") or ""
-        if attack_group:
-            group_data = get_vocab_entry("att&ck_groups", attack_group)
-            if type(group_data) is dict:
-                group_description = group_data["description"]
-                hover_link = f'"{sanitize_hover(group_description)}"'
-                expand_header += f"\n\n{get_icon('att&ck_groups')} **MITRE ATT&CK Group** : [ ` {attack_group} - {group_data['name']} `]({group_data['link']} {hover_link})"
-
-        aliases = model[model_datafield].get("aliases") or ""
-        if aliases:
-            expand_header += (
-                f"\n\n{get_icon('aliases')} ` Other aliases : {', '.join(aliases)}`"
-            )
-
     if model_type == "bdr":
         justification = model[model_datafield]["justification"].replace("\n", "\n> ")
         expand_description += f"\n\n## ❓ Justification \n\n > {justification}"
