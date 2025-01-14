@@ -51,7 +51,6 @@ NAV_INDEX_FIELDS = {
         "criticality",
         "tlp",
         "description",
-        "actors",
         "implementations",
         "criticality",
         "targets",
