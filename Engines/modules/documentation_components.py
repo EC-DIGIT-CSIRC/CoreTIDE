@@ -143,6 +143,7 @@ def relations_table(
 
         if type(trunk) is list:
             if trunk:
+                print("DEBUG" , str(trunk))
                 branch_data = {}
                 branch_data[get_type(trunk[0])] = "<br>".join(
                     [backlink_resolver(b) for b in trunk if b != "Unknown"] #type: ignore
