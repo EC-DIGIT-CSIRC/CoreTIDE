@@ -395,7 +395,6 @@ class DataTide:
             object_names = dict(Index["object_names"])
             titles = dict(Index["titles"])
             icons = dict(Index["icons"])
-            indexes = dict(Index["indexes"])
             models_docs_folder: Path = Path(
                 IndexTide.load()["configurations"]["global"]["paths"]["core"][
                     "models_docs_folder"
