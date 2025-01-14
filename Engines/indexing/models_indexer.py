@@ -68,8 +68,6 @@ def run():
             description = str()
 
             match model_type:
-                case "tam":
-                    description = model_data.get("actor", {}).get("description")
                 case "tvm":
                     description = model_data.get("threat", {}).get("description")
                 case "cdm":

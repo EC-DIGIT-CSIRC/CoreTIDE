@@ -78,10 +78,10 @@ def schema_update():
                     migrated_content.append(f"  uuid: {new_uuid}\n")
                     migrated_content.append(f"  schema: {schema_version}\n")
 
-                elif re.search(r'(TAM|TVM|CDM|BDR)[0-9]{4}', line):
+                elif re.search(r'(TVM|CDM|BDR)[0-9]{4}', line):
                     
                 
-                    match = "".join(re.findall(r'(TAM|TVM|CDM|BDR)([0-9]{4})', line)[0])
+                    match = "".join(re.findall(r'(TVM|CDM|BDR)([0-9]{4})', line)[0])
                     replacement = mapping[match]['uuid']
                     if "#" not in line:
                         replacement += " #" + mapping[match]['name']
