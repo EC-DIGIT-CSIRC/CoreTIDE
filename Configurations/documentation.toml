@@ -38,7 +38,6 @@ rpt = "Intelligence Reports"
 lookup_metadata = "Lookup Metadata"
 
 [titles]
-tam = "Threat Actor Schema"
 tvm = "Threat Vector Schema"
 cdm = "Detection Objectives Schema"
 mdr = "Detection Rules Schema"
