@@ -113,21 +113,18 @@ class IndexTide:
                 )
 
                 if stg_version > main_version:
-                    print(
+                    log("INFO",
                         f"🔄 Replacing MDR {mdr_name} from prod index with"
                         f" staging data, as version is higher (main : v{main_version}"
                         f" staging : v{stg_version})"
                     )
 
                     updated_mdr = list()
-                    RECONCILED_INDEX["models"]["mdr"][mdr] = STG_INDEX[mdr]
-                    if RECONCILED_INDEX["models"]["mdr"][mdr].get("meta"):
-                        RECONCILED_INDEX["models"]["mdr"][mdr]["metadata"] = RECONCILED_INDEX["models"]["mdr"][mdr].pop(
-                            "meta"
-                        )  # Renaming meta to metadata in the fly to accomodate renaming
-                    global TIDE_MDR_STAGING_BANNER
-                    TIDE_MDR_STAGING_BANNER = dict()
-                    TIDE_MDR_STAGING_BANNER[mdr] = BANNER_MESSAGE.format(**locals())
+
+                    log("INFO", "Doing a safety patching to avoid edge cases")
+                    print("OLD MODEL :", str(STG_INDEX[mdr]))
+                    RECONCILED_INDEX["models"]["mdr"][mdr] = patch.tide_1_patch(STG_INDEX[mdr], "mdr")
+                    print("NEW MODEL :", RECONCILED_INDEX["models"]["mdr"][mdr])
         
         log("SUCCESS", "Finalized Staging Reconciliation Routine")
         log("INFO", "Updated MDRs from Production Index with Staging Data", str(len(updated_mdr)))

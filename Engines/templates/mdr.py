@@ -7,8 +7,6 @@ TEMPLATEv3 = '''{frontmatter}
 
 {name}
 
-{banner}
-
 {tlp}
 
 {techniques}
