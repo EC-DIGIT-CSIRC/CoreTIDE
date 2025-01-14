@@ -144,15 +144,6 @@ def documentation(mdr):
     response.loc[0] = [severity_data, responders_data, playbook_data]
     response = response.to_markdown(index=False)
 
-    # Make Banner if staging rule
-    if "TIDE_MDR_STAGING_BANNER" in globals():
-        banner = globals()["TIDE_MDR_STAGING_BANNER"].get(uuid_data) or ""
-        if banner:
-            if DOCUMENTATION_TARGET == "gitlab":
-                banner = f"⚠️ [-{banner.replace('⚠️', '')}-]"
-    else:
-        banner = ""
-
     references = mdr.get("references")
     # To deprecate once everything is migrated to new reference system
     if type(references) is list:
