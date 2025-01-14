@@ -501,7 +501,7 @@ def relations_upstream(id):
 
     tree = {}
     if get_type(id) == "tvm":
-        tree = parents(id)
+        tree = []
     else:
         for p in parents(id):
             tree[p] = relations_upstream(p)
