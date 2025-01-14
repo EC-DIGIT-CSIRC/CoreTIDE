@@ -10,7 +10,6 @@ sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.modules.framework import (
     get_value_metaschema,
-    get_type,
     techniques_resolver,
 )
 from Engines.modules.documentation import (
@@ -36,6 +35,11 @@ from Engines.modules.deployment import enabled_systems
 ROOT = Path(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 DOCUMENTATION_TARGET = DataTide.Configurations.Documentation.documentation_target
+if DOCUMENTATION_TARGET == "gitlab":
+    UUID_PERMALINKS = DataTide.Configurations.Documentation.gitlab.get("uuid_permalinks", False)
+else:
+    UUID_PERMALINKS = False
+
 DEFAULT_RESPONDERS = DataTide.Configurations.Deployment.default_responders
 SYSTEMS_CONFIG = DataTide.Configurations.Systems.Index
 VOCAB_INDEX = DataTide.Vocabularies.Index
@@ -83,16 +87,16 @@ def documentation(mdr):
     doc = str()
     mdr_configs = mdr["configurations"]
 
-    frontmatter_type = DataTide.Configurations.Documentation.object_names["mdr"]
-    frontmatter = f"---\ntype: {frontmatter_type}\n---"
-    
-    if DOCUMENTATION_TARGET == "gitlab":
-        frontmatter = ""
-
-    name = mdr["name"]
+    name = f"{MDR_ICON} {mdr['name']}"
+    frontmatter = ""
 
     if DOCUMENTATION_TARGET == "generic":
-        name = f"# {MDR_ICON} {name}"
+        name = "# " + name
+
+    if DOCUMENTATION_TARGET == "gitlab":
+        if UUID_PERMALINKS:
+            frontmatter = f"---\ntitle: {name}\n---"
+        name = ""    
 
     # TODO Backwards compatible with OpenTIDE 1.0, to deprecate at some point
     uuid_data = mdr.get("uuid") or mdr["metadata"]["uuid"]
@@ -287,14 +291,27 @@ def run():
     mdr_doc_count = 0
 
     for mdr_uuid in MODELS_INDEX["mdr"]:
-        print("DEBUG - ", mdr_uuid)
+        
         # Make a file name based on MDR data
         mdr_data = MODELS_INDEX["mdr"][mdr_uuid]
-        doc_name = mdr_data.get("name").replace("_", " ")
-        doc_file_name = f"{MDR_ICON} {doc_name}.md"
-        doc_file_name = safe_file_name(doc_file_name)
+        mdr_name = mdr_data.get("name")
+        mdr_uuid = mdr_data.get("metadata").get("uuid")
+        
+        log("ONGOING",
+            "Generating MDR Documentation",
+            mdr_name,
+            mdr_uuid
+            )
+
+        if UUID_PERMALINKS:
+            doc_file_name = mdr_data.get("metadata").get("uuid")+ ".md"
+        else:
+            doc_name = mdr_data.get("name").replace("_", " ")
+            doc_file_name = f"{MDR_ICON} {doc_name}.md"
+            doc_file_name = safe_file_name(doc_file_name)
+            
         doc_path = MDR_WIKI_PATH / doc_file_name
-        print(f"{MDR_ICON} Generating documentation for {doc_name}...")
+        
 
         document = documentation(mdr_data)
 

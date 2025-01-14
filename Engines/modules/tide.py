@@ -319,7 +319,6 @@ class DataTide:
                     definitions = Index["definitions"]
                     wiki_docs_folder = Index["wiki_docs_folder"]
                     models_docs_folder = Index["models_docs_folder"]
-                    lookup_docs = Index["lookup_docs"]
                     schemas_docs_folder = Index["schemas_docs_folder"]
                     vocabularies_docs = Index["vocabularies_docs"]
                     resources = Index["resources"]

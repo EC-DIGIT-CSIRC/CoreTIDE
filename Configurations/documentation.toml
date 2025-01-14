@@ -20,7 +20,9 @@ skip_vocabularies = ["mitigation",
 
 [gitlab]
 model_cover_pages = true #Creates a cover page for the model sub-folder
-                        #using JSON Tables to facilitate searches
+                         #using JSON Tables to facilitate searches
+uuid_permalinks = true   #All markdown files are named using UUIDs to create 
+                         #a permanent URL link. YAML frontmatter is used for page titles.
 
 [cve]
 default_db_link = "https://nvd.nist.gov/vuln/detail/"
@@ -36,10 +38,10 @@ rpt = "Intelligence Reports"
 lookup_metadata = "Lookup Metadata"
 
 [titles]
-tvm = "Threat Vector Models Data Model Reference"
-cdm = "Cyber Detection Models Data Model Reference"
-mdr = "Managed Detection Rules Data Model Reference"
-bdr = "Business Detection Rules Data Model Reference"
+tvm = "Threat Vector Schema"
+cdm = "Detection Objectives Schema"
+mdr = "Detection Rules Schema"
+bdr = "Business Detection Schema"
 
 [icons]
 tvm = "☣️"

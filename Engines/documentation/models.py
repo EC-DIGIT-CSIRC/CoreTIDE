@@ -44,6 +44,10 @@ MODELS_DOCS_PATH = Path(DataTide.Configurations.Global.Paths.Core.models_docs_fo
 MODELS_SCOPE = DataTide.Configurations.Documentation.scope
 
 DOCUMENTATION_TARGET = DataTide.Configurations.Documentation.documentation_target
+if DOCUMENTATION_TARGET == "gitlab":
+    UUID_PERMALINKS = DataTide.Configurations.Documentation.gitlab.get("uuid_permalinks", False)
+else:
+    UUID_PERMALINKS = False
 
 MODELS_INDEX = DataTide.Models.Index
 MODELS_NAME = DataTide.Configurations.Documentation.object_names
@@ -58,17 +62,17 @@ def documentation(model):
 
     model_uuid = model.get("metadata", {}).get("uuid")
     model_type = get_type(model_uuid)
-
-    if DOCUMENTATION_TARGET == "generic":
-        frontmatter_type = DataTide.Configurations.Documentation.object_names[
-            model_type
-        ].replace("/", "")
-        frontmatter = f"---\ntype: {frontmatter_type}\n---"
-    elif DOCUMENTATION_TARGET == "gitlab":
-        frontmatter = ""
-
+    title = f"{get_icon(model_type)} {model['name']}"
+    frontmatter = ""
+    
+    if DOCUMENTATION_TARGET == "gitlab":
+        if UUID_PERMALINKS:
+            frontmatter = f"---\ntitle: {title}\n---"            
+        title = ""
+    elif DOCUMENTATION_TARGET == "generic":
+        title = "# " + title
+        
     model_datafield = DataTide.Configurations.Global.data_fields[model_type]
-    title = f"# {get_icon(model_type)} {model['name']}"
     criticality = criticality_doc(model["criticality"])
     metadata = model.get("metadata") or model.get("meta") or {}
     metadata = {k: v for k, v in metadata.items() if k != "tlp"}
@@ -204,11 +208,17 @@ def run():
         for model in MODELS_INDEX[model_type]:
 
             # Make a file name based on  data
-            model_data = MODELS_INDEX[model_type][model]
-            doc_name = model_data.get("name").replace("_", " ")
-            doc_file_name = (
-                f"{get_icon(model_type)} {doc_name.strip()}.md"
-            )
+            model_data:dict = MODELS_INDEX[model_type][model]
+            model_name = model_data["name"]
+            model_uuid = model_data.get("metadata",{}).get("uuid")
+
+            if UUID_PERMALINKS:
+                doc_file_name = model_uuid + ".md"
+            else:
+                doc_name = model_name.replace("_", " ")
+                doc_file_name = (
+                    f"{get_icon(model_type)} {doc_name.strip()}.md"
+                )
 
             doc_file_name = safe_file_name(doc_file_name)
             doc_path = doc_type_path / doc_file_name
@@ -217,7 +227,11 @@ def run():
             if DOCUMENTATION_TARGET == "gitlab":
                 doc_path = Path(str(doc_path).replace(" ", "-"))
 
-            log("ONGOING", "Generating documentation", doc_file_name)
+            log("ONGOING",
+                f"Generating {model_type.upper()} documentation",
+                model_name,
+                model_uuid)
+            
             document = documentation(model_data)
 
             with open(doc_path, "w+", encoding="utf-8") as output:

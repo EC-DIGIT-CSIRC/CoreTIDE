@@ -17,6 +17,10 @@ from Engines.modules.tide import DataTide
 
 VOCAB_INDEX = DataTide.Vocabularies.Index
 DOCUMENTATION_TARGET = DataTide.Configurations.Documentation.documentation_target
+if DOCUMENTATION_TARGET == "gitlab":
+    UUID_PERMALINKS = DataTide.Configurations.Documentation.gitlab.get("uuid_permalinks", False)
+else:
+    UUID_PERMALINKS = False
 ICONS = DataTide.Configurations.Documentation.icons
 DOCUMENTATION_CONFIG = DataTide.Configurations.Documentation
 CONFIG_INDEX = DataTide.Configurations.Index
@@ -289,6 +293,8 @@ def backlink_resolver(model_uuid:str,
             file_link += ".md"
 
     elif DOCUMENTATION_TARGET == "gitlab":
+        if UUID_PERMALINKS:
+            file_link = doc_path + model_data.get("metadata",{}).get("uuid")
         file_link = file_link.replace(" ", "-").replace("_", "-")
 
     hover = sanitize_hover(str(hover))
@@ -428,31 +434,26 @@ def model_value_doc(model_id, key, with_icon=False, max_chars=None, legacy=False
 def name_subschema_doc(
     recomposition: str, identifier: str, with_icon: bool = True
 ) -> str:
-    SUFFIX = "Sub Schema"
+    
+    SUFFIX = " Schema"
+    
     subschema_name = str()
     composition_name = str()
     recomp_config = CONFIG_INDEX[recomposition][identifier]
-    if recomp_config:
-        subschema_name = recomp_config["tide"]["subschema"]
-        composition_name = recomp_config["tide"]["name"]
+    
+    composition_name = recomp_config["tide"].get("name")
 
-    if not subschema_name:
+    if composition_name:
+        subschema_name = recomposition.title() + " - " +  composition_name + SUFFIX
+
+    else:
         log(
             "INFO",
-            f"No subschema name in config.yaml for {identifier}",
-            f"Defaulting to taking {identifier} base name",
-            "You can add a custom subschema name in config.yaml",
+            f"There is no name assigned to {identifier}",
+            "A name is strongly recommended for most documentation functions",
+            "Ensure to add a name to 'config.yaml'",
         )
-        subschema_name = composition_name + SUFFIX
-
-        if not composition_name:
-            log(
-                "INFO",
-                f"There is no name assigned to {identifier}",
-                "A name is strongly recommended for most documentation functions",
-                "Ensure to add a name to 'config.yaml'",
-            )
-            subschema_name = identifier.replace("_", " ").title() + SUFFIX
+        subschema_name = identifier.replace("_", " ").title() + SUFFIX
 
     if with_icon:
         subschema_name = str(ICONS.get("subschemas")) + " " + subschema_name
