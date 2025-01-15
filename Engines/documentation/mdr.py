@@ -204,7 +204,12 @@ def documentation(mdr):
                 data = (
                     f"**{enriched_value}** : {get_vocab_description(cleaned_key, data)}"
                 )
-
+            else:
+                if type(data) is str:
+                    data = f"`{data}`"
+                if type(data) is list:
+                    data = ", ".join([f"`{d}`" for d in data])
+                    
             buffer["Parameter"] = key_name
             buffer["System Config"] = param_name
             buffer["Description"] = str(param_description).replace("$", r"\$").replace("\n", " ")
