@@ -25,8 +25,6 @@ REF_TEMPLATE = """#references:
     #a:
   #restricted:
     #A:
-  #reports:
-    #-
 """
 
 

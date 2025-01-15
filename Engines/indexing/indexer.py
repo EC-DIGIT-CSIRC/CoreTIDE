@@ -13,7 +13,6 @@ sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.modules.files import resolve_paths, resolve_configurations
 from Engines.modules.logs import log
-from Engines.templates.tide_indexes import fetch_tide_index_template
 from Engines.modules.patching import Tide2Patching
 
 def indexer(write_index=False) -> dict:
@@ -245,15 +244,6 @@ def indexer(write_index=False) -> dict:
                 log("INFO", "Appending BDR to CDM in Model index as options")
                 tide_model_index["cdm"]["entries"].update(tide_model_index["bdr"]["entries"])
             index["vocabs"].update(tide_model_index)
-
-    if not os.path.exists(TIDE_INDEXES_PATH/"reports.json"):
-        log("SKIP", "Not able to find a reports.json index in Tide instance",
-            "Should be generated in the next Framework generation pipeline run")
-    else:
-        tide_reports_index = json.load(open(TIDE_INDEXES_PATH/"reports.json", encoding="utf-8"))
-
-        if tide_reports_index:
-            index["vocabs"].update(tide_reports_index)
     
     # Lookups indexer
 
