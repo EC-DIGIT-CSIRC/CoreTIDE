@@ -174,14 +174,16 @@ def documentation(mdr):
             ]  # Keep only the string after the last separator
             # system_data[new_key] = system_data.pop(key)
             key_name = get_field_title(cleaned_key, SYSTEMS_SUBSCHEMAS[s])
-            param_description:str = get_value_metaschema(
-                cleaned_key, metaschema=SYSTEMS_SUBSCHEMAS[s], retrieve="description"
-            ) #type: ignore
-            param_name = get_value_metaschema(
+            param_description = str(get_value_metaschema(
+                                cleaned_key,
+                                metaschema=SYSTEMS_SUBSCHEMAS[s],
+                                retrieve="description"
+            )) or "No Value"
+            param_name = str(get_value_metaschema(
                 cleaned_key,
                 metaschema=SYSTEMS_SUBSCHEMAS[s],
                 retrieve="tide.mdr.parameter",
-            )
+            )) or "No Value"
             data = system_data[key]
 
             # If vocab entry, will fetch data to enrich
