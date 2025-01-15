@@ -109,7 +109,7 @@ def documentation(mdr):
     else:
         techniques = ""
 
-    cdm = relations_table(uuid_data, "upstream")
+    relations = relations_table(uuid_data, "upstream")
 
     # Get Severity Data
     severity_data = mdr["response"]["alert_severity"]
@@ -246,7 +246,7 @@ def documentation(mdr):
         techniques=techniques,
         metadata=metadata,
         description=description,
-        cdm=cdm,
+        relations=relations,
         response=response,
         configurations=configurations,
         queries=queries,
