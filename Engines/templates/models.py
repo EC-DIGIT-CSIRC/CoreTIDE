@@ -38,10 +38,7 @@ MODEL_DOC_TEMPLATE = '''{frontmatter}
 
 {data_table}
 
-
 {references}
-
----
 
 {tags}
 

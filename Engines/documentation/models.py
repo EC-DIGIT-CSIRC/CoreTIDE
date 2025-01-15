@@ -159,7 +159,7 @@ def documentation(model):
     if DOCUMENTATION_TARGET == "gitlab":
         tags = ""
     else:
-        tags = "#### 🏷️ Tags\n\n"
+        tags = "---\n\n#### 🏷️ Tags\n\n"
         tags += "#" + ", #".join(tags)
 
     doc = MODEL_DOC_TEMPLATE.format(frontmatter=frontmatter,
