@@ -174,16 +174,19 @@ def documentation(mdr):
             ]  # Keep only the string after the last separator
             # system_data[new_key] = system_data.pop(key)
             key_name = get_field_title(cleaned_key, SYSTEMS_SUBSCHEMAS[s])
-            param_description = str(get_value_metaschema(
-                                cleaned_key,
-                                metaschema=SYSTEMS_SUBSCHEMAS[s],
-                                retrieve="description"
-            )) or "No Value"
-            param_name = str(get_value_metaschema(
-                cleaned_key,
-                metaschema=SYSTEMS_SUBSCHEMAS[s],
-                retrieve="tide.mdr.parameter",
-            )) or "No Value"
+            param_description = get_value_metaschema(
+                                    cleaned_key,
+                                    metaschema=SYSTEMS_SUBSCHEMAS[s],
+                                    retrieve="description"
+                                ) or ""
+            param_name = get_value_metaschema(
+                            cleaned_key,
+                            metaschema=SYSTEMS_SUBSCHEMAS[s],
+                            retrieve="tide.mdr.parameter",
+                        )
+            
+            param_name = f"`{param_name}`" if param_name else ""
+            
             data = system_data[key]
 
             # If vocab entry, will fetch data to enrich
@@ -200,7 +203,7 @@ def documentation(mdr):
 
             buffer["Parameter"] = key_name
             buffer["System Config"] = param_name
-            buffer["Description"] = param_description.replace("$", r"\$").replace("\n", " ")
+            buffer["Description"] = str(param_description).replace("$", r"\$").replace("\n", " ")
             buffer["Config"] = str(data).replace("$", r"\$").replace("\n", " ")
 
             config_data.append(buffer)
