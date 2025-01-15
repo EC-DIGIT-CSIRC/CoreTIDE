@@ -24,7 +24,7 @@ MODEL_DOC_TEMPLATE = '''{frontmatter}
 
 ---
 
-## ⛓️ Relations
+## 🕸️ Relations
 
 {relation_graph}
 
