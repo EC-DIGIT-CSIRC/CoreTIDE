@@ -21,7 +21,7 @@ TEMPLATEv3 = '''{frontmatter}
 
 ### 🕸️ Relations
 
-{cdm}
+{relations}
 
 &nbsp;
 
