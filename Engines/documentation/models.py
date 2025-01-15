@@ -151,7 +151,7 @@ def documentation(model):
             expand_graphs += "\n\n --- \n\n### ⛓️ Threat Chaining\n\n"
             expand_graphs += chain_diagram + "\n\n"
             expand_graphs += (
-                FOLD.format("Expand chaining data", chain_table) + "\n\n --- \n"
+                FOLD.format("Expand chaining data", chain_table)
             )
 
     data_table, tags = model_data_table(model[model_datafield], model_uuid)
