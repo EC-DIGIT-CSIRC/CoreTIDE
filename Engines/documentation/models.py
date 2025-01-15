@@ -86,13 +86,17 @@ def documentation(model):
         title = ""
 
     references = model.get("references")
-    # To deprecate once everything is migrated to new reference system
-    if type(references) is list:
-        references = "- " + "\n- ".join(references)
-    elif type(references) is dict:
-        references = reference_doc(model.get("references"))
+    
     if references:
+        # To deprecate once everything is migrated to new reference system
+        if type(references) is list:
+            references = "- " + "\n- ".join(references)
+        elif type(references) is dict:
+            references = reference_doc(references)
         references = "### 🔗 References\n\n" + references
+
+    else:
+        references = ""
 
     description = model[model_datafield].get("description") or model[
         model_datafield

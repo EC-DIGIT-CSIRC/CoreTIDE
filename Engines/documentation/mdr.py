@@ -145,13 +145,17 @@ def documentation(mdr):
     response = response.to_markdown(index=False)
 
     references = mdr.get("references")
-    # To deprecate once everything is migrated to new reference system
-    if type(references) is list:
-        references = "- " + "\n- ".join(references)
-    elif type(references) is dict:
-        references = reference_doc(mdr.get("references"))
+    
     if references:
+        # To deprecate once everything is migrated to new reference system
+        if type(references) is list:
+            references = "- " + "\n- ".join(references)
+        elif type(references) is dict:
+            references = reference_doc(references)
         references = "### 🔗 References\n\n" + references
+
+    else:
+        references = ""
 
     # Add enriched configuration data
     configurations = str()
