@@ -10,7 +10,6 @@ sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.modules.logs import log
 from Engines.modules.tide import DataTide
-from Engines.templates.tide_indexes import fetch_tide_index_template
 
 TIDE_INDEXES_PATH = Path(DataTide.Configurations.Global.Paths.Tide.tide_indexes)
 ICONS = DataTide.Configurations.Documentation.icons

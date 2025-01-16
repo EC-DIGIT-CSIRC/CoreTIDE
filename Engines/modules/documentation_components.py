@@ -80,21 +80,10 @@ def reference_doc(references: dict) -> str:
             scope, DEFINITIONS_INDEX["references"]["properties"]
         )
 
-        if scope == "reports":
-            references_list = [
-                f"{backlink_resolver(report)} ({tlp_doc(get_vocab_entry('reports', report, 'tlp'), False)})"
-                for report in references[scope]
-            ]
-            reference_index = {
-                report: backlink_resolver(report, raw_link=True)
-                for report in references[scope]
-            }
-            reference_labels.extend([f"[{k}]: {v}" for k, v in reference_index.items()])
-        else:
-            references_list = [f"[_{k}_] {v}" for k, v in references[scope].items()]
-            reference_labels.extend(
-                [f"[{k}]: {v}" for k, v in references[scope].items()]
-            )
+        references_list = [f"[_{k}_] {v}" for k, v in references[scope].items()]
+        reference_labels.extend(
+            [f"[{k}]: {v}" for k, v in references[scope].items()]
+        )
 
         references_list = "- " + "\n- ".join(references_list)
         reference_doc_markdown += f"\n\n**{scope_title}**\n\n{references_list}"

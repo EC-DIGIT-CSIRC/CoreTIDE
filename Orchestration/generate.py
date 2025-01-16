@@ -6,7 +6,7 @@ sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.modules.logs import log, ANSI, coretide_intro
 from Engines.modules.tide import IndexTide
-from Engines.indexing import models_indexer, reports_indexer
+from Engines.indexing import models_indexer
 from Engines.framework import templates
 print(coretide_intro())
 
@@ -29,7 +29,6 @@ log(
 )
 
 models_indexer.run()
-reports_indexer.run()
 templates.run()
 
 IndexTide.reload()

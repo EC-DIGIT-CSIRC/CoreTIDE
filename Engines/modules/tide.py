@@ -337,7 +337,6 @@ class DataTide:
                     cdm = Index["cdm"]
                     mdr = Index["mdr"]
                     bdr = Index["bdr"]
-                    reports = Index["reports"]
                     lookups = Index["lookups"]
                     analytics = Index["analytics"]
                     snippet_file = Index["snippet_file"]

@@ -8,8 +8,6 @@ anyOf:
       - public
   - required:
       - internal
-  - required:
-      - reports
 properties:
 
   public:
@@ -55,12 +53,3 @@ properties:
           type: string
           format: uri
     additionalProperties: False
-
-  reports:
-    title: Reports
-    description: |
-      Document which have been uploaded onto the CoreTIDE instance, which shareability is dependent
-      on the respective TLP rating of the indexed object.
-    type: array
-    tide.template.spacer: False
-    tide.vocab: true
