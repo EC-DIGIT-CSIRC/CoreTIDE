@@ -17,6 +17,7 @@ from Engines.modules.documentation import (
     get_icon,
     rich_attack_links,
     get_vocab_description,
+    GitlabMarkdown,
     model_value_doc,
     FOLD,
 )
@@ -30,6 +31,7 @@ from Engines.modules.documentation_components import (
 )
 from Engines.modules.tide import DataTide
 from Engines.modules.logs import log
+from Engines.modules.graphs import relationships_graph
 from Engines.modules.deployment import enabled_systems
 
 ROOT = Path(str(git.Repo(".", search_parent_directories=True).working_dir))
@@ -109,8 +111,17 @@ def documentation(mdr):
     else:
         techniques = ""
 
-    relations = relations_table(uuid_data, "upstream")
+    
+    relation_graph = relationships_graph(uuid_data)
+    relation_table = relations_table(uuid_data, "upstream")
 
+    if not relation_graph:
+        relations = "🚫 No related objects indexed."
+        if DOCUMENTATION_TARGET == "gitlab":
+            GitlabMarkdown.negative_diff(relation_graph)
+    else:
+        relations = relation_graph + "\n\n" + relation_table
+    
     # Get Severity Data
     severity_data = mdr["response"]["alert_severity"]
     severity_col = get_field_title("alert_severity", MDR_METASCHEMA)
