@@ -241,10 +241,6 @@ def backlink_resolver(model_uuid:str,
     model_data = dict()
     file_link = backlink_name = icon = str()
 
-    if model_type != "rpt":
-        model_data = MODELS_INDEX[model_type][model_uuid]
-        icon = ICONS[model_type]
-
     doc_path = "../" + DOCUMENTATION_CONFIG.object_names[model_type] + "/"
     hover = ""
 
@@ -275,13 +271,6 @@ def backlink_resolver(model_uuid:str,
         hover += f"&#013;&#010;&#013;&#010;{mdr_description}"
         file_link = f"{doc_path}{icon} {model_name}"
 
-    elif model_type == "rpt":
-        report_data = get_vocab_entry("reports", model_uuid)
-        if type(report_data) is dict:
-            backlink_name = f"{model_uuid} - {report_data['name']}"
-            hover = report_data["description"]
-            file_link = f"{doc_path}{report_data['file_name']}"
-
     else:
         model_name = model_data["name"].strip()
         backlink_name = model_name
@@ -289,8 +278,7 @@ def backlink_resolver(model_uuid:str,
 
     if DOCUMENTATION_TARGET == "generic":
         file_link = file_link.replace(" ", "%20")
-        if model_type != "rpt":
-            file_link += ".md"
+        file_link += ".md"
 
     elif DOCUMENTATION_TARGET == "gitlab":
         if UUID_PERMALINKS:
