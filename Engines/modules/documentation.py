@@ -238,8 +238,10 @@ def backlink_resolver(model_uuid:str,
     raw_hover: in combination with raw_link, returns a tuple with the cursor hovering content
     """
     model_type = get_type(model_uuid)
-    model_data = dict()
     file_link = backlink_name = icon = str()
+
+    model_data:dict = MODELS_INDEX[model_type][model_uuid]
+    icon = ICONS[model_type]
 
     doc_path = "../" + DOCUMENTATION_CONFIG.object_names[model_type] + "/"
     hover = ""
@@ -256,9 +258,9 @@ def backlink_resolver(model_uuid:str,
 
     if model_type in ["tvm", "bdr"]:
         hover = model_value(model_uuid, "description")
-    if model_type in ["cdm"]:
+    if model_type == "cdm":
         hover = model_value(model_uuid, "guidelines")
-
+    
     if model_type == "mdr":
         model_name = model_data["name"]
 
@@ -270,7 +272,6 @@ def backlink_resolver(model_uuid:str,
         mdr_description = mdr_description
         hover += f"&#013;&#010;&#013;&#010;{mdr_description}"
         file_link = f"{doc_path}{icon} {model_name}"
-
     else:
         model_name = model_data["name"].strip()
         backlink_name = model_name
