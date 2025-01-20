@@ -50,6 +50,7 @@ def run():
             "icon": ICONS[model_type],
             "name": index_name,
             "description": index_name,
+            "model": True,
         }
         entries = {}
         registry = DataTide.Models.Index[model_type]
