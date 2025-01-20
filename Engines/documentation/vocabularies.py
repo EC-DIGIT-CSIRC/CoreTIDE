@@ -139,21 +139,27 @@ def run():
         if voc in SKIP_VOCABS:
             log("SKIP", f"Skipping vocab as is in skip list",voc)
         else:
-            icon = get_icon(voc) or ICONS["vocab"] or ""
-            print(f"{icon} Generating Vocabulary Documentation for field : {voc}...")
-            if not VOCAB_INDEX[voc]["entries"]:
-                log("SKIP", "The vocabulary is empty, will not document", voc)
+            if  VOCAB_INDEX[voc]["metadata"].get("model", False):
+                log("SKIP",
+                    "Not creating vocabulary documentation, was detected as an OpenTIDE model index",
+                    voc)
+                continue
             else:
-                documentation, name = make_vocab_doc(voc, VOCAB_INDEX[voc])
+                icon = get_icon(voc) or ICONS["vocab"] or ""
+                print(f"{icon} Generating Vocabulary Documentation for field : {voc}...")
+                if not VOCAB_INDEX[voc]["entries"]:
+                    log("SKIP", "The vocabulary is empty, will not document", voc)
+                else:
+                    documentation, name = make_vocab_doc(voc, VOCAB_INDEX[voc])
 
-                output_name = icon + " " + name + ".md"
-                output_path = VOCAB_DOCS_PATH / output_name
+                    output_name = icon + " " + name + ".md"
+                    output_path = VOCAB_DOCS_PATH / output_name
 
-                if DOCUMENTATION_TARGET == "gitlab":
-                    output_path = Path(str(output_path).replace(" ", "-"))
+                    if DOCUMENTATION_TARGET == "gitlab":
+                        output_path = Path(str(output_path).replace(" ", "-"))
 
-                with open(output_path, "w+", encoding="utf-8") as output:
-                    output.write(documentation)
+                    with open(output_path, "w+", encoding="utf-8") as output:
+                        output.write(documentation)
 
     doc_format_log = str()
     if DOCUMENTATION_TARGET == "gitlab":
