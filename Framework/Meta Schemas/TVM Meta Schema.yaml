@@ -55,12 +55,9 @@ properties:
       - description
     
     properties:
-      actors: 
-        title: Threat Actor Model
-        type: array
-        tide.vocab: tam
-        description: Known adversaries that could be the detected subjects, or at least representative
-        example: NOBELIUM
+
+      actors:
+        tide.meta.definition: actors
 
       killchain: 
         title: Cyber Kill Chain

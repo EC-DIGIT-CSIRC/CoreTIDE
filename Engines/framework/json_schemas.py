@@ -208,7 +208,15 @@ def gen_lib_schema(
                     # buffer["type"] = "string"
                     buffer["markdownDescription"] = dropdown
 
+                # Handle if scoped
+                if scoped:
+                    stage = key_data.get("tide.vocab.stages")
+                    if stage:
+                        value = stage + "::" + key
+
                 tips = (key_data.get("name") or "") 
+                if key_data.get("alias"):
+                    tips += ", " + ", ".join(key_data["alias"])
                 helper = value + " #" + tips.strip()
                 if not no_wrap:
                     if len(helper) > 60:
@@ -228,6 +236,7 @@ def gen_lib_schema(
                 # Due to line breaks in vscode
                 copied = buffer.copy()
                 array.append(copied)
+
 
                 if value not in enum:
                     enum.append(value)

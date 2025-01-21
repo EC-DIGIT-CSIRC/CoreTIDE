@@ -1,0 +1,35 @@
+title: Threat Actors
+description: "Attributes related threat activities with a known activity cluster"
+tide.template.spacer: true
+icon: "🐲"
+type: array
+items:
+  type:
+    - object
+    - string
+  required:
+    - name
+  anyOf:
+    - type: object
+    - type: string
+  properties:
+    
+    name:
+      title: Threat Actor
+      description: "TBD"
+      icon: "🐲"
+      type: string
+      tide.vocab: actors
+      tide.vocab.scoped: true
+    
+    sighting:
+      title: Threat Actor Sightings
+      type: string
+      tide.template.multiline: True
+
+    references:
+      title: Sightings References
+      type: array
+      items:
+        type: string
+        format: uri
