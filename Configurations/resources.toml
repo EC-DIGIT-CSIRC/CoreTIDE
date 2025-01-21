@@ -12,3 +12,7 @@ matrix = "engage/Engage-Data-V1.0.xlsx"
 
 [nist]
 data = "nist/NIST Cybersecurity Framework.xlsx"
+
+[misp]
+[misp.galaxies]
+threat_actors = "https://raw.githubusercontent.com/MISP/misp-galaxy/refs/heads/main/clusters/threat-actor.json"
