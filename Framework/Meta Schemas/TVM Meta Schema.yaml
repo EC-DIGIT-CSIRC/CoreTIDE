@@ -8,7 +8,7 @@ $schema: http://json-schema.org/draft-07/schema#
 additionalProperties: false
 
 tide.placeholders:
-  SCHEMA_VERSION: tvm::2.0
+  SCHEMA_VERSION: tvm::2.1
 
 required:
   - name
