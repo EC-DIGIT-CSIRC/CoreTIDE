@@ -8,7 +8,7 @@ $schema: http://json-schema.org/draft-07/schema#
 additionalProperties: false
 
 tide.placeholders:
-  SCHEMA_VERSION: tvm::2.0
+  SCHEMA_VERSION: tvm::2.1
 
 required:
   - name
@@ -55,12 +55,9 @@ properties:
       - description
     
     properties:
-      actors: 
-        title: Threat Actor Model
-        type: array
-        tide.vocab: tam
-        description: Known adversaries that could be the detected subjects, or at least representative
-        example: NOBELIUM
+
+      actors:
+        tide.meta.definition: actors
 
       killchain: 
         title: Cyber Kill Chain
