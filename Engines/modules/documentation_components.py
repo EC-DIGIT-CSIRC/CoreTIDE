@@ -80,21 +80,10 @@ def reference_doc(references: dict) -> str:
             scope, DEFINITIONS_INDEX["references"]["properties"]
         )
 
-        if scope == "reports":
-            references_list = [
-                f"{backlink_resolver(report)} ({tlp_doc(get_vocab_entry('reports', report, 'tlp'), False)})"
-                for report in references[scope]
-            ]
-            reference_index = {
-                report: backlink_resolver(report, raw_link=True)
-                for report in references[scope]
-            }
-            reference_labels.extend([f"[{k}]: {v}" for k, v in reference_index.items()])
-        else:
-            references_list = [f"[_{k}_] {v}" for k, v in references[scope].items()]
-            reference_labels.extend(
-                [f"[{k}]: {v}" for k, v in references[scope].items()]
-            )
+        references_list = [f"[_{k}_] {v}" for k, v in references[scope].items()]
+        reference_labels.extend(
+            [f"[{k}]: {v}" for k, v in references[scope].items()]
+        )
 
         references_list = "- " + "\n- ".join(references_list)
         reference_doc_markdown += f"\n\n**{scope_title}**\n\n{references_list}"
@@ -158,25 +147,18 @@ def relations_table(
         trunk_data = unfold_trunk({trunk: tree[trunk]}) or {}  # type: ignore
 
         if direction == "downstream":
-            if model_type in ["tam"]:
-                trunk_data["tvm"] = (
-                    None if "tvm" not in trunk_data else trunk_data["tvm"]
-                )
-            if model_type in ["tam", "tvm"]:
+
+            if model_type == "tvm":
                 trunk_data["cdm"] = (
                     None if "cdm" not in trunk_data else trunk_data["cdm"]
                 )
-            if model_type in ["tam", "tvm", "cdm", "bdr"]:
+            if model_type in ["tvm", "cdm", "bdr"]:
                 trunk_data["mdr"] = (
                     None if "mdr" not in trunk_data else trunk_data["mdr"]
                 )
 
         elif direction == "upstream":
             if "bdr" not in trunk_data:
-                if model_type in ["mdr", "cdm", "tvm"]:
-                    trunk_data["tam"] = (
-                        None if "tam" not in trunk_data else trunk_data["tam"]
-                    )
                 if model_type in ["mdr", "cdm"]:
                     trunk_data["tvm"] = (
                         None if "tvm" not in trunk_data else trunk_data["tvm"]

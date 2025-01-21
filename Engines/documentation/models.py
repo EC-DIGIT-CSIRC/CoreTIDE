@@ -44,6 +44,10 @@ MODELS_DOCS_PATH = Path(DataTide.Configurations.Global.Paths.Core.models_docs_fo
 MODELS_SCOPE = DataTide.Configurations.Documentation.scope
 
 DOCUMENTATION_TARGET = DataTide.Configurations.Documentation.documentation_target
+if DOCUMENTATION_TARGET == "gitlab":
+    UUID_PERMALINKS = DataTide.Configurations.Documentation.gitlab.get("uuid_permalinks", False)
+else:
+    UUID_PERMALINKS = False
 
 MODELS_INDEX = DataTide.Models.Index
 MODELS_NAME = DataTide.Configurations.Documentation.object_names
@@ -58,17 +62,17 @@ def documentation(model):
 
     model_uuid = model.get("metadata", {}).get("uuid")
     model_type = get_type(model_uuid)
-
-    if DOCUMENTATION_TARGET == "generic":
-        frontmatter_type = DataTide.Configurations.Documentation.object_names[
-            model_type
-        ].replace("/", "")
-        frontmatter = f"---\ntype: {frontmatter_type}\n---"
-    elif DOCUMENTATION_TARGET == "gitlab":
-        frontmatter = ""
-
+    title = f"{get_icon(model_type)} {model['name']}"
+    frontmatter = ""
+    
+    if DOCUMENTATION_TARGET == "gitlab":
+        if UUID_PERMALINKS:
+            frontmatter = f"---\ntitle: {title}\n---"            
+        title = ""
+    elif DOCUMENTATION_TARGET == "generic":
+        title = "# " + title
+        
     model_datafield = DataTide.Configurations.Global.data_fields[model_type]
-    title = f"# {get_icon(model_type)} {model['name']}"
     criticality = criticality_doc(model["criticality"])
     metadata = model.get("metadata") or model.get("meta") or {}
     metadata = {k: v for k, v in metadata.items() if k != "tlp"}
@@ -82,11 +86,17 @@ def documentation(model):
         title = ""
 
     references = model.get("references")
-    # To deprecate once everything is migrated to new reference system
-    if type(references) is list:
-        references = "- " + "\n- ".join(references)
-    elif type(references) is dict:
-        references = reference_doc(model.get("references"))
+    
+    if references:
+        # To deprecate once everything is migrated to new reference system
+        if type(references) is list:
+            references = "- " + "\n- ".join(references)
+        elif type(references) is dict:
+            references = reference_doc(references)
+        references = "### 🔗 References\n\n" + references
+
+    else:
+        references = ""
 
     description = model[model_datafield].get("description") or model[
         model_datafield
@@ -104,6 +114,8 @@ def documentation(model):
     if techniques:
         techniques = rich_attack_links(techniques)
         techniques = f'{get_icon("att&ck")} **ATT&CK Techniques** {techniques}'
+    else:
+        techniques = ""
 
     relation_graph = relationships_graph(model_uuid)
     relation_table = ""
@@ -119,25 +131,6 @@ def documentation(model):
         relation_graph = "🚫 No related objects indexed."
         if DOCUMENTATION_TARGET == "gitlab":
             GitlabMarkdown.negative_diff(relation_graph)
-
-    if model_type == "tam":
-        misp = model[model_datafield].get("misp") or ""
-        if misp:
-            expand_header += f"\n\n{get_icon('misp')} **MISP Galaxy UUID** : `{misp}`"
-
-        attack_group = model[model_datafield].get("att&ck_groups") or ""
-        if attack_group:
-            group_data = get_vocab_entry("att&ck_groups", attack_group)
-            if type(group_data) is dict:
-                group_description = group_data["description"]
-                hover_link = f'"{sanitize_hover(group_description)}"'
-                expand_header += f"\n\n{get_icon('att&ck_groups')} **MITRE ATT&CK Group** : [ ` {attack_group} - {group_data['name']} `]({group_data['link']} {hover_link})"
-
-        aliases = model[model_datafield].get("aliases") or ""
-        if aliases:
-            expand_header += (
-                f"\n\n{get_icon('aliases')} ` Other aliases : {', '.join(aliases)}`"
-            )
 
     if model_type == "bdr":
         justification = model[model_datafield]["justification"].replace("\n", "\n> ")
@@ -162,7 +155,7 @@ def documentation(model):
             expand_graphs += "\n\n --- \n\n### ⛓️ Threat Chaining\n\n"
             expand_graphs += chain_diagram + "\n\n"
             expand_graphs += (
-                FOLD.format("Expand chaining data", chain_table) + "\n\n --- \n"
+                FOLD.format("Expand chaining data", chain_table)
             )
 
     data_table, tags = model_data_table(model[model_datafield], model_uuid)
@@ -170,7 +163,8 @@ def documentation(model):
     if DOCUMENTATION_TARGET == "gitlab":
         tags = ""
     else:
-        tags = "#" + ", #".join(tags)
+        tags = "---\n\n#### 🏷️ Tags\n\n"
+        tags += "#" + ", #".join(tags)
 
     doc = MODEL_DOC_TEMPLATE.format(frontmatter=frontmatter,
                                     title=title,
@@ -223,11 +217,17 @@ def run():
         for model in MODELS_INDEX[model_type]:
 
             # Make a file name based on  data
-            model_data = MODELS_INDEX[model_type][model]
-            doc_name = model_data.get("name").replace("_", " ")
-            doc_file_name = (
-                f"{get_icon(model_type)} {doc_name.strip()}.md"
-            )
+            model_data:dict = MODELS_INDEX[model_type][model]
+            model_name = model_data["name"]
+            model_uuid = model_data.get("metadata",{}).get("uuid")
+
+            if UUID_PERMALINKS:
+                doc_file_name = model_uuid + ".md"
+            else:
+                doc_name = model_name.replace("_", " ")
+                doc_file_name = (
+                    f"{get_icon(model_type)} {doc_name.strip()}.md"
+                )
 
             doc_file_name = safe_file_name(doc_file_name)
             doc_path = doc_type_path / doc_file_name
@@ -236,7 +236,11 @@ def run():
             if DOCUMENTATION_TARGET == "gitlab":
                 doc_path = Path(str(doc_path).replace(" ", "-"))
 
-            log("ONGOING", "Generating documentation", doc_file_name)
+            log("ONGOING",
+                f"Generating {model_type.upper()} documentation",
+                model_name,
+                model_uuid)
+            
             document = documentation(model_data)
 
             with open(doc_path, "w+", encoding="utf-8") as output:

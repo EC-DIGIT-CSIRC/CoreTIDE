@@ -213,7 +213,6 @@ def chaining_graph(tvm):
     graph_properties = {
         "cve": {"relation": "exploits", "direction": "to", "shape": "flag"},
         "platforms": {"relation": "targets", "direction": "to", "shape": "database"},
-        "actors": {"relation": "performs", "direction": "from", "shape": "pill"},
     }
 
     properties_node_graph = []
@@ -230,9 +229,6 @@ def chaining_graph(tvm):
                         shape = graph_properties[prop]["shape"]
                         direction = graph_properties[prop].get("direction")
                         node = str()
-                        if prop == "actors":
-                            value = f"{model_value(value, 'name')}"
-
                         if shape == "database":
                             node = f"{value.replace(' ','')}[({value})]"
                         elif shape == "flag":

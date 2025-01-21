@@ -14,7 +14,7 @@ sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.indexing.indexer import indexer
 from Engines.modules.logs import log
-from Engines.modules.models import SystemConfig, TideModels, DetectionSystems, TideConfigs, TideDefinitionsModels
+from Engines.modules.patching import Tide2Patching
 
 ROOT = Path(str(git.Repo(".", search_parent_directories=True).working_dir))
 
@@ -162,9 +162,12 @@ class IndexTide:
         added_mdr = list()
         updated_mdr = list()
 
+        patch = Tide2Patching()
+
         for mdr in STG_INDEX:
             if mdr not in RECONCILED_INDEX["models"]["mdr"]:
-                RECONCILED_INDEX["models"]["mdr"][mdr] = STG_INDEX[mdr]
+                log("INFO", "Patching MDR in staging index", mdr)
+                RECONCILED_INDEX["models"]["mdr"][mdr] = patch.tide_1_patch(STG_INDEX[mdr], "mdr")
                 added_mdr.append(mdr)
             else:
                 main_mdr_metadata = (
@@ -182,21 +185,16 @@ class IndexTide:
                 )
 
                 if stg_version > main_version:
-                    print(
+                    log("INFO",
                         f"🔄 Replacing MDR {mdr_name} from prod index with"
                         f" staging data, as version is higher (main : v{main_version}"
                         f" staging : v{stg_version})"
                     )
 
                     updated_mdr = list()
-                    RECONCILED_INDEX["models"]["mdr"][mdr] = STG_INDEX[mdr]
-                    if RECONCILED_INDEX["models"]["mdr"][mdr].get("meta"):
-                        RECONCILED_INDEX["models"]["mdr"][mdr]["metadata"] = RECONCILED_INDEX["models"]["mdr"][mdr].pop(
-                            "meta"
-                        )  # Renaming meta to metadata in the fly to accomodate renaming
-                    global TIDE_MDR_STAGING_BANNER
-                    TIDE_MDR_STAGING_BANNER = dict()
-                    TIDE_MDR_STAGING_BANNER[mdr] = BANNER_MESSAGE.format(**locals())
+
+                    log("INFO", "Doing a safety patching to avoid edge cases")
+                    RECONCILED_INDEX["models"]["mdr"][mdr] = patch.tide_1_patch(STG_INDEX[mdr], "mdr")
         
         log("SUCCESS", "Finalized Staging Reconciliation Routine")
         log("INFO", "Updated MDRs from Production Index with Staging Data", str(len(updated_mdr)))
@@ -392,8 +390,6 @@ class DataTide:
         """
         Index = dict(IndexTide.load()["models"])
         """Index containing model types"""
-        tam = dict(Index["tam"])
-        """Threat Actor Models Data Index"""
         tvm = dict(Index["tvm"])
         """Threat Vector Models Data Index"""
         cdm = dict(Index["cdm"])
@@ -406,7 +402,7 @@ class DataTide:
         """Business Detection Rules Data Index"""
         chaining = IndexTide.compute_chains(tvm)
         """Index of all chaining relationships"""
-        FlatIndex = tam | tvm | cdm | mdr | bdr
+        FlatIndex =  tvm | cdm | mdr | bdr
         """Flat Key Value pair structure of all UUIDs in the index"""
 
     @dataclass(frozen=True)
@@ -425,8 +421,6 @@ class DataTide:
         """
 
         Index = dict(IndexTide.load()["json_schemas"])
-        tam = dict(Index.get("tam", {}))
-        """Threat Actor Model JSON Schema"""
         tvm = dict(Index.get("tvm", {}))
         """Threat Vector Model JSON Schema"""
         cdm = dict(Index.get("cdm", {}))
@@ -443,8 +437,6 @@ class DataTide:
         """
 
         Index = dict(IndexTide.load()["templates"])
-        tam = str(Index.get("tam"))
-        """Threat Actor Model Object Template"""
         tvm = str(Index.get("tvm"))
         """Threat Vector Model Object Template"""
         cdm = str(Index.get("cdm"))
@@ -465,8 +457,6 @@ class DataTide:
         subschemas = dict(IndexTide.load()["subschemas"])
         definitions = dict(IndexTide.load()["definitions"])
         templates = dict(IndexTide.load()["templates"])
-        tam = dict(Index["tam"])
-        """Threat Actor Model Tide Schema"""
         tvm = dict(Index["tvm"])
         """Threat Vector Model Tide Schema"""
         cdm = dict(Index["cdm"])
@@ -529,7 +519,6 @@ class DataTide:
                     definitions = Index["definitions"]
                     wiki_docs_folder = Index["wiki_docs_folder"]
                     models_docs_folder = Index["models_docs_folder"]
-                    lookup_docs = Index["lookup_docs"]
                     schemas_docs_folder = Index["schemas_docs_folder"]
                     vocabularies_docs = Index["vocabularies_docs"]
                     resources = Index["resources"]
@@ -545,12 +534,10 @@ class DataTide:
                     Only use for specific use cases, for any others prefer
                     the other attributes which are precomputed"""
                     
-                    tam = Index["tam"]
                     tvm = Index["tvm"]
                     cdm = Index["cdm"]
                     mdr = Index["mdr"]
                     bdr = Index["bdr"]
-                    reports = Index["reports"]
                     lookups = Index["lookups"]
                     analytics = Index["analytics"]
                     snippet_file = Index["snippet_file"]
@@ -618,7 +605,6 @@ class DataTide:
             object_names = dict(Index["object_names"])
             titles = dict(Index["titles"])
             icons = dict(Index["icons"])
-            indexes = dict(Index["indexes"])
             models_docs_folder: Path = Path(
                 IndexTide.load()["configurations"]["global"]["paths"]["core"][
                     "models_docs_folder"

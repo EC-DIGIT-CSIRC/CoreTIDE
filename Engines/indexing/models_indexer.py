@@ -10,7 +10,6 @@ sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.modules.logs import log
 from Engines.modules.tide import DataTide
-from Engines.templates.tide_indexes import fetch_tide_index_template
 
 TIDE_INDEXES_PATH = Path(DataTide.Configurations.Global.Paths.Tide.tide_indexes)
 ICONS = DataTide.Configurations.Documentation.icons
@@ -40,7 +39,8 @@ def run():
     EXPORT_INDENT = 0
     if DEBUG:
         EXPORT_INDENT = 4
-    model_index = {}
+    
+    model_index = json.load(open(TIDE_INDEXES_PATH / "models.json"))
 
     for model_type in MODEL_SCOPE:
 
@@ -50,6 +50,7 @@ def run():
             "icon": ICONS[model_type],
             "name": index_name,
             "description": index_name,
+            "model": True,
         }
         entries = {}
         registry = DataTide.Models.Index[model_type]
@@ -68,8 +69,6 @@ def run():
             description = str()
 
             match model_type:
-                case "tam":
-                    description = model_data.get("actor", {}).get("description")
                 case "tvm":
                     description = model_data.get("threat", {}).get("description")
                 case "cdm":

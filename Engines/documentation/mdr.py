@@ -10,7 +10,6 @@ sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.modules.framework import (
     get_value_metaschema,
-    get_type,
     techniques_resolver,
 )
 from Engines.modules.documentation import (
@@ -18,6 +17,7 @@ from Engines.modules.documentation import (
     get_icon,
     rich_attack_links,
     get_vocab_description,
+    GitlabMarkdown,
     model_value_doc,
     FOLD,
 )
@@ -31,11 +31,17 @@ from Engines.modules.documentation_components import (
 )
 from Engines.modules.tide import DataTide
 from Engines.modules.logs import log
+from Engines.modules.graphs import relationships_graph
 from Engines.modules.deployment import enabled_systems
 
 ROOT = Path(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 DOCUMENTATION_TARGET = DataTide.Configurations.Documentation.documentation_target
+if DOCUMENTATION_TARGET == "gitlab":
+    UUID_PERMALINKS = DataTide.Configurations.Documentation.gitlab.get("uuid_permalinks", False)
+else:
+    UUID_PERMALINKS = False
+
 DEFAULT_RESPONDERS = DataTide.Configurations.Deployment.default_responders
 SYSTEMS_CONFIG = DataTide.Configurations.Systems.Index
 VOCAB_INDEX = DataTide.Vocabularies.Index
@@ -83,16 +89,16 @@ def documentation(mdr):
     doc = str()
     mdr_configs = mdr["configurations"]
 
-    frontmatter_type = DataTide.Configurations.Documentation.object_names["mdr"]
-    frontmatter = f"---\ntype: {frontmatter_type}\n---"
-    
-    if DOCUMENTATION_TARGET == "gitlab":
-        frontmatter = ""
-
-    name = mdr["name"]
+    name = f"{MDR_ICON} {mdr['name']}"
+    frontmatter = ""
 
     if DOCUMENTATION_TARGET == "generic":
-        name = f"# {MDR_ICON} {name}"
+        name = "# " + name
+
+    if DOCUMENTATION_TARGET == "gitlab":
+        if UUID_PERMALINKS:
+            frontmatter = f"---\ntitle: {name}\n---"
+        name = ""    
 
     # TODO Backwards compatible with OpenTIDE 1.0, to deprecate at some point
     uuid_data = mdr.get("uuid") or mdr["metadata"]["uuid"]
@@ -105,8 +111,17 @@ def documentation(mdr):
     else:
         techniques = ""
 
-    cdm = relations_table(uuid_data, "upstream")
+    
+    relation_graph = relationships_graph(uuid_data)
+    relation_table = relations_table(uuid_data, "upstream")
 
+    if not relation_graph:
+        relations = "🚫 No related objects indexed."
+        if DOCUMENTATION_TARGET == "gitlab":
+            GitlabMarkdown.negative_diff(relation_graph)
+    else:
+        relations = relation_graph + "\n\n" + relation_table
+    
     # Get Severity Data
     severity_data = mdr["response"]["alert_severity"]
     severity_col = get_field_title("alert_severity", MDR_METASCHEMA)
@@ -140,21 +155,18 @@ def documentation(mdr):
     response.loc[0] = [severity_data, responders_data, playbook_data]
     response = response.to_markdown(index=False)
 
-    # Make Banner if staging rule
-    if "TIDE_MDR_STAGING_BANNER" in globals():
-        banner = globals()["TIDE_MDR_STAGING_BANNER"].get(uuid_data) or ""
-        if banner:
-            if DOCUMENTATION_TARGET == "gitlab":
-                banner = f"⚠️ [-{banner.replace('⚠️', '')}-]"
-    else:
-        banner = ""
-
     references = mdr.get("references")
-    # To deprecate once everything is migrated to new reference system
-    if type(references) is list:
-        references = "- " + "\n- ".join(references)
-    elif type(references) is dict:
-        references = reference_doc(mdr.get("references"))
+    
+    if references:
+        # To deprecate once everything is migrated to new reference system
+        if type(references) is list:
+            references = "- " + "\n- ".join(references)
+        elif type(references) is dict:
+            references = reference_doc(references)
+        references = "### 🔗 References\n\n" + references
+
+    else:
+        references = ""
 
     # Add enriched configuration data
     configurations = str()
@@ -178,13 +190,18 @@ def documentation(mdr):
             # system_data[new_key] = system_data.pop(key)
             key_name = get_field_title(cleaned_key, SYSTEMS_SUBSCHEMAS[s])
             param_description = get_value_metaschema(
-                cleaned_key, metaschema=SYSTEMS_SUBSCHEMAS[s], retrieve="description"
-            )
+                                    cleaned_key,
+                                    metaschema=SYSTEMS_SUBSCHEMAS[s],
+                                    retrieve="description"
+                                ) or ""
             param_name = get_value_metaschema(
-                cleaned_key,
-                metaschema=SYSTEMS_SUBSCHEMAS[s],
-                retrieve="tide.mdr.parameter",
-            )
+                            cleaned_key,
+                            metaschema=SYSTEMS_SUBSCHEMAS[s],
+                            retrieve="tide.mdr.parameter",
+                        )
+            
+            param_name = f"`{param_name}`" if param_name else ""
+            
             data = system_data[key]
 
             # If vocab entry, will fetch data to enrich
@@ -198,29 +215,16 @@ def documentation(mdr):
                 data = (
                     f"**{enriched_value}** : {get_vocab_description(cleaned_key, data)}"
                 )
-
-            # TODO Better Sentinel Entities Handling
-            # TODO Pretty print dictionaries in general
-            # Convert list to joined string
-
-            if type(data) is list:
-                if type(data[0]) is not dict:
-                    data = ", ".join(data)
-                else:
-                    data = data[0]
-
-            # Prevents from being rendered with mathematical expression formatting
-            if type(data) is str:
-                data = data.replace("$", r"\$")
-                data = data.replace("\n", "")
-
-            if type(data) is dict:
-                data = str(data)
-
+            else:
+                if type(data) is str:
+                    data = f"`{data}`"
+                if type(data) is list:
+                    data = ", ".join([f"`{d}`" for d in data])
+                    
             buffer["Parameter"] = key_name
             buffer["System Config"] = param_name
-            buffer["Description"] = param_description
-            buffer["Config"] = data
+            buffer["Description"] = str(param_description).replace("$", r"\$").replace("\n", " ")
+            buffer["Config"] = str(data).replace("$", r"\$").replace("\n", " ")
 
             config_data.append(buffer)
 
@@ -258,12 +262,11 @@ def documentation(mdr):
     doc = TEMPLATEv3.format(
         frontmatter=frontmatter,
         name=name,
-        banner=banner,
         tlp=tlp,
         techniques=techniques,
         metadata=metadata,
         description=description,
-        cdm=cdm,
+        relations=relations,
         response=response,
         configurations=configurations,
         queries=queries,
@@ -287,14 +290,27 @@ def run():
     mdr_doc_count = 0
 
     for mdr_uuid in MODELS_INDEX["mdr"]:
-        print("DEBUG - ", mdr_uuid)
+        
         # Make a file name based on MDR data
         mdr_data = MODELS_INDEX["mdr"][mdr_uuid]
-        doc_name = mdr_data.get("name").replace("_", " ")
-        doc_file_name = f"{MDR_ICON} {doc_name}.md"
-        doc_file_name = safe_file_name(doc_file_name)
+        mdr_name = mdr_data.get("name")
+        mdr_uuid = mdr_data.get("metadata").get("uuid")
+        
+        log("ONGOING",
+            "Generating MDR Documentation",
+            mdr_name,
+            mdr_uuid
+            )
+
+        if UUID_PERMALINKS:
+            doc_file_name = mdr_data.get("metadata").get("uuid")+ ".md"
+        else:
+            doc_name = mdr_data.get("name").replace("_", " ")
+            doc_file_name = f"{MDR_ICON} {doc_name}.md"
+            doc_file_name = safe_file_name(doc_file_name)
+            
         doc_path = MDR_WIKI_PATH / doc_file_name
-        print(f"{MDR_ICON} Generating documentation for {doc_name}...")
+        
 
         document = documentation(mdr_data)
 

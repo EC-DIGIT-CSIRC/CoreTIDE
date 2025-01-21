@@ -7,8 +7,6 @@ TEMPLATEv3 = '''{frontmatter}
 
 {name}
 
-{banner}
-
 {tlp}
 
 {techniques}
@@ -21,8 +19,9 @@ TEMPLATEv3 = '''{frontmatter}
 
 > {description}
 
-{cdm}
+### 🕸️ Relations
 
+{relations}
 
 &nbsp;
 
@@ -40,7 +39,6 @@ TEMPLATEv3 = '''{frontmatter}
 
 {queries}
 
-### 🔗 References
 
 {references}
 

@@ -55,8 +55,6 @@ DROPDOWN_TEMPLATE = """
 
 {stage}
 
-{aliases}
-
 {link}
 
 ---
@@ -138,10 +136,6 @@ def make_markdown_dropdown(name, key, field=""):
     )
 
     link = key.get("link") or ""
-    aliases = key.get("aliases") or ""
-
-    if aliases:
-        aliases = ", ".join(aliases)
 
     stage = key.get("tide.vocab.stages") or ""
     tlp = key.get("tlp") or ""
@@ -170,8 +164,6 @@ def make_markdown_dropdown(name, key, field=""):
             if type(stage) == list:
                 stage = ", ".join(stage)
             stage = "`{}`".format(stage)
-    if aliases:
-        aliases = "`{}`".format(aliases)
 
     dropdown = DROPDOWN_TEMPLATE.format(**locals())
 

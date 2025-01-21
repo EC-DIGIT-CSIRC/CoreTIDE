@@ -24,7 +24,7 @@ MODEL_DOC_TEMPLATE = '''{frontmatter}
 
 ---
 
-## ⛓️ Relations
+## 🕸️ Relations
 
 {relation_graph}
 
@@ -38,14 +38,7 @@ MODEL_DOC_TEMPLATE = '''{frontmatter}
 
 {data_table}
 
-
-## 🔗 References
-
 {references}
-
----
-
-#### 🏷️ Tags
 
 {tags}
 

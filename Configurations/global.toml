@@ -1,12 +1,10 @@
-models = [ "tam", "tvm", "cdm", "bdr", "mdr" ]
+models = [ "tvm", "cdm", "bdr", "mdr" ]
 
 [paths.tide]
-tam = "Models/Threat Actor Models/"
 tvm = "Models/Threat Vector Models/"
 cdm = "Models/Cyber Detection Models/"
 mdr = "Models/Managed Detection Rules/"
 bdr = "Models/Business Detection Requests/"
-reports = "Reports/"
 lookups = "Lookups/"
 analytics = "Analytics/"
 snippet_file = ".vscode/Model Templates.code-snippets"
@@ -24,14 +22,12 @@ metaschemas = "Framework/Meta Schemas/"
 subschemas = "Framework/Meta Schemas/Sub Schemas/"
 definitions = "Framework/Meta Schemas/Definitions/"
 wiki_docs_folder = "wiki/"
-models_docs_folder = "wiki/Knowledge Graph/"
-lookup_docs = "wiki/Lookups/"
-schemas_docs_folder = "wiki/Specifications/"
-vocabularies_docs = "wiki/Vocabularies/"
+models_docs_folder = "wiki/Models/"
+schemas_docs_folder = "wiki/Framework/Schemas/"
+vocabularies_docs = "wiki/Framework/Vocabularies/"
 resources = "External/"
 
 [metaschemas]
-tam = "TAM Meta Schema.yaml"
 tvm = "TVM Meta Schema.yaml"
 cdm = "CDM Meta Schema.yaml"
 mdr = "MDR Meta Schema.yaml"
@@ -42,7 +38,6 @@ lookup_metadata = "Lookup Metadata Meta Schema.yaml"
 systems = "MDR Systems Deployment"
 
 [json_schemas]
-tam = "TAM Schema.json"
 tvm = "TVM Schema.json"
 cdm = "CDM Schema.json"
 mdr = "MDR Schema.json"
@@ -50,14 +45,12 @@ bdr = "BDR Schema.json"
 lookup_metadata = "Lookup Metadata Schema.json"
 
 [data_fields]
-tam = "actor"
 tvm = "threat"
 cdm = "detection"
 mdr = "rule"
 bdr = "request"
 
 [templates]
-tam = "TAM TEMPLATE.yaml"
 tvm = "TVM TEMPLATE.yaml"
 cdm = "CDM TEMPLATE.yaml"
 mdr = "MDR TEMPLATE.yaml"
