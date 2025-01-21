@@ -407,12 +407,12 @@ class DataTide:
         @dataclass(frozen=True)
         class Resources:
             """Parameters pointing to External resources used by engines."""
-
             Index = dict(IndexTide.load()["configurations"]["resources"])
             attack = dict(Index["attack"])
             d3fend = dict(Index["d3fend"])
             engage = dict(Index["engage"])
             nist = dict(Index["nist"])
+            misp = dict(Index["misp"])
 
         @dataclass(frozen=True)
         class Deployment:

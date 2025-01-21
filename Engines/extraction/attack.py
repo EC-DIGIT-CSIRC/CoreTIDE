@@ -135,29 +135,7 @@ def gen_mitigations_vocab(attack_table, out_file, prefix=None):
     output.close()
 
 
-def gen_group_vocab(attack_table: pd.DataFrame, prefix=""):
 
-    df = attack_table
-    df = df[["ID", "name", "description", "url"]]
-    df = df.rename(columns={"ID": "id", "url": "link"})
-    groups_data = df.to_dict("records")
-
-    for p in groups_data:
-        p["name"] = prefix + p["name"]
-
-    return groups_data
-
-
-# Generate groups vocab
-
-enterprise_groups = pd.read_excel(enterprise, sheet_name="groups")
-data = gen_group_vocab(enterprise_groups)
-vocab_data = yaml.safe_load(open(groups_vocab, encoding="utf-8"))
-vocab_data["keys"] = data
-with open(groups_vocab, "w", encoding="utf-8") as vocab:
-    yaml.dump(
-        vocab_data, vocab, sort_keys=False, allow_unicode=True, Dumper=IndentFullDumper
-    )
 
 # Resets techniques table
 out_file_body = yaml.safe_load(open(vocab_folder / techniques_vocab, encoding="utf-8"))
