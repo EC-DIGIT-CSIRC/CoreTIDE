@@ -27,7 +27,7 @@ properties:
     icon: 🧱
     description: Identifier of the schema at its current version 
     default: $SCHEMA_VERSION
-    pattern: ^[a-z]{3}.[1-9].[0.9]$
+    pattern: ^[a-z]{3}::[1-9].[0.9]$
 
   version:
     title: Version
