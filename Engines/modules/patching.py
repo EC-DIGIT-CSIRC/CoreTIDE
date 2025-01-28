@@ -40,12 +40,23 @@ class Tide2Patching:
                 if model_type != "mdr": # Allowing this option for Staging MDR documentation patching
                     log("SKIP", "Not patching for validation, in main", model.get("name", ""))
                     return model
-        
+
+        if model.get("metadata", {}).get("schema"):
+            log("SKIP",
+                f"Schema identifier found : {model['metadata']['schema']}",
+                f"Will not patch {model['name']}")
+            return model
+
         log("ONGOING", f"Evaluating patching validation requirements for {model['name']}")
-        
+
         if not model.get("metadata"):
             log("INFO", "Missing metadata section", "Transferring meta section to metadata")
             model["metadata"] = model.pop("meta")
+
+        if not model.get("metadata", {}).get("schema"):
+            schema_identifier = model_type.lower() + "::2.0"
+            model["metadata"]["schema"] = model_type.lower() + "::2.0"
+            log("INFO", "Adding schema identifier", f"{model['name']} => {schema_identifier}")
         
         if not model.get("metadata", {}).get("uuid"):
             if "uuid" in model:
@@ -70,12 +81,6 @@ class Tide2Patching:
                 model["metadata"]["uuid"] = str(uuid.uuid4())
                 log("INFO", f"Adding temporary UUID to {model['name']}", model["metadata"]["uuid"])
 
-        if not model.get("metadata", {}).get("schema"):
-            schema_identifier = model_type.lower() + "::2.0"
-            model["metadata"]["schema"] = model_type.lower() + "::2.0"
-            log("INFO", "Adding schema identifier", f"{model['name']} => {schema_identifier}")
-
-        
         if LEGACY_UUID_MAPPING:
             if old_ids:=model.get("threat", {}).get("actors"):
                 updated_ids = []
