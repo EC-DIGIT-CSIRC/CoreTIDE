@@ -85,6 +85,7 @@ properties:
       procedures:
         title: Response Procedure
         type: object
+        tide.template.spacer: False
         description: | 
           Supportive information for the responders to alerts/events/incidents
           triggered by this detection rule  
