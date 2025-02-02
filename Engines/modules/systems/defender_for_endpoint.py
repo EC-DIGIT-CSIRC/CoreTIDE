@@ -216,7 +216,7 @@ class DefenderForEndpointService:
         rule_body = json.dumps(asdict(rule))
         rule_body = rule_body.replace("odata_type", "@odata.type")
         rule_body = json.loads(rule_body)
-        #rule_body = json.loads(TEST)
+
         print(json.dumps(rule_body, indent=4))
         
         request = self.session.post(url=self.GRAPH_API_ENDPOINT,

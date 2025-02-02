@@ -30,12 +30,9 @@ class DefenderForEndpointDeploy(DeployMDR):
         
         if not mdr_config:
             exit()
-    
-        
 
         # Handle Response Actions 
         response_actions = []
-
 
         if mdr_config.actions:
             @dataclass
@@ -117,9 +114,7 @@ class DefenderForEndpointDeploy(DeployMDR):
                             schedule=DetectionRule.Schedule(period=scheduling), # type: ignore
                             detectionAction=DetectionRule.DetectionAction(alertTemplate=alert_template,
                                                                             responseActions=response_actions))
-        from dataclasses import asdict
-        print(asdict(rule))
-        exit()
+
         service.create_detection_rule(rule)
     
     def deploy(self, mdr_deployment: Sequence[TideModels.MDR], deployment_plan:DeploymentStrategy):
@@ -132,7 +127,7 @@ class DefenderForEndpointDeploy(DeployMDR):
         
         for tenant_deployment in deployment.rule_deployment:
             service = DefenderForEndpointService(tenant_deployment.tenant)
-            tt = {"rr":{"rr":["ee"]}}
+
             for mdr in tenant_deployment.rules:
                 self.deploy_mdr(data=mdr, service=service)
 

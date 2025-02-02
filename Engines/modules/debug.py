@@ -14,7 +14,7 @@ class DebugEnvironment:
     debugging to facilitate local development
     """
     ENABLED = False
-    if HelperTide.is_debug():
+    if HelperTide().is_debug():
         ENABLED = True
         os.environ["TIDE_DEBUG_ENABLED"] = "True"
     MDR_DEPLOYMENT_TEST_UUIDS = list(DataTide.Configurations.Deployment.debug["mdr_test_uuids"])

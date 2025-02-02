@@ -14,13 +14,17 @@ sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.indexing.indexer import indexer
 from Engines.modules.logs import log
+from Engines.modules.models import (DetectionSystems,
+                                    TideModels,
+                                    TideDefinitionsModels,
+                                    TideConfigs,
+                                    SystemConfig)
 from Engines.modules.patching import Tide2Patching
 
 ROOT = Path(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 
 # Configuration Models. Used to facilitate type hinting
-
 class HelperTide:
     @staticmethod
     def is_debug()->bool:
