@@ -130,6 +130,12 @@ properties:
                   title: Supporting Search Query
                   type: string
                   tide.template.multiline: True
+          
+          containment:
+            title: Incident Containment Guidelines
+            type: string
+            description: Guidelines to contain the incident, once assessed to be a True Positive
+            tide.template.multiline: True
 
 
 
