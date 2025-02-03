@@ -20,6 +20,18 @@ description = "Qualified rules in prod tenant should not collect investigation p
 actions = {}
 #"function::prefix".name = "TEST"
 
+[[modifiers]]
+[modifiers.conditions] #All conditions within the block are AND
+status = ["DISABLED"] # Conditions within the list are OR
+flags = ["Detection Rule"]
+description = "Testing Disabled Rules"
+[modifiers.modifications]
+tenants = ["DEV"]
+alert.title = "Modifiers Testing"
+alert.scheduling = "24H"
+alert.severity = "Informational"
+actions = {}
+
 [[tenants]]
 name = "DEV"
 description = "Development Environment"

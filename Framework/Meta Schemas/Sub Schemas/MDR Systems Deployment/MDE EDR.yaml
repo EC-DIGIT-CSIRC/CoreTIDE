@@ -1,14 +1,25 @@
 required: 
   #- schema #To be enabled at a later date. Must be part of the public release
+  - schema
   - status
   - scheduling
+  - impacted_entities
   - query
   - alert
-
-tide.template.force-required:
-  - schema
+  - scope
 
 properties:
+
+  rule_id:
+    title: Internal Defender for Endpoint Rule ID
+    type: integer
+    description: |
+      IMPORTANT - If you uncommented this keyword, you MUST put back the 
+      pound sign (#) so the automation can correctly write the rule ID. 
+      Do not edit manually. 
+
+      Used by automation to keep track of the ID generated automatically
+      by MDE backend.
 
   schema:
     title: Schema identifier and version
@@ -37,7 +48,6 @@ properties:
     icon: 🏢
     description: Override the default organizations and deploy to selected tenants only.
     type: array
-    tide.template.spacer: true
     tide.config.parameter-list: systems.defender_for_endpoint.platform.tenants
 
   flags:
@@ -45,7 +55,6 @@ properties:
     icon: 🚩
     description: Flags allow to customize the rule behaviour using the modifiers framework
     type: array
-    tide.template.spacer: true
     tide.config.parameter-list: systems.defender_for_endpoint.platform.flags
 
   scheduling:
@@ -92,23 +101,23 @@ properties:
         description: |
           Threat Category assigned to the alert triggered by the detection rule.
         example: Malware
-        type: str
+        type: string
         enum:
-          - Command and control
-          - Lateral movement
+          - Command And Control
+          - Lateral Movement
           - Malware
           - Persistence
-          - Privilege escalation
+          - Privilege Escalation
           - Ransomware
-          - Suspicious activity
-          - Unwanted software
+          - Suspicious Activity
+          - Unwanted Software
           - Exploit
-          - Initial access
+          - Initial Access
           - Execution
           - Exfiltration
           - Collection
-          - Credential access
-          - Defense evasion
+          - Credential Access
+          - Defense Evasion
           - Discovery
           - Impact 
 
@@ -140,6 +149,13 @@ properties:
       Identify affected assets in your query results.
       They will be used to generate incidents and automate tasks.
     type: object
+    anyOf:
+      - required:
+          - device
+      - required:
+          - mailbox
+      - required:
+          - user
 
     properties:
 
@@ -270,7 +286,7 @@ properties:
             tide.template.spacer: false
             required: 
               - action
-              - column
+              - identifier
               - groups
             properties:
 
@@ -284,7 +300,7 @@ properties:
                   - Allow
                   - Block
 
-              column:
+              identifier:
                 title: File Column Selection
                 description: |
                   Column Identifier that will be used for the file allow/block 
@@ -339,7 +355,53 @@ properties:
             enum:
               - SHA1
               - InitiatingProcessSHA1
-  
+
+      users:
+        title: User Response Actions
+        description: |
+          Choose applicable actions to take on entities found by your query.
+        type: object
+        properties:
+
+          mark_as_compromised:
+            title: Mark User as Compromised
+            description: |
+              Describes a response action that sets the user's risk level to "high"
+              in Microsoft Entra ID. This response action sets the user's risk level
+              to high in Microsoft Entra ID, which triggers the identity protection
+              policies for a high risk level.
+            type: string
+            enum:
+              - AccountObjectId
+              - InitiatingProcessAccountObjectId
+              - ServicePrincipalId
+              - RecipientObjectId
+
+          disable_user:
+            title: Disable User
+            description: |
+              Describes a response action that temporarily prevents a user from
+              logging in to the on premises network.
+            type: string
+            enum:
+              - AccountSid
+              - InitiatingProcessAccountSid
+              - RequestAccountSid
+              - OnPremSid
+
+          force_password_reset:
+            title: Force User Password Reset
+            description: |
+              Describes a response action that prompts the user to change their password the next time they sign in.
+            type: string
+            enum: 
+              - AccountSid
+              - InitiatingProcessAccountSid
+              - RequestAccountSid
+              - OnPremSid
+
+
+
   scope:
     title: Alert Scope
     description: |
@@ -347,6 +409,7 @@ properties:
     type: object
     required:
       - selection
+    
     if: 
       properties:
         selection: 

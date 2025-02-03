@@ -9,12 +9,11 @@
   #flags:
     #-
   
-  #scheduling: 
+  scheduling: 
   
   alert:
     #title: 
-    category:
-      - 
+    category: 
     #severity: 
     #recommendation: |
       #Type Here

@@ -211,6 +211,7 @@ def indexer(write_index=False) -> dict:
     print("📊 Indexing Models...")
 
     models_index = dict()
+    files_index = dict()
 
     #TODO Backward compatibility measure. To remove.
     patch = Tide2Patching()
@@ -234,10 +235,12 @@ def indexer(write_index=False) -> dict:
                             log("FATAL", "Missing identifier from model in file", model)
                         else:
                             model_cat_index[identifier] = model_body
+                            files_index[identifier] = model
             models_index[meta_name] = model_cat_index
 
     index["models"] = models_index
-
+    index["files"] = files_index
+    
     # Tide Indexes retrieval (injected into )
     log("INFO", "Retrieving all Tide Indexes built on the Tide Instance",
         "Injected onto vocabulary index to be retrieved in generation jobs")

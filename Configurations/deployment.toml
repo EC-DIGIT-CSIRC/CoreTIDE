@@ -22,7 +22,7 @@ enabled = false
 #systems = ["splunk"]
 
 [debug]
-mdr_test_uuids = ["0f056f79-c1bd-4d26-9f5a-4421c17b04af"] #UUID of MDRs that can be used for Debugging purposes
+mdr_test_uuids = [""] #UUID of MDRs that can be used for Debugging purposes
 lookup_test_files = [""] #File name of MDRs that can be used for Debugging purposes
 metadata_lookup_test_file = [""]
 proxy_enabled = false #Global flag to enable or disable proxy configuration when running in debug mode

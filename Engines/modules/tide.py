@@ -247,35 +247,44 @@ class SystemLoader:
         group_scoping = DefenderForEndpoint.GroupScoping(**mdr_config.pop("scope"))
 
         response_actions = None 
+        
         if mdr_config.get("actions"):
             actions:dict = mdr_config.pop("actions")
-            devices = files = None
+            devices = None
+            files = None
+            users = None
 
             if actions.get("devices"):
-                devices = DefenderForEndpoint.ResponseActions.DeviceActions(**actions.pop("devices"))
+                devices = DefenderForEndpoint.ResponseActions.Devices(**actions.pop("devices"))
             if actions.get("files"):
-                FileActions = DefenderForEndpoint.ResponseActions.FileActions
+                FileActions = DefenderForEndpoint.ResponseActions.Files
                 allow_block_action = None
                 if actions["files"].get("allow_block"):
                     allow_block = actions["files"].pop("allow_block", None)
-                    device_groups = FileActions.FileAllowBlockAction.GroupScoping(**allow_block.pop("groups"))
-                    allow_block_action = FileActions.FileAllowBlockAction(**allow_block,
+                    device_groups = FileActions.AllowBlockAction.GroupScoping(**allow_block.pop("groups"))
+                    allow_block_action = FileActions.AllowBlockAction(**allow_block,
                                                                         groups=device_groups)                    
 
                 quarantine_file = actions["files"].pop("quarantine_files", None)
-                files = DefenderForEndpoint.ResponseActions.FileActions(allow_block=allow_block_action,
+                files = DefenderForEndpoint.ResponseActions.Files(allow_block=allow_block_action,
                                                                         quarantine_file=quarantine_file)
 
-            if devices or files:
+            if actions.get("users"):
+                users = DefenderForEndpoint.ResponseActions.Users(**actions.pop("users"))
+
+
+            if devices or files or users:
                 response_actions = DefenderForEndpoint.ResponseActions(devices=devices,
-                                                                        files=files)
+                                                                        files=files,
+                                                                        users=users)
+
         return DefenderForEndpoint(**mdr_config,
                                     contributors=contributors,
                                     flags=flags,
                                     tenants=tenants,
                                     alert=alert,
-                                    impacted_entities=impacted_entities,
                                     actions=response_actions,
+                                    impacted_entities=impacted_entities,
                                     scope=group_scoping)
 
 
@@ -408,7 +417,7 @@ class DataTide:
         """Index of all chaining relationships"""
         FlatIndex =  tvm | cdm | mdr | bdr
         """Flat Key Value pair structure of all UUIDs in the index"""
-
+        files = dict(IndexTide.load()["files"])
     @dataclass(frozen=True)
     class Vocabularies:
         """TIDE Schema Interface.

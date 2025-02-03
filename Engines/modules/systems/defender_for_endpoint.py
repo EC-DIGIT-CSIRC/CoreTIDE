@@ -64,13 +64,19 @@ class DetectionRule:
         class ResponseAction:
             odata_type: str
             identifier: Any = "deviceId"
-            isolationType: Optional[str] = None
-            deviceGroupNames: Sequence[str] | None = None
 
+        @dataclass
+        class ResponseActionIsolateDevice(ResponseAction):
+            isolationType: str = ""
+
+        @dataclass
+        class ResponseActionFileActions(ResponseAction):
+            deviceGroupNames: Optional[Sequence[str]] = None
+            
         @dataclass
         class OrganizationalScope:
             scopeType = "deviceGroup"
-            scopeNames = list[str]
+            scopeNames = Sequence[str]
 
         alertTemplate: AlertTemplate
         responseActions: Sequence[ResponseAction]
@@ -82,12 +88,11 @@ class DetectionRule:
     detectionAction: DetectionAction
     isEnabled: bool = False
 
-GOOD_TEST = """
-{
+GOOD_TEST = {
   "displayName": "ANOTHER RULE NAME",
-  "isEnabled": true,
+  "isEnabled": True,
   "queryCondition": {
-    "queryText": "DeviceProcessEvents | take 1"
+    "queryText": 'DeviceEvents| where DeviceName == "N/A"'
   },
   "schedule": {
     "period": "12H"
@@ -98,7 +103,7 @@ GOOD_TEST = """
       "description": "Some alert description",
       "severity": "medium",
       "category": "Execution",
-      "recommendedActions": null,
+      "recommendedActions": None,
       "mitreTechniques": [],
       "impactedAssets": [
         {
@@ -107,17 +112,16 @@ GOOD_TEST = """
         }
       ]
     },
-    "organizationalScope": null,
+    "organizationalScope": None,
     "responseActions": [
       {
         "@odata.type": "#microsoft.graph.security.isolateDeviceResponseAction",
         "identifier": "deviceId",
         "isolationType": "full"
       }
-    ]
+    ],
   }
 }
-"""
 
 TEST = """
 {
@@ -210,14 +214,11 @@ class DefenderForEndpointService:
             raise TideErrors.TenantConnectionError("Cannot authenticate with the tenant configuration")
 
     def create_detection_rule(self, rule:DetectionRule)->int:
-        rule_body = asdict(rule)
         
         # Replace odata_type to @odata.type ans re-dump into a JSON body
         rule_body = json.dumps(asdict(rule))
         rule_body = rule_body.replace("odata_type", "@odata.type")
         rule_body = json.loads(rule_body)
-
-        print(json.dumps(rule_body, indent=4))
         
         request = self.session.post(url=self.GRAPH_API_ENDPOINT,
                                     json=rule_body)
@@ -232,18 +233,28 @@ class DefenderForEndpointService:
             raise TideErrors.DetectionRuleCreationFailed
 
     def update_detection_rule(self, rule:DetectionRule, rule_id:int):
-        rule_body = asdict(rule)
+        
+        # Replace odata_type to @odata.type ans re-dump into a JSON body
+        rule_body = json.dumps(asdict(rule))
+        rule_body = rule_body.replace("odata_type", "@odata.type")
+        rule_body = json.loads(rule_body)
+        
         request = self.session.patch(url=self.GRAPH_API_ENDPOINT + f"/{rule_id}",
                                      json=rule_body)
-        if request.status_code != 200:
+        
+        if request.status_code == 200:
+            log("SUCCESS", "Created Updated Rules in MDE", str(request.json()))
+        else:
             log("FATAL",
                 f"Failed to create detection rule with id {rule_id} in tenant {self.tenant_config.name}",
-                str(rule_body))
+                str(request.json()), str(rule_body))
             raise TideErrors.DetectionRuleUpdateFailed
 
     def delete_detection_rule(self, rule_id:int):
         request = self.session.delete(url=self.GRAPH_API_ENDPOINT + f"/{rule_id}")
-        if request.status_code != 204:
+        if request.status_code == 204:
+            log("SUCCESS", "Removed Detection Rule from MDE Tenant")
+        else:
             log("FATAL",
                 f"Failed to create detection rule with id {rule_id} in tenant {self.tenant_config.name}",
                 "Double check scope permissions, and whether the ID actually exists")

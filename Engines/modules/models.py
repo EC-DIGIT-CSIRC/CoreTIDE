@@ -11,6 +11,23 @@ sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.modules.logs import log
 
+# TODO - Re-Architect Uber Class by merging this and DataTide
+
+# OpenTide.DataModel.
+# OpenTide.Objects. #Using DataModel as strong mapping
+# OpenTide.Configurations.
+# OpenTide.Deployment
+# OpenTide.Systems.
+# 
+
+class DataModel:
+
+    class Enums:
+        ...
+    class Objects:
+        ...
+    class Deployment:
+        ...
 
 class DetectionSystems(Enum):
     DEFENDER_FOR_ENDPOINT = auto()
@@ -180,7 +197,7 @@ class TideModels:
     
         @dataclass
         class Response:
-            alert_severity: Optional[str] = None 
+            alert_severity: str = "Informational" 
             playbook: Optional[str] = None
             responders: Optional[str] = None
 
@@ -211,10 +228,10 @@ class TideModels:
                 class ResponseActions:
                     
                     @dataclass
-                    class FileActions:
+                    class Files:
                                     
                         @dataclass
-                        class FileAllowBlockAction:
+                        class AllowBlockAction:
                         
                             @dataclass
                             class GroupScoping:
@@ -222,22 +239,29 @@ class TideModels:
                                 device_groups: Optional[Sequence[str]] = None
 
                             action: Literal["Allow", "Block"]
-                            column: str
+                            identifier: str
                             groups: Optional[GroupScoping] = None
             
-                        allow_block: Optional[FileAllowBlockAction] = None
+                        allow_block: Optional[AllowBlockAction] = None
                         quarantine_file: Optional[str] = None
 
                     @dataclass
-                    class DeviceActions:
+                    class Devices:
                         isolate_device: Optional[str] = None
                         collect_investigation_package: bool = False
                         run_antivirus_scan:bool = False
                         initiate_investigation:bool = False
                         restrict_app_execution:bool = False
 
-                    devices: Optional[DeviceActions] = None
-                    files: Optional[FileActions] = None
+                    @dataclass
+                    class Users:
+                        mark_as_compromised: Optional[str] = None
+                        disable_user: Optional[str] = None
+                        force_password_reset: Optional[str] = None
+
+                    devices: Optional[Devices] = None
+                    files: Optional[Files] = None
+                    users: Optional[Users] = None
 
                     
                 
@@ -246,6 +270,7 @@ class TideModels:
                 query: str
                 impacted_entities: ImpactedEntities
                 scheduling: Literal["NRT", "1H", "3H", "12H", "24H"]
+                rule_id: Optional[int] = None
                 actions: Optional[ResponseActions] = None
                 scope: Optional[GroupScoping] = None
             
