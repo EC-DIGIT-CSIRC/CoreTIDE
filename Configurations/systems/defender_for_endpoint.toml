@@ -17,7 +17,7 @@ description = "Qualified rules in prod tenant should not collect investigation p
 status = ["IMPROVEMENT", "STAGING"] # Conditions within the list are OR
 tenants = ["DEV"]
 [modifiers.modifications]
-actions = {}
+actions = "NULL"
 #"function::prefix".name = "TEST"
 
 [[modifiers]]
@@ -30,8 +30,8 @@ flags = ["Detection Rule"]
 tenants = ["DEV"]
 scheduling = "24H"
 alert.title = "prefix::TESTING IGNORE "
-prefix.alert.severity = "Informational"
-actions = {}
+alert.severity = "Informational"
+actions = "NULL"
 
 [[tenants]]
 name = "DEV"

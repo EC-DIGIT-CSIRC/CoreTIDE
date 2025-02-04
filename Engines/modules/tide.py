@@ -254,10 +254,9 @@ class SystemLoader:
         impacted_entities = DefenderForEndpoint.ImpactedEntities(**mdr_config.pop("impacted_entities"))
         group_scoping = DefenderForEndpoint.GroupScoping(**mdr_config.pop("scope"))
 
+        actions:dict = mdr_config.pop("actions", None)
         response_actions = None 
-        
         if mdr_config.get("actions"):
-            actions:dict = mdr_config.pop("actions")
             devices = None
             files = None
             users = None

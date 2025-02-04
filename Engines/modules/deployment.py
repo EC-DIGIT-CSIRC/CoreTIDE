@@ -23,6 +23,7 @@ from Engines.modules.models import (TideConfigs,
                                     DeploymentStrategy,
                                     TenantDeployment,
                                     TenantDeploymentModel) 
+from Engines.modules.framework import unroll_dot_dict
 
 from git.repo import Repo
 
@@ -450,6 +451,17 @@ class TideDeployment:
         return target_tenants
 
 
+    def _deep_update(self, base_dictionary:MutableMapping, updating_dictionary:MutableMapping)->MutableMapping:
+        """
+        Performs a deep nested mapping, so can combine dictionaries
+        without overriding them
+        """
+        for key, value in updating_dictionary.items():
+            if isinstance(value, MutableMapping):
+                base_dictionary[key] = self._deep_update(base_dictionary.get(key, {}), value)
+            else:
+                base_dictionary[key] = value
+        return base_dictionary
 
 
     def defaults_resolver(self, data:TideModels.MDR, system:DetectionSystems) -> TideModels.MDR:
@@ -459,17 +471,6 @@ class TideDeployment:
         configuration, then re-adding the user-defined MDR configuration on top
         """
 
-        def deep_update(base_dictionary:MutableMapping, updating_dictionary:MutableMapping)->MutableMapping:
-            """
-            Performs a deep nested mapping, so can combine dictionaries
-            without overriding them
-            """
-            for key, value in updating_dictionary.items():
-                if isinstance(value, MutableMapping):
-                    base_dictionary[key] = deep_update(base_dictionary.get(key, {}), value)
-                else:
-                    base_dictionary[key] = value
-            return base_dictionary
         
         defaults = self.system_configuration_resolver(system).defaults
         mdr_config = self.mdr_configuration_resolver(data, system)
@@ -484,9 +485,9 @@ class TideDeployment:
         # Then we apply the user defined MDR on top. This ensures that
         # the defaults do not override anything already defined.
         for default in defaults:
-            deep_update(new_config, {default: defaults[default]})
+            self._deep_update(new_config, {default: defaults[default]})
 
-        deep_update(new_config, raw_config)
+        self._deep_update(new_config, raw_config)
         
         try:
             return TideLoader.load_mdr(raw_config)
@@ -542,15 +543,33 @@ class TideDeployment:
 
                 if match is True:
                     log("INFO", "Condition Matching", str(mod.name or ""), str(mod.description or ""))
-                    for modification in mod.modifications:
-                        new_value = None if mod.modifications[modification] in [{}, []] else mod.modifications[modification]                        
-                        log("ONGOING", f"Applying modification {str(modification)} -> {str(new_value)}")
-                        raw_mdr_config.update({modification : new_value})
+                    flatten_modifications = pd.json_normalize(mod.modifications).to_dict(orient="records")[0] #type: ignore
+                    for modification in flatten_modifications:
+                        new_value = flatten_modifications[modification]
+                        new_value = None if new_value in ["NONE", "NULL"] else new_value                     
+                        if new_value:
+                            if "::" in new_value:
+                                raw_mdr_config_flatten = pd.json_normalize(raw_mdr_config).to_dict(orient="records")[0] #type: ignore
+                                operator = new_value.split("::")[0]
+                                value = new_value.split("::")[1]
+                                log("DEBUG", f"Found mod {modification} with operator {operator} with value {value}")
+                                log("DEBUG", str(raw_mdr_config_flatten))
+                                if modification in raw_mdr_config_flatten:
+                                    log("DEBUG", str(raw_mdr_config_flatten[modification]))
+                                    if operator == "prefix":
+                                        new_value = value + (raw_mdr_config_flatten[modification] or "")
+                                    elif operator == "suffix":
+                                        new_value = (raw_mdr_config_flatten[modification] or "") + value
+                                    log("DEBUG", "Generated new value", new_value)
+                                else:
+                                    new_value = value
+
+                        updated_config = unroll_dot_dict({modification:new_value})
+                        log("ONGOING", f"Applying modification {modification} -> {str(new_value)}")
+                        if updated_config:
+                            raw_mdr_config = self._deep_update(raw_mdr_config.copy(), updated_config)
 
         raw_data["configurations"].update({system_identifier: raw_mdr_config})
-        from pprint import pprint
-        pprint(raw_data)
-        exit()
         log("INFO", "New recompiled modified deployment", str(raw_data))
         
         return TideLoader.load_mdr(raw_data)
