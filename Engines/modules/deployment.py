@@ -26,6 +26,8 @@ from Engines.modules.models import (TideConfigs,
 
 from git.repo import Repo
 
+import pandas as pd
+
 SYSTEMS_CONFIGS_INDEX = DataTide.Configurations.Systems.Index
 PRODUCTION_STATUS = DataTide.Configurations.Deployment.status["production"]
 SAFE_STATUS = DataTide.Configurations.Deployment.status["safe"]
@@ -335,7 +337,7 @@ class TideDeployment:
     def system_configuration_resolver(self, system:Literal[DetectionSystems.DEFENDER_FOR_ENDPOINT])->TideConfigs.Systems.DefenderForEndpoint:
         ...
     @overload
-    def system_configuration_resolver(self, system:DetectionSystems):
+    def system_configuration_resolver(self, system:DetectionSystems)->SystemConfig:
         ...
     def system_configuration_resolver(self, system:DetectionSystems): #type:ignore
         match system:
@@ -346,6 +348,8 @@ class TideDeployment:
             #case DetectionSystems.CARBON_BLACK_CLOUD:
             #    return DataTide.Configurations.Systems.CarbonBlackCloud
             case DetectionSystems.DEFENDER_FOR_ENDPOINT:
+                log("DEBUG", str(DataTide.Configurations.Systems.DefenderForEndpoint.raw))
+                log("DEBUG", str(DataTide.Configurations.Systems.DefenderForEndpoint.modifiers))
                 return DataTide.Configurations.Systems.DefenderForEndpoint
             #case _:
             #    raise NotImplemented
@@ -505,17 +509,29 @@ class TideDeployment:
         Dynamically modifies MDR data based on 
         """
 
-        modifiers = self.system_configuration_resolver(system).modifiers
-
+        system_configuration = self.system_configuration_resolver(system)
+        modifiers = system_configuration.modifiers
         mdr_config = self.mdr_configuration_resolver(data, system)
+        system_identifier = system_configuration.platform.identifier
         
         if not mdr_config:
             raise NotImplemented
 
         raw_data = asdict(data)
+        raw_mdr_config = asdict(mdr_config)
+        
+        log("ONGOING",
+            "Checking modifiers for system",
+            str(system),
+            str(modifiers))
         
         if modifiers:
+            log("INFO", "Found modifiers in configuration for system", str(system))
             for mod in modifiers:
+                log("ONGOING",
+                    f"Evaluating modifier {str(mod.name)} {str(mod.description)}",
+                    str(mod.conditions))
+                
                 match = False
                 
                 if mod.conditions.status:
@@ -533,9 +549,18 @@ class TideDeployment:
                         match = False
 
                 if match is True:
+                    log("INFO", "Condition Matching", str(mod.name or ""), str(mod.description or ""))
                     for modification in mod.modifications:
-                        raw_data.update({modification : mod.modifications[modification]})
+                        new_value = None if mod.modifications[modification] in [{}, []] else mod.modifications[modification]                        
+                        log("ONGOING", f"Applying modification {str(modification)} -> {str(new_value)}")
+                        raw_mdr_config.update({modification : new_value})
 
+        raw_data["configurations"].update({system_identifier: raw_mdr_config})
+        from pprint import pprint
+        pprint(raw_data)
+        exit()
+        log("INFO", "New recompiled modified deployment", str(raw_data))
+        
         return TideLoader.load_mdr(raw_data)
 
     @overload

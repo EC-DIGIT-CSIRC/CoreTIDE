@@ -91,13 +91,14 @@ class SystemConfig:
     class Modifiers:
         @dataclass
         class Conditions:
-            status: Optional[Sequence[str]] 
-            flags: Optional[Sequence[Never] | Sequence[str]]
-            tenants: Optional[Sequence[Never] | Sequence[str]] 
-            description: str 
+            status: Optional[Sequence[str]] = None
+            flags: Optional[Sequence[Never] | Sequence[str]] = None
+            tenants: Optional[Sequence[Never] | Sequence[str]] = None
 
         conditions: Conditions
-        modifications: dict
+        modifications: Mapping[Any, str]
+        name: Optional[str] = None
+        description: Optional[str] = None
 
     @dataclass 
     class Tenant:

@@ -342,20 +342,30 @@ class TideLoader:
     
     @staticmethod
     def load_modifiers_config(modifiers_config:list[dict])->Sequence[SystemConfig.Modifiers] | list[Never]:
+        
+        print("DEBUG", modifiers_config)
         if not modifiers_config:
+            log("SKIP", "No modifiers configuration could be found")
             return []
         
         modifiers = []
+        
         for modifier in modifiers_config:
-            if ("conditions" not in modifiers) or ("modification" not in modifiers):
+            log("DEBUG", "Current Modifier Evaluated", str(modifier))
+            if ("conditions" not in modifier) or ("modifications" not in modifier):
                 log("FATAL", "Could not load the modifier configuration, does not contain 'conditions' or 'modifications key'",
                     str(modifier))
-                continue
+                raise Exception
 
+            name = modifier.get("name")
+            description = modifier.get("description")
             conditions = SystemConfig.Modifiers.Conditions(**modifier["conditions"])
             modifications:dict = modifier["modifications"]
             
-            modifiers.append(SystemConfig.Modifiers(conditions, modifications))
+            modifiers.append(SystemConfig.Modifiers(name=name,
+                                                    description=description,
+                                                    conditions=conditions,
+                                                    modifications=modifications))
         
         return modifiers
 
