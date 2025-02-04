@@ -282,16 +282,7 @@ class Proxy:
             proxy_host = PROXY_CONFIG["proxy_host"]
             proxy_port = PROXY_CONFIG["proxy_port"]
             if proxy_host and proxy_port and proxy_user and proxy_pass:
-                proxy = (
-                    "http://"
-                    + proxy_user
-                    + ":"
-                    + proxy_pass
-                    + "@"
-                    + proxy_host
-                    + ":"
-                    + str(proxy_port)
-                )
+                proxy = (f"http://{proxy_user}:{proxy_pass}@{proxy_host}:{proxy_port}")
                 os.environ["HTTP_PROXY"] = proxy
                 os.environ["HTTPS_PROXY"] = proxy
                 log("SUCCESS", "Proxy environment setup successful")
@@ -300,6 +291,7 @@ class Proxy:
                     "FAILURE",
                     "Could not retrieve all proxy information",
                     "Control that all proxy infos are entered in CI variables",
+                    "Expects proxy_user, proxy_password, proxy_host and proxy_port"
                 )
 
     @staticmethod
