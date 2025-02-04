@@ -1,4 +1,5 @@
-import sys 
+import sys
+import os
 import requests 
 import json
 
@@ -213,6 +214,34 @@ class DefenderForEndpointService:
                 str(response.json()))
             raise TideErrors.TenantConnectionError("Cannot authenticate with the tenant configuration")
 
+    
+    def _safer_configuation(self, rule:DetectionRule)->DetectionRule:
+        """
+        Reconfigures a deployment to remove all known problematic identifiers
+        and attempt deployment in a minimal but functional state
+        """
+        if rule.detectionAction.alertTemplate.impactedAssets:
+            log("INFO", "Reassigning Impacted Entities to Device with deviceId identifier")
+            ImpactedAssets = DetectionRule.DetectionAction.AlertTemplate.ImpactedAsset
+            rule.detectionAction.alertTemplate.impactedAssets = [ImpactedAssets(odata_type="#microsoft.graph.security.impactedDeviceAsset",
+                                                                                identifier="deviceId")]
+        if response_actions:=rule.detectionAction.responseActions:
+            new_response_actions = []
+            RISKY_RESPONSE_ACTIONS = ["#microsoft.graph.security.markUserAsCompromisedResponseAction",
+                                        "#microsoft.graph.security.disableUserResponseAction",
+                                        "#microsoft.graph.security.forceUserPasswordResetResponseAction"]
+            for action in response_actions:
+                if action.odata_type not in RISKY_RESPONSE_ACTIONS:
+                    new_response_actions.append(action)
+                else:
+                    log("INFO",
+                        f"Removing response action as can lead to mapping issues",
+                        action.odata_type)
+            rule.detectionAction.responseActions = new_response_actions
+
+        return rule
+
+    
     def create_detection_rule(self, rule:DetectionRule)->int:
         
         # Replace odata_type to @odata.type ans re-dump into a JSON body
@@ -229,8 +258,32 @@ class DefenderForEndpointService:
         else:
             log("FATAL",
                 f"Failed to create detection rule in tenant {self.tenant_config.name}",
-                str(request.json()))
-            raise TideErrors.DetectionRuleCreationFailed
+                str(request.json()),
+                "Will attempt redeployment, with minimal configurations : impacted_entities"
+                "will be set to Device with DeviceId mapping, user response actions will be"
+                "removed as they can lead to mapping issues. If successful, this pipeline will"
+                "fail with warning, and you will need to check the GUI to see which identifiers"
+                "are available based on your query")
+            
+            rule = self._safer_configuation(rule)
+            rule_body = json.dumps(asdict(rule))
+            rule_body = rule_body.replace("odata_type", "@odata.type")
+            rule_body = json.loads(rule_body)
+
+            log("ONGOING",
+                "Attempting redeployment with safer configuration",
+                str(rule_body))
+            
+            request = self.session.post(url=self.GRAPH_API_ENDPOINT,
+                                        json=rule_body)
+            if request.status_code == 201:
+                log("SUCCESS", "Created rule in MDE", str(request.json()))
+                log("WARNING",
+                    "This is a partial deployment, check the MDE GUI to see the available identifiers")
+                return int(request.json()["id"])
+            else:
+                os.environ["DEPLOYMENT_WARNING_RAISED"]
+                raise TideErrors.DetectionRuleCreationFailed
 
     def update_detection_rule(self, rule:DetectionRule, rule_id:int):
         

@@ -25,7 +25,7 @@ from Engines.modules.systems.defender_for_endpoint import (DetectionRule,
 
 class DefenderForEndpointDeploy(DeployMDR):
     
-    def deploy_mdr(self, data:TideModels.MDR, service:DefenderForEndpointService):
+    def deploy_mdr(self, data:TideModels.MDR, service:DefenderForEndpointService, tenant:str):
 
         def lower_first_character(string:str)->str:
             return string[0].lower() + string[1:]
@@ -143,23 +143,45 @@ class DefenderForEndpointDeploy(DeployMDR):
                             detectionAction=DetectionRule.DetectionAction(alertTemplate=alert_template,
                                                                             responseActions=response_actions))
 
-        rule_id = mdr_config.rule_id
-        
+        if mdr_config.rule_id:
+            rule_id = mdr_config.rule_id.get(tenant)
+            log("INFO",
+                f"Retrieved ID for tenant {tenant} in MDR",
+                str(rule_id),
+                "Will perform an update")
+        else:
+            log("INFO",
+                f"Could not retrieve ID for tenant {tenant} in MDR",
+                "Will create a new rule, and write back the ID to the file")
+
+            rule_id = None
+            
         if mdr_config.status == "REMOVED":
             if not rule_id:
                 log("FATAL",
                     "Cannot remove the rule as a rule_id could not be found in the file",
                     "You will need to manually check the target system to remove the rule")
             else:
+                log("ONGOING",
+                    f"Proceeding with deletion of rule against tenant {tenant}",
+                    str(rule_id))
+                
                 service.delete_detection_rule(rule_id)
                 file_path = DataTide.Configurations.Global.Paths.Tide.mdr / DataTide.Models.files[data.metadata.uuid]
                 with open(file_path, "r", encoding="utf-8") as mdr_file:
-                    content = mdr_file.read()
+                    content = mdr_file.readlines()
 
-                content = content.replace(f"defender_for_endpoint:\n    rule_id: {rule_id}", f"defender_for_endpoint:\n    #rule_id:")
-                
+                updated_content = list()
+
+                #Remove previous rule ID from file
+                for line in content:
+                    if line.strip() != f"rule_id::{tenant}: {rule_id}":
+                        updated_content.append(line)
+
                 with open(file_path, "w", encoding="utf-8") as mdr_file:
-                    mdr_file.write(content)
+                    log("SUCCESS",
+                    f"Removed ID in MDR File for tenant {tenant}")
+                    mdr_file.writelines(updated_content)
 
         else:
             if rule_id:
@@ -169,12 +191,23 @@ class DefenderForEndpointDeploy(DeployMDR):
                 rule_id = service.create_detection_rule(rule)
                 file_path = DataTide.Configurations.Global.Paths.Tide.mdr / DataTide.Models.files[data.metadata.uuid]
                 with open(file_path, "r", encoding="utf-8") as mdr_file:
-                    content = mdr_file.read()
+                    content = mdr_file.readlines()
                 
-                content = content.replace("defender_for_endpoint:\n    #rule_id:", f"defender_for_endpoint:\n    rule_id: {rule_id}")
+                updated_content = list()
+                for line in content:
+                    log("DEBUG", line)
+                    if line.strip() == 'defender_for_endpoint:':
+                        updated_content.append(line)
+                        updated_content.append(f"    rule_id::{tenant}: {rule_id}\n")
+                        log("DEBUG", "Appending line", str(rule_id))
+                    else:
+                        updated_content.append(line)
 
                 with open(file_path, "w", encoding="utf-8") as mdr_file:
-                    mdr_file.write(content)
+                    log("SUCCESS",
+                    f"Updated MDR File with new ID for tenant {tenant}",
+                    str(rule_id))
+                    mdr_file.writelines(updated_content)
 
     
     def deploy(self, mdr_deployment: Sequence[TideModels.MDR], deployment_plan:DeploymentStrategy):
@@ -189,7 +222,7 @@ class DefenderForEndpointDeploy(DeployMDR):
             service = DefenderForEndpointService(tenant_deployment.tenant)
 
             for mdr in tenant_deployment.rules:
-                self.deploy_mdr(data=mdr, service=service)
+                self.deploy_mdr(data=mdr, service=service, tenant=tenant_deployment.tenant.name)
 
             
 

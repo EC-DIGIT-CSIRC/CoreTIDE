@@ -237,10 +237,18 @@ class SystemLoader:
     def load_defender_for_endpoint(mdr_config:dict[str, Any])->TideModels.MDR.Configurations.DefenderForEndpoint:
     
         DefenderForEndpoint = TideModels.MDR.Configurations.DefenderForEndpoint
-        
+
         tenants:list[str] = mdr_config.pop("contributors", None)
         flags:list[str] = mdr_config.pop("flags", None)
         contributors:list[str] = mdr_config.pop("tenants", None)
+
+        rule_id_bundle = {}
+        for key in mdr_config.copy():
+            if key.startswith("rule_id::"):
+                tenant = key.split("rule_id::")[1]
+                rule_id_bundle[tenant] = mdr_config.pop(key)
+        rule_id = rule_id_bundle if rule_id_bundle else mdr_config.pop("rule_id", None)
+
 
         alert = DefenderForEndpoint.Alert(**mdr_config.pop("alert"))
         impacted_entities = DefenderForEndpoint.ImpactedEntities(**mdr_config.pop("impacted_entities"))
@@ -279,6 +287,7 @@ class SystemLoader:
                                                                         users=users)
 
         return DefenderForEndpoint(**mdr_config,
+                                    rule_id=rule_id,
                                     contributors=contributors,
                                     flags=flags,
                                     tenants=tenants,
@@ -292,7 +301,6 @@ class TideLoader:
 
     @staticmethod
     def load_mdr(mdr_data:dict)->TideModels.MDR:
-        
         
         metadata = TideDefinitionsModels.TideObjectMetadata(**mdr_data.pop("metadata"))
         response_config = mdr_data.pop("response", {})

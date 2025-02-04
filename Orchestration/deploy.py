@@ -101,3 +101,18 @@ for system in deployment_list:
             "Ensure there is an adequate plugin present in the Tide Instance",
         )
         raise (Exception("DEPLOYMENT ENGINE NOT FOUND"))
+
+if os.environ.get("DEPLOYMENT_ERROR_RAISED"):
+    log(
+        "FATAL",
+        "Some deployment scripts failed.",
+        "Review the error logs to discover the problem",
+    )
+    raise Exception("Deployment Failed")
+
+if os.environ.get("DEPLOYMENT_WARNING_RAISED"):
+    log("WARNING", "Passed deployment, but with some warning", 
+                "Review the warning logs to discover the problem")
+    sys.exit(19)
+else:
+    log("SUCCESS", "All content passed validation")

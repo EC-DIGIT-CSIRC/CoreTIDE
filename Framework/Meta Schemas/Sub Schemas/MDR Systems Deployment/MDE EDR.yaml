@@ -8,19 +8,17 @@ required:
   - alert
   - scope
 
-properties:
-
-  rule_id:
+patternProperties:
+  "rule_id::.+$":
     title: Internal Defender for Endpoint Rule ID
     type: integer
     description: |
-      IMPORTANT - If you uncommented this keyword, you MUST put back the 
-      pound sign (#) so the automation can correctly write the rule ID. 
-      Do not edit manually. 
+      IMPORTANT: This is used by the automation to correctly
+      Target the rule on MDE, which uses its own ID system. 
+      This key will appear as many tenant as this rule is deployed to.
+      Do not alter this field manually, or create new fields.
 
-      Used by automation to keep track of the ID generated automatically
-      by MDE backend.
-
+properties:
   schema:
     title: Schema identifier and version
     type: string

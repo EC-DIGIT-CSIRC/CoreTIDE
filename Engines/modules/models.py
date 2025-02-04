@@ -264,13 +264,12 @@ class TideModels:
                     users: Optional[Users] = None
 
                     
-                
                 schema: str
                 alert: Alert
                 query: str
                 impacted_entities: ImpactedEntities
                 scheduling: Literal["NRT", "1H", "3H", "12H", "24H"]
-                rule_id: Optional[int] = None
+                rule_id: Optional[Mapping[str, int]] = None
                 actions: Optional[ResponseActions] = None
                 scope: Optional[GroupScoping] = None
             

@@ -401,8 +401,6 @@ class TideDeployment:
         - If MANUAL, can only be targeted if defined in the MDR
         - If STAGING or PRODUCTION, can only be targeted if the current deployment plan alligns with it
         """
-        print(asdict(data))
-        print(system)
         tenants = self.system_configuration_resolver(system).tenants
         mdr_tenants = self.mdr_configuration_resolver(data, system).tenants
         target_tenants = list()
