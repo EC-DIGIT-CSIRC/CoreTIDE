@@ -74,3 +74,8 @@ class TideErrors(Exception):
         unforeseen errors. Operator mistake.
         """
         ...
+    class TideQueryValidationError:
+        """
+        Raised when the MDR query failed validation
+        """
+        ...

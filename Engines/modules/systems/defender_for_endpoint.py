@@ -175,7 +175,10 @@ class DefenderForEndpointService:
         self.DEBUG = DebugEnvironment.ENABLED
         self.DEPLOYER_IDENTIFIER = DataTide.Configurations.Systems.DefenderForEndpoint.platform.identifier
         self.OAUTH_TOKEN_ENDPOINT = "https://login.microsoftonline.com/{tenant_id}/oauth2/v2.0/token"
-        self.GRAPH_API_ENDPOINT = "https://graph.microsoft.com/beta/security/rules/detectionRules"
+        self.GRAPH_API_ENDPOINT = "https://graph.microsoft.com/beta/security"
+        self.DETECTION_RULES_ENDPOINT = self.GRAPH_API_ENDPOINT + "/rules/detectionRules"
+        self.HUNTING_QUERY_ENDPOINT = self.GRAPH_API_ENDPOINT + "/runHuntingQuery"
+
         self.tenant_config = tenant_config
 
         if tenant_config.setup.proxy:
@@ -241,7 +244,32 @@ class DefenderForEndpointService:
 
         return rule
 
-    
+    def validate_query(self, query:str)->bool:
+        """
+        Performs a query against the MDE tenant to validate if the query is able to run.
+        Timespan gets forced to one hour to avoid any performance hits. 
+        """
+        request = self.session.post(url=self.HUNTING_QUERY_ENDPOINT,
+                                    json={"Query" : query,
+                                          "Timespan": "P1H"})
+        
+        if request.status_code == 200:
+            log("SUCCESS", 
+                "Query was able to run on tenant", self.tenant_config.name)
+            return True
+        else:
+            if request.status_code == 403:
+                log("FATAL", 
+                    f"Missing permissions to run query against tenant {self.tenant_config.name} - Error Code {request.status_code}",
+                    str(request.json()),
+                    "Add the permissions mentionsed above to the service principal to fix this")
+                raise Exception
+
+            log("FATAL", 
+                f"Was not able to run query against tenant {self.tenant_config.name} - Error Code {request.status_code}",
+                str(request.json()))
+            return False
+
     def create_detection_rule(self, rule:DetectionRule)->int:
         
         # Replace odata_type to @odata.type ans re-dump into a JSON body
@@ -249,7 +277,7 @@ class DefenderForEndpointService:
         rule_body = rule_body.replace("odata_type", "@odata.type")
         rule_body = json.loads(rule_body)
         
-        request = self.session.post(url=self.GRAPH_API_ENDPOINT,
+        request = self.session.post(url=self.DETECTION_RULES_ENDPOINT,
                                     json=rule_body)
 
         if request.status_code == 201:

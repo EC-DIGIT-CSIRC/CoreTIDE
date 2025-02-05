@@ -250,7 +250,7 @@ properties:
             - MANUAL
             - STAGING
             - PRODUCTION
-
+            
         setup:
           title: Tenant Setup
           description: |

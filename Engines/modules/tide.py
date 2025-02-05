@@ -42,8 +42,9 @@ class HelperTide:
 
     @staticmethod
     def fetch_config_envvar(config_secrets: dict[str,str]) -> dict[str, Any]:
-        # Replace placeholder variables with environment
-        print("SECRETS IN ENVVAR REPLACE ", str(config_secrets))
+        """
+        Replace placeholder variables with environment
+        """
         #Allows to print all errors at once before raising exception
         missing_envvar_error = False
         
@@ -342,7 +343,6 @@ class TideLoader:
     @staticmethod
     def load_modifiers_config(modifiers_config:list[dict])->Sequence[SystemConfig.Modifiers] | list[Never]:
         
-        print("DEBUG", modifiers_config)
         if not modifiers_config:
             log("SKIP", "No modifiers configuration could be found")
             return []
@@ -379,13 +379,11 @@ class TideLoader:
             if "setup" not in tenant:
                 log("FATAL", f"Could not find a tenant setup configuration for platform {platform.name}",
                     "Ensure that the setup section is correctly entered in platform configuration TOML file")
-                print(str(tenant))
                 raise NotImplementedError("Missing Configuration Segment")
 
             match platform:
                 case DetectionSystems.DEFENDER_FOR_ENDPOINT:
                     setup_with_secrets = HelperTide.fetch_config_envvar(tenant.pop("setup"))
-                    print("SECRETS ", str(setup_with_secrets))
                     setup = TideConfigs.Systems.DefenderForEndpoint.Tenant.Setup(**setup_with_secrets)
 
                 case _:
