@@ -85,7 +85,41 @@ def fetch_config_parameter_list(dot_path:str)->list:
         return config_index[key]
     else:
         raise ValueError(f"Config path {dot_path} must be a valid path to a list parameter")
+
+def fetch_config_system_tenants_list(system:str)->list:
+    system_config_index = DataTide.Configurations.Index
+    system_config = system_config_index.get("systems", {}).get(system)
     
+    if not system_config:
+        log("FATAL",
+            f"Could not retrieve an available configuration for system {system}",
+            f"Indexed Configurations : {str(system_config_index.keys())}")
+        raise ValueError(f"Missing configuration for system {system}")
+    
+    tenants:list[dict] = system_config.get("tenants")
+    
+    if not tenants:
+        log("FATAL",
+            "Cannot retrieve a tenants section within the system configuration",
+            str(system_config))
+        raise ValueError(f"System Configuration for {system} does not contain a tenants section")
+    
+    tenants_list = list()
+    for tenant_config in tenants:
+        tenant_name = tenant_config.get("name")
+        if tenant_name:
+            log("INFO",
+                f"Discovered tenant definition {tenant_name}",
+                tenant_config.get("description", "No description"))
+            tenants_list.append(tenant_name)            
+        else:
+            log("FATAL",
+            "Cannot retrieve a tenant name in tenant definition",
+            str(tenant_config))
+            raise ValueError(f"Missing name field in tenant definition")
+
+    return tenants_list
+
 def stage_documentation(field: str, stages: str | list) -> str:
 
     vocab_stages = VOCAB_INDEX[field]["metadata"].get("stages")
@@ -472,12 +506,19 @@ def gen_json_schema(dictionary):
 
                 # Handles the case when a list of values has to be fetched from
                 # the configuration files.
-                if dict_foo[field].get("tide.config.parameter-list"):
-                    values_list = fetch_config_parameter_list(dict_foo[field]["tide.config.parameter-list"])
+                if config_fetch:=dict_foo[field].get("tide.config.parameter-list"):
+                    values_list = fetch_config_parameter_list(config_fetch)
                     dictionary[field]["items"] = {}
                     dictionary[field]["items"]["enum"] = values_list
                     dictionary[field]["items"]["uniqueItems"] = True
 
+                # Special handling to specifically get the available tenants
+                if system:=dict_foo[field].get("tide.config.system.tenants"):
+                    values_list = fetch_config_system_tenants_list(system)
+                    dictionary[field]["items"] = {}
+                    dictionary[field]["items"]["enum"] = values_list
+                    dictionary[field]["items"]["uniqueItems"] = True
+                
                 if dict_foo[field].get("tide.vocab"):
                     if type(dict_foo[field]["tide.vocab"]) is str:
                         query = dict_foo[field]["tide.vocab"]

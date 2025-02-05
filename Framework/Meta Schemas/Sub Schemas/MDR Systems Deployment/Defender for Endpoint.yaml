@@ -1,5 +1,4 @@
 required: 
-  #- schema #To be enabled at a later date. Must be part of the public release
   - schema
   - status
   - scheduling
@@ -42,11 +41,12 @@ properties:
       format: email
 
   tenants: 
-    title: Organizations
+    title: Target Tenants
     icon: 🏢
-    description: Override the default organizations and deploy to selected tenants only.
+    description: |
+      Override the default organizations and deploy to selected tenants only.
     type: array
-    tide.config.parameter-list: systems.defender_for_endpoint.platform.tenants
+    tide.config.system.tenants: defender_for_endpoint
 
   flags:
     title: Flags
@@ -148,12 +148,9 @@ properties:
       They will be used to generate incidents and automate tasks.
     type: object
     anyOf:
-      - required:
-          - device
-      - required:
-          - mailbox
-      - required:
-          - user
+      - required: [device]
+      - required: [mailbox]
+      - required: [user]
 
     properties:
 

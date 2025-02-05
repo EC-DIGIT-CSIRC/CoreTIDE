@@ -84,7 +84,6 @@ class SystemConfig:
         name: str
         subschema: str
         description: str
-        tenants: list[str]
         flags: list[str]
 
     @dataclass
@@ -153,7 +152,6 @@ class TideConfigs:
                 class Setup(SystemConfig.Tenant.Setup):
                     tenant_id: str
                     client_id: str
-                    secret_id: str
                     client_secret: str
 
                 setup:Setup

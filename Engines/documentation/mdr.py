@@ -175,7 +175,15 @@ def documentation(mdr):
         config_data = list()
         status_name = mdr_configs[s]["status"]
         status_name = f"{get_icon(status_name, 'status')} {status_name}"
-        system_name = SYSTEMS_CONFIG[s]["tide"]["name"] + f" <b>{status_name}</b>"
+        
+        # Allows to handle transition to MDRv4 new configurations
+        try:
+            system_name = SYSTEMS_CONFIG[s]["tide"]["name"]
+        except:
+            system_name = SYSTEMS_CONFIG[s]["platform"]["name"]
+
+        system_name += f" <b>{status_name}</b>"
+
         system_data = pd.json_normalize(mdr_configs[s], sep="|").to_dict(
             orient="records"
         )[0]
@@ -247,7 +255,7 @@ def documentation(mdr):
     query_data = dict()
     for s in mdr_configs:
         query = mdr_configs[s].get("query").strip()
-        expander = f"Expand to view {SYSTEMS_CONFIG[s]['tide']['name']} query"
+        expander = f"Expand to view {system_name} query"
         queries += QUERY_FOLD.format(expander, query)
 
     # Make metadata footer
