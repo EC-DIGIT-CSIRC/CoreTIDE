@@ -90,10 +90,10 @@ class CarbonBlackCloudDeploy(CarbonBlackCloudEngineInit, DeployMDR):
 
             config_data = data["configurations"][self.DEPLOYER_IDENTIFIER]
             uuid = data.get("uuid") or data["metadata"]["uuid"]
-            name = data["name"]
-            description = data["description"]
+            name = data["name"].strip()
+            description = data["description"].strip()
             status = config_data["status"]
-            query = config_data["query"]
+            query = config_data["query"].strip()
 
             # Check if case for removal or deployment, different procedures for each
             deployment = False
@@ -223,7 +223,7 @@ class CarbonBlackCloudDeploy(CarbonBlackCloudEngineInit, DeployMDR):
                     )
                     report_builder.add_ioc(ioc)
                     for tag in tags:
-                        report_builder.add_tag(tag)
+                        report_builder.add_tag(tag.strip())
                     report = report_builder.build()
                     report.save_watchlist()
                     watchlist.add_reports([report])  # type: ignore
