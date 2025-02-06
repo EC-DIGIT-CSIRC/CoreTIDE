@@ -251,7 +251,7 @@ class DefenderForEndpointService:
         """
         request = self.session.post(url=self.HUNTING_QUERY_ENDPOINT,
                                     json={"Query" : query,
-                                          "Timespan": "P1H"})
+                                          "Timespan": "PT1H"})
         
         if request.status_code == 200:
             log("SUCCESS", 
@@ -265,9 +265,13 @@ class DefenderForEndpointService:
                     "Add the permissions mentionsed above to the service principal to fix this")
                 raise Exception
 
+            error_message = request.json().get("error", {}).get("message") or request.json()
+            print(request.json())
+
             log("FATAL", 
-                f"Was not able to run query against tenant {self.tenant_config.name} - Error Code {request.status_code}",
-                str(request.json()))
+                f"Error Code {request.status_code} - {error_message}",
+                "The query could not run due to a syntax error. Confirm that it can run on the console and try again",
+                query)
             return False
 
     def create_detection_rule(self, rule:DetectionRule)->int:

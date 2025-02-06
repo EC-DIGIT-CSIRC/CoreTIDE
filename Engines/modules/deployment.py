@@ -567,7 +567,7 @@ class TideDeployment:
                         updated_config = unroll_dot_dict({modification:new_value})
                         log("ONGOING", f"Applying modification {modification} -> {str(new_value)}")
                         if updated_config:
-                            raw_mdr_config = self._deep_update(raw_mdr_config.copy(), updated_config)
+                            raw_mdr_config = self._deep_update(raw_mdr_config.copy(), updated_config) #type: ignore
 
         raw_data["configurations"].update({system_identifier: raw_mdr_config})
         log("INFO", "New recompiled modified deployment", str(raw_data))

@@ -91,8 +91,6 @@ class HelperTide:
                 "Check your CI settings to ensure these environment variables are properly injected")
             raise KeyError
 
-        print("SECRETS AFTER ENVVAR REPLACE ", str(config_secrets))
-
         return config_secrets
 
 
