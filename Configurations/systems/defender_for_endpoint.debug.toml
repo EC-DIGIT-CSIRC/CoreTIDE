@@ -1,0 +1,45 @@
+[platform]
+enabled = false 
+identifier = "defender_for_endpoint"
+name = "Microsoft Defender for Endpoint"
+subschema = "Defender for Endpoint"
+description = """Defender for Endpoint is a comprehensive, cloud-native endpoint
+security solution that delivers visibility and AI-powered cyberthreat protection
+to help stop cyberattacks across Windows, macOS, Linux, Android, iOS, and IoT devices.
+"""
+flags = ["Detection Rule", "Supporting", "Signal Risk Contributor"]
+device_groups = ["All Windows", "Mobile Workstations", "MacOS"]
+
+[[modifiers]]
+name = "Staging rule "
+description = "Qualified rules in prod tenant should not collect investigation package"
+[modifiers.conditions] #All conditions within the block are AND
+status = ["IMPROVEMENT", "STAGING"] # Conditions within the list are OR
+tenants = ["DEV"]
+[modifiers.modifications]
+actions = "NULL"
+#"function::prefix".name = "TEST"
+
+[[modifiers]]
+name = "Disabled Rule Modifier"
+description = "Made for simple testing"
+[modifiers.conditions] #All conditions within the block are AND
+status = ["DISABLED"] # Conditions within the list are OR
+flags = ["Detection Rule"]
+[modifiers.modifications]
+tenants = ["DEV"]
+scheduling = "24H"
+alert.title = "prefix::TESTING IGNORE "
+alert.severity = "Informational"
+actions = "NULL"
+
+[[tenants]]
+name = "DEV"
+description = "Development Environment"
+deployment = "ALWAYS"
+[tenants.setup]
+proxy = true
+ssl = false
+tenant_id = "$MDE_TENANT_ID"
+client_id = "$MDE_CLIENT_ID"
+client_secret = "$MDE_CLIENT_SECRET"

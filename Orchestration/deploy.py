@@ -7,7 +7,7 @@ import traceback
 
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
-from Engines.modules.deployment import enabled_systems, modified_mdr_files, make_deploy_plan, DeploymentPlans
+from Engines.modules.deployment import enabled_systems, modified_mdr_files, make_deploy_plan, DeploymentStrategy
 from Engines.modules.logs import log, ANSI, coretide_intro
 from Engines.modules.tide import DataTide, IndexTide
 from Engines.mutation.promotion import PromoteMDR
@@ -32,10 +32,10 @@ torrent = rf"""
 
 print(torrent)
 
-DEPLOYMENT_PLAN = DeploymentPlans.load_from_environment()
+DEPLOYMENT_PLAN = DeploymentStrategy.load_from_environment()
 
 # Status promotion, happening before the main deployment loop
-if DEPLOYMENT_PLAN is DeploymentPlans.PRODUCTION:
+if DEPLOYMENT_PLAN is DeploymentStrategy.PRODUCTION:
     pre_deployment = modified_mdr_files(DEPLOYMENT_PLAN)
     log("TITLE", "Pre-deployment Routine")
     PromoteMDR().promote(pre_deployment)
@@ -101,3 +101,18 @@ for system in deployment_list:
             "Ensure there is an adequate plugin present in the Tide Instance",
         )
         raise (Exception("DEPLOYMENT ENGINE NOT FOUND"))
+
+if os.environ.get("DEPLOYMENT_ERROR_RAISED"):
+    log(
+        "FATAL",
+        "Some deployment scripts failed.",
+        "Review the error logs to discover the problem",
+    )
+    raise Exception("Deployment Failed")
+
+if os.environ.get("DEPLOYMENT_WARNING_RAISED"):
+    log("WARNING", "Passed deployment, but with some warning", 
+                "Review the warning logs to discover the problem")
+    sys.exit(19)
+else:
+    log("SUCCESS", "All content passed validation")

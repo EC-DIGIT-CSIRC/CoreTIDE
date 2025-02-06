@@ -34,11 +34,9 @@ properties:
     title: Organizations
     icon: 🏢
     description: Override the default organizations the deployment will configure the reports onto.
-    tide.template.hide: True
     type: array
-    example: DATACENTER
-    items:
-      type: string
+    tide.template.hide: True
+    tide.config.parameter-list: systems.carbon_black_cloud.setup.organizations
 
   watchlist: 
     title: Watchlist

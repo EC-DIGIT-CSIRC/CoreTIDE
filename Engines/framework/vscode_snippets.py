@@ -90,9 +90,21 @@ def run():
 
         for entry in CONFIG_INDEX[recomp]:
             recomp_entry = CONFIG_INDEX[recomp][entry]
-            if recomp_entry["tide"]["enabled"] == True:
+            enabled = False
+            
+            try:
+                if recomp_entry["tide"]["enabled"] == True:
+                    enabled = True
+            except:
+                if recomp_entry["platform"]["enabled"] == True:
+                    enabled = True
 
-                subschema_name = recomp_entry["tide"]["name"]
+            if enabled:
+                try:
+                    subschema_name = recomp_entry["tide"]["name"]
+                except: 
+                    subschema_name = recomp_entry["platform"]["name"]
+
                 log("ONGOING", "Generating snippets for", subschema_name)
 
                 subchema_template_name = f"{subschema_name} Template.yaml"

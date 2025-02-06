@@ -3,61 +3,39 @@ import os
 import git
 import yaml
 import re
-from typing import Any
+from typing import MutableMapping, Sequence, overload, Literal
 from enum import Enum, auto
 from pathlib import Path
-from dataclasses import dataclass
+from dataclasses import asdict
+
 
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.modules.logs import log
-from Engines.modules.tide import DataTide
+from Engines.modules.tide import DataTide, HelperTide
 from Engines.modules.debug import DebugEnvironment
+from Engines.modules.errors import TideErrors
+from Engines.modules.tide import DataTide, DetectionSystems, TideLoader
+from Engines.modules.models import (TideConfigs,
+                                    TideDefinitionsModels,
+                                    TideModels,
+                                    SystemConfig,
+                                    DeploymentStrategy,
+                                    TenantDeployment,
+                                    TenantDeploymentModel) 
+from Engines.modules.framework import unroll_dot_dict
 
 from git.repo import Repo
+
+import pandas as pd
 
 SYSTEMS_CONFIGS_INDEX = DataTide.Configurations.Systems.Index
 PRODUCTION_STATUS = DataTide.Configurations.Deployment.status["production"]
 SAFE_STATUS = DataTide.Configurations.Deployment.status["safe"]
 
-@dataclass
-class DeploymentPlans(Enum):
-    STAGING = auto()
-    PRODUCTION = auto()
-    FULL = auto()
-
-    @staticmethod
-    def load_from_environment():
-        """
-        Read the DEPLOYMENT_PLAN environment variable and maps it to 
-        DeploymentPlans valid values. In case of an illegal value, 
-        or missing environment variable will raise an exception
-        """
-        SUPPORTED_PLANS = [plan.name for plan in DeploymentPlans]
-        DEPLOYMENT_PLAN = str(os.getenv("DEPLOYMENT_PLAN")) or None
-        if not DEPLOYMENT_PLAN:
-            log(
-                "FATAL",
-                "No deployment plan, ensure that the CI variable DEPLOYMENT_PLAN is set correctly",
-            )
-            raise Exception("NO DEPLOYMENT PLAN")
-
-        try:
-            DEPLOYMENT_PLAN = DeploymentPlans[DEPLOYMENT_PLAN]
-        except:
-
-                log(
-                    "FATAL",
-                    "The following deployment plan is not supported",
-                    DEPLOYMENT_PLAN,
-                    f"Supported plan : {SUPPORTED_PLANS}",
-                )
-                raise AttributeError("UNSUPPORTED DEPLOYMENT PLAN")
-
-        return DEPLOYMENT_PLAN
 
 def make_deploy_plan(
-    plan: DeploymentPlans,
+    plan: DeploymentStrategy,
     wide_scope = False
 ) -> dict[str, list[str]]:
     """
@@ -106,7 +84,7 @@ def make_deploy_plan(
                 if wide_scope:
                     deploy_mdr.setdefault(system, []).append(mdr_uuid)
                 else:
-                    if plan is DeploymentPlans.PRODUCTION:
+                    if plan is DeploymentStrategy.PRODUCTION:
                         if platform_status in PRODUCTION_STATUS:
                             deploy_mdr.setdefault(system, []).append(mdr_uuid)
                             log(
@@ -121,7 +99,7 @@ def make_deploy_plan(
                                 name,
                             )
 
-                    elif plan is DeploymentPlans.STAGING:
+                    elif plan is DeploymentStrategy.STAGING:
                         if (
                             platform_status not in PRODUCTION_STATUS
                             and platform_status not in SAFE_STATUS
@@ -148,48 +126,9 @@ def make_deploy_plan(
 
     return deploy_mdr
 
-def fetch_config_envvar(config_secrets: dict[str,str]) -> dict[str, Any]:
-    # Replace placeholder variables with environment
-
-    #Allows to print all errors at once before raising exception
-    missing_envvar_error = False
-    for sec in config_secrets.copy():
-        if not config_secrets[sec]:
-            log("SKIP", "Did not found an entry for", sec,
-                "If there are deployment issue, review if it is relevant to configure")
-            continue
-        if type(config_secrets[sec]) == str:
-            if config_secrets[sec].startswith("$"):
-                if config_secrets[sec].removeprefix("$") in os.environ:
-                    env_variable = str(config_secrets.pop(sec)).removeprefix("$")
-                    config_secrets[sec] = os.environ.get(env_variable, "")
-                    log("SUCCESS", "Fetched environment secret", env_variable)
-                else:
-                    if DebugEnvironment.ENABLED:
-                        log("SKIP", 
-                            "Could not find expected environment variable",
-                            config_secrets[sec],
-                            "Debug Mode identified, continuing - remember that this may break some deployments")
-                    else:
-                        log(
-                            "FATAL",
-                            "Could not find expected environment variable",
-                            config_secrets[sec],
-                            "Review configuration file and execution environment",
-                        )
-                        missing_envvar_error = True
-
-    if missing_envvar_error:
-        log("FATAL",
-            "Some environment variable specified in configuration files were not found",
-            "Review the previous errors to find which ones were missing",
-            "Check your CI settings to ensure these environment variables are properly injected")
-        raise KeyError
-
-    return config_secrets
 
 
-def modified_mdr_files(plan: DeploymentPlans)->list[Path]:
+def modified_mdr_files(plan: DeploymentStrategy)->list[Path]:
 
     MDR_PATH = Path(DataTide.Configurations.Global.Paths.Tide.mdr)
     MDR_PATH_RAW = DataTide.Configurations.Global.Paths.Tide._raw["mdr"]
@@ -209,7 +148,7 @@ def modified_mdr_files(plan: DeploymentPlans)->list[Path]:
     return mdr_files
 
 
-def diff_calculation(plan: DeploymentPlans) -> list:
+def diff_calculation(plan: DeploymentStrategy) -> list:
     """
     Calculates the files in scope of deployment based on the execution context.
     
@@ -230,9 +169,9 @@ def diff_calculation(plan: DeploymentPlans) -> list:
 
     TARGET = os.getenv("CI_COMMIT_SHA")
 
-    if plan is DeploymentPlans.PRODUCTION:
+    if plan is DeploymentStrategy.PRODUCTION:
         SOURCE = os.getenv("CI_COMMIT_BEFORE_SHA")
-    elif plan is DeploymentPlans.STAGING:
+    elif plan is DeploymentStrategy.STAGING:
         SOURCE = os.getenv("CI_MERGE_REQUEST_DIFF_BASE_SHA")
         if os.getenv("CI_MERGE_REQUEST_EVENT_TYPE") == "merged_result":
             log("INFO", "Currently running a diff calculation for merge results")
@@ -319,8 +258,12 @@ def enabled_lookup_systems() -> list[str]:
 def enabled_systems() -> list[str]:
     enabled_systems = list()
     for system in SYSTEMS_CONFIGS_INDEX:
-        if SYSTEMS_CONFIGS_INDEX[system]["tide"].get("enabled") is True:
-            enabled_systems.append(system)
+        try:
+            if SYSTEMS_CONFIGS_INDEX[system]["tide"].get("enabled") is True:
+                enabled_systems.append(system)
+        except:
+            if SYSTEMS_CONFIGS_INDEX[system]["platform"].get("enabled") is True:
+                enabled_systems.append(system)
 
     return enabled_systems
 
@@ -338,22 +281,13 @@ class Proxy:
         else:
             log("ONGOING", "Setting environment proxy according to CI variables")
             PROXY_CONFIG = DataTide.Configurations.Deployment.proxy
-            PROXY_CONFIG = fetch_config_envvar(PROXY_CONFIG)
+            PROXY_CONFIG = HelperTide.fetch_config_envvar(PROXY_CONFIG)
             proxy_user = PROXY_CONFIG["proxy_user"]
             proxy_pass = PROXY_CONFIG["proxy_password"]
             proxy_host = PROXY_CONFIG["proxy_host"]
             proxy_port = PROXY_CONFIG["proxy_port"]
             if proxy_host and proxy_port and proxy_user and proxy_pass:
-                proxy = (
-                    "http://"
-                    + proxy_user
-                    + ":"
-                    + proxy_pass
-                    + "@"
-                    + proxy_host
-                    + ":"
-                    + str(proxy_port)
-                )
+                proxy = (f"http://{proxy_user}:{proxy_pass}@{proxy_host}:{proxy_port}")
                 os.environ["HTTP_PROXY"] = proxy
                 os.environ["HTTPS_PROXY"] = proxy
                 log("SUCCESS", "Proxy environment setup successful")
@@ -362,6 +296,7 @@ class Proxy:
                     "FAILURE",
                     "Could not retrieve all proxy information",
                     "Control that all proxy infos are entered in CI variables",
+                    "Expects proxy_user, proxy_password, proxy_host and proxy_port"
                 )
 
     @staticmethod
@@ -369,3 +304,315 @@ class Proxy:
         os.environ["HTTP_PROXY"] = ""
         os.environ["HTTPS_PROXY"] = ""
         log("INFO", "Resetting proxy setup")
+
+
+class TideDeployment:
+
+    def __init__(self, deployment, system:DetectionSystems, strategy):
+        
+        match system:
+            case DetectionSystems.SPLUNK:
+                self.rule_deployment = self.deployment_resolver(deployment, DetectionSystems.SPLUNK, strategy)
+            case DetectionSystems.SENTINEL:
+                self.rule_deployment = self.deployment_resolver(deployment, DetectionSystems.SENTINEL, strategy)
+            case DetectionSystems.CARBON_BLACK_CLOUD:
+                self.rule_deployment = self.deployment_resolver(deployment, DetectionSystems.CARBON_BLACK_CLOUD, strategy)
+            case DetectionSystems.DEFENDER_FOR_ENDPOINT:
+                self.rule_deployment = self.deployment_resolver(deployment, DetectionSystems.DEFENDER_FOR_ENDPOINT, strategy)
+
+
+    @overload
+    def system_configuration_resolver(self, system:Literal[DetectionSystems.SPLUNK])->TideConfigs.Systems.Splunk:
+        ...
+    @overload
+    def system_configuration_resolver(self, system:Literal[DetectionSystems.SENTINEL])->TideConfigs.Systems.Sentinel:
+        ...
+    @overload
+    def system_configuration_resolver(self, system:Literal[DetectionSystems.CARBON_BLACK_CLOUD])->TideConfigs.Systems.CarbonBlackCloud:
+        ...
+    @overload
+    def system_configuration_resolver(self, system:Literal[DetectionSystems.DEFENDER_FOR_ENDPOINT])->TideConfigs.Systems.DefenderForEndpoint:
+        ...
+    @overload
+    def system_configuration_resolver(self, system:DetectionSystems)->SystemConfig:
+        ...
+    def system_configuration_resolver(self, system:DetectionSystems): #type:ignore
+        match system:
+            #case DetectionSystems.SPLUNK:
+            #    return DataTide.Configurations.Systems.Splunk
+            #case DetectionSystems.SENTINEL:
+            #    return DataTide.Configurations.Systems.Sentinel
+            #case DetectionSystems.CARBON_BLACK_CLOUD:
+            #    return DataTide.Configurations.Systems.CarbonBlackCloud
+            case DetectionSystems.DEFENDER_FOR_ENDPOINT:
+                log("DEBUG", str(DataTide.Configurations.Systems.DefenderForEndpoint.raw))
+                log("DEBUG", str(DataTide.Configurations.Systems.DefenderForEndpoint.modifiers))
+                return DataTide.Configurations.Systems.DefenderForEndpoint
+            #case _:
+            #    raise NotImplemented
+        
+
+    @overload
+    def mdr_configuration_resolver(self, data:TideModels.MDR, system:Literal[DetectionSystems.SPLUNK])->TideModels.MDR.Configurations.Splunk:
+        ...
+    @overload
+    def mdr_configuration_resolver(self, data:TideModels.MDR, system:Literal[DetectionSystems.SENTINEL])->TideModels.MDR.Configurations.Sentinel:
+        ...
+    @overload
+    def mdr_configuration_resolver(self, data:TideModels.MDR, system:Literal[DetectionSystems.CARBON_BLACK_CLOUD])->TideModels.MDR.Configurations.CarbonBlackCloud:
+        ...
+    @overload
+    def mdr_configuration_resolver(self, data:TideModels.MDR, system:Literal[DetectionSystems.DEFENDER_FOR_ENDPOINT])->TideModels.MDR.Configurations.DefenderForEndpoint:
+        ...
+    @overload
+    def mdr_configuration_resolver(self, data:TideModels.MDR, system:DetectionSystems)->TideDefinitionsModels.SystemConfigurationModel:
+        ...
+    def mdr_configuration_resolver(self, data:TideModels.MDR, system:DetectionSystems)->TideDefinitionsModels.SystemConfigurationModel:
+
+        match system:
+            case DetectionSystems.DEFENDER_FOR_ENDPOINT:
+                mdr_config = data.configurations.defender_for_endpoint
+            case _:
+                raise NotImplemented
+
+        if not mdr_config:
+            raise NotImplemented
+
+        return mdr_config    
+
+    @overload
+    def tenants_resolver(self, data:TideModels.MDR, system:Literal[DetectionSystems.SPLUNK], deployment_strategy:DeploymentStrategy)->Sequence[SystemConfig.Tenant]:
+        ...
+    @overload
+    def tenants_resolver(self, data:TideModels.MDR, system:Literal[DetectionSystems.SENTINEL], deployment_strategy:DeploymentStrategy)->Sequence[SystemConfig.Tenant]:
+        ...
+    @overload
+    def tenants_resolver(self, data:TideModels.MDR, system:Literal[DetectionSystems.CARBON_BLACK_CLOUD], deployment_strategy:DeploymentStrategy)->Sequence[SystemConfig.Tenant]:
+        ...
+    @overload
+    def tenants_resolver(self, data:TideModels.MDR, system:Literal[DetectionSystems.DEFENDER_FOR_ENDPOINT], deployment_strategy:DeploymentStrategy)->Sequence[TideConfigs.Systems.DefenderForEndpoint.Tenant]:
+        ...
+    @overload
+    def tenants_resolver(self, data:TideModels.MDR, system:DetectionSystems, deployment_strategy:DeploymentStrategy)->Sequence[SystemConfig.Tenant]:
+        ...
+    def tenants_resolver(self, data:TideModels.MDR, system:DetectionSystems, deployment_strategy:DeploymentStrategy)->Sequence[SystemConfig.Tenant]:
+        """
+        Returns a list of all the tenants configurations, if they are allowed to be targeted.
+        - If ALWAYS, will be targeted on every deployment
+        - If MANUAL, can only be targeted if defined in the MDR
+        - If STAGING or PRODUCTION, can only be targeted if the current deployment plan alligns with it
+        """
+        tenants = self.system_configuration_resolver(system).tenants
+        mdr_tenants = self.mdr_configuration_resolver(data, system).tenants
+        target_tenants = list()
+
+        for tenant in tenants:
+            
+            
+            # If Deployment Plan is ALWAYS, we always target the tenant
+            if tenant.deployment is DeploymentStrategy.ALWAYS:
+                target_tenants.append(tenant)
+                continue
+            
+            # If MDR defines target tenants, we can skip the tenant if
+            # it's not defined in the MDR
+            if mdr_tenants:
+                if tenant.name in mdr_tenants:
+                    log("SKIP",
+                        f"Skipping tenant {tenant.name} as is not defined by MDR tenant list",
+                        str(mdr_tenants))
+                    continue
+                else:
+                    if tenant.deployment is DeploymentStrategy.MANUAL:
+                        target_tenants.append(tenant)
+                        log("SUCCESS",
+                            f"Adding tenant {tenant.name} to the tenant deployment list")
+                    elif tenant.deployment is deployment_strategy:
+                        target_tenants.append(tenant)
+                        log("SUCCESS",
+                            f"Adding tenant {tenant.name} to the tenant deployment list")
+                    else:
+                        log("SKIP",
+                            f"Skipping tenant {tenant.name} as is not compatible with current deployment plan",
+                            f"Tenant deployment plan : {tenant.deployment}, current deployment plan : {deployment_strategy.name}")
+                                
+            else:
+                if tenant.deployment is DeploymentStrategy.MANUAL:
+                    log("SKIP",
+                        f"Skipping tenant {tenant.name} as can only be assigned within the MDR defined tenant",
+                        "You can define custom target tenants under the tenants keyword")
+                    continue
+                
+                elif tenant.deployment is deployment_strategy:
+                    target_tenants.append(tenant)
+                    log("SUCCESS",
+                        f"Adding tenant {tenant.name} to the tenant deployment list")
+                else:
+                    log("SKIP",
+                        f"Skipping tenant {tenant.name} as is not compatible with current deployment plan",
+                        f"Tenant deployment plan : {tenant.deployment}, current deployment plan : {deployment_strategy.name}")
+
+        return target_tenants
+
+
+    def _deep_update(self, base_dictionary:MutableMapping, updating_dictionary:MutableMapping)->MutableMapping:
+        """
+        Performs a deep nested mapping, so can combine dictionaries
+        without overriding them
+        """
+        for key, value in updating_dictionary.items():
+            if isinstance(value, MutableMapping):
+                base_dictionary[key] = self._deep_update(base_dictionary.get(key, {}), value)
+            else:
+                base_dictionary[key] = value
+        return base_dictionary
+
+
+    def defaults_resolver(self, data:TideModels.MDR, system:DetectionSystems) -> TideModels.MDR:
+        """
+        Computes a new MDR Configuration based on defaults, if they are present
+        in the System Configuration File, by first adding all default to a base
+        configuration, then re-adding the user-defined MDR configuration on top
+        """
+
+        
+        defaults = self.system_configuration_resolver(system).defaults
+        mdr_config = self.mdr_configuration_resolver(data, system)
+        new_config = dict()
+        
+        if not defaults:
+            return data
+        
+        raw_config = asdict(mdr_config)
+        
+        # We first apply all the default onto a base configuration
+        # Then we apply the user defined MDR on top. This ensures that
+        # the defaults do not override anything already defined.
+        for default in defaults:
+            self._deep_update(new_config, {default: defaults[default]})
+
+        self._deep_update(new_config, raw_config)
+        
+        try:
+            return TideLoader.load_mdr(raw_config)
+        except:
+            log("FATAL",
+                "Combining the defaults with the MDR Data has created an incompatible schema. Review your default configuration.",
+                str(raw_config))
+            raise TideErrors.MDRDefaultsConfigurationDataError
+
+    def modifiers_resolver(self, data:TideModels.MDR, target_tenant:str, system:DetectionSystems) -> TideModels.MDR:
+        """
+        Dynamically modifies MDR data based on 
+        """
+
+        system_configuration = self.system_configuration_resolver(system)
+        modifiers = system_configuration.modifiers
+        mdr_config = self.mdr_configuration_resolver(data, system)
+        system_identifier = system_configuration.platform.identifier
+        
+        if not mdr_config:
+            raise NotImplemented
+
+        raw_data = asdict(data)
+        raw_mdr_config = asdict(mdr_config)
+        
+        log("ONGOING",
+            "Checking modifiers for system",
+            str(system),
+            str(modifiers))
+        
+        if modifiers:
+            log("INFO", "Found modifiers in configuration for system", str(system))
+            for mod in modifiers:
+                log("ONGOING",
+                    f"Evaluating modifier {str(mod.name)} {str(mod.description)}",
+                    str(mod.conditions))
+                
+                match = False
+                
+                if mod.conditions.status:
+                    if mod.conditions.status == mdr_config.status:
+                        match = True
+                if mod.conditions.tenants:
+                    if target_tenant in mod.conditions.tenants:
+                        match = True
+                    else:
+                        match = False
+                if mod.conditions.flags and mdr_config.flags:
+                    if [tag for tag in mdr_config.flags if tag in mod.conditions.flags]:
+                        match = True
+                    else:
+                        match = False
+
+                if match is True:
+                    log("INFO", "Condition Matching", str(mod.name or ""), str(mod.description or ""))
+                    flatten_modifications = pd.json_normalize(mod.modifications).to_dict(orient="records")[0] #type: ignore
+                    for modification in flatten_modifications:
+                        new_value = flatten_modifications[modification]
+                        new_value = None if new_value in ["NONE", "NULL"] else new_value                     
+                        if new_value:
+                            if "::" in new_value:
+                                raw_mdr_config_flatten = pd.json_normalize(raw_mdr_config).to_dict(orient="records")[0] #type: ignore
+                                operator = new_value.split("::")[0]
+                                value = new_value.split("::")[1]
+                                log("DEBUG", f"Found mod {modification} with operator {operator} with value {value}")
+                                log("DEBUG", str(raw_mdr_config_flatten))
+                                if modification in raw_mdr_config_flatten:
+                                    log("DEBUG", str(raw_mdr_config_flatten[modification]))
+                                    if operator == "prefix":
+                                        new_value = value + (raw_mdr_config_flatten[modification] or "")
+                                    elif operator == "suffix":
+                                        new_value = (raw_mdr_config_flatten[modification] or "") + value
+                                    log("DEBUG", "Generated new value", new_value)
+                                else:
+                                    new_value = value
+
+                        updated_config = unroll_dot_dict({modification:new_value})
+                        log("ONGOING", f"Applying modification {modification} -> {str(new_value)}")
+                        if updated_config:
+                            raw_mdr_config = self._deep_update(raw_mdr_config.copy(), updated_config) #type: ignore
+
+        raw_data["configurations"].update({system_identifier: raw_mdr_config})
+        log("INFO", "New recompiled modified deployment", str(raw_data))
+        
+        return TideLoader.load_mdr(raw_data)
+
+    @overload
+    def deployment_resolver(self, mdr_deployment:Sequence[TideModels.MDR], system:Literal[DetectionSystems.SPLUNK], deployment_strategy:DeploymentStrategy)->Sequence[TenantDeployment.Splunk]:
+        ...
+    @overload
+    def deployment_resolver(self, mdr_deployment:Sequence[TideModels.MDR], system:Literal[DetectionSystems.SENTINEL], deployment_strategy:DeploymentStrategy)->Sequence[TenantDeployment.Sentinel]:
+        ...
+    @overload
+    def deployment_resolver(self, mdr_deployment:Sequence[TideModels.MDR], system:Literal[DetectionSystems.CARBON_BLACK_CLOUD], deployment_strategy:DeploymentStrategy)->Sequence[TenantDeployment.CarbonBlackCloud]:
+        ...
+    @overload
+    def deployment_resolver(self, mdr_deployment:Sequence[TideModels.MDR], system:Literal[DetectionSystems.DEFENDER_FOR_ENDPOINT], deployment_strategy:DeploymentStrategy)->Sequence[TenantDeployment.DefenderForEndpoint]:
+        ...
+    def deployment_resolver(self, mdr_deployment:Sequence[TideModels.MDR], system:DetectionSystems, deployment_strategy:DeploymentStrategy)->Sequence[TenantDeploymentModel]:
+
+        deployment = list()
+        tenants_data = dict()
+        tenants_mapping = dict()
+        
+        for mdr in mdr_deployment:
+            mdr = self.defaults_resolver(data=mdr,
+                                        system=system)
+            if type(mdr) is str:
+                mdr = DataTide.Models.MDR[mdr]
+            
+            tenants = self.tenants_resolver(mdr, system, deployment_strategy)
+            
+            for tenant in tenants:
+                tenants_data[tenant.name] = tenant
+                tenants_mapping.setdefault(tenant.name, []).append(self.modifiers_resolver(data=mdr, 
+                                                                                           target_tenant=tenant.name,
+                                                                                           system=system))
+
+        for tenant in tenants_mapping:
+            deployment.append(TenantDeploymentModel(tenant=tenants_data[tenant],
+                                                    rules=tenants_mapping[tenant]))
+
+        return deployment
+    

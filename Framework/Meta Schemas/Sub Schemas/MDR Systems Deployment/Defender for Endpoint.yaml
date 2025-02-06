@@ -1,0 +1,462 @@
+required: 
+  - schema
+  - status
+  - scheduling
+  - impacted_entities
+  - query
+  - alert
+  - scope
+
+patternProperties:
+  "rule_id::.+$":
+    title: Internal Defender for Endpoint Rule ID
+    type: integer
+    description: |
+      IMPORTANT: This is used by the automation to correctly
+      Target the rule on MDE, which uses its own ID system. 
+      This key will appear as many tenant as this rule is deployed to.
+      Do not alter this field manually, or create new fields.
+
+properties:
+  schema:
+    title: Schema identifier and version
+    type: string
+    description: Identifier of the schema at its current version 
+    const: defender_for_endpoint::2.0
+
+  status: 
+    title: Status of the use-case
+    type: string
+    description: Define the status according to use case development life cycle process
+    tide.vocab: true
+    example: STAGING
+    default: DEVELOPMENT
+
+  contributors:
+    title: Development Contributors
+    type: array
+    description: Individuals who supported creating, enriching or tuning the detection. 
+    items:
+      type: string
+      format: email
+
+  tenants: 
+    title: Target Tenants
+    icon: 🏢
+    description: |
+      Override the default organizations and deploy to selected tenants only.
+    type: array
+    tide.config.system.tenants: defender_for_endpoint
+
+  flags:
+    title: Flags
+    icon: 🚩
+    description: Flags allow to customize the rule behaviour using the modifiers framework
+    type: array
+    tide.config.parameter-list: systems.defender_for_endpoint.platform.flags
+
+  scheduling:
+    title: Rule Schedule
+    description: |
+      Select the frequency by which the query will run and trigger alerts. If you set it to run less frequently, it will have a longer lookback duration.
+
+      Queries that run every 24 hours check the past 30 days.
+      Queries that run every 12 hours check the past 48 hours.
+      Queries that run every 3 hours check the past 12 hours.
+      Queries that run every hour check the past 4 hours.
+      Queries that run continuously check events as they are ingested into Microsoft Defender XDR.
+
+      NRT is supported for specific tables and columns. Please see the documentation for more details.
+      https://learn.microsoft.com/en-us/defender-xdr/custom-detection-rules?view=o365-worldwide#continuous-nrt-frequency
+    tide.template.spacer: true
+    tide.mdr.parameter: schedule
+    type: string
+    enum:
+      - NRT
+      - 1H
+      - 3H
+      - 12H
+      - 24H
+
+
+  alert:
+    title: Alert Configuration
+    description: |
+      Parameters used to configure the alert generated when the detection rule is triggered
+    type: object
+    required:
+      - category
+    properties:
+
+      title:
+        title: Alert Title
+        tide.mdr.parameter: detectionAction.alertTemplate.title
+        description: |
+          Name of the alert triggered by the custom detection rule. By
+          default, the name of the MDR will be used, but this parameter allows
+          to override it. 
+
+      category:
+        title: Threat Category
+        description: |
+          Threat Category assigned to the alert triggered by the detection rule.
+        example: Malware
+        tide.mdr.parameter: detectionAction.alertTemplate.category
+        type: string
+        enum:
+          - Command And Control
+          - Lateral Movement
+          - Malware
+          - Persistence
+          - Privilege Escalation
+          - Ransomware
+          - Suspicious Activity
+          - Unwanted Software
+          - Exploit
+          - Initial Access
+          - Execution
+          - Exfiltration
+          - Collection
+          - Credential Access
+          - Defense Evasion
+          - Discovery
+          - Impact 
+
+      severity:
+        title: Alert Severity
+        description: |
+          Severity of the generated alert. By default, the alert_severity of the MDR is mapped
+          to the severity, this parameter allows to override this behaviour. 
+        example: Medium
+        tide.mdr.parameter: detectionAction.alertTemplate.severity
+        type: string
+        enum:
+          - Informational
+          - Low
+          - Medium
+          - High 
+      
+      recommendation:
+        title: Alert Response Recommendation
+        description: |
+          Recommended actions to respond to the threat related to the alert
+          triggered by the custom detection rule.
+        tide.mdr.parameter: detectionAction.alertTemplate.recommendation
+        type: string
+        tide.template.multiline : True
+
+
+  impacted_entities:
+    title: Impacted Entities
+    description: |
+      Identify affected assets in your query results.
+      They will be used to generate incidents and automate tasks.
+    type: object
+    tide.mdr.parameter: detectionAction.alertTemplate.impactedAssets
+    anyOf:
+      - required: [device]
+      - required: [mailbox]
+      - required: [user]
+
+    properties:
+
+      device:
+        title: Device
+        description: |
+          Represents a device that was identified in an alert triggered by a custom detection rule.
+          Make sure that the column exists in the results of the query search.
+        type: string
+        enum:
+          - DeviceId
+          - DeviceName
+          - RemoteDeviceName
+          - TargetDeviceName
+          - DestinationDeviceName
+
+      mailbox:
+        title: Mailbox
+        description: |
+          Represents a mailbox that was identified in an alert triggered by a custom detection rule.
+          Make sure that the column exists in the results of the query search.
+        type: string
+        enum: 
+          - AccountUpn
+          - FileOwnerUpn
+          - InitiatingProcessAccountUpn
+          - LastModifyingAccountUpn
+          - TargetAccountUpn
+          - SenderFromAddress
+          - SenderDisplayName
+          - RecipientEmailAddress
+          - SenderMailFromAddress   
+
+      user:
+        title: User
+        description: |
+          Represents a user that was identified in an alert triggered by a custom detection rule.
+          Make sure that the column exists in the results of the query search.
+        type: string
+        enum: 
+          - AccountObjectId
+          - AccountSid
+          - AccountUpn
+          - AccountName
+          - AccountDomain
+          - AccountId
+          - RequestAccountSid
+          - RequestAccountName
+          - RequestAccountDomain
+          - RecipientObjectId
+          - ProcessAccountObjectId
+          - InitiatingAccountSid
+          - InitiatingProcessAccountUpn
+          - InitiatingAccountName
+          - InitiatingAccountDomain
+          - ServicePrincipalId
+          - ServicePrincipalName
+          - TargetAccountUpn
+
+  actions:
+    title: Response Actions
+    description: |
+      Describes the actions that will be taken after a detection
+      is made by a custom detection rule.
+    type: object
+    tide.mdr.parameter: detectionAction.responseActions
+    properties:
+
+      devices:
+        title: Device Response Actions
+        description: |
+          Choose applicable actions to take on entities found by your query.
+        type: object
+        properties:
+
+          isolate_device:
+            title: Device Isolation
+            description: |
+              Describes a response action that uses Microsoft Defender to apply
+              full network isolation to a device. This response action prevents
+              the device from connecting to any application or service.
+            tide.mdr.parameter: detectionAction.responseActions[stopAndQuarantineFileResponseAction]
+            type: string
+            enum:
+              - Full
+              - Selective
+
+          collect_investigation_package:
+            title: Collection Investigation Package
+            description: |
+              Describes a response action that collects details for an investigation package.
+            tide.mdr.parameter: detectionAction.responseActions[collectInvestigationPackageResponseAction]
+            type: boolean
+            default: false
+
+          run_antivirus_scan:
+            title: Run Antivirus Scan
+            description: |
+              Describes a response action that performs a full Microsoft Defender
+              Antivirus scan on the device.
+            tide.mdr.parameter: detectionAction.responseActions[runAntivirusScanResponseAction]   
+            type: boolean
+            default: false
+
+          initiate_investigation:
+            title: Initiate Investigation
+            description: |
+              Describes a response action that starts an automated investigation of a device.
+            type: boolean
+            tide.mdr.parameter: detectionAction.responseActions[runAntivirusScanResponseAction]   
+            default: false
+
+          restrict_app_execution:
+            title: Restrict Application Execution
+            description: |
+              Describes a response action that sets restrictions on device to allow only files
+              that are signed with a Microsoft-issued certificate to run.
+            type: boolean
+            tide.mdr.parameter: detectionAction.responseActions[restrictAppExecutionResponseAction]
+            default: false
+
+      files:
+        title: Files Response Actions
+        description: |
+          Choose applicable actions to take on entities found by your query.
+        type: object
+        properties:
+
+          allow_block:
+            title: Allow/Block Files
+            description: |
+              Describes a response action that allows or blocks a file to run on devices controlled by Microsoft Defender for Endpoint.
+            type: object
+            tide.template.spacer: false
+            tide.mdr.parameter: detectionAction.responseActions[allow/blockFileResponseAction]
+            required: 
+              - action
+              - identifier
+              - groups
+            properties:
+
+              action:
+                title: Response Action Selection
+                description: |
+                  You may only select the allow or block action within a response 
+                  action for a detection rule
+                type: string
+                enum:
+                  - Allow
+                  - Block
+
+              identifier:
+                title: File Column Selection
+                description: |
+                  Column Identifier that will be used for the file allow/block 
+                  response action. The column must exist in the results of the
+                  query search result
+                type: string
+                enum:
+                  - SHA1
+                  - SHA256
+                  - InitiatingProcessSHA1
+                  - InitiatingProcessSHA256
+
+              groups:
+                title: Device Groups
+                description: |
+                  Device groups to which the actions set in the custom detection rule are applied
+                tide.template.spacer: false
+                type: object
+                required:
+                  - selection
+                if: 
+                  properties:
+                    selection: 
+                      enum: [All]
+                else:
+                  required: [selection, device_groups]
+                properties:
+                  
+                  selection: 
+                    title: Device Group Selection
+                    description: |
+                      Select to which device group this response action will be applied to.
+                      If set to All - will apply to all endpoints, if set to Specific
+                      will require to select the relevant device groups
+                    type: string 
+                    enum:
+                      - All
+                      - Specific
+
+                  device_groups: 
+                    title: Selected Device groups
+                    description: |
+                      Device groups to which this response action will be applied to
+                    type: array
+                    tide.mdr.parameter: detectionAction.responseActions[allow/blockFileResponseAction].deviceGroupNames
+                    tide.config.parameter-list: systems.defender_for_endpoint.platform.device_groups
+
+          quarantine_file:
+            title: Stop and Quarantine File
+            description: |
+              Response action that moves the file from its current location to quarantine.
+            type: string
+            enum:
+              - SHA1
+              - InitiatingProcessSHA1
+
+      users:
+        title: User Response Actions
+        description: |
+          Choose applicable actions to take on entities found by your query.
+        type: object
+        properties:
+
+          mark_as_compromised:
+            title: Mark User as Compromised
+            description: |
+              Describes a response action that sets the user's risk level to "high"
+              in Microsoft Entra ID. This response action sets the user's risk level
+              to high in Microsoft Entra ID, which triggers the identity protection
+              policies for a high risk level.
+            type: string
+            enum:
+              - AccountObjectId
+              - InitiatingProcessAccountObjectId
+              - ServicePrincipalId
+              - RecipientObjectId
+
+          disable_user:
+            title: Disable User
+            description: |
+              Describes a response action that temporarily prevents a user from
+              logging in to the on premises network.
+            type: string
+            enum:
+              - AccountSid
+              - InitiatingProcessAccountSid
+              - RequestAccountSid
+              - OnPremSid
+
+          force_password_reset:
+            title: Force User Password Reset
+            description: |
+              Describes a response action that prompts the user to change their password the next time they sign in.
+            type: string
+            enum: 
+              - AccountSid
+              - InitiatingProcessAccountSid
+              - RequestAccountSid
+              - OnPremSid
+
+
+
+  scope:
+    title: Alert Scope
+    description: |
+      Scope of devices to which the alert will be triggered for
+    type: object
+    tide.mdr.parameter: detectionAction.organizationalScope
+    required:
+      - selection
+    
+    if: 
+      properties:
+        selection: 
+          enum: [All]
+    else:
+      required: [selection, device_groups]
+
+    properties:
+
+      selection: 
+        title: Device Group Selection
+        description: |
+          Select to which device group this response action will be applied to.
+          If set to All - will apply to all endpoints, if set to Specific
+          will require to select the relevant device groups
+        type: string 
+        tide.mdr.parameter: detectionAction.organizationalScope.scopeType
+        default: All
+        enum:
+          - All
+          - Specific
+
+      device_groups: 
+        title: Selected Device groups
+        description: |
+          Device groups to which this response action will be applied to
+        type: array
+        tide.mdr.parameter: detectionAction.organizationalScope.scopeNames
+        tide.config.parameter-list: systems.defender_for_endpoint.platform.device_groups
+
+  query: 
+    title: Defender For Endpoint Detection Rule
+    type: string
+    tide.template.spacer: true
+    tide.mdr.parameter: queryCondition.queryText
+    tide.template.multiline : True
+    description: KQL Query
+    example: |
+      DeviceFileEvents
+      | where (ActionType == "FileCreated" and FileName endswith ".zip" and (FileOriginUrl != "" or FileOriginReferrerUrl != ""))

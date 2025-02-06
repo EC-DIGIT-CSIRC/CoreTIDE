@@ -181,18 +181,27 @@ def indexer(write_index=False) -> dict:
 
         for data in recomp_data:
             obj_counter += 1
-            sub_name = recomp_data[data]["tide"]["name"]
-            subschema_name = recomp_data[data]["tide"]["subschema"]
+            try:
+                sub_name = recomp_data[data]["tide"]["name"]
+                subschema_name = recomp_data[data]["tide"]["subschema"]
+            except:
+                sub_name = recomp_data[data]["platform"]["name"]
+                subschema_name = recomp_data[data]["platform"]["subschema"]
+
 
             sub_body = yaml.safe_load(
                 open(subchemas_path / (subschema_name + ".yaml"), encoding="utf-8")
             )
             subschemas_index[recomp][data] = sub_body
-
-            template_body = open(
-                sub_templates_path / (sub_name + " Template.yaml"), encoding="utf-8"
-            ).read()
-            template_index[recomp][data] = template_body
+            
+            try:
+                template_body = open(
+                    sub_templates_path / (sub_name + " Template.yaml"), encoding="utf-8"
+                ).read()
+                template_index[recomp][data] = template_body
+            except:
+                log("FATAL", f"Could not find template {subschema_name} at location {subchemas_path}",
+                    "This will be skipped as it is expected when creating new subschemas")
 
     index["templates"] = template_index
     index["subschemas"] = subschemas_index
@@ -202,6 +211,7 @@ def indexer(write_index=False) -> dict:
     print("📊 Indexing Models...")
 
     models_index = dict()
+    files_index = dict()
 
     #TODO Backward compatibility measure. To remove.
     patch = Tide2Patching()
@@ -225,10 +235,12 @@ def indexer(write_index=False) -> dict:
                             log("FATAL", "Missing identifier from model in file", model)
                         else:
                             model_cat_index[identifier] = model_body
+                            files_index[identifier] = model
             models_index[meta_name] = model_cat_index
 
     index["models"] = models_index
-
+    index["files"] = files_index
+    
     # Tide Indexes retrieval (injected into )
     log("INFO", "Retrieving all Tide Indexes built on the Tide Instance",
         "Injected onto vocabulary index to be retrieved in generation jobs")

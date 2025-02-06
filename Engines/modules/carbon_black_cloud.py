@@ -2,13 +2,13 @@ import os
 import sys 
 import git
 from abc import ABC
-from importlib import import_module
+
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.modules.logs import log
 from Engines.modules.debug import DebugEnvironment
-from Engines.modules.tide import DataTide
-from Engines.modules.deployment import fetch_config_envvar, Proxy
+from Engines.modules.tide import DataTide, HelperTide
+from Engines.modules.deployment import Proxy
 
 
 class CarbonBlackCloudEngineInit(ABC):
@@ -24,7 +24,7 @@ class CarbonBlackCloudEngineInit(ABC):
 
         CBC_CONFIG = DataTide.Configurations.Systems.CarbonBlackCloud
 
-        CBC_SETUP = fetch_config_envvar(CBC_CONFIG.setup)
+        CBC_SETUP = HelperTide.fetch_config_envvar(CBC_CONFIG.setup)
         self.DEFAULT_WATCHLIST = CBC_SETUP["watchlist"]
         self.CBC_URL = CBC_SETUP["url"]
         self.SSL_ENABLED = CBC_SETUP["ssl"]
@@ -41,7 +41,7 @@ class CarbonBlackCloudEngineInit(ABC):
         #Allows to print all errors for all tenants at once and raise Exception later
         cbc_secrets_error_flag = False 
         for org in CBC_CONFIG.secrets:
-            tenant_secrets = fetch_config_envvar(CBC_CONFIG.secrets[org])
+            tenant_secrets = HelperTide.fetch_config_envvar(CBC_CONFIG.secrets[org])
             if "org_key" not in tenant_secrets:
                 log(
                     "FATAL",

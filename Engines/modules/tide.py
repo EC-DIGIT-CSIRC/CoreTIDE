@@ -3,19 +3,97 @@ import git
 import sys
 from pathlib import Path
 import json
-from typing import Literal, Dict, Tuple
-from enum import Enum, auto
+from typing import Literal, Dict, Mapping, Tuple, Never, overload, Any, Sequence, Mapping, Union
 from functools import cache
+from abc import ABC
+from importlib import import_module
+from copy import deepcopy
 
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
 from Engines.indexing.indexer import indexer
 from Engines.modules.logs import log
+from Engines.modules.models import (DetectionSystems,
+                                    TideModels,
+                                    TideDefinitionsModels,
+                                    TideConfigs,
+                                    SystemConfig)
 from Engines.modules.patching import Tide2Patching
 
 ROOT = Path(str(git.Repo(".", search_parent_directories=True).working_dir))
+
+
+# Configuration Models. Used to facilitate type hinting
+class HelperTide:
+    @staticmethod
+    def is_debug()->bool:
+        """
+        Provides an interface to discover whether the current execution
+        context is considered to be in a debugging scenario.
+        """
+        if (
+            os.environ.get("DEBUG") == True
+            or os.environ.get("TERM_PROGRAM") == "vscode"
+        ):
+            return True
+        else:
+            return False
+
+    @staticmethod
+    def fetch_config_envvar(config_secrets: dict[str,str]) -> dict[str, Any]:
+        """
+        Replace placeholder variables with environment
+        """
+        #Allows to print all errors at once before raising exception
+        missing_envvar_error = False
+        
+        if HelperTide.is_debug():
+            try:
+                import_module("Engines.modules.local_secrets")
+            except:
+                print("[FAILURE]",
+                    "Could not find local python file at `Engines.modules.local_secrets` to set secret environment variables",
+                    "Parts of this module may not work properly",
+                    "Refer to the relevant TOML conguration file to find which variables may be necessary")
+
+
+        for sec in config_secrets.copy():
+            if not config_secrets[sec]:
+                log("SKIP", "Did not found an entry for", sec,
+                    "If there are deployment issue, review if it is relevant to configure")
+                continue
+            if type(config_secrets[sec]) == str:
+                if config_secrets[sec].startswith("$"):
+                    if config_secrets[sec].removeprefix("$") in os.environ:
+                        env_variable = str(config_secrets.pop(sec)).removeprefix("$")
+                        config_secrets[sec] = os.environ.get(env_variable, "")
+                        log("SUCCESS", "Fetched environment secret", env_variable)
+                    else:
+                        if HelperTide.is_debug():
+                            log("SKIP", 
+                                "Could not find expected environment variable",
+                                config_secrets[sec],
+                                "Debug Mode identified, continuing - remember that this may break some deployments")
+                        else:
+                            log(
+                                "FATAL",
+                                "Could not find expected environment variable",
+                                config_secrets[sec],
+                                "Review configuration file and execution environment",
+                            )
+                            missing_envvar_error = True
+
+        if missing_envvar_error:
+            log("FATAL",
+                "Some environment variable specified in configuration files were not found",
+                "Review the previous errors to find which ones were missing",
+                "Check your CI settings to ensure these environment variables are properly injected")
+            raise KeyError
+
+        return config_secrets
+
 
 class IndexTide:
     """
@@ -151,20 +229,167 @@ class IndexTide:
         if tier == "tide":
             return IndexTide.load()["paths"]["tide"]
 
-    @staticmethod
-    def is_debug()->bool:
-        """
-        Provides an interface to discover whether the current execution
-        context is considered to be in a debugging scenario.
-        """
-        if (
-            os.environ.get("DEBUG") == True
-            or os.environ.get("TERM_PROGRAM") == "vscode"
-        ):
-            return True
-        else:
-            return False
+                
 
+class SystemLoader:
+
+    @staticmethod
+    def load_defender_for_endpoint(mdr_config:dict[str, Any])->TideModels.MDR.Configurations.DefenderForEndpoint:
+    
+        DefenderForEndpoint = TideModels.MDR.Configurations.DefenderForEndpoint
+
+        tenants:list[str] = mdr_config.pop("contributors", None)
+        flags:list[str] = mdr_config.pop("flags", None)
+        contributors:list[str] = mdr_config.pop("tenants", None)
+
+        rule_id_bundle = {}
+        for key in mdr_config.copy():
+            if key.startswith("rule_id::"):
+                tenant = key.split("rule_id::")[1]
+                rule_id_bundle[tenant] = mdr_config.pop(key)
+        rule_id = rule_id_bundle if rule_id_bundle else mdr_config.pop("rule_id", None)
+
+
+        alert = DefenderForEndpoint.Alert(**mdr_config.pop("alert"))
+        impacted_entities = DefenderForEndpoint.ImpactedEntities(**mdr_config.pop("impacted_entities"))
+        group_scoping = DefenderForEndpoint.GroupScoping(**mdr_config.pop("scope"))
+
+        actions:dict = mdr_config.pop("actions", None)
+        response_actions = None 
+        if mdr_config.get("actions"):
+            devices = None
+            files = None
+            users = None
+
+            if actions.get("devices"):
+                devices = DefenderForEndpoint.ResponseActions.Devices(**actions.pop("devices"))
+            if actions.get("files"):
+                FileActions = DefenderForEndpoint.ResponseActions.Files
+                allow_block_action = None
+                if actions["files"].get("allow_block"):
+                    allow_block = actions["files"].pop("allow_block", None)
+                    device_groups = FileActions.AllowBlockAction.GroupScoping(**allow_block.pop("groups"))
+                    allow_block_action = FileActions.AllowBlockAction(**allow_block,
+                                                                        groups=device_groups)                    
+
+                quarantine_file = actions["files"].pop("quarantine_files", None)
+                files = DefenderForEndpoint.ResponseActions.Files(allow_block=allow_block_action,
+                                                                        quarantine_file=quarantine_file)
+
+            if actions.get("users"):
+                users = DefenderForEndpoint.ResponseActions.Users(**actions.pop("users"))
+
+
+            if devices or files or users:
+                response_actions = DefenderForEndpoint.ResponseActions(devices=devices,
+                                                                        files=files,
+                                                                        users=users)
+
+        return DefenderForEndpoint(**mdr_config,
+                                    rule_id=rule_id,
+                                    contributors=contributors,
+                                    flags=flags,
+                                    tenants=tenants,
+                                    alert=alert,
+                                    actions=response_actions,
+                                    impacted_entities=impacted_entities,
+                                    scope=group_scoping)
+
+
+class TideLoader:
+
+    @staticmethod
+    def load_mdr(mdr:dict)->TideModels.MDR:
+        mdr = deepcopy(mdr)
+        metadata = TideDefinitionsModels.TideObjectMetadata(**mdr.pop("metadata"))
+        response_config = mdr.pop("response", {})
+        if response_config:
+            response = TideModels.MDR.Response(**response_config)
+        references = TideDefinitionsModels.TideObjectReferences(**mdr.pop("references", {}))
+
+        configurations = TideModels.MDR.Configurations()
+        system_configurations:dict[str,Any] = mdr.pop("configurations")
+        
+        if system_configurations.get("defender_for_endpoint"):
+            configurations.defender_for_endpoint = SystemLoader.load_defender_for_endpoint(system_configurations.pop("defender_for_endpoint"))
+        return TideModels.MDR(**mdr,
+                                metadata=metadata,
+                                response=response,
+                                references=references,
+                                configurations=configurations)
+
+
+    @overload
+    @staticmethod
+    def load_platform_config(platform_config:dict, system:Literal[DetectionSystems.DEFENDER_FOR_ENDPOINT])->TideConfigs.Systems.DefenderForEndpoint.Platform: # type: ignore
+        ...
+    @staticmethod
+    def load_platform_config(platform_config:dict, system:DetectionSystems):
+        if not platform_config:
+            log("FATAL", f"Could not find any platform configuration for platform f{system.name}",
+            "Ensure that the platform configuration section is present")
+            raise NotImplementedError("Missing Configuration Segment")
+
+        match system:
+
+            case DetectionSystems.DEFENDER_FOR_ENDPOINT:
+                return TideConfigs.Systems.DefenderForEndpoint.Platform(**platform_config)
+
+            case _:
+                return SystemConfig.Platform(**platform_config)
+    
+    @staticmethod
+    def load_modifiers_config(modifiers_config:list[dict])->Sequence[SystemConfig.Modifiers] | list[Never]:
+        
+        if not modifiers_config:
+            log("SKIP", "No modifiers configuration could be found")
+            return []
+        
+        modifiers = []
+        
+        for modifier in modifiers_config:
+            log("DEBUG", "Current Modifier Evaluated", str(modifier))
+            if ("conditions" not in modifier) or ("modifications" not in modifier):
+                log("FATAL", "Could not load the modifier configuration, does not contain 'conditions' or 'modifications key'",
+                    str(modifier))
+                raise Exception
+
+            name = modifier.get("name")
+            description = modifier.get("description")
+            conditions = SystemConfig.Modifiers.Conditions(**modifier["conditions"])
+            modifications:dict = modifier["modifications"]
+            
+            modifiers.append(SystemConfig.Modifiers(name=name,
+                                                    description=description,
+                                                    conditions=conditions,
+                                                    modifications=modifications))
+        
+        return modifiers
+
+    @staticmethod
+    def load_tenants_config(tenants_config:Sequence[dict], platform:DetectionSystems):
+        if not tenants_config:
+            log("FATAL", f"Could not find any tenant information for platform f{platform.name}",
+                "Ensure that at least one tenant is present in the platform configuration TOML file")
+            raise NotImplementedError("Missing Configuration Segment")
+        tenants = []
+        for tenant in tenants_config:
+            if "setup" not in tenant:
+                log("FATAL", f"Could not find a tenant setup configuration for platform {platform.name}",
+                    "Ensure that the setup section is correctly entered in platform configuration TOML file")
+                raise NotImplementedError("Missing Configuration Segment")
+
+            match platform:
+                case DetectionSystems.DEFENDER_FOR_ENDPOINT:
+                    setup_with_secrets = HelperTide.fetch_config_envvar(tenant.pop("setup"))
+                    setup = TideConfigs.Systems.DefenderForEndpoint.Tenant.Setup(**setup_with_secrets)
+
+                case _:
+                    raise NotImplementedError(f"Platform {platform.name} is not recognized")
+
+            tenants.append(SystemConfig.Tenant(**tenant, setup=setup))
+
+        return tenants
 
 class DataTide:
     """Unified programmatic interface to access all data in the
@@ -197,13 +422,16 @@ class DataTide:
         """Cyber Detection Models Data Index"""
         mdr = dict(Index["mdr"])
         """Managed Detection Rules Data Index"""
+        # We need to do a deepcopy to ensure that loading steps aren't modifying the original data
+        MDR = {uuid:TideLoader.load_mdr(deepcopy(data)) for (uuid, data) in dict(Index.copy()["mdr"]).items()} 
+        """Model Mapped Managed Detection Rules Data Index"""
         bdr = dict(Index["bdr"])
         """Business Detection Rules Data Index"""
         chaining = IndexTide.compute_chains(tvm)
         """Index of all chaining relationships"""
         FlatIndex =  tvm | cdm | mdr | bdr
         """Flat Key Value pair structure of all UUIDs in the index"""
-
+        files = dict(IndexTide.load()["files"])
     @dataclass(frozen=True)
     class Vocabularies:
         """TIDE Schema Interface.
@@ -280,7 +508,7 @@ class DataTide:
     @dataclass(frozen=True)
     class Configurations:
         Index = dict(IndexTide.load()["configurations"])
-        DEBUG = IndexTide.is_debug()
+        DEBUG = HelperTide.is_debug()
         """Discovers whether the current execution context is considered
         to be a debugging one"""
         
@@ -376,6 +604,17 @@ class DataTide:
                 setup = dict(Index["setup"])
                 secrets = dict(Index["secrets"])
                 validation = dict(Index["validation"])
+
+            @dataclass
+            class DefenderForEndpoint(TideConfigs.Systems.DefenderForEndpoint):
+                raw = dict(
+                    IndexTide.load()["configurations"]["systems"]["defender_for_endpoint"]
+                )
+                platform = TideLoader.load_platform_config(dict(raw["platform"]), DetectionSystems.DEFENDER_FOR_ENDPOINT)
+                modifiers = TideLoader.load_modifiers_config(raw["modifiers"])
+                tenants = TideLoader.load_tenants_config(raw["tenants"], DetectionSystems.DEFENDER_FOR_ENDPOINT)
+                defaults = dict(raw.get("defaults", {}))
+
 
         @dataclass(frozen=True)
         class Documentation:
