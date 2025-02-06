@@ -258,8 +258,12 @@ def enabled_lookup_systems() -> list[str]:
 def enabled_systems() -> list[str]:
     enabled_systems = list()
     for system in SYSTEMS_CONFIGS_INDEX:
-        if SYSTEMS_CONFIGS_INDEX[system]["tide"].get("enabled") is True:
-            enabled_systems.append(system)
+        try:
+            if SYSTEMS_CONFIGS_INDEX[system]["tide"].get("enabled") is True:
+                enabled_systems.append(system)
+        except:
+            if SYSTEMS_CONFIGS_INDEX[system]["platform"].get("enabled") is True:
+                enabled_systems.append(system)
 
     return enabled_systems
 

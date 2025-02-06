@@ -100,8 +100,7 @@ def documentation(mdr):
             frontmatter = f"---\ntitle: {name}\n---"
         name = ""    
 
-    # TODO Backwards compatible with OpenTIDE 1.0, to deprecate at some point
-    uuid_data = mdr.get("uuid") or mdr["metadata"]["uuid"]
+    uuid_data = mdr["metadata"]["uuid"]
     description = mdr.get("description", "").replace("\n", "\n> ")
 
     techniques = techniques_resolver(uuid_data)
@@ -170,6 +169,9 @@ def documentation(mdr):
 
     # Add enriched configuration data
     configurations = str()
+    
+    # Prepare queries doc
+    queries = str()
 
     for s in mdr_configs:
         config_data = list()
@@ -182,12 +184,17 @@ def documentation(mdr):
         except:
             system_name = SYSTEMS_CONFIG[s]["platform"]["name"]
 
+        print("SYSTEM NAME ", system_name)
         system_name += f" <b>{status_name}</b>"
 
         system_data = pd.json_normalize(mdr_configs[s], sep="|").to_dict(
             orient="records"
         )[0]
-        system_data.pop("query")
+        
+        
+        query = system_data.pop("query").strip()
+        expander = f"Expand to view {system_name} query"
+        queries += QUERY_FOLD.format(expander, query)
 
         for key in system_data.copy():  # Avoids dict mutation errors
             buffer = dict()
@@ -208,12 +215,21 @@ def documentation(mdr):
                             retrieve="tide.mdr.parameter",
                         )
             
+            param_vocab = get_value_metaschema(
+                            cleaned_key,
+                            metaschema=SYSTEMS_SUBSCHEMAS[s],
+                            retrieve="tide.vocab",
+                        )
+
             param_name = f"`{param_name}`" if param_name else ""
             
             data = system_data[key]
+        
 
             # If vocab entry, will fetch data to enrich
-            if cleaned_key in VOCAB_INDEX:
+            if param_vocab:
+                vocabulary = cleaned_key if param_vocab is True else param_vocab
+
                 if cleaned_key == "status":
                     enriched_value = status_name
                 else:
@@ -221,13 +237,15 @@ def documentation(mdr):
                         uuid_data, cleaned_key, with_icon=True
                     )
                 data = (
-                    f"**{enriched_value}** : {get_vocab_description(cleaned_key, data)}"
+                    f"**{enriched_value}** : {get_vocab_description(vocabulary, data)}"
                 )
             else:
                 if type(data) is str:
                     data = f"`{data}`"
                 if type(data) is list:
                     data = ", ".join([f"`{d}`" for d in data])
+                if type(data) is bool:
+                    data = f"`{str(data)}`"
                     
             buffer["Parameter"] = key_name
             buffer["System Config"] = param_name
@@ -235,7 +253,7 @@ def documentation(mdr):
             buffer["Config"] = str(data).replace("$", r"\$").replace("\n", " ")
 
             config_data.append(buffer)
-
+        
         table = pd.DataFrame(config_data).to_markdown(index=False)
 
         if s not in enabled_systems():
@@ -249,14 +267,6 @@ def documentation(mdr):
         fold = FOLD.format(system_name, table)
 
         configurations += fold
-
-    # Add Query Folds
-    queries = str()
-    query_data = dict()
-    for s in mdr_configs:
-        query = mdr_configs[s].get("query").strip()
-        expander = f"Expand to view {system_name} query"
-        queries += QUERY_FOLD.format(expander, query)
 
     # Make metadata footer
     mdr_metadata = mdr.get("metadata") or mdr["meta"]
@@ -302,8 +312,7 @@ def run():
         # Make a file name based on MDR data
         mdr_data = MODELS_INDEX["mdr"][mdr_uuid]
         mdr_name = mdr_data.get("name")
-        mdr_uuid = mdr_data.get("metadata").get("uuid")
-        
+        print(mdr_data)
         log("ONGOING",
             "Generating MDR Documentation",
             mdr_name,

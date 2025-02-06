@@ -7,6 +7,7 @@ from typing import Literal, Dict, Mapping, Tuple, Never, overload, Any, Sequence
 from functools import cache
 from abc import ABC
 from importlib import import_module
+from copy import deepcopy
 
 from dataclasses import dataclass, asdict
 
@@ -298,21 +299,20 @@ class SystemLoader:
 class TideLoader:
 
     @staticmethod
-    def load_mdr(mdr_data:dict)->TideModels.MDR:
-        
-        metadata = TideDefinitionsModels.TideObjectMetadata(**mdr_data.pop("metadata"))
-        response_config = mdr_data.pop("response", {})
+    def load_mdr(mdr:dict)->TideModels.MDR:
+        mdr = deepcopy(mdr)
+        metadata = TideDefinitionsModels.TideObjectMetadata(**mdr.pop("metadata"))
+        response_config = mdr.pop("response", {})
         if response_config:
             response = TideModels.MDR.Response(**response_config)
-        references = TideDefinitionsModels.TideObjectReferences(**mdr_data.pop("references", {}))
+        references = TideDefinitionsModels.TideObjectReferences(**mdr.pop("references", {}))
 
         configurations = TideModels.MDR.Configurations()
-        system_configurations:dict[str,Any] = mdr_data.pop("configurations")
+        system_configurations:dict[str,Any] = mdr.pop("configurations")
         
         if system_configurations.get("defender_for_endpoint"):
             configurations.defender_for_endpoint = SystemLoader.load_defender_for_endpoint(system_configurations.pop("defender_for_endpoint"))
-
-        return TideModels.MDR(**mdr_data,
+        return TideModels.MDR(**mdr,
                                 metadata=metadata,
                                 response=response,
                                 references=references,
@@ -422,7 +422,8 @@ class DataTide:
         """Cyber Detection Models Data Index"""
         mdr = dict(Index["mdr"])
         """Managed Detection Rules Data Index"""
-        MDR = {uuid:TideLoader.load_mdr(data) for (uuid, data) in dict(Index["mdr"]).items()}
+        # We need to do a deepcopy to ensure that loading steps aren't modifying the original data
+        MDR = {uuid:TideLoader.load_mdr(deepcopy(data)) for (uuid, data) in dict(Index.copy()["mdr"]).items()} 
         """Model Mapped Managed Detection Rules Data Index"""
         bdr = dict(Index["bdr"])
         """Business Detection Rules Data Index"""

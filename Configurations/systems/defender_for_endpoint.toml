@@ -29,3 +29,6 @@ ssl = true
 tenant_id = "$MDE_TENANT_ID"
 client_id = "$MDE_CLIENT_ID"
 client_secret = "$MDE_CLIENT_SECRET"
+
+#[defaults]
+#any_parameter.even_nested = "Default Value"
