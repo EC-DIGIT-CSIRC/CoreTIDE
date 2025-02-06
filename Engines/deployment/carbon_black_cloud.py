@@ -91,7 +91,7 @@ class CarbonBlackCloudDeploy(CarbonBlackCloudEngineInit, DeployMDR):
             config_data = data["configurations"][self.DEPLOYER_IDENTIFIER]
             uuid = data.get("uuid") or data["metadata"]["uuid"]
             name = data["name"].strip()
-            description = data["description"].strip()
+            description = data["description"].replace("\n", " ")
             status = config_data["status"]
             query = config_data["query"].strip()
 
