@@ -9,7 +9,7 @@ from pathlib import Path
 
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
-from Engines.modules.deployment import enabled_systems, enabled_lookup_systems, diff_calculation, DeploymentPlans
+from Engines.modules.deployment import enabled_systems, enabled_lookup_systems, diff_calculation, DeploymentStrategy
 from Engines.modules.logs import log, ANSI, coretide_intro
 from Engines.modules.tide import DataTide
 from Engines.modules.plugins import DeployTide
@@ -47,9 +47,9 @@ REPO_DIR = os.getenv("CI_PROJECT_DIR") or "./"
 JOB_NAME = os.getenv("CI_JOB_NAME")
 
 # We always assume a production deployment for lookups by default
-DEPLOYMENT_PLAN = DeploymentPlans.load_from_environment()
+DEPLOYMENT_PLAN = DeploymentStrategy.load_from_environment()
 
-def lookup_deployment_plan(plan: DeploymentPlans) -> dict:
+def lookup_deployment_plan(plan: DeploymentStrategy) -> dict:
 
     lookup_paths = list()
     deploy_lookups = dict()
@@ -70,7 +70,7 @@ def lookup_deployment_plan(plan: DeploymentPlans) -> dict:
         lookups_path_regex = r"Lookups\/[^\/]+\/[^\/]+\.csv$"
         lookup_paths = [
             lookup
-            for lookup in diff_calculation(DeploymentPlans.PRODUCTION)
+            for lookup in diff_calculation(DeploymentStrategy.PRODUCTION)
             if re.match(lookups_path_regex, lookup)
         ]
 

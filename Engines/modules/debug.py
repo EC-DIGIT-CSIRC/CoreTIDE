@@ -1,12 +1,11 @@
 import os
 import sys
 from dataclasses import dataclass
-from importlib import import_module
 
 import git 
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
-from Engines.modules.tide import DataTide
+from Engines.modules.tide import DataTide, HelperTide
 
 @dataclass
 class DebugEnvironment:
@@ -15,17 +14,7 @@ class DebugEnvironment:
     debugging to facilitate local development
     """
     ENABLED = False
-    if (os.environ.get("DEBUG") == "True"
-        or os.environ.get("TERM_PROGRAM") == "vscode"):
-        print("[INFO] DEBUG Mode is activated")
-        try:
-            import_module("Engines.modules.local_secrets")
-        except:
-            print("[FAILURE]",
-                "Could not find local python file at `Engines.modules.local_secrets` to set secret environment variables",
-                "Parts of this module may not work properly",
-                "Refer to the relevant TOML conguration file to find which variables may be necessary")
-
+    if HelperTide().is_debug():
         ENABLED = True
         os.environ["TIDE_DEBUG_ENABLED"] = "True"
     MDR_DEPLOYMENT_TEST_UUIDS = list(DataTide.Configurations.Deployment.debug["mdr_test_uuids"])

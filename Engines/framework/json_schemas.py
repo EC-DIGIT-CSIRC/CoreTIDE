@@ -70,6 +70,55 @@ FOLDABLE = """
 </details>
 """.strip()
 
+def fetch_config_parameter_list(dot_path:str)->list:
+    config_index = DataTide.Configurations.Index
+    config_path = dot_path.split(".")
+    key = config_path[0]
+    while key != config_path[-1]:
+        if key in config_index:
+            config_index = config_index[key]
+            key = config_path[config_path.index(key) + 1]
+        else:
+            raise ValueError(f"Key : {key} could not be found in path {dot_path}")
+    
+    if type(config_index[key]) is list:
+        return config_index[key]
+    else:
+        raise ValueError(f"Config path {dot_path} must be a valid path to a list parameter")
+
+def fetch_config_system_tenants_list(system:str)->list:
+    system_config_index = DataTide.Configurations.Index
+    system_config = system_config_index.get("systems", {}).get(system)
+    
+    if not system_config:
+        log("FATAL",
+            f"Could not retrieve an available configuration for system {system}",
+            f"Indexed Configurations : {str(system_config_index.keys())}")
+        raise ValueError(f"Missing configuration for system {system}")
+    
+    tenants:list[dict] = system_config.get("tenants")
+    
+    if not tenants:
+        log("FATAL",
+            "Cannot retrieve a tenants section within the system configuration",
+            str(system_config))
+        raise ValueError(f"System Configuration for {system} does not contain a tenants section")
+    
+    tenants_list = list()
+    for tenant_config in tenants:
+        tenant_name = tenant_config.get("name")
+        if tenant_name:
+            log("INFO",
+                f"Discovered tenant definition {tenant_name}",
+                tenant_config.get("description", "No description"))
+            tenants_list.append(tenant_name)            
+        else:
+            log("FATAL",
+            "Cannot retrieve a tenant name in tenant definition",
+            str(tenant_config))
+            raise ValueError(f"Missing name field in tenant definition")
+
+    return tenants_list
 
 def stage_documentation(field: str, stages: str | list) -> str:
 
@@ -370,19 +419,24 @@ def recomposition_handler(entry_point):
     # Generate a list of pivots
     for entry in recompositions:
         data = recompositions[entry]
-        if data["tide"]["enabled"] == True:
+        enabled = False
 
+        if data.get("tide"):
+            config_keyword = "tide"
+        else:
+            config_keyword = "platform"
+
+        if data[config_keyword]["enabled"] == True:
             # recomp_entry = dict()
             recomp_identifier = entry
             recomposition[recomp_identifier] = dict()
-            recomposition[recomp_identifier]["title"] = data["tide"]["name"]
-            recomposition[recomp_identifier]["description"] = data["tide"][
+            recomposition[recomp_identifier]["title"] = data[config_keyword]["name"]
+            recomposition[recomp_identifier]["description"] = data[config_keyword][
                 "description"
             ]
             recomposition[recomp_identifier]["type"] = "object"
 
-            recomp_source = data["tide"]["subschema"] + ".yaml"
-
+            recomp_source = data[config_keyword]["subschema"] + ".yaml"
             recomp_source_path = SUBSCHEMAS_PATH / subschema_folder / recomp_source
             recomp_data = yaml.safe_load(open(recomp_source_path, encoding="utf-8"))
             recomposition[recomp_identifier].update(recomp_data)
@@ -459,6 +513,21 @@ def gen_json_schema(dictionary):
                     temp = recomposition_handler(dict_foo[field]["recomposition"])
                     dictionary[field]["properties"] = temp
 
+                # Handles the case when a list of values has to be fetched from
+                # the configuration files.
+                if config_fetch:=dict_foo[field].get("tide.config.parameter-list"):
+                    values_list = fetch_config_parameter_list(config_fetch)
+                    dictionary[field]["items"] = {}
+                    dictionary[field]["items"]["enum"] = values_list
+                    dictionary[field]["items"]["uniqueItems"] = True
+
+                # Special handling to specifically get the available tenants
+                if system:=dict_foo[field].get("tide.config.system.tenants"):
+                    values_list = fetch_config_system_tenants_list(system)
+                    dictionary[field]["items"] = {}
+                    dictionary[field]["items"]["enum"] = values_list
+                    dictionary[field]["items"]["uniqueItems"] = True
+                
                 if dict_foo[field].get("tide.vocab"):
                     if type(dict_foo[field]["tide.vocab"]) is str:
                         query = dict_foo[field]["tide.vocab"]

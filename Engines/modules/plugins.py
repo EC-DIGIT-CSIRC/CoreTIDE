@@ -9,7 +9,6 @@ sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 from Engines.modules.tide import DataTide
 from Engines.modules.logs import log
 
-
 class PluginTide(ABC):
     pass
 
@@ -68,15 +67,15 @@ class PluginEnginesLoader:
             try:
                 if isinstance(tier, DeployEngine):
                     try:
-                        print("PLUGING TIER IS DeployEngine")
+                        log("ONGOING", "Loading Deployment Engines", plugin_name)
                         plugin = self.import_plugin(
                             str("Engines.deployment." + plugin_name)
                         )
                     except Exception as e:
-                        log("WARNING", "Failed to import plugin", repr(e))
+                        log("WARNING", "Failed to import plugin", repr(e), plugin_name)
                 elif isinstance(tier, ValidationEngine):
                     try:
-                        print("PLUGING TIER IS ValidationEngine")
+                        log("ONGOING", "Loading Validation Engines")
                         plugin = self.import_plugin(
                             str("Engines.validation." + plugin_name)
                         )
