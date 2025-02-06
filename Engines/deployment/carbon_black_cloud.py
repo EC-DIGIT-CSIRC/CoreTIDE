@@ -91,9 +91,9 @@ class CarbonBlackCloudDeploy(CarbonBlackCloudEngineInit, DeployMDR):
             config_data = data["configurations"][self.DEPLOYER_IDENTIFIER]
             uuid = data.get("uuid") or data["metadata"]["uuid"]
             name = data["name"].strip()
-            description = data["description"].replace("\n", " ")
+            description = data["description"].strip()
             status = config_data["status"]
-            query = config_data["query"].replace("\n", "")
+            query = config_data["query"].replace("\n", " ")
 
             # Check if case for removal or deployment, different procedures for each
             deployment = False
@@ -125,9 +125,6 @@ class CarbonBlackCloudDeploy(CarbonBlackCloudEngineInit, DeployMDR):
             selected_watchlist = config_data.get("watchlist") or self.DEFAULT_WATCHLIST
             selected_report = config_data.get("report") or name
             
-            print("DEBUG", "Selected Report is : ", selected_report)
-            print("DEBUG", "Selected Watchlist is : ", selected_watchlist)
-
             watchlist_list = service.select(Watchlist)
             # Select watchlist and report objects
             report = None
@@ -222,18 +219,13 @@ class CarbonBlackCloudDeploy(CarbonBlackCloudEngineInit, DeployMDR):
             # If report does not exist, create a new one and attach the IOC
             else:
                 if deployment:
-                    print("DEBUG - Creating report")
                     report_builder = Report.create(
                         service, selected_report, description, severity
                     )
-                    print("DEBUG - Description : ", description)
                     report_builder.add_ioc(ioc)
                     for tag in tags:
-                        print("DEBUG - Adding tag : ", tag)
                         report_builder.add_tag(tag.strip())
                     report = report_builder.build()
-                    print("DEBUG - Report Compiled - ", str(report))
-                    print("DEBUG - Report Compiled - ", str(report.to_json()))
 
                     report.save_watchlist()
                     watchlist.add_reports([report])  # type: ignore
