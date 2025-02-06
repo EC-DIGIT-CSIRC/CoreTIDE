@@ -93,7 +93,7 @@ class CarbonBlackCloudDeploy(CarbonBlackCloudEngineInit, DeployMDR):
             name = data["name"].strip()
             description = data["description"].replace("\n", " ")
             status = config_data["status"]
-            query = config_data["query"].strip()
+            query = config_data["query"].replace("\n", "")
 
             # Check if case for removal or deployment, different procedures for each
             deployment = False
