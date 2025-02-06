@@ -69,6 +69,7 @@ properties:
       NRT is supported for specific tables and columns. Please see the documentation for more details.
       https://learn.microsoft.com/en-us/defender-xdr/custom-detection-rules?view=o365-worldwide#continuous-nrt-frequency
     tide.template.spacer: true
+    tide.mdr.parameter: schedule
     type: string
     enum:
       - NRT
@@ -89,6 +90,7 @@ properties:
 
       title:
         title: Alert Title
+        tide.mdr.parameter: detectionAction.alertTemplate.title
         description: |
           Name of the alert triggered by the custom detection rule. By
           default, the name of the MDR will be used, but this parameter allows
@@ -99,6 +101,7 @@ properties:
         description: |
           Threat Category assigned to the alert triggered by the detection rule.
         example: Malware
+        tide.mdr.parameter: detectionAction.alertTemplate.category
         type: string
         enum:
           - Command And Control
@@ -125,6 +128,7 @@ properties:
           Severity of the generated alert. By default, the alert_severity of the MDR is mapped
           to the severity, this parameter allows to override this behaviour. 
         example: Medium
+        tide.mdr.parameter: detectionAction.alertTemplate.severity
         type: string
         enum:
           - Informational
@@ -137,6 +141,7 @@ properties:
         description: |
           Recommended actions to respond to the threat related to the alert
           triggered by the custom detection rule.
+        tide.mdr.parameter: detectionAction.alertTemplate.recommendation
         type: string
         tide.template.multiline : True
 
@@ -147,6 +152,7 @@ properties:
       Identify affected assets in your query results.
       They will be used to generate incidents and automate tasks.
     type: object
+    tide.mdr.parameter: detectionAction.alertTemplate.impactedAssets
     anyOf:
       - required: [device]
       - required: [mailbox]
@@ -216,6 +222,7 @@ properties:
       Describes the actions that will be taken after a detection
       is made by a custom detection rule.
     type: object
+    tide.mdr.parameter: detectionAction.responseActions
     properties:
 
       devices:
@@ -231,6 +238,7 @@ properties:
               Describes a response action that uses Microsoft Defender to apply
               full network isolation to a device. This response action prevents
               the device from connecting to any application or service.
+            tide.mdr.parameter: detectionAction.responseActions[stopAndQuarantineFileResponseAction]
             type: string
             enum:
               - Full
@@ -240,23 +248,26 @@ properties:
             title: Collection Investigation Package
             description: |
               Describes a response action that collects details for an investigation package.
+            tide.mdr.parameter: detectionAction.responseActions[collectInvestigationPackageResponseAction]
             type: boolean
-            default: true
+            default: false
 
           run_antivirus_scan:
             title: Run Antivirus Scan
             description: |
               Describes a response action that performs a full Microsoft Defender
               Antivirus scan on the device.
+            tide.mdr.parameter: detectionAction.responseActions[runAntivirusScanResponseAction]   
             type: boolean
-            default: true
+            default: false
 
           initiate_investigation:
             title: Initiate Investigation
             description: |
               Describes a response action that starts an automated investigation of a device.
             type: boolean
-            default: true
+            tide.mdr.parameter: detectionAction.responseActions[runAntivirusScanResponseAction]   
+            default: false
 
           restrict_app_execution:
             title: Restrict Application Execution
@@ -264,7 +275,8 @@ properties:
               Describes a response action that sets restrictions on device to allow only files
               that are signed with a Microsoft-issued certificate to run.
             type: boolean
-            default: true
+            tide.mdr.parameter: detectionAction.responseActions[restrictAppExecutionResponseAction]
+            default: false
 
       files:
         title: Files Response Actions
@@ -279,6 +291,7 @@ properties:
               Describes a response action that allows or blocks a file to run on devices controlled by Microsoft Defender for Endpoint.
             type: object
             tide.template.spacer: false
+            tide.mdr.parameter: detectionAction.responseActions[allow/blockFileResponseAction]
             required: 
               - action
               - identifier
@@ -340,6 +353,7 @@ properties:
                     description: |
                       Device groups to which this response action will be applied to
                     type: array
+                    tide.mdr.parameter: detectionAction.responseActions[allow/blockFileResponseAction].deviceGroupNames
                     tide.config.parameter-list: systems.defender_for_endpoint.platform.device_groups
 
           quarantine_file:
@@ -402,6 +416,7 @@ properties:
     description: |
       Scope of devices to which the alert will be triggered for
     type: object
+    tide.mdr.parameter: detectionAction.organizationalScope
     required:
       - selection
     
@@ -421,6 +436,7 @@ properties:
           If set to All - will apply to all endpoints, if set to Specific
           will require to select the relevant device groups
         type: string 
+        tide.mdr.parameter: detectionAction.organizationalScope.scopeType
         default: All
         enum:
           - All
@@ -431,12 +447,14 @@ properties:
         description: |
           Device groups to which this response action will be applied to
         type: array
+        tide.mdr.parameter: detectionAction.organizationalScope.scopeNames
         tide.config.parameter-list: systems.defender_for_endpoint.platform.device_groups
 
   query: 
     title: Defender For Endpoint Detection Rule
     type: string
     tide.template.spacer: true
+    tide.mdr.parameter: queryCondition.queryText
     tide.template.multiline : True
     description: KQL Query
     example: |

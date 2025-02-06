@@ -309,3 +309,15 @@ properties:
               description: |
                 The Client Secret Value for the credentials you created for your App Registration.
               type: string
+  
+  defaults:
+    title: Default Parameters
+    description: |
+      Default Parameters allow you to create a baseline configuration, which has
+      to be overwritten by the MDR content (and can always be further mutated with modifiers).
+      This is helpful to setup non-required keywords which are expected to always be there.
+      You are expected, similar to modifiers, to enter the dot separated path to access the
+      desired keyword in the MDR schema.
+    type: object
+    additionalProperties:
+          type: object
