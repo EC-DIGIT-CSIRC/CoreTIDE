@@ -124,6 +124,10 @@ class CarbonBlackCloudDeploy(CarbonBlackCloudEngineInit, DeployMDR):
             # The report title should be updated against CDM name on each push.
             selected_watchlist = config_data.get("watchlist") or self.DEFAULT_WATCHLIST
             selected_report = config_data.get("report") or name
+            
+            print("DEBUG", "Selected Report is : ", selected_report)
+            print("DEBUG", "Selected Watchlist is : ", selected_watchlist)
+
             watchlist_list = service.select(Watchlist)
             # Select watchlist and report objects
             report = None
@@ -218,13 +222,19 @@ class CarbonBlackCloudDeploy(CarbonBlackCloudEngineInit, DeployMDR):
             # If report does not exist, create a new one and attach the IOC
             else:
                 if deployment:
+                    print("DEBUG - Creating report")
                     report_builder = Report.create(
                         service, selected_report, description, severity
                     )
+                    print("DEBUG - Description : ", description)
                     report_builder.add_ioc(ioc)
                     for tag in tags:
+                        print("DEBUG - Adding tag : ", tag)
                         report_builder.add_tag(tag.strip())
                     report = report_builder.build()
+                    print("DEBUG - Report Compiled - ", str(report))
+                    print("DEBUG - Report Compiled - ", str(report.to_json()))
+
                     report.save_watchlist()
                     watchlist.add_reports([report])  # type: ignore
                     log("SUCCESS", "Created report and deployed IOC", selected_report)
