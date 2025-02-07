@@ -154,6 +154,36 @@ def documentation(mdr):
     response.loc[0] = [severity_data, responders_data, playbook_data]
     response = response.to_markdown(index=False)
 
+    if procedure:=mdr.get("response", {}).get("procedure"):
+        analysis = "> " + procedure.get("analysis").replace("\n", "\n> ")
+        searches = procedure.get("searches", "")
+        containment = procedure.get("containment", "")
+
+        response += "\n\n### 📋 Procedure\n\n"
+        response += f"#### 🕵🏼‍♂️ Analysis\n\n{analysis}\n\n"
+        if searches:
+            rows = ""
+            for search in searches:
+                try:
+                    system_name = SYSTEMS_CONFIG[search.get("system")]["tide"]["name"]
+                except:
+                    system_name = SYSTEMS_CONFIG[search.get("system")]["platform"]["name"]
+
+                rows += "<tr>\n"
+                rows += "\n<td>" + search.get("purpose") + "\n</td>"
+                rows += "\n<td>" + system_name + "</td>\n"
+                rows += "\n<td>\n" + f"\n```sql\n{search.get("query").strip()}\n```\n" + "</td>\n"
+                rows += "</tr>\n"
+                
+            table = "<tr><th>Purpose</th>\n<th>Target System</th>\n<th>Query</th>\n</tr>"
+            table = "<table>\n" + table + rows + "\n</table>"
+            response += f"#### 🔎 Supporting Searches\n\n{table}"
+        if containment:
+            containment = "> " + containment.replace("\n", "\n> ")
+            response += f"\n\n#### 🔐 Containment\n{containment}"
+
+
+
     references = mdr.get("references")
     
     if references:

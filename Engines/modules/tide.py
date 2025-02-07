@@ -304,7 +304,19 @@ class TideLoader:
         metadata = TideDefinitionsModels.TideObjectMetadata(**mdr.pop("metadata"))
         response_config = mdr.pop("response", {})
         if response_config:
-            response = TideModels.MDR.Response(**response_config)
+            procedure = response_config.pop("procedure", None)
+            if procedure:
+                searches = None
+                searches_data = procedure.pop("searches", None)
+                if searches_data:
+                    searches = []
+                    for search in searches_data:
+                        searches.append(TideModels.MDR.Response.Procedure.Search(**search))
+                procedure = TideModels.MDR.Response.Procedure(**procedure,
+                                                              searches=searches)
+            response = TideModels.MDR.Response(**response_config,
+                                               procedure=procedure)
+
         references = TideDefinitionsModels.TideObjectReferences(**mdr.pop("references", {}))
 
         configurations = TideModels.MDR.Configurations()

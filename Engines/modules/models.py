@@ -196,9 +196,22 @@ class TideModels:
     
         @dataclass
         class Response:
+            @dataclass
+            class Procedure:
+                @dataclass
+                class Search:
+                    purpose: str
+                    system: str
+                    query: str
+
+                analysis: str
+                searches: Optional[Sequence[Search]] = None
+                containment: Optional[str] = None
+
             alert_severity: str = "Informational" 
             playbook: Optional[str] = None
             responders: Optional[str] = None
+            procedure: Optional[Procedure] = None
 
         @dataclass
         class Configurations:
