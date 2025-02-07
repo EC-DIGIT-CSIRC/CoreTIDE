@@ -430,7 +430,10 @@ def name_subschema_doc(
     composition_name = str()
     recomp_config = CONFIG_INDEX[recomposition][identifier]
     
-    composition_name = recomp_config["tide"].get("name")
+    try:
+        composition_name = recomp_config["tide"].get("name")
+    except: 
+        composition_name = recomp_config["platform"].get("name")
 
     if composition_name:
         subschema_name = recomposition.title() + " - " +  composition_name + SUFFIX
