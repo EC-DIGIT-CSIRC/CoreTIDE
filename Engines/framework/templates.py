@@ -37,10 +37,14 @@ def fetch_config_template(dot_path:str)->str:
         else:
             raise ValueError(f"Key : {key} could not be found in path {dot_path}")
     
-    if type(config_index[key]) is str:
-        return config_index[key].strip()
-    else:
-        raise ValueError(f"Config path {dot_path} must be a valid path to a list parameter")
+    try:
+        return str(config_index[key]).strip()
+    except:
+        log("WARNING",
+            "Could not the expected template",
+            dot_path,
+            "This is non blocking, but check why the template could not be fetched")
+        return ""
 
 
 def replace_strings_in_file(file_path, strings, replacement):
