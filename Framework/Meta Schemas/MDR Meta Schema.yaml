@@ -74,7 +74,7 @@ properties:
         title: Playbook link
         type: string
         format: uri
-        description: Link to the playbook on Confluence
+        description: Link an external playbook
         example: https://internal-knowledge-base/playbook/account_brute_force
       
       responders:
@@ -83,7 +83,7 @@ properties:
         tide.vocab: true #TODO - migrate to config once config fetch is implemented
         description: Team responsible for handling related incoming alerts
 
-      procedures:
+      procedure:
         title: Response Procedure
         type: object
         tide.template.spacer: False
@@ -99,7 +99,7 @@ properties:
             type: string
             description: Guidelines to handle the alert 
             tide.template.multiline: True
-            tide.config.template: schema.templates.mdr::analysis 
+            tide.config.template: schema.templates.mdr::response::procedure::analysis 
 
           searches:
             title: Supporting searches
@@ -117,16 +117,12 @@ properties:
                   title: Short explanation of the search
                   type: string
                   description: Describes how the search supports the investigative process
+                  tide.template.multiline: True
 
                 system:
                   title: Target system for the search
                   type: string
-                  enum: #TODO - source this from config files once config fetch is implemented
-                    - splunk
-                    - sentinel
-                    - defender_for_endpoint
-                    - carbon_black_cloud 
-                    - sysdig
+                  tide.config.systems::enabled: True 
                 
                 query:
                   title: Supporting Search Query
@@ -138,7 +134,7 @@ properties:
             type: string
             description: Guidelines to contain the incident, once assessed to be a True Positive
             tide.template.multiline: True
-            tide.config.template: schema.templates.mdr::containment 
+            tide.config.template: schema.templates.mdr::response::procedure::containment 
 
 
 

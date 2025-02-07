@@ -15,7 +15,7 @@ from Engines.modules.documentation import get_icon
 from Engines.modules.logs import log
 from Engines.modules.tide import DataTide
 from Engines.modules.files import resolve_paths
-
+from Engines.modules.deployment import enabled_systems
 
 GLOBAL_CONFIG = DataTide.Configurations.Global
 
@@ -517,16 +517,33 @@ def gen_json_schema(dictionary):
                 # the configuration files.
                 if config_fetch:=dict_foo[field].get("tide.config.parameter-list"):
                     values_list = fetch_config_parameter_list(config_fetch)
-                    dictionary[field]["items"] = {}
-                    dictionary[field]["items"]["enum"] = values_list
-                    dictionary[field]["items"]["uniqueItems"] = True
+                    if dict_foo[field].get("type") == "string":
+                        dictionary[field]["enum"] = values_list
+                    elif dict_foo[field].get("type") == "array":
+                        dictionary[field]["items"] = {}
+                        dictionary[field]["items"]["enum"] = values_list
+                        dictionary[field]["items"]["uniqueItems"] = True
+
+                # Handles the case where we want to dynamically return a list
+                # of available systems
+                if dict_foo[field].get("tide.config.systems::enabled"):
+                    values_list = enabled_systems()
+                    if dict_foo[field].get("type") == "string":
+                        dictionary[field]["enum"] = values_list
+                    elif dict_foo[field].get("type") == "array":
+                        dictionary[field]["items"] = {}
+                        dictionary[field]["items"]["enum"] = values_list
+                        dictionary[field]["items"]["uniqueItems"] = True
 
                 # Special handling to specifically get the available tenants
                 if system:=dict_foo[field].get("tide.config.system.tenants"):
                     values_list = fetch_config_system_tenants_list(system)
-                    dictionary[field]["items"] = {}
-                    dictionary[field]["items"]["enum"] = values_list
-                    dictionary[field]["items"]["uniqueItems"] = True
+                    if dict_foo[field].get("type") == "string":
+                        dictionary[field]["enum"] = values_list
+                    elif dict_foo[field].get("type") == "array":
+                        dictionary[field]["items"] = {}
+                        dictionary[field]["items"]["enum"] = values_list
+                        dictionary[field]["items"]["uniqueItems"] = True
                 
                 if dict_foo[field].get("tide.vocab"):
                     if type(dict_foo[field]["tide.vocab"]) is str:

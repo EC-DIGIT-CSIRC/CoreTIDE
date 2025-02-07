@@ -224,7 +224,7 @@ def indexer(write_index=False) -> dict:
                 if (not os.path.isdir(model_path)) and (str(model_path).endswith(".yaml")):
                     obj_counter += 1
 
-                    if "[DEBUG]" not in model:
+                    if not model.endswith(".debug.yaml"):
                         model_body = yaml.safe_load(open(model_path, encoding="utf-8"))
                         
                         #TODO Backward compatibility measure. To remove.

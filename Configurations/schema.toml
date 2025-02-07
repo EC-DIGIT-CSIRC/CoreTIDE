@@ -7,10 +7,10 @@
 "mdr::description" = """
 """
 
-"mdr::analysis" = """
+"mdr::response::procedure::analysis" = """
 """
 
 
-"mdr::containment" = """
+"mdr::response::procedure::containment" = """
 """
 
