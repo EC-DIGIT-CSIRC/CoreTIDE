@@ -87,10 +87,10 @@ class HelperTide:
 
         if missing_envvar_error:
             log("FATAL",
-                "Some environment variable specified in configuration files were not found",
+                "Some environment variable specified in configuration files were not found"
                 "Review the previous errors to find which ones were missing",
-                "Check your CI settings to ensure these environment variables are properly injected")
-            raise KeyError
+                "Check your CI settings to ensure these environment variables are properly injected",
+                "This may not be a critical issue, for example if you didn't enable a particular system")
 
         return config_secrets
 
@@ -393,6 +393,7 @@ class TideLoader:
 
             match platform:
                 case DetectionSystems.DEFENDER_FOR_ENDPOINT:
+                    print("DEBUG TENANT", str(tenant))
                     setup_with_secrets = HelperTide.fetch_config_envvar(tenant.pop("setup"))
                     setup = TideConfigs.Systems.DefenderForEndpoint.Tenant.Setup(**setup_with_secrets)
 
