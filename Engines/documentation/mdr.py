@@ -214,7 +214,6 @@ def documentation(mdr):
         except:
             system_name = SYSTEMS_CONFIG[s]["platform"]["name"]
 
-        print("SYSTEM NAME ", system_name)
         system_name += f" <b>{status_name}</b>"
 
         system_data = pd.json_normalize(mdr_configs[s], sep="|").to_dict(
@@ -342,7 +341,7 @@ def run():
         # Make a file name based on MDR data
         mdr_data = MODELS_INDEX["mdr"][mdr_uuid]
         mdr_name = mdr_data.get("name")
-        print(mdr_data)
+
         log("ONGOING",
             "Generating MDR Documentation",
             mdr_name,
