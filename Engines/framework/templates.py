@@ -24,6 +24,25 @@ class IndentFullDumper(yaml.Dumper):
         return super(IndentFullDumper, self).increase_indent(flow, False)
 
 
+def fetch_config_template(dot_path:str)->str:
+    print(dot_path)
+    config_index = DataTide.Configurations.Index
+    config_path = dot_path.split(".")
+    key = config_path[0]
+    while key != config_path[-1]:
+        print(config_index)
+        if key in config_index:
+            config_index = config_index[key]
+            key = config_path[config_path.index(key) + 1]
+        else:
+            raise ValueError(f"Key : {key} could not be found in path {dot_path}")
+    
+    if type(config_index[key]) is str:
+        return config_index[key].strip()
+    else:
+        raise ValueError(f"Config path {dot_path} must be a valid path to a list parameter")
+
+
 def replace_strings_in_file(file_path, strings, replacement):
     """
     Replaces strings in target file with another chosen string in place,
@@ -222,7 +241,19 @@ def gen_template(metaschema, required):
 
                     content = "blank"
 
-                    if metaschema[key].get("format") == "date":
+                    if config_path:=metaschema[key].get("tide.config.template"):
+                        content = fetch_config_template(config_path)
+                        if not content:
+                            content = "Type Here"
+                        if key in required:
+                            # Trick to respect newlines
+                            content = content.replace("\n\n", "\nforce_space")
+                        else:
+                            # When commented out, newlines are respected as-is
+                            content = "\n".join(["#" + line for line in content.split("\n")])
+
+                        content = "|\n'" + content
+                    elif metaschema[key].get("format") == "date":
                         content = "YYYY-MM-DD"
                     elif metaschema[key].get("format") == "number":
                         content = 3
@@ -263,13 +294,16 @@ def make_spaces(template_path, metaschema):
 
     for line in template:
         key = line.split(":")[0].replace(" ", "")
+        force_space = True if "force_space" in line else False
         spacer = get_value_metaschema(
             key.replace("#", ""), metaschema, "tide.template.spacer"
         )
         key_type = get_value_metaschema(key.replace("#", ""), metaschema, "type")
-        if key_type == "object" or spacer:
+        if key_type == "object" or spacer or force_space:
             if spacer != False:
                 spaced.append("\n")
+            if force_space:
+                line = line.replace("force_space", "")
 
         spaced.append(line)
 
@@ -321,6 +355,7 @@ def run():
 
             replace_strings_in_file(template_path, ["- Comment out"], "#-")
             replace_strings_in_file(template_path, ["blank", "'"], "")
+            replace_strings_in_file(template_path, ["spacer"], '    ')
 
             for placeholder in placeholders:
                 replace_strings_in_file(template_path, [f"${placeholder}"], placeholders[placeholder])

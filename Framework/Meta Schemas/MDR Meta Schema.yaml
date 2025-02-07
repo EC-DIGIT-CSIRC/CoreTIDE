@@ -48,12 +48,13 @@ properties:
     description: Explanation of what the detection rule is detecting, in order to give context to alerts receivers.
     type: string
     tide.template.multiline : True
+    tide.config.template: schema.templates.mdr::description
 
   detection_model: 
     title: CoreTIDE Cyber Detection Model
     tide.vocab: cdm
     description: CDM that this detection rule is implementing.
-    example: CDM0016
+    example: "0486fc80-bf0f-4bef-a3b2-471e2ce58b03 # Detect Execution of XYZ"
 
   response:
     title: Incident Response Details
@@ -98,6 +99,7 @@ properties:
             type: string
             description: Guidelines to handle the alert 
             tide.template.multiline: True
+            tide.config.template: schema.templates.mdr::analysis 
 
           searches:
             title: Supporting searches
@@ -136,6 +138,7 @@ properties:
             type: string
             description: Guidelines to contain the incident, once assessed to be a True Positive
             tide.template.multiline: True
+            tide.config.template: schema.templates.mdr::containment 
 
 
 
