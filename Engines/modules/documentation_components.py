@@ -58,7 +58,7 @@ def metadata_doc(metadata: dict, model_type: str) -> str:
     schema = dict()
 
     for key, value in metadata.items():
-        meta_title = get_field_title(k, metaschema)
+        meta_title = get_field_title(key, metaschema)
         if meta_title:
             # Push schema at the end of the line
             if key == "schema":
