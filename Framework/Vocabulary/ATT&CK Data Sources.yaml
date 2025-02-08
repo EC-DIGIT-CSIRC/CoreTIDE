@@ -6,7 +6,6 @@ description: Data sources represent the various subjects/topics of information t
   ATT&CK technique or sub-technique.
 reference: https://attack.mitre.org/datasources/
 icon: 📊
-
 keys:
   - id: DS0026
     name: Active Directory

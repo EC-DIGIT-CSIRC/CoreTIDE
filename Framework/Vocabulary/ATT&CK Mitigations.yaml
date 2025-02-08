@@ -12,8 +12,27 @@ keys:
     link: https://attack.mitre.org/mitigations/M1036
   - id: M1015
     name: Active Directory Configuration
-    description: Configure Active Directory to prevent use of certain techniques;
-      use SID Filtering, etc.
+    description: 'Implement robust Active Directory configurations using group policies
+      to control access and reduce the attack surface. Specific examples include:
+
+
+      * Account Configuration: Use provisioned domain accounts rather than local accounts
+      to leverage centralized control and auditing capabilities.
+
+      * Interactive Logon Restrictions: Enforce group policies that prohibit interactive
+      logons for accounts that should not directly access systems.
+
+      * Remote Desktop Settings: Limit Remote Desktop logons to authorized accounts
+      to prevent misuse by adversaries.
+
+      * Dedicated Administrative Accounts: Create specialized domain-wide accounts
+      that are restricted from interactive logons but can perform specific tasks like
+      installations or repository access.
+
+      * Authentication Silos: Configure Authentication Silos in Active Directory to
+      create access zones with restrictions based on membership in the Protected Users
+      global security group. This setup enhances security by applying additional protections
+      to high-risk accounts, limiting their exposure to potential attacks.'
     link: https://attack.mitre.org/mitigations/M1015
   - id: M1049
     name: Antivirus/Antimalware
@@ -142,6 +161,20 @@ keys:
     description: Make configuration changes related to the operating system or a common
       feature of the operating system that result in system hardening against techniques.
     link: https://attack.mitre.org/mitigations/M1028
+  - id: M1060
+    name: Out-of-Band Communications Channel
+    description: 'Establish secure out-of-band communication channels to ensure the
+      continuity of critical communications during security incidents, data integrity
+      attacks, or in-network communication failures. Out-of-band communication refers
+      to using an alternative, separate communication path that is not dependent on
+      the potentially compromised primary network infrastructure. This method can
+      include secure messaging apps, encrypted phone lines, satellite communications,
+      or dedicated emergency communication systems. Leveraging these alternative channels
+      reduces the risk of adversaries intercepting, disrupting, or tampering with
+      sensitive communications and helps coordinate an effective incident response.(Citation:
+      TrustedSec OOB Communications)(Citation: NIST Special Publication 800-53 Revision
+      5)'
+    link: https://attack.mitre.org/mitigations/M1060
   - id: M1027
     name: Password Policies
     description: Set and enforce secure password policies for accounts.
