@@ -54,26 +54,27 @@ def metadata_doc(metadata: dict, model_type: str) -> str:
     Generates a standardized metadata markdown format
     """
     metaschema = INDEX["metaschemas"][model_type]["properties"]
-    metadata = dict()
+    metadata_enriched = dict()
     schema = dict()
 
-    for k in metadata:
+    for key, value in metadata.items():
         meta_title = get_field_title(k, metaschema)
         if meta_title:
             # Push schema at the end of the line
-            if k == "schema":
-                schema = {meta_title:metadata[k]}
+            if key == "schema":
+                schema = {meta_title: value}
             else:
-                meta[meta_title] = metadata[k]
+                metadata_enriched[meta_title] = value
         else:
-            log("DEBUG", f"Missing title in metaschema : {metaschema} for key : {k}")
+            log("WARNING", f"Missing title in metaschema : {metaschema} for key : {k}")
+            metadata_enriched[key] = value
     
-    meta.update(schema)
-    for m in meta:
-        if type(meta[m]) is list:
-            meta[m] = ", ".join(meta[m])
+    metadata_enriched.update(schema)
+    for m in metadata_enriched:
+        if type(metadata_enriched[m]) is list:
+            metadata_enriched[m] = ", ".join(metadata_enriched[m])
         
-    metadata_doc_markdown = " **|** ".join([f"`{m} : {meta[m]}`" for m in meta])
+    metadata_doc_markdown = " **|** ".join([f"`{m} : {metadata_enriched[m]}`" for m in metadata_enriched])
 
     return metadata_doc_markdown
 
