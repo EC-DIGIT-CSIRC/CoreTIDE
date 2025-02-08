@@ -50,16 +50,25 @@ def criticality_doc(criticality_data: str) -> str:
 
 
 def metadata_doc(metadata: dict, model_type: str) -> str:
+    """
+    Generates a standardized metadata markdown format
+    """
     metaschema = INDEX["metaschemas"][model_type]["properties"]
-    # Make metadata footer
-    meta = dict()
+    metadata = dict()
+    schema = dict()
+
     for k in metadata:
         meta_title = get_field_title(k, metaschema)
         if meta_title:
-            meta[meta_title] = metadata[k]
+            # Push schema at the end of the line
+            if k == "schema"
+                schema = {meta_title:metadata[k]}
+            else:
+                meta[meta_title] = metadata[k]
         else:
             log("DEBUG", f"Missing title in metaschema : {metaschema} for key : {k}")
     
+    meta.update(schema)
     for m in meta:
         if type(meta[m]) is list:
             meta[m] = ", ".join(meta[m])
