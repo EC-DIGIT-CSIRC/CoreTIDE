@@ -248,7 +248,7 @@ def gen_template(metaschema, required):
                     if config_path:=metaschema[key].get("tide.config.template"):
                         content = fetch_config_template(config_path)
                         if not content:
-                            content = "Type Here"
+                            content = "..."
                         if key in required:
                             # Trick to respect newlines
                             content = content.replace("\n\n", "\nforce_space")
@@ -267,9 +267,9 @@ def gen_template(metaschema, required):
                         content = "https://"
                     elif metaschema[key].get("tide.template.multiline"):
                         if key in required:
-                            content = "|\n'Type Here"
+                            content = "|\n'..."
                         else:
-                            content = "|\n'#Type Here"
+                            content = "|\n'#..."
                     elif "default" in metaschema[key]:
                         content = metaschema[key]["default"]
                     elif "const" in metaschema[key]:
