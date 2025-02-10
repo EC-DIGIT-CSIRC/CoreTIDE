@@ -76,6 +76,8 @@ class SplunkMetadataDeploy(SplunkEngineInit, DeployMetadata):
             entry["MDR_alert_handling_team"] = (
                 body.get("response", {}).get("responders") or self.DEFAULT_RESPONDERS
             )
+            procedure = body.get("response", {}).get("procedure", {})
+            entry["MDR_response_procedure"] = json.dumps(procedure)
             entry["MDR_attack_technique"] = techniques
             entry["MDR_saw_playbook"] = body.get("response", {}).get("playbook")
             entry["MDR_documentation"] = self.GITWIKI + body.get("name").replace(
