@@ -77,6 +77,7 @@ class SentinelDeploy(SentinelEngineInit):
         # Handle disables suppression
         elif suppression is False:
             rule.suppression_enabled = False
+            rule.suppression_duration = iso_duration_timedelta("1h") #Requires a default value, even if disabled
         # Handle defaults
         else:
             rule.suppression_enabled = mdr_sentinel.get("alert.suppression_enabled")
