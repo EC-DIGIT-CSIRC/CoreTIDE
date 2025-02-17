@@ -1,0 +1,35 @@
+  #schema: sentinel_one::1.0
+  #status: DEVELOPMENT
+  #contributors:
+    #-
+  #tenants:
+    #-
+  #flags:
+    #-
+  
+  #details:
+    #name: 
+    #description: |
+      #...
+    #severity: 
+    #expiration: 
+  
+  condition:
+    #single_event:
+      #query: |
+        #...
+  
+    #correlation:
+      #entity: 
+      #match_in_order: true
+      #time_window: 
+      #sub_queries:
+        #- query: |
+            #...
+          #matches_required: 1
+  
+    #cool_off: 
+  
+  response:
+    treat_as_threat: false
+    network_quarantine: false

@@ -34,6 +34,7 @@ class DetectionSystems(Enum):
     CARBON_BLACK_CLOUD = auto()
     SPLUNK = auto()
     SENTINEL = auto()
+    SENTINEL_ONE = auto()
 
 class DeploymentStrategy(Enum):
     STAGING = auto()
@@ -159,6 +160,19 @@ class TideConfigs:
             platform: Platform
             tenants: Sequence[Tenant]
 
+        @dataclass
+        class SentinelOne(SystemConfig):
+            @dataclass
+            class Tenant(SystemConfig.Tenant):
+
+                @dataclass
+                class Setup(SystemConfig.Tenant.Setup):
+                    scope:str
+                    api_token:str
+                    site:Optional[str] = None
+
+                setup:Setup
+
 
 
 class TideDefinitionsModels:
@@ -188,6 +202,10 @@ class TideDefinitionsModels:
         tenants: Optional[list[str]]
         contributors: Optional[list[str]]
 
+    @dataclass
+    class ExternalRuleId:
+        rule_id_bundle: Optional[Mapping[str, int]] = None
+
 
 class TideModels:
 
@@ -216,6 +234,46 @@ class TideModels:
         @dataclass
         class Configurations:
             
+            @dataclass
+            class SentinelOne(TideDefinitionsModels.SystemConfigurationModel):
+                @dataclass
+                class Details:
+                    name: Optional[str] = None
+                    description: Optional[str] = None
+                    severity: Optional[str] = None
+                    expiration: Optional[str] = None
+                
+                @dataclass
+                class Condition:
+                    @dataclass
+                    class SingleEvent:
+                        query: str
+
+                    @dataclass
+                    class Correlation:
+                        @dataclass
+                        class SubQueries:
+                            query: str
+                            matches_required: int
+                        entity: str
+                        match_in_order: bool
+                        time_window: str
+                        sub_queries: Sequence[SubQueries]
+                    
+                    single_event: Optional[SingleEvent] = None
+                    correlation: Optional[Correlation] = None
+                    cool_off: Optional[str] = None
+                
+                @dataclass
+                class Response:
+                    treat_as_threat:bool
+                    network_quarantine:bool
+
+                condition: Condition
+                response: Optional[Response] = None
+                details:Optional[Details] = None
+                rule_id_bundle: Optional[TideDefinitionsModels.ExternalRuleId] = None
+
             @dataclass
             class DefenderForEndpoint(TideDefinitionsModels.SystemConfigurationModel):
                 @dataclass
@@ -298,6 +356,7 @@ class TideModels:
                 ...
                         
             defender_for_endpoint: Optional[DefenderForEndpoint] = None
+            sentinel_one: Optional[SentinelOne] = None
             carbon_black_cloud: Optional[Mapping] = None
             splunk: Optional[Mapping] = None
             sentinel: Optional[Mapping] = None

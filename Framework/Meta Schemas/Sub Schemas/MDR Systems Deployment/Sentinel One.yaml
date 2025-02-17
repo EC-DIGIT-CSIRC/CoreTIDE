@@ -101,7 +101,7 @@ properties:
       as it will fail any further updates. You'll need to delete your rule and start over, 
       if you wish you continue in the same file you'll need to delete any rule_id that was
       added by the deployer to allow it to deploy a new one. 
-    type: Object
+    type: object
     oneOf:
       - required: ["single_event"]
       - required: ["correlation"]
@@ -113,6 +113,7 @@ properties:
           Use this Rule Type if you wish to generate one alert
           for every match of the query, without further correlations
         type: object
+        tide.template.spacer: False
         required: 
           - query
         properties:
@@ -211,6 +212,7 @@ properties:
 
           Expects a value in minute or hour, from 1m to 1440m or 1h to 24h.
         type: string
+        tide.template.spacer: True
         pattern: ^(([1-9][0-9]{0,2}m|1[0-3][0-9]{2}m|14[0-3][0-9]m|1440m)|([1-9]h|1[0-9]h|2[0-4]h))$
 
   response:
