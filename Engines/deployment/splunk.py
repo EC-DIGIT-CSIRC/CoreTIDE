@@ -44,7 +44,11 @@ class SplunkDeploy(SplunkEngineInit, DeployMDR):
         advanced_config = mdr_splunk.pop(
             "advanced", None
         )  # Remove advanced config and keep it separate
-
+        
+        # Normalize all types to string by safety
+        if advanced_config:
+            advanced_config = {k: str(v) for k,v in advanced_config.items()}
+        
         # Exception for risk, as is a particular data structure in Splunk
         risk = mdr_splunk.get("risk")
         if risk:
