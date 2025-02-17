@@ -3,7 +3,7 @@
 
 # The first DetectionOps open platform
 
-_Threat Informed Detection Modelling and Engineering as-Code_
+_Threat Informed Detection Engineering_
 
 Powering DIGIT S2 CATCH Detection Engineering Operations,
 CoreTide is planned to go open source for the benefit of the European - and beyond - SOC community.
