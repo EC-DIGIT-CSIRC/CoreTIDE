@@ -363,5 +363,5 @@ properties:
     tide.template.hide: true
     type: object
     additionalProperties:
-      type: [string, int]
+      type: [string, integer]
       example: parameter_to_set
