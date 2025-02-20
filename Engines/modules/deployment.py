@@ -306,36 +306,24 @@ class Proxy:
         log("INFO", "Resetting proxy setup")
 
 
+
 class TideDeployment:
 
     def __init__(self, deployment, system:DetectionSystems, strategy):
         
         match system:
             case DetectionSystems.SPLUNK:
-                self.rule_deployment = self.deployment_resolver(deployment, DetectionSystems.SPLUNK, strategy)
+                self.rule_deployment:Sequence[TenantDeployment.Splunk] = self.deployment_resolver(deployment, DetectionSystems.SPLUNK, strategy) #type:ignore
             case DetectionSystems.SENTINEL:
-                self.rule_deployment = self.deployment_resolver(deployment, DetectionSystems.SENTINEL, strategy)
+                self.rule_deployment:Sequence[TenantDeployment.Sentinel] = self.deployment_resolver(deployment, DetectionSystems.SENTINEL, strategy) #type:ignore
             case DetectionSystems.CARBON_BLACK_CLOUD:
-                self.rule_deployment = self.deployment_resolver(deployment, DetectionSystems.CARBON_BLACK_CLOUD, strategy)
+                self.rule_deployment:Sequence[TenantDeployment.CarbonBlackCloud] = self.deployment_resolver(deployment, DetectionSystems.CARBON_BLACK_CLOUD, strategy) #type:ignore
             case DetectionSystems.DEFENDER_FOR_ENDPOINT:
-                self.rule_deployment = self.deployment_resolver(deployment, DetectionSystems.DEFENDER_FOR_ENDPOINT, strategy)
+                self.rule_deployment:Sequence[TenantDeployment.DefenderForEndpoint] = self.deployment_resolver(deployment, DetectionSystems.DEFENDER_FOR_ENDPOINT, strategy) #type:ignore
+            case DetectionSystems.SENTINEL_ONE:
+                self.rule_deployment:Sequence[TenantDeployment.SentinelOne] = self.deployment_resolver(deployment, DetectionSystems.SENTINEL_ONE, strategy) #type:ignore
 
 
-    @overload
-    def system_configuration_resolver(self, system:Literal[DetectionSystems.SPLUNK])->TideConfigs.Systems.Splunk:
-        ...
-    @overload
-    def system_configuration_resolver(self, system:Literal[DetectionSystems.SENTINEL])->TideConfigs.Systems.Sentinel:
-        ...
-    @overload
-    def system_configuration_resolver(self, system:Literal[DetectionSystems.CARBON_BLACK_CLOUD])->TideConfigs.Systems.CarbonBlackCloud:
-        ...
-    @overload
-    def system_configuration_resolver(self, system:Literal[DetectionSystems.DEFENDER_FOR_ENDPOINT])->TideConfigs.Systems.DefenderForEndpoint:
-        ...
-    @overload
-    def system_configuration_resolver(self, system:DetectionSystems)->SystemConfig:
-        ...
     def system_configuration_resolver(self, system:DetectionSystems): #type:ignore
         match system:
             #case DetectionSystems.SPLUNK:
@@ -348,25 +336,16 @@ class TideDeployment:
                 log("DEBUG", str(DataTide.Configurations.Systems.DefenderForEndpoint.raw))
                 log("DEBUG", str(DataTide.Configurations.Systems.DefenderForEndpoint.modifiers))
                 return DataTide.Configurations.Systems.DefenderForEndpoint
+            case DetectionSystems.SENTINEL_ONE:
+                log("DEBUG", str(DataTide.Configurations.Systems.SentinelOne.raw))
+                log("DEBUG", str(DataTide.Configurations.Systems.SentinelOne.modifiers))
+                return DataTide.Configurations.Systems.SentinelOne
+
             #case _:
             #    raise NotImplemented
         
 
-    @overload
-    def mdr_configuration_resolver(self, data:TideModels.MDR, system:Literal[DetectionSystems.SPLUNK])->TideModels.MDR.Configurations.Splunk:
-        ...
-    @overload
-    def mdr_configuration_resolver(self, data:TideModels.MDR, system:Literal[DetectionSystems.SENTINEL])->TideModels.MDR.Configurations.Sentinel:
-        ...
-    @overload
-    def mdr_configuration_resolver(self, data:TideModels.MDR, system:Literal[DetectionSystems.CARBON_BLACK_CLOUD])->TideModels.MDR.Configurations.CarbonBlackCloud:
-        ...
-    @overload
-    def mdr_configuration_resolver(self, data:TideModels.MDR, system:Literal[DetectionSystems.DEFENDER_FOR_ENDPOINT])->TideModels.MDR.Configurations.DefenderForEndpoint:
-        ...
-    @overload
-    def mdr_configuration_resolver(self, data:TideModels.MDR, system:DetectionSystems)->TideDefinitionsModels.SystemConfigurationModel:
-        ...
+
     def mdr_configuration_resolver(self, data:TideModels.MDR, system:DetectionSystems)->TideDefinitionsModels.SystemConfigurationModel:
 
         match system:
@@ -380,21 +359,6 @@ class TideDeployment:
 
         return mdr_config    
 
-    @overload
-    def tenants_resolver(self, data:TideModels.MDR, system:Literal[DetectionSystems.SPLUNK], deployment_strategy:DeploymentStrategy)->Sequence[SystemConfig.Tenant]:
-        ...
-    @overload
-    def tenants_resolver(self, data:TideModels.MDR, system:Literal[DetectionSystems.SENTINEL], deployment_strategy:DeploymentStrategy)->Sequence[SystemConfig.Tenant]:
-        ...
-    @overload
-    def tenants_resolver(self, data:TideModels.MDR, system:Literal[DetectionSystems.CARBON_BLACK_CLOUD], deployment_strategy:DeploymentStrategy)->Sequence[SystemConfig.Tenant]:
-        ...
-    @overload
-    def tenants_resolver(self, data:TideModels.MDR, system:Literal[DetectionSystems.DEFENDER_FOR_ENDPOINT], deployment_strategy:DeploymentStrategy)->Sequence[TideConfigs.Systems.DefenderForEndpoint.Tenant]:
-        ...
-    @overload
-    def tenants_resolver(self, data:TideModels.MDR, system:DetectionSystems, deployment_strategy:DeploymentStrategy)->Sequence[SystemConfig.Tenant]:
-        ...
     def tenants_resolver(self, data:TideModels.MDR, system:DetectionSystems, deployment_strategy:DeploymentStrategy)->Sequence[SystemConfig.Tenant]:
         """
         Returns a list of all the tenants configurations, if they are allowed to be targeted.
@@ -402,7 +366,7 @@ class TideDeployment:
         - If MANUAL, can only be targeted if defined in the MDR
         - If STAGING or PRODUCTION, can only be targeted if the current deployment plan alligns with it
         """
-        tenants = self.system_configuration_resolver(system).tenants
+        tenants = self.system_configuration_resolver(system).tenants #type: ignore
         mdr_tenants = self.mdr_configuration_resolver(data, system).tenants
         target_tenants = list()
 
@@ -476,7 +440,7 @@ class TideDeployment:
         """
 
         
-        defaults = self.system_configuration_resolver(system).defaults
+        defaults = self.system_configuration_resolver(system).defaults #type: ignore
         mdr_config = self.mdr_configuration_resolver(data, system)
         new_config = dict()
         
@@ -507,9 +471,9 @@ class TideDeployment:
         """
 
         system_configuration = self.system_configuration_resolver(system)
-        modifiers = system_configuration.modifiers
+        modifiers = system_configuration.modifiers #type: ignore
         mdr_config = self.mdr_configuration_resolver(data, system)
-        system_identifier = system_configuration.platform.identifier
+        system_identifier = system_configuration.platform.identifier #type: ignore
         
         if not mdr_config:
             raise NotImplemented
@@ -578,18 +542,6 @@ class TideDeployment:
         
         return TideLoader.load_mdr(raw_data)
 
-    @overload
-    def deployment_resolver(self, mdr_deployment:Sequence[TideModels.MDR], system:Literal[DetectionSystems.SPLUNK], deployment_strategy:DeploymentStrategy)->Sequence[TenantDeployment.Splunk]:
-        ...
-    @overload
-    def deployment_resolver(self, mdr_deployment:Sequence[TideModels.MDR], system:Literal[DetectionSystems.SENTINEL], deployment_strategy:DeploymentStrategy)->Sequence[TenantDeployment.Sentinel]:
-        ...
-    @overload
-    def deployment_resolver(self, mdr_deployment:Sequence[TideModels.MDR], system:Literal[DetectionSystems.CARBON_BLACK_CLOUD], deployment_strategy:DeploymentStrategy)->Sequence[TenantDeployment.CarbonBlackCloud]:
-        ...
-    @overload
-    def deployment_resolver(self, mdr_deployment:Sequence[TideModels.MDR], system:Literal[DetectionSystems.DEFENDER_FOR_ENDPOINT], deployment_strategy:DeploymentStrategy)->Sequence[TenantDeployment.DefenderForEndpoint]:
-        ...
     def deployment_resolver(self, mdr_deployment:Sequence[TideModels.MDR], system:DetectionSystems, deployment_strategy:DeploymentStrategy)->Sequence[TenantDeploymentModel]:
 
         deployment = list()

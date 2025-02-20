@@ -26,6 +26,7 @@ deployment = "ALWAYS" #STAGING, PRODUCTION, MANUAL (only when defined in MDR) or
 [tenants.setup]
 proxy = false
 ssl = true
+url = "" #Management URL
 scope = "Scope Name exactly as written"
 #site = "Site name within scope, exactly as console"
 api_token = "$SENTINEL_ONE_API_TOKEN"

@@ -217,9 +217,9 @@ class DefenderForEndpointDeploy(DeployMDR):
         deployment = TideDeployment(deployment=mdr_deployment,
                                     system=DetectionSystems.DEFENDER_FOR_ENDPOINT,
                                     strategy=deployment_plan)
-        
         for tenant_deployment in deployment.rule_deployment:
-            service = DefenderForEndpointService(tenant_deployment.tenant)
+            a = tenant_deployment.tenant
+            service = DefenderForEndpointService(tenant_deployment.tenant) #type: ignore
 
             for mdr in tenant_deployment.rules:
                 self.deploy_mdr(data=mdr, service=service, tenant=tenant_deployment.tenant.name)

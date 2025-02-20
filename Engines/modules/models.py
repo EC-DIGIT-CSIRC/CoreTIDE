@@ -13,14 +13,14 @@ from Engines.modules.logs import log
 
 # TODO - Re-Architect Uber Class by merging this and DataTide
 
-# OpenTide.DataModel.
-# OpenTide.Objects. #Using DataModel as strong mapping
+# OpenTide.Models. #DataModels
+# OpenTide.Objects. #Returning Models
 # OpenTide.Configurations.
-# OpenTide.Deployment
-# OpenTide.Systems.
-# 
+# OpenTide.Deployment. #Returns Initialized deployment classes
+# OpenTide.Vocabularies.
+# OpenTide.Schemas.Json / OpenTide.Schemas.Yaml
 
-class DataModel:
+class BaseModels:
 
     class Enums:
         ...
@@ -140,6 +140,20 @@ class TideConfigs:
             ...
 
         @dataclass
+        class SentinelOne(SystemConfig):
+            @dataclass
+            class Tenant(SystemConfig.Tenant):
+
+                @dataclass
+                class Setup(SystemConfig.Tenant.Setup):
+                    url:str
+                    scope:str
+                    api_token:str
+                    site:Optional[str] = None
+
+                setup:Setup
+
+        @dataclass
         class DefenderForEndpoint(SystemConfig):
             
             @dataclass
@@ -160,18 +174,6 @@ class TideConfigs:
             platform: Platform
             tenants: Sequence[Tenant]
 
-        @dataclass
-        class SentinelOne(SystemConfig):
-            @dataclass
-            class Tenant(SystemConfig.Tenant):
-
-                @dataclass
-                class Setup(SystemConfig.Tenant.Setup):
-                    scope:str
-                    api_token:str
-                    site:Optional[str] = None
-
-                setup:Setup
 
 
 
@@ -270,7 +272,7 @@ class TideModels:
                     network_quarantine:bool
 
                 condition: Condition
-                response: Optional[Response] = None
+                response: Response
                 details:Optional[Details] = None
                 rule_id_bundle: Optional[TideDefinitionsModels.ExternalRuleId] = None
 
@@ -392,6 +394,10 @@ class TenantDeployment:
     @dataclass
     class CarbonBlackCloud(TenantDeploymentModel):
         tenant: TideConfigs.Systems.DefenderForEndpoint.Tenant
+
+    @dataclass
+    class SentinelOne(TenantDeploymentModel):
+        tenant: TideConfigs.Systems.SentinelOne.Tenant
 
     @dataclass
     class DefenderForEndpoint(TenantDeploymentModel):

@@ -404,12 +404,10 @@ class TideLoader:
 
     @overload
     @staticmethod
-    def load_platform_config(platform_config:dict, system:Literal[DetectionSystems.SENTINEL_ONE])->TideConfigs.Systems.SentinelOne.Platform: # type: ignore
-        ...
+    def load_platform_config(platform_config:dict, system:Literal[DetectionSystems.SENTINEL_ONE])->TideConfigs.Systems.SentinelOne.Platform: ...
     @overload
     @staticmethod
-    def load_platform_config(platform_config:dict, system:Literal[DetectionSystems.DEFENDER_FOR_ENDPOINT])->TideConfigs.Systems.DefenderForEndpoint.Platform: # type: ignore
-        ...
+    def load_platform_config(platform_config:dict, system:Literal[DetectionSystems.DEFENDER_FOR_ENDPOINT])->TideConfigs.Systems.DefenderForEndpoint.Platform: ...
     @staticmethod
     def load_platform_config(platform_config:dict, system:DetectionSystems):
         if not platform_config:
