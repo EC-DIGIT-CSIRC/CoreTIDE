@@ -12,6 +12,21 @@ patternProperties:
       This key will appear as many tenant as this rule is deployed to.
       Do not alter this field manually, or create new fields.
 
+if:
+  properties:
+    condition:
+      properties:
+        correlation:
+          properties:
+            entity:
+              enum: ["Endpoint", "Ip", "None", "Storyline", "User"]
+then:
+  not:
+    required: ["response"]
+    
+else:
+    required: ["response"]
+
 properties:
   schema:
     title: Schema identifier and version
@@ -102,10 +117,33 @@ properties:
       if you wish you continue in the same file you'll need to delete any rule_id that was
       added by the deployer to allow it to deploy a new one. 
     type: object
-    oneOf:
-      - required: ["single_event"]
-      - required: ["correlation"]
+    required: 
+      - type
+    
+    if:
+      properties:
+        type:
+          enum: [Single Event]
+    then:
+      required: [single_event]
+      not:
+        required: [correlation]
+    else:
+      required: [correlation]
+      not:
+        required: [single_event]
+
     properties:
+
+      type:
+        title: Detection Type
+        type: string
+        enum:
+          - Single Event
+          - Correlation
+        enumMarkdown:
+          - Matches against a single query
+          - Allows correlating around entities and using multiple subqueries
 
       single_event:
         title: Single Event Rule Type
@@ -141,6 +179,7 @@ properties:
             title: Correlation Entity
             description: |
               A common entity used to group matching events.
+              IMPORTANT: To use the response section, you must select a Process entity
             type: string
             enum: 
               - Process

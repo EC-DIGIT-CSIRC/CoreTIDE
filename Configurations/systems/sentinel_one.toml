@@ -20,13 +20,25 @@ flags = [""]
 #alert.title = "prefix::Staging "
 
 [[tenants]]
-name = "Name"
+name = "TEST::XDR"
 description = "Tenant Description"
 deployment = "ALWAYS" #STAGING, PRODUCTION, MANUAL (only when defined in MDR) or ALWAYS
 [tenants.setup]
-proxy = false
+proxy = true
 ssl = true
-url = "" #Management URL
-scope = "Scope Name exactly as written"
-#site = "Site name within scope, exactly as console"
+url = "https://euce1-ec.sentinelone.net/" #Management URL
+account_id = "2124162412906024084"
+#site_id = "Site name within scope, exactly as console"
+api_token = "$SENTINEL_ONE_API_TOKEN"
+
+[[tenants]]
+name = "TEST::EC_Subtenant1"
+description = "Tenant Description"
+deployment = "ALWAYS" #STAGING, PRODUCTION, MANUAL (only when defined in MDR) or ALWAYS
+[tenants.setup]
+proxy = true
+ssl = true
+url = "https://euce1-ec.sentinelone.net/" #Management URL
+account_id = "2124162412906024084"
+site_id = "2131969276897154164"
 api_token = "$SENTINEL_ONE_API_TOKEN"

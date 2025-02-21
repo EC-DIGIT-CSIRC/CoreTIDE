@@ -42,9 +42,6 @@ class Tide2Patching:
                     return model
 
         if model.get("metadata", {}).get("schema"):
-            log("SKIP",
-                f"Schema identifier found : {model['metadata']['schema']}",
-                f"Will not patch {model['name']}")
             return model
 
         log("ONGOING", f"Evaluating patching validation requirements for {model['name']}")

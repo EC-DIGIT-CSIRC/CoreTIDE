@@ -19,18 +19,13 @@ from Engines.modules.deployment import Proxy
 from Engines.modules.errors import TideErrors
 
 
-class Severity(str, Enum):
-    low = "Low"
-    medium = "Medium"
-    high = "High"
-    critical = "Critical"
     
 class SeverityMapping(Enum):
-    Informational = Severity.low
-    Low = Severity.low
-    Medium = Severity.medium
-    High = Severity.high
-    Critical = Severity.high 
+    Informational = "Low"
+    Low = "Low"
+    Medium = "Medium"
+    High = "High"
+    Critical = "Critical"
 
 @dataclass
 class DetectionRule:    
@@ -51,7 +46,7 @@ class DetectionRule:
 
             @dataclass
             class TimeWindow:
-                windowMinutes: str
+                windowMinutes: int
 
             entity:str #Already validated in JSON Schema
             matchInOrder: bool
@@ -61,12 +56,12 @@ class DetectionRule:
         expirationMode:Literal["Permanent", "Temporary"]
         name: str
         description: str
-        networkQuarantine: bool
-        treatAsThreat: bool
-        queryType:Literal["Correlation", "Events"]
-        severity:Severity
+        queryType:Literal["correlation", "events"]
+        severity:str
         status:Literal["Active", "Disabled"]
-        queryLand: Literal["1.0", "2.0"] = "2.0"
+        networkQuarantine: Optional[bool] = None
+        treatAsThreat: Optional[Literal["UNDEFINED", "Suspicious", "Malicious"]] = None
+        queryLang: Literal["1.0", "2.0"] = "2.0"
         s1ql: Optional[str] = None #Only for single event 
         expiration: Optional[str] = None
         coolOffSetting:Optional[CoolOffSettings] = None
@@ -74,8 +69,8 @@ class DetectionRule:
     
     @dataclass
     class Filter:
-        accountIds:list[str]
-        siteIds:Optional[list[str]] = []
+        accountIds:Optional[list[str]] = None
+        siteIds:Optional[list[str]] = None
         
     data:Data
     filter: Filter
@@ -98,7 +93,8 @@ class SentinelOneService:
         self.CREATE_QUERY_ENDPOINT = self.tenant_config.setup.url + "/web/api/v2.1/dv/init-query"
 
         self.session = requests.Session()
-        self.session.headers.update({"Authorization" : f"ApiToken {self.tenant_config.setup.api_token}"})
+        self.session.headers.update({"Authorization" : f"ApiToken {self.tenant_config.setup.api_token}",
+                                     "Content-Type" : "application/json"})
 
         if tenant_config.setup.proxy:
             Proxy.set_proxy()
@@ -109,7 +105,17 @@ class SentinelOneService:
         ...
 
     def create_update_detection_rule(self, rule:DetectionRule, rule_id:Optional[int]=None)->int:
-        rule_body = json.dumps(asdict(rule))
+
+        def _remove_nulls(value):
+            if isinstance(value, dict):
+                return {k: _remove_nulls(v) for k, v in value.items() if v is not None}
+            elif isinstance(value, list):
+                return [_remove_nulls(item) for item in value if item is not None]
+            else:
+                return value
+        
+        rule_body = json.dumps(_remove_nulls(asdict(rule)))
+        log("INFO", str(rule_body))        
         
         endpoint = self.CUSTOM_DETECTION_RULES_ENDPOINT
         if rule_id:
@@ -117,35 +123,35 @@ class SentinelOneService:
             endpoint += f"/{rule_id}"
             request = self.session.put(url=endpoint,
                                         verify=self.tenant_config.setup.ssl,
-                                        json=rule_body)
+                                        data=rule_body)
         else:
             log("ONGOING", "Executing API call to create STAR Custom Rule")
             request = self.session.post(url=endpoint,
                                         verify=self.tenant_config.setup.ssl,
-                                        json=rule_body)
+                                        data=rule_body)
 
         match request.status_code:
-            case 201:
+            case 200:
                 log("SUCCESS", "Created rule in SentinelOne", str(request.json()))
                 return int(request.json()["data"]["id"])
 
             case 400:
                 log("FATAL",
                     "Received code [400], Invalid user input received",
-                    str(request.json))
+                    str(request.text))
                 raise TideErrors.DetectionRuleCreationFailed
 
             case 401:
                 log("FATAL",
                     "Received code [401], Unauthorized access",
-                    str(request.json),
+                    str(request.text),
                     "Check your configuration and API permissions again")
                 raise TideErrors.DetectionRuleCreationFailed
 
             case 404:
                 log("FATAL",
                     f"Received code [404], Custom Detection rule not found with id {rule_id}",
-                    str(request.json),
+                    str(request.text),
                     "Go to SentinelOne Console and check if your rule still exists. If not, remove the rule id entry from the MDR file")
                 raise TideErrors.DetectionRuleCreationFailed
         
@@ -156,7 +162,13 @@ class SentinelOneService:
 
 
     def disable_detection_rule(self, rule_id:int):
-        ...
+        filter = {"filter": {"ids":[rule_id]}}
+
+        log("ONGOING", "")
+        request = self.session.put(url=self.CUSTOM_DETECTION_RULES_ENDPOINT,
+                            verify=self.tenant_config.setup.ssl,
+                            data=filter)
+
 
     def delete_detection_rule(self, rule_id:int):
         ...

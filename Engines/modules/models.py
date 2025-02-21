@@ -117,9 +117,8 @@ class SystemConfig:
                 self.deployment = DeploymentStrategy[self.deployment]
 
     platform: Platform
-    modifiers: Sequence[Modifiers] | Sequence[Never]
     tenants: Sequence[Tenant]
-    defaults: dict[str,str]
+    modifiers: Optional[Sequence[Modifiers]] = None
 
 @dataclass
 class TideConfigs:
@@ -147,9 +146,9 @@ class TideConfigs:
                 @dataclass
                 class Setup(SystemConfig.Tenant.Setup):
                     url:str
-                    scope:str
+                    account_id:str
                     api_token:str
-                    site:Optional[str] = None
+                    site_id:Optional[str] = None
 
                 setup:Setup
 
@@ -203,10 +202,6 @@ class TideDefinitionsModels:
         flags: Optional[list[Never] | list[str]]
         tenants: Optional[list[str]]
         contributors: Optional[list[str]]
-
-    @dataclass
-    class ExternalRuleId:
-        rule_id_bundle: Optional[Mapping[str, int]] = None
 
 
 class TideModels:
@@ -262,19 +257,20 @@ class TideModels:
                         time_window: str
                         sub_queries: Sequence[SubQueries]
                     
+                    type:Literal["Single Event", "Correlation"]
                     single_event: Optional[SingleEvent] = None
                     correlation: Optional[Correlation] = None
                     cool_off: Optional[str] = None
                 
                 @dataclass
                 class Response:
-                    treat_as_threat:bool
+                    treat_as_threat:Literal[False, "Malicious", "Suspicious"]
                     network_quarantine:bool
 
                 condition: Condition
-                response: Response
+                response: Optional[Response] = None
                 details:Optional[Details] = None
-                rule_id_bundle: Optional[TideDefinitionsModels.ExternalRuleId] = None
+                rule_id_bundle: Optional[Mapping[str, int]] = None
 
             @dataclass
             class DefenderForEndpoint(TideDefinitionsModels.SystemConfigurationModel):

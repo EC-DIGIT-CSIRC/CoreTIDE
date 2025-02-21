@@ -21,33 +21,59 @@ class SentinelOneDeploy(DeployMDR):
 
     def deploy_mdr(self, data:TideModels.MDR, service:SentinelOneService, tenant_config:TideConfigs.Systems.SentinelOne.Tenant):
         
+        def _convert_to_minutes(timespan:str)->int:
+            if timespan.endswith("m"):
+                timespan_in_minute = timespan.removesuffix("m")
+            elif timespan.endswith("h"):
+                timespan_in_minute = int(timespan.removesuffix("h")) * 60 
+
+            return int(timespan_in_minute)
+
         mdr_config = data.configurations.sentinel_one
 
         if not mdr_config:
             exit()
         
+        #Base Details
         rule_name = data.name
         rule_description = data.description
         rule_expiration_mode = "Permanent"
         rule_severity = SeverityMapping[data.response.alert_severity].value
         rule_expiration = None
         rule_status = "Disabled" if mdr_config.status == "DISABLED" else "Active"
-        treat_as_threat = mdr_config.response.treat_as_threat
-        network_quarantine = mdr_config.response.network_quarantine
-
+        
+        # Details Section
         if details:=mdr_config.details:
             if details.name:
                 rule_name = details.name
             if details.description:
                 rule_description = details.description
+            if details.severity:
+                rule_severity = details.severity
             if details.expiration:
                 rule_expiration_mode = "Temporary"
                 rule_expiration = details.expiration
 
-        if single_event_data:=mdr_config.condition.single_event:
+        # Response Section
+        treat_as_threat = mdr_config.response.treat_as_threat
+        if treat_as_threat is False:
+            treat_as_threat = "UNDEFINED"
+        
+        network_quarantine = mdr_config.response.network_quarantine
+
+        # Condition Section
+        cool_off = mdr_config.condition.cool_off
+        if cool_off is str:
+            cool_off = DetectionRule.Data.CoolOffSettings(renotifyMinutes=_convert_to_minutes(cool_off))
+
+        if mdr_config.condition.type == "Single Event":
+            single_event_data = mdr_config.condition.single_event
+            if not single_event_data:
+                log("FAILURE", "Missing Single Event section in MDR", data.metadata.uuid)
+                raise Exception
             query = single_event_data.query
             rule_data = DetectionRule.Data(name=rule_name,
-                                            queryType="Events",
+                                            queryType="events",
                                             s1ql=query,
                                             severity=rule_severity,
                                             status=rule_status,
@@ -55,9 +81,14 @@ class SentinelOneDeploy(DeployMDR):
                                             expiration=rule_expiration,
                                             description=rule_description,
                                             networkQuarantine=network_quarantine,
-                                            treatAsThreat=treat_as_threat)
-        elif correlation_data:=mdr_config.condition.correlation:
-            
+                                            treatAsThreat=treat_as_threat,
+                                            coolOffSetting=cool_off) # type: ignore
+        
+        elif mdr_config.condition.type == "Correlation":
+            correlation_data = mdr_config.condition.correlation
+            if not correlation_data:
+                log("FAILURE", "Missing correlation section in MDR", data.metadata.uuid)
+                raise Exception
             sub_queries = []
                         
             for sub_query in correlation_data.sub_queries:
@@ -66,7 +97,9 @@ class SentinelOneDeploy(DeployMDR):
 
             time_window_config = None
             if correlation_data.time_window:
-                time_window_config = DetectionRule.Data.CorrelationParams.TimeWindow(windowMinutes = correlation_data.time_window)
+                
+                time_window_data = correlation_data.time_window                                    
+                time_window_config = DetectionRule.Data.CorrelationParams.TimeWindow(windowMinutes = _convert_to_minutes(time_window_data))
 
             correlation_config = DetectionRule.Data.CorrelationParams(entity=correlation_data.entity,
                                                                       matchInOrder=correlation_data.match_in_order,
@@ -74,7 +107,7 @@ class SentinelOneDeploy(DeployMDR):
                                                                       timeWindow=time_window_config)
             
             rule_data = DetectionRule.Data(name=rule_name,
-                                            queryType="Events",
+                                            queryType="correlation",
                                             correlationParams=correlation_config,
                                             severity=rule_severity,
                                             status=rule_status,
@@ -82,29 +115,41 @@ class SentinelOneDeploy(DeployMDR):
                                             expiration=rule_expiration,
                                             description=rule_description,
                                             networkQuarantine=network_quarantine,
-                                            treatAsThreat=treat_as_threat)
+                                            treatAsThreat=treat_as_threat,
+                                            coolOffSetting=cool_off) # type: ignore
 
         else:
             raise Exception
 
-        deployment_filter = DetectionRule.Filter(accountIds=[tenant_config.setup.scope],
-                                                 siteIds=[tenant_config.setup.site] if tenant_config.setup.site else None)
+        # Filter Setup
+        if tenant_config.setup.site_id:
+            deployment_filter = DetectionRule.Filter(siteIds=[tenant_config.setup.site_id])
+        elif tenant_config.setup.account_id:
+            deployment_filter = DetectionRule.Filter(accountIds=[tenant_config.setup.account_id])
 
         rule = DetectionRule(data=rule_data,
                              filter=deployment_filter)
 
-        
+
+        from dataclasses import asdict
+        log("DEBUG", "MDR CONTENT")
+        print(asdict(mdr_config))
         if mdr_config.rule_id_bundle:
+            mdr_config.rule_id_bundle
             rule_id = mdr_config.rule_id_bundle.get(tenant_config.name) #type:ignore
+            if rule_id:
+                log("INFO",
+                    f"Retrieved ID for tenant {tenant_config.name} in MDR",
+                    str(rule_id),
+                    "Will perform an update")
             log("INFO",
-                f"Retrieved ID for tenant {tenant_config.name} in MDR",
-                str(rule_id),
-                "Will perform an update")
+                f"Could not retrieve ID for tenant {tenant_config.name} in MDR existing rule IDs",
+                "Will create a new rule, and write back the ID to the file")
         else:
             log("INFO",
                 f"Could not retrieve ID for tenant {tenant_config.name} in MDR",
                 "Will create a new rule, and write back the ID to the file")
-
+            print(mdr_config.rule_id_bundle)
             rule_id = None
 
         
@@ -137,6 +182,7 @@ class SentinelOneDeploy(DeployMDR):
 
         else:
             if rule_id:
+                log("INFO", f"Found Rule ID", str(rule_id), "Going to update the rule")
                 service.create_update_detection_rule(rule, rule_id)
         
             else:
@@ -163,6 +209,7 @@ class SentinelOneDeploy(DeployMDR):
 
 
     def deploy(self, mdr_deployment: Sequence[TideModels.MDR], deployment_plan:DeploymentStrategy):
+        log("INFO", "Received deployment information", str(mdr_deployment))
         mdr_deployment = [DataTide.Models.MDR[uuid] for uuid in mdr_deployment]
 
         deployment = TideDeployment(deployment=mdr_deployment,

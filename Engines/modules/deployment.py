@@ -351,11 +351,13 @@ class TideDeployment:
         match system:
             case DetectionSystems.DEFENDER_FOR_ENDPOINT:
                 mdr_config = data.configurations.defender_for_endpoint
+            case DetectionSystems.SENTINEL_ONE:
+                mdr_config = data.configurations.sentinel_one
             case _:
-                raise NotImplemented
+                raise Exception(NotImplemented)
 
         if not mdr_config:
-            raise NotImplemented
+            raise Exception(NotImplemented)
 
         return mdr_config    
 

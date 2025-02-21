@@ -249,15 +249,20 @@ class SystemLoader:
                                             contributors=contributors)
 
     @staticmethod
-    def _external_rule_id(mdr_config:dict[str, Any])->Tuple[dict[str, Any], TideDefinitionsModels.ExternalRuleId]:
-        ExternalIdBundle = TideDefinitionsModels.ExternalRuleId 
+    def _external_rule_id(mdr_config:dict[str, Any])->Tuple[dict[str, Any], Mapping[str, int]]:
         rule_id_bundle = {}
+        
+        # In case was already parsed into bundle
+        if "rule_id_bundle" in mdr_config:
+            rule_id_bundle = mdr_config.pop("rule_id_bundle")
+            return mdr_config, rule_id_bundle
+        
         for key in mdr_config.copy():
             if key.startswith("rule_id::"):
                 tenant = key.split("rule_id::")[1]
                 rule_id_bundle[tenant] = mdr_config.pop(key)
 
-        return mdr_config, ExternalIdBundle(rule_id_bundle=rule_id_bundle)
+        return mdr_config, rule_id_bundle
 
     @staticmethod
     def sentinel_one(mdr_config:dict[str, Any])->TideModels.MDR.Configurations.SentinelOne:
@@ -267,29 +272,33 @@ class SystemLoader:
         mdr_config, base_config = SystemLoader._base_configuration(mdr_config)
         mdr_config, rule_id_bundle = SystemLoader._external_rule_id(mdr_config)
         
+        print("HERREERR")
+        print(rule_id_bundle)
+
         details = None
         if mdr_config.get("details"):
             details = SentinelOne.Details(**mdr_config.pop("details"))
 
+        condition = mdr_config.pop("condition")
+        rule_type = condition.pop("type")
         single_event = None
-        if mdr_config.get("single_event"):
-            single_event = SentinelOne.Condition.SingleEvent(**mdr_config.pop("single_event"))
+        if condition.get("single_event"):
+            single_event = SentinelOne.Condition.SingleEvent(**condition.pop("single_event"))
         
         correlation = None
-        if mdr_config.get("correlation"):
-            sub_queries = mdr_config.pop("sub_queries")
+        if condition.get("correlation"):
+            sub_queries = condition["correlation"].pop("sub_queries")
             sub_queries = [SentinelOne.Condition.Correlation.SubQueries(**sub) for sub in sub_queries]
-            correlation = SentinelOne.Condition.Correlation(**mdr_config.pop("correlations"),
+            correlation = SentinelOne.Condition.Correlation(**condition.pop("correlation"),
                                                             sub_queries=sub_queries)
 
         cool_off = mdr_config.pop("cool_off", None)
-        condition = SentinelOne.Condition(single_event=single_event,
+        condition = SentinelOne.Condition(type=rule_type,
+                                          single_event=single_event,
                                           correlation=correlation,
                                           cool_off=cool_off)
 
-        response = None
-        if mdr_config.get("response"):
-            response = SentinelOne.Response(**mdr_config.pop("response"))
+        response = SentinelOne.Response(**mdr_config.pop("response"))
         
         return SentinelOne(schema=base_config.schema,
                            status=base_config.status,
@@ -704,7 +713,7 @@ class DataTide:
                     IndexTide.load()["configurations"]["systems"]["defender_for_endpoint"]
                 )
                 platform = TideLoader.load_platform_config(dict(raw["platform"]), DetectionSystems.DEFENDER_FOR_ENDPOINT)
-                modifiers = TideLoader.load_modifiers_config(raw["modifiers"])
+                modifiers = TideLoader.load_modifiers_config(raw["modifiers"]) if raw.get("modifiers") else None
                 tenants = TideLoader.load_tenants_config(raw["tenants"], DetectionSystems.DEFENDER_FOR_ENDPOINT)
                 defaults = dict(raw.get("defaults", {}))
 
@@ -714,7 +723,7 @@ class DataTide:
                     IndexTide.load()["configurations"]["systems"]["sentinel_one"]
                 )
                 platform = TideLoader.load_platform_config(dict(raw["platform"]), DetectionSystems.SENTINEL_ONE)
-                modifiers = TideLoader.load_modifiers_config(raw["modifiers"])
+                modifiers = TideLoader.load_modifiers_config(raw["modifiers"]) if raw.get("modifiers") else None
                 tenants = TideLoader.load_tenants_config(raw["tenants"], DetectionSystems.SENTINEL_ONE)
                 defaults = dict(raw.get("defaults", {}))
 
