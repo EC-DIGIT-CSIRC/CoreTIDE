@@ -101,6 +101,33 @@ class SentinelOneService:
         else:
             Proxy.unset_proxy()
 
+    def _http_errors(self, response:requests.Response, error):
+        match response.status_code:
+            case 400:
+                log("FATAL",
+                    "Received code [400], Invalid user input received",
+                    str(response.text))
+                raise error
+
+            case 401:
+                log("FATAL",
+                    "Received code [401], Unauthorized access",
+                    str(response.text),
+                    "Check your configuration and API permissions again")
+                raise error
+
+            case 404:
+                log("FATAL",
+                    f"Received code [404], Custom Detection rule not found with id in MDR file",
+                    str(response.text),
+                    "Go to SentinelOne Console and check if your rule still exists. If not, remove the rule id entry from the MDR file")
+                raise error
+        
+            case _:
+                log("FATAL", f"Unforeseen error with code [{response.status_code}]",
+                    str(response.json()))
+                raise error
+    
     def validate_query(self, query:str)->bool:
         ...
 
@@ -121,11 +148,13 @@ class SentinelOneService:
         if rule_id:
             log("ONGOING", "Executing API call to update STAR Custom Rule with id", str(rule_id))
             endpoint += f"/{rule_id}"
+            error = TideErrors.DetectionRuleCreationFailed
             request = self.session.put(url=endpoint,
                                         verify=self.tenant_config.setup.ssl,
                                         data=rule_body)
         else:
             log("ONGOING", "Executing API call to create STAR Custom Rule")
+            error = TideErrors.DetectionRuleCreationFailed
             request = self.session.post(url=endpoint,
                                         verify=self.tenant_config.setup.ssl,
                                         data=rule_body)
@@ -135,40 +164,40 @@ class SentinelOneService:
                 log("SUCCESS", "Created rule in SentinelOne", str(request.json()))
                 return int(request.json()["data"]["id"])
 
-            case 400:
-                log("FATAL",
-                    "Received code [400], Invalid user input received",
-                    str(request.text))
-                raise TideErrors.DetectionRuleCreationFailed
-
-            case 401:
-                log("FATAL",
-                    "Received code [401], Unauthorized access",
-                    str(request.text),
-                    "Check your configuration and API permissions again")
-                raise TideErrors.DetectionRuleCreationFailed
-
-            case 404:
-                log("FATAL",
-                    f"Received code [404], Custom Detection rule not found with id {rule_id}",
-                    str(request.text),
-                    "Go to SentinelOne Console and check if your rule still exists. If not, remove the rule id entry from the MDR file")
-                raise TideErrors.DetectionRuleCreationFailed
-        
             case _:
-                log("FATAL", f"Unforeseen error with code [{request.status_code}]",
-                    str(request.json()))
-                raise TideErrors.DetectionRuleCreationFailed
+                self._http_errors(request, error=error)
 
 
     def disable_detection_rule(self, rule_id:int):
         filter = {"filter": {"ids":[rule_id]}}
+        filter = json.dumps(filter)
 
-        log("ONGOING", "")
+        log("ONGOING", "Disabling Rule with ID", str(rule_id))
         request = self.session.put(url=self.CUSTOM_DETECTION_RULES_ENDPOINT,
-                            verify=self.tenant_config.setup.ssl,
-                            data=filter)
+                                    verify=self.tenant_config.setup.ssl,
+                                    data=filter)
+        match request.status_code:
+            case 200:
+                log("SUCCESS", f"Disabled rule with id {rule_id} in SentinelOne", str(request.json()))
+
+            case _:
+                self._http_errors(request,
+                                  error=TideErrors.DetectionRuleDisablingFailed)
 
 
     def delete_detection_rule(self, rule_id:int):
-        ...
+        
+        filter = {"filter": {"ids":[rule_id]}}
+        filter = json.dumps(filter)
+        
+        log("ONGOING", "Deleting Rule with ID", str(rule_id))
+        request = self.session.delete(url=self.CUSTOM_DETECTION_RULES_ENDPOINT,
+                                    verify=self.tenant_config.setup.ssl,
+                                    data=filter)
+        match request.status_code:
+            case 200:
+                log("SUCCESS", f"Deleted rule with id {rule_id} in SentinelOne", str(request.json()))
+
+            case _:
+                self._http_errors(request,
+                                  error=TideErrors.DetectionRuleDeletionFailed)

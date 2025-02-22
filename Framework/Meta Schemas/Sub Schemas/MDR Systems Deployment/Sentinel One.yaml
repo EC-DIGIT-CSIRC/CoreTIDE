@@ -13,18 +13,24 @@ patternProperties:
       Do not alter this field manually, or create new fields.
 
 if:
-  properties:
-    condition:
-      properties:
-        correlation:
+  anyOf:
+    - properties:
+        condition:
           properties:
-            entity:
-              enum: ["Endpoint", "Ip", "None", "Storyline", "User"]
+            correlation:
+              properties:
+                entity:
+                  enum: ["Process"]
+    - properties:
+        condition:
+          properties:
+            type:
+              enum: ["Single Event"]
 then:
-  not:
-    required: ["response"]
+  required: ["response"]
     
 else:
+  not:
     required: ["response"]
 
 properties:

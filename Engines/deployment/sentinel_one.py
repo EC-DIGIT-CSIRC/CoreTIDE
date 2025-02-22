@@ -2,7 +2,7 @@ import git
 import sys
 
 from typing import Sequence
-from dataclasses import dataclass
+from dataclasses import asdict
 
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
@@ -11,7 +11,7 @@ from Engines.modules.tide import DataTide, DetectionSystems, TideLoader
 from Engines.modules.plugins import DeployMDR
 from Engines.modules.models import (TideModels,
                                     DeploymentStrategy) 
-from Engines.modules.deployment import TideDeployment
+from Engines.modules.deployment import TideDeployment, ExternalIdHelper
 from Engines.modules.logs import log
 from Engines.modules.models import TideConfigs
 
@@ -19,9 +19,16 @@ from Engines.modules.systems.sentinel_one import SentinelOneService, DetectionRu
 
 class SentinelOneDeploy(DeployMDR):
 
-    def deploy_mdr(self, data:TideModels.MDR, service:SentinelOneService, tenant_config:TideConfigs.Systems.SentinelOne.Tenant):
-        
+    def compile_deployment(self,
+                           data:TideModels.MDR,
+                           tenant_config:TideConfigs.Systems.SentinelOne.Tenant)->DetectionRule:
+        """
+        Builds the Detection Rule call made to the API
+        """
         def _convert_to_minutes(timespan:str)->int:
+            """
+            Helper class to normalize all time expression to minutes
+            """
             if timespan.endswith("m"):
                 timespan_in_minute = timespan.removesuffix("m")
             elif timespan.endswith("h"):
@@ -55,17 +62,24 @@ class SentinelOneDeploy(DeployMDR):
                 rule_expiration = details.expiration
 
         # Response Section
-        treat_as_threat = mdr_config.response.treat_as_threat
-        if treat_as_threat is False:
-            treat_as_threat = "UNDEFINED"
-        
-        network_quarantine = mdr_config.response.network_quarantine
+        if mdr_config.response:
+            treat_as_threat = mdr_config.response.treat_as_threat
+            network_quarantine = mdr_config.response.network_quarantine
+            if treat_as_threat is False:
+                treat_as_threat = "UNDEFINED"
+        else:
+            treat_as_threat = None
+            network_quarantine = None
 
         # Condition Section
         cool_off = mdr_config.condition.cool_off
         if cool_off is str:
             cool_off = DetectionRule.Data.CoolOffSettings(renotifyMinutes=_convert_to_minutes(cool_off))
 
+        # Rule type sanity checker
+        if mdr_config.condition.type not in ["Single Event", "Correlation"]:
+            raise Exception
+        
         if mdr_config.condition.type == "Single Event":
             single_event_data = mdr_config.condition.single_event
             if not single_event_data:
@@ -118,38 +132,49 @@ class SentinelOneDeploy(DeployMDR):
                                             treatAsThreat=treat_as_threat,
                                             coolOffSetting=cool_off) # type: ignore
 
-        else:
-            raise Exception
-
         # Filter Setup
         if tenant_config.setup.site_id:
             deployment_filter = DetectionRule.Filter(siteIds=[tenant_config.setup.site_id])
         elif tenant_config.setup.account_id:
             deployment_filter = DetectionRule.Filter(accountIds=[tenant_config.setup.account_id])
 
-        rule = DetectionRule(data=rule_data,
+        return DetectionRule(data=rule_data,
                              filter=deployment_filter)
 
 
-        from dataclasses import asdict
-        log("DEBUG", "MDR CONTENT")
-        print(asdict(mdr_config))
+
+
+    def deploy_mdr(self,
+                   data:TideModels.MDR,
+                   service:SentinelOneService,
+                   tenant_config:TideConfigs.Systems.SentinelOne.Tenant):
+        """
+        Deploys the detection rule : creation, update, deletion and disabling.
+        """
+
+        mdr_config = data.configurations.sentinel_one
+        if not mdr_config:
+            raise Exception
+        
+        rule = self.compile_deployment(data=data, tenant_config=tenant_config)
+
         if mdr_config.rule_id_bundle:
             mdr_config.rule_id_bundle
-            rule_id = mdr_config.rule_id_bundle.get(tenant_config.name) #type:ignore
+            rule_id = mdr_config.rule_id_bundle.get(tenant_config.name.strip()) #type:ignore
             if rule_id:
                 log("INFO",
                     f"Retrieved ID for tenant {tenant_config.name} in MDR",
                     str(rule_id),
                     "Will perform an update")
-            log("INFO",
-                f"Could not retrieve ID for tenant {tenant_config.name} in MDR existing rule IDs",
-                "Will create a new rule, and write back the ID to the file")
+            else:
+                log("INFO",
+                    f"Could not retrieve ID for tenant {tenant_config.name} in MDR existing rule IDs",
+                    str(mdr_config.rule_id_bundle),
+                    "Will create a new rule, and write back the ID to the file")
         else:
             log("INFO",
                 f"Could not retrieve ID for tenant {tenant_config.name} in MDR",
                 "Will create a new rule, and write back the ID to the file")
-            print(mdr_config.rule_id_bundle)
             rule_id = None
 
         
@@ -163,22 +188,10 @@ class SentinelOneDeploy(DeployMDR):
                     f"Proceeding with deletion of rule against tenant {tenant_config.name}",
                     str(rule_id))
                 
-                service.delete_detection_rule(rule_id)
-                file_path = DataTide.Configurations.Global.Paths.Tide.mdr / DataTide.Models.files[data.metadata.uuid]
-                with open(file_path, "r", encoding="utf-8") as mdr_file:
-                    content = mdr_file.readlines()
-
-                updated_content = list()
-
-                #Remove previous rule ID from file
-                for line in content:
-                    if line.strip() != f"rule_id::{tenant_config.name}: {rule_id}":
-                        updated_content.append(line)
-
-                with open(file_path, "w", encoding="utf-8") as mdr_file:
-                    log("SUCCESS",
-                    f"Removed ID in MDR File for tenant {tenant_config.name}")
-                    mdr_file.writelines(updated_content)
+                service.delete_detection_rule(rule_id=rule_id)
+                ExternalIdHelper.remove_id(rule_id=rule_id,
+                                           tenant_name=tenant_config.name,
+                                           mdr_uuid=data.metadata.uuid)
 
         else:
             if rule_id:
@@ -187,30 +200,26 @@ class SentinelOneDeploy(DeployMDR):
         
             else:
                 rule_id = service.create_update_detection_rule(rule)
-                file_path = DataTide.Configurations.Global.Paths.Tide.mdr / DataTide.Models.files[data.metadata.uuid]
-                with open(file_path, "r", encoding="utf-8") as mdr_file:
-                    content = mdr_file.readlines()
-                
-                updated_content = list()
-                for line in content:
-                    log("DEBUG", line)
-                    if line.strip() == 'sentinel_one:':
-                        updated_content.append(line)
-                        updated_content.append(f"    rule_id::{tenant_config.name}: {rule_id}\n")
-                        log("DEBUG", "Appending line", str(rule_id))
-                    else:
-                        updated_content.append(line)
-
-                with open(file_path, "w", encoding="utf-8") as mdr_file:
-                    log("SUCCESS",
-                    f"Updated MDR File with new ID for tenant {tenant_config.name}",
-                    str(rule_id))
-                    mdr_file.writelines(updated_content)
+                ExternalIdHelper.insert_id(rule_id=rule_id,
+                                           tenant_name=tenant_config.name,
+                                           mdr_uuid=data.metadata.uuid,
+                                           system_name=DataTide.Configurations.Systems.SentinelOne.platform.identifier)
 
 
-    def deploy(self, mdr_deployment: Sequence[TideModels.MDR], deployment_plan:DeploymentStrategy):
+    def deploy(self, mdr_deployment: Sequence[TideModels.MDR] | list[str], deployment_plan:DeploymentStrategy):
+        """
+        Triggers the deployment sequence for a series of MDR uuids or TideModels.MDR Objects
+        """
+        
         log("INFO", "Received deployment information", str(mdr_deployment))
-        mdr_deployment = [DataTide.Models.MDR[uuid] for uuid in mdr_deployment]
+        
+        loaded_mdr = []
+        for mdr in mdr_deployment:
+            if type(mdr) is str:
+                loaded_mdr.append(DataTide.Models.MDR[mdr])
+            elif type(mdr) is TideModels.MDR:
+                loaded_mdr.append(mdr)
+        mdr_deployment = loaded_mdr
 
         deployment = TideDeployment(deployment=mdr_deployment,
                                     system=DetectionSystems.SENTINEL_ONE,
