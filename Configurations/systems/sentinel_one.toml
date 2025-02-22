@@ -1,5 +1,5 @@
 [platform]
-enabled = true
+enabled = false
 identifier = "sentinel_one"
 name = "Sentinel One"
 subschema = "Sentinel One"
@@ -20,25 +20,14 @@ flags = [""]
 #alert.title = "prefix::Staging "
 
 [[tenants]]
-name = "TEST::XDR"
-description = "Tenant Description"
+name = "Environment::Name"
+description = "Description"
 deployment = "ALWAYS" #STAGING, PRODUCTION, MANUAL (only when defined in MDR) or ALWAYS
 [tenants.setup]
 proxy = true
 ssl = true
-url = "https://euce1-ec.sentinelone.net/" #Management URL
-account_id = 2124162412906024084
+url =  #Management URL
+account_id = 
 #site_id = "Site name within scope, exactly as console"
 api_token = "$SENTINEL_ONE_API_TOKEN"
 
-[[tenants]]
-name = "TEST::EC_Subtenant1"
-description = "Tenant Description"
-deployment = "ALWAYS" #STAGING, PRODUCTION, MANUAL (only when defined in MDR) or ALWAYS
-[tenants.setup]
-proxy = true
-ssl = true
-url = "https://euce1-ec.sentinelone.net/" #Management URL
-account_id = 2124162412906024084
-site_id = 2131969276897154164
-api_token = "$SENTINEL_ONE_API_TOKEN"
