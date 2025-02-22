@@ -134,9 +134,9 @@ class SentinelOneDeploy(DeployMDR):
 
         # Filter Setup
         if tenant_config.setup.site_id:
-            deployment_filter = DetectionRule.Filter(siteIds=[tenant_config.setup.site_id])
+            deployment_filter = DetectionRule.Filter(siteIds=[str(tenant_config.setup.site_id)])
         elif tenant_config.setup.account_id:
-            deployment_filter = DetectionRule.Filter(accountIds=[tenant_config.setup.account_id])
+            deployment_filter = DetectionRule.Filter(accountIds=[str(tenant_config.setup.account_id)])
 
         return DetectionRule(data=rule_data,
                              filter=deployment_filter)

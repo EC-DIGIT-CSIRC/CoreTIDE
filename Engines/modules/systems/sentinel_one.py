@@ -135,9 +135,9 @@ class SentinelOneService:
         May not be able to catch every edge cases, but will replicate most frontend errors
         """
         request = {}
-        request["accountIds"] = self.tenant_config.setup.account_id
+        request["accountIds"] = str(self.tenant_config.setup.account_id)
         if site_id:=self.tenant_config.setup.site_id:
-            request["site_id"] = site_id
+            request["site_id"] = str(site_id)
         request["query"] = query
         now = datetime.now()
         from_date = now - timedelta(minutes=1)

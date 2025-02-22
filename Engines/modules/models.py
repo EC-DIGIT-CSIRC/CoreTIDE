@@ -146,9 +146,9 @@ class TideConfigs:
                 @dataclass
                 class Setup(SystemConfig.Tenant.Setup):
                     url:str
-                    account_id:str
+                    account_id:int
                     api_token:str
-                    site_id:Optional[str] = None
+                    site_id:Optional[int] = None
 
                 setup:Setup
 
