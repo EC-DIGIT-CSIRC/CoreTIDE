@@ -8,6 +8,7 @@ import git
 from dataclasses import dataclass, asdict
 from typing import Literal, Never, ClassVar, Sequence, overload, Any, Optional
 from enum import Enum, auto
+from datetime import datetime, timedelta
 
 sys.path.append(str(git.Repo(".", search_parent_directories=True).working_dir))
 
@@ -88,9 +89,9 @@ class SentinelOneService:
         self.DEBUG = DebugEnvironment.ENABLED
         self.DEPLOYER_IDENTIFIER = DataTide.Configurations.Systems.SentinelOne.platform.identifier
         self.tenant_config = tenant_config
+        
         self.CUSTOM_DETECTION_RULES_ENDPOINT = self.tenant_config.setup.url + "/web/api/v2.1/cloud-detection/rules"
-
-        self.CREATE_QUERY_ENDPOINT = self.tenant_config.setup.url + "/web/api/v2.1/dv/init-query"
+        self.CREATE_QUERY_ENDPOINT = self.tenant_config.setup.url + "/web/api/v2.1/dv/events/pq"
 
         self.session = requests.Session()
         self.session.headers.update({"Authorization" : f"ApiToken {self.tenant_config.setup.api_token}",
@@ -114,7 +115,7 @@ class SentinelOneService:
                     "Received code [401], Unauthorized access",
                     str(response.text),
                     "Check your configuration and API permissions again")
-                raise error
+                raise TideErrors.TideTenantConfigurationMissingPermissions
 
             case 404:
                 log("FATAL",
@@ -129,8 +130,43 @@ class SentinelOneService:
                 raise error
     
     def validate_query(self, query:str)->bool:
-        ...
+        """
+        Performs a Power Query against the SentinelOne tenant to validate if the query is able to run
+        May not be able to catch every edge cases, but will replicate most frontend errors
+        """
+        request = {}
+        request["accountIds"] = self.tenant_config.setup.account_id
+        if site_id:=self.tenant_config.setup.site_id:
+            request["site_id"] = site_id
+        request["query"] = query
+        now = datetime.now()
+        from_date = now - timedelta(minutes=1)
+        request["toDate"] = str(now.isoformat()) + "Z"
+        request["fromDate"] = str(from_date.isoformat()) + "Z"
+        
+        request =json.dumps(request, indent=4)
+        response = self.session.post(url=self.CREATE_QUERY_ENDPOINT,
+                                    verify=self.tenant_config.setup.ssl,
+                                    data=request)
 
+        match response.status_code:
+            case 200:
+                log("SUCCESS", "The query was able to run")
+                return True
+            case 400:
+                try:
+                    error = response.json().get("errors")[0].get("detail")
+                except:
+                    error = str(response.json())
+                log("FATAL",
+                    f"The query failed to be validated on tenant {self.tenant_config.name}",
+                    error,
+                    "Double check your query on the Sentinel One Event Search interface")
+                return False
+            case _:
+                self._http_errors(response, error=TideErrors.TideQueryValidationError)
+            
+                
     def create_update_detection_rule(self, rule:DetectionRule, rule_id:Optional[int]=None)->int:
 
         def _remove_nulls(value):
@@ -192,8 +228,8 @@ class SentinelOneService:
         
         log("ONGOING", "Deleting Rule with ID", str(rule_id))
         request = self.session.delete(url=self.CUSTOM_DETECTION_RULES_ENDPOINT,
-                                    verify=self.tenant_config.setup.ssl,
-                                    data=filter)
+                                        verify=self.tenant_config.setup.ssl,
+                                        data=filter)
         match request.status_code:
             case 200:
                 log("SUCCESS", f"Deleted rule with id {rule_id} in SentinelOne", str(request.json()))

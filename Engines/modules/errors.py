@@ -65,6 +65,11 @@ class TideErrors(Exception):
         Represents all errors related to OpenTIDE System Configuration Files
         """
         ...
+    class TideTenantConfigurationMissingPermissions(TideSystemConfigurationErrors):
+        """
+        Represents all errors related to API permissions on target systems
+        """
+        ...
     class TenantNonExistingDeploymentPlan(TideTenantConfigurationErrors):
         """
         Raised when a tenant uses a non existing deployment plan
