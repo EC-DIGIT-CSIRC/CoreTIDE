@@ -1,5 +1,5 @@
-title: Defender For Endpoint Configuration
-description: Validates and Documents the Defender for Endpoint Configuration file
+title: Sentinel One Configuration
+description: Validates and Documents the Sentinel One Configuration file
 
 $schema: https://json-schema.org/draft/2020-12/schema
 additionalProperties: false
@@ -9,7 +9,6 @@ required:
   - tenants
 
 properties:
-
   platform:
     title: Platform Config Section
     type: object
@@ -37,7 +36,7 @@ properties:
           especially within the MDR configuration section. Cannot be overwritten,
           need to be changed at a schema level first 
         type: string
-        const: defender_for_endpoint
+        const: sentinel_one
 
       name:
         title: System Name
@@ -45,7 +44,7 @@ properties:
           The usual commercial or commonly known term for the system. Mostly
           used for documentation or enrichment purposes
         type: string
-        const: Microsoft Defender for Endpoint
+        const: Sentinel One
       
       subschema:
         title: System Sub Schema 
@@ -53,7 +52,7 @@ properties:
           Name of the file containing the schema definition for the system, without
           path or extension. Should not be usually modified. 
         type: string
-        const: Defender for Endpoint
+        const: Sentinel One
 
       description:
         title: System Description
@@ -70,24 +69,6 @@ properties:
         type: array
         items:
           type: string
-
-      device_groups:
-        title: Device Groups
-        description: |
-          The list of device groups, must be EXACTLY what is represented in the MDE GUI. 
-          This can be used by Detection Engineers in certain parts of the MDR to define the 
-          detection rule response actions and detection scope. 
-          --- 
-          In an enterprise scenario, security operation teams are typically assigned a set of devices.
-          These devices are grouped together based on a set of attributes such as their domains,
-          computer names, or designated tags.
-
-          In Microsoft Defender for Endpoint, you can create device groups and use them to:
-
-          - Limit access to related alerts and data to specific Microsoft Entra user groups with assigned RBAC roles
-          - Configure different auto-remediation settings for different sets of devices
-          - Assign specific remediation levels to apply during automated investigations
-          - In an investigation, filter the Devices list to specific device groups by using the Group filter.
 
   modifiers:
     title: Deployment Modifiers
@@ -262,9 +243,7 @@ properties:
           required: 
             - proxy
             - ssl
-            - tenant_id
-            - client_id
-            - client_secret
+            - account_id
           
           properties: 
             proxy: 
@@ -293,34 +272,25 @@ properties:
               type: boolean
               default: true
 
-            tenant_id:
+            url:
+              title: Management URL
+              type: string
+              description: |
+                The root URL of the tenant, the same as the one you see on your browser when visiting
+                the console 
+
+            account_id:
               title: Microsoft Entra ID Tenant ID
               description: |
-                The Tenant ID (also known as the Directory ID) for the Microsoft Entra ID tenant associated
-                with your Defender for Endpoint license. This is recommended to be hidden in CI variables.
-              type: string
+                Required, allows to scope the tenant to the entire account. You can find your account ID under
+                "Scopes", in the Sentinel One console.
+              type: integer
             
-            client_id: 
+            site_id: 
               title: App Registration Client ID
+              type: integer
               description: |
-                The Client ID (also know as the Application ID) for the Entra ID App Registration you created
-                in the Prerequisites section.
-              type: string
+                Optional, you may specify the scope of this tenant by adding a specific site. If not, deploys
+                to the entire account. Sites are contained within Scopes (or Accounts), and you can find the ID
+                on the Sentinel One console
             
-            client_secret:
-              title: App Registration Client Secret Value
-              description: |
-                The Client Secret Value for the credentials you created for your App Registration.
-              type: string
-  
-  defaults:
-    title: Default Parameters
-    description: |
-      Default Parameters allow you to create a baseline configuration, which has
-      to be overwritten by the MDR content (and can always be further mutated with modifiers).
-      This is helpful to setup non-required keywords which are expected to always be there.
-      You are expected, similar to modifiers, to enter the dot separated path to access the
-      desired keyword in the MDR schema.
-    type: object
-    additionalProperties:
-          type: object

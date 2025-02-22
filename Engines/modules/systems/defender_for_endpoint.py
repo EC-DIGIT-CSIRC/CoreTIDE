@@ -250,6 +250,7 @@ class DefenderForEndpointService:
         Timespan gets forced to one hour to avoid any performance hits. 
         """
         request = self.session.post(url=self.HUNTING_QUERY_ENDPOINT,
+                                    verify=self.tenant_config.setup.ssl,
                                     json={"Query" : query,
                                           "Timespan": "PT1H"})
         
@@ -282,6 +283,7 @@ class DefenderForEndpointService:
         rule_body = json.loads(rule_body)
         
         request = self.session.post(url=self.DETECTION_RULES_ENDPOINT,
+                                    verify=self.tenant_config.setup.ssl,
                                     json=rule_body)
 
         if request.status_code == 201:
@@ -312,9 +314,9 @@ class DefenderForEndpointService:
                 log("SUCCESS", "Created rule in MDE", str(request.json()))
                 log("WARNING",
                     "This is a partial deployment, check the MDE GUI to see the available identifiers")
+                os.environ["DEPLOYMENT_WARNING_RAISED"]
                 return int(request.json()["id"])
             else:
-                os.environ["DEPLOYMENT_WARNING_RAISED"]
                 raise TideErrors.DetectionRuleCreationFailed
 
     def update_detection_rule(self, rule:DetectionRule, rule_id:int):
@@ -325,6 +327,7 @@ class DefenderForEndpointService:
         rule_body = json.loads(rule_body)
         
         request = self.session.patch(url=self.GRAPH_API_ENDPOINT + f"/{rule_id}",
+                                     verify=self.tenant_config.setup.ssl,
                                      json=rule_body)
         
         if request.status_code == 200:
@@ -336,7 +339,8 @@ class DefenderForEndpointService:
             raise TideErrors.DetectionRuleUpdateFailed
 
     def delete_detection_rule(self, rule_id:int):
-        request = self.session.delete(url=self.GRAPH_API_ENDPOINT + f"/{rule_id}")
+        request = self.session.delete(url=self.GRAPH_API_ENDPOINT + f"/{rule_id}",
+                                      verify=self.tenant_config.setup.ssl)
         if request.status_code == 204:
             log("SUCCESS", "Removed Detection Rule from MDE Tenant")
         else:
@@ -344,53 +348,3 @@ class DefenderForEndpointService:
                 f"Failed to create detection rule with id {rule_id} in tenant {self.tenant_config.name}",
                 "Double check scope permissions, and whether the ID actually exists")
             raise TideErrors.DetectionRuleDeletionFailed
-
-
-'''
-    @overload
-    def camelify(self, input:dict[str,dict])->dict[str,dict]: ...
-    @overload
-    def camelify(self, input:dict[str,list])->dict[str,list]: ...
-    @overload
-    def camelify(self, input:dict[str,str])->dict[str,str]: ...
-    @overload
-    def camelify(self, input:list[dict])->list[dict]: ...
-    @overload
-    def camelify(self, input:list[str])->list[str]: ...
-    def camelify(self, input):
-        """
-        Turns strings, list, dictionaries, and any combinations of those
-        from snake_case to camelCase
-        """
-        def snake_to_camel(string:str)->str:
-            split = string.split("_")
-            camel = str()
-            for index, word in enumerate(split):
-                if index == 0:
-                    camel += word
-                    continue
-                camel += word.capitalize()
-            return camel
-
-        if type(input) is str:
-            return snake_to_camel(input)
-
-        if type(input) is list:
-            camel_list = [self.camelify(x) for x in input] 
-            return camel_list
-
-        if type(input) is dict:
-            camel_dictionary = {}
-            for key, value in input.items():
-                if type(value) is dict:
-                    camel_dictionary[snake_to_camel(key)] = self.camelify(value)
-
-                elif type(value) is list:
-                    newvalues = [self.camelify(x) for x in value]
-                    camel_dictionary[snake_to_camel(key)] = newvalues
-
-                else:
-                    camel_dictionary[snake_to_camel(key)] = value
-        
-            return camel_dictionary
-'''
