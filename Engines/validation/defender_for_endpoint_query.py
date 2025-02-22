@@ -44,7 +44,7 @@ class DefenderForEndpointValidateQuery(ValidateQuery):
                                     strategy=deployment_plan)
         
         for tenant_deployment in deployment.rule_deployment:
-            service = DefenderForEndpointService(tenant_deployment.tenant)
+            service = DefenderForEndpointService(tenant_deployment.tenant) #type:ignore
 
             for mdr in tenant_deployment.rules:
                 self.check_query(mdr=mdr,

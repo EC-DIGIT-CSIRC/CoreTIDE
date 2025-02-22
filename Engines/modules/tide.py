@@ -234,7 +234,84 @@ class IndexTide:
 class SystemLoader:
 
     @staticmethod
-    def load_defender_for_endpoint(mdr_config:dict[str, Any])->TideModels.MDR.Configurations.DefenderForEndpoint:
+    def _base_configuration(mdr_config:dict[str, Any])->Tuple[dict[str, Any], TideDefinitionsModels.SystemConfigurationModel]:
+        BaseConfigModel = TideDefinitionsModels.SystemConfigurationModel
+        schema = mdr_config.pop("contributors", None)
+        status = mdr_config.pop("status", None)
+        tenants:list[str] = mdr_config.pop("contributors", None)
+        flags:list[str] = mdr_config.pop("flags", None)
+        contributors:list[str] = mdr_config.pop("tenants", None)
+
+        return mdr_config, BaseConfigModel(schema=schema,
+                                            tenants=tenants,
+                                            status=status,
+                                            flags=flags,
+                                            contributors=contributors)
+
+    @staticmethod
+    def _external_rule_id(mdr_config:dict[str, Any])->Tuple[dict[str, Any], Mapping[str, int]]:
+        rule_id_bundle = {}
+        
+        # In case was already parsed into bundle
+        if "rule_id_bundle" in mdr_config:
+            rule_id_bundle = mdr_config.pop("rule_id_bundle")
+            return mdr_config, rule_id_bundle
+        
+        for key in mdr_config.copy():
+            if key.startswith("rule_id::"):
+                tenant = key.split("rule_id::")[1]
+                rule_id_bundle[tenant] = mdr_config.pop(key)
+
+        return mdr_config, rule_id_bundle
+
+    @staticmethod
+    def sentinel_one(mdr_config:dict[str, Any])->TideModels.MDR.Configurations.SentinelOne:
+
+        SentinelOne = TideModels.MDR.Configurations.SentinelOne
+        
+        mdr_config, base_config = SystemLoader._base_configuration(mdr_config)
+        mdr_config, rule_id_bundle = SystemLoader._external_rule_id(mdr_config)
+        
+        print("HERREERR")
+        print(rule_id_bundle)
+
+        details = None
+        if mdr_config.get("details"):
+            details = SentinelOne.Details(**mdr_config.pop("details"))
+
+        condition = mdr_config.pop("condition")
+        rule_type = condition.pop("type")
+        single_event = None
+        if condition.get("single_event"):
+            single_event = SentinelOne.Condition.SingleEvent(**condition.pop("single_event"))
+        
+        correlation = None
+        if condition.get("correlation"):
+            sub_queries = condition["correlation"].pop("sub_queries")
+            sub_queries = [SentinelOne.Condition.Correlation.SubQueries(**sub) for sub in sub_queries]
+            correlation = SentinelOne.Condition.Correlation(**condition.pop("correlation"),
+                                                            sub_queries=sub_queries)
+
+        cool_off = mdr_config.pop("cool_off", None)
+        condition = SentinelOne.Condition(type=rule_type,
+                                          single_event=single_event,
+                                          correlation=correlation,
+                                          cool_off=cool_off)
+
+        response = SentinelOne.Response(**mdr_config.pop("response"))
+        
+        return SentinelOne(schema=base_config.schema,
+                           status=base_config.status,
+                           contributors=base_config.contributors,
+                           tenants=base_config.tenants,
+                           flags=base_config.flags,
+                           rule_id_bundle=rule_id_bundle,
+                           details=details,
+                           condition=condition,
+                           response=response)
+
+    @staticmethod
+    def defender_for_endpoint(mdr_config:dict[str, Any])->TideModels.MDR.Configurations.DefenderForEndpoint:
     
         DefenderForEndpoint = TideModels.MDR.Configurations.DefenderForEndpoint
 
@@ -323,7 +400,10 @@ class TideLoader:
         system_configurations:dict[str,Any] = mdr.pop("configurations")
         
         if system_configurations.get("defender_for_endpoint"):
-            configurations.defender_for_endpoint = SystemLoader.load_defender_for_endpoint(system_configurations.pop("defender_for_endpoint"))
+            configurations.defender_for_endpoint = SystemLoader.defender_for_endpoint(system_configurations.pop("defender_for_endpoint"))
+        if system_configurations.get("sentinel_one"):
+            configurations.sentinel_one = SystemLoader.sentinel_one(system_configurations.pop("sentinel_one"))
+
         return TideModels.MDR(**mdr,
                                 metadata=metadata,
                                 response=response,
@@ -333,8 +413,10 @@ class TideLoader:
 
     @overload
     @staticmethod
-    def load_platform_config(platform_config:dict, system:Literal[DetectionSystems.DEFENDER_FOR_ENDPOINT])->TideConfigs.Systems.DefenderForEndpoint.Platform: # type: ignore
-        ...
+    def load_platform_config(platform_config:dict, system:Literal[DetectionSystems.SENTINEL_ONE])->TideConfigs.Systems.SentinelOne.Platform: ...
+    @overload
+    @staticmethod
+    def load_platform_config(platform_config:dict, system:Literal[DetectionSystems.DEFENDER_FOR_ENDPOINT])->TideConfigs.Systems.DefenderForEndpoint.Platform: ...
     @staticmethod
     def load_platform_config(platform_config:dict, system:DetectionSystems):
         if not platform_config:
@@ -346,6 +428,9 @@ class TideLoader:
 
             case DetectionSystems.DEFENDER_FOR_ENDPOINT:
                 return TideConfigs.Systems.DefenderForEndpoint.Platform(**platform_config)
+
+            case DetectionSystems.SENTINEL_ONE:
+                return TideConfigs.Systems.SentinelOne.Platform(**platform_config)
 
             case _:
                 return SystemConfig.Platform(**platform_config)
@@ -391,11 +476,15 @@ class TideLoader:
                     "Ensure that the setup section is correctly entered in platform configuration TOML file")
                 raise NotImplementedError("Missing Configuration Segment")
 
+            setup_with_secrets = HelperTide.fetch_config_envvar(tenant.pop("setup"))
+
             match platform:
                 case DetectionSystems.DEFENDER_FOR_ENDPOINT:
-                    print("DEBUG TENANT", str(tenant))
-                    setup_with_secrets = HelperTide.fetch_config_envvar(tenant.pop("setup"))
                     setup = TideConfigs.Systems.DefenderForEndpoint.Tenant.Setup(**setup_with_secrets)
+
+                case DetectionSystems.SENTINEL_ONE:
+                    setup = TideConfigs.Systems.SentinelOne.Tenant.Setup(**setup_with_secrets)
+
 
                 case _:
                     raise NotImplementedError(f"Platform {platform.name} is not recognized")
@@ -624,8 +713,18 @@ class DataTide:
                     IndexTide.load()["configurations"]["systems"]["defender_for_endpoint"]
                 )
                 platform = TideLoader.load_platform_config(dict(raw["platform"]), DetectionSystems.DEFENDER_FOR_ENDPOINT)
-                modifiers = TideLoader.load_modifiers_config(raw["modifiers"])
+                modifiers = TideLoader.load_modifiers_config(raw["modifiers"]) if raw.get("modifiers") else None
                 tenants = TideLoader.load_tenants_config(raw["tenants"], DetectionSystems.DEFENDER_FOR_ENDPOINT)
+                defaults = dict(raw.get("defaults", {}))
+
+            @dataclass
+            class SentinelOne(TideConfigs.Systems.SentinelOne):
+                raw = dict(
+                    IndexTide.load()["configurations"]["systems"]["sentinel_one"]
+                )
+                platform = TideLoader.load_platform_config(dict(raw["platform"]), DetectionSystems.SENTINEL_ONE)
+                modifiers = TideLoader.load_modifiers_config(raw["modifiers"]) if raw.get("modifiers") else None
+                tenants = TideLoader.load_tenants_config(raw["tenants"], DetectionSystems.SENTINEL_ONE)
                 defaults = dict(raw.get("defaults", {}))
 
 

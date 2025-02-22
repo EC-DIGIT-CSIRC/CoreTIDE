@@ -13,14 +13,14 @@ from Engines.modules.logs import log
 
 # TODO - Re-Architect Uber Class by merging this and DataTide
 
-# OpenTide.DataModel.
-# OpenTide.Objects. #Using DataModel as strong mapping
+# OpenTide.Models. #DataModels
+# OpenTide.Objects. #Returning Models
 # OpenTide.Configurations.
-# OpenTide.Deployment
-# OpenTide.Systems.
-# 
+# OpenTide.Deployment. #Returns Initialized deployment classes
+# OpenTide.Vocabularies.
+# OpenTide.Schemas.Json / OpenTide.Schemas.Yaml
 
-class DataModel:
+class BaseModels:
 
     class Enums:
         ...
@@ -34,6 +34,7 @@ class DetectionSystems(Enum):
     CARBON_BLACK_CLOUD = auto()
     SPLUNK = auto()
     SENTINEL = auto()
+    SENTINEL_ONE = auto()
 
 class DeploymentStrategy(Enum):
     STAGING = auto()
@@ -116,9 +117,8 @@ class SystemConfig:
                 self.deployment = DeploymentStrategy[self.deployment]
 
     platform: Platform
-    modifiers: Sequence[Modifiers] | Sequence[Never]
     tenants: Sequence[Tenant]
-    defaults: dict[str,str]
+    modifiers: Optional[Sequence[Modifiers]] = None
 
 @dataclass
 class TideConfigs:
@@ -137,6 +137,20 @@ class TideConfigs:
         @dataclass
         class CarbonBlackCloud(SystemConfig):
             ...
+
+        @dataclass
+        class SentinelOne(SystemConfig):
+            @dataclass
+            class Tenant(SystemConfig.Tenant):
+
+                @dataclass
+                class Setup(SystemConfig.Tenant.Setup):
+                    url:str
+                    account_id:int
+                    api_token:str
+                    site_id:Optional[int] = None
+
+                setup:Setup
 
         @dataclass
         class DefenderForEndpoint(SystemConfig):
@@ -158,6 +172,7 @@ class TideConfigs:
 
             platform: Platform
             tenants: Sequence[Tenant]
+
 
 
 
@@ -216,6 +231,47 @@ class TideModels:
         @dataclass
         class Configurations:
             
+            @dataclass
+            class SentinelOne(TideDefinitionsModels.SystemConfigurationModel):
+                @dataclass
+                class Details:
+                    name: Optional[str] = None
+                    description: Optional[str] = None
+                    severity: Optional[str] = None
+                    expiration: Optional[str] = None
+                
+                @dataclass
+                class Condition:
+                    @dataclass
+                    class SingleEvent:
+                        query: str
+
+                    @dataclass
+                    class Correlation:
+                        @dataclass
+                        class SubQueries:
+                            query: str
+                            matches_required: int
+                        entity: str
+                        match_in_order: bool
+                        time_window: str
+                        sub_queries: Sequence[SubQueries]
+                    
+                    type:Literal["Single Event", "Correlation"]
+                    single_event: Optional[SingleEvent] = None
+                    correlation: Optional[Correlation] = None
+                    cool_off: Optional[str] = None
+                
+                @dataclass
+                class Response:
+                    treat_as_threat:Literal[False, "Malicious", "Suspicious"]
+                    network_quarantine:bool
+
+                condition: Condition
+                response: Optional[Response] = None
+                details:Optional[Details] = None
+                rule_id_bundle: Optional[Mapping[str, int]] = None
+
             @dataclass
             class DefenderForEndpoint(TideDefinitionsModels.SystemConfigurationModel):
                 @dataclass
@@ -298,6 +354,7 @@ class TideModels:
                 ...
                         
             defender_for_endpoint: Optional[DefenderForEndpoint] = None
+            sentinel_one: Optional[SentinelOne] = None
             carbon_black_cloud: Optional[Mapping] = None
             splunk: Optional[Mapping] = None
             sentinel: Optional[Mapping] = None
@@ -333,6 +390,10 @@ class TenantDeployment:
     @dataclass
     class CarbonBlackCloud(TenantDeploymentModel):
         tenant: TideConfigs.Systems.DefenderForEndpoint.Tenant
+
+    @dataclass
+    class SentinelOne(TenantDeploymentModel):
+        tenant: TideConfigs.Systems.SentinelOne.Tenant
 
     @dataclass
     class DefenderForEndpoint(TenantDeploymentModel):

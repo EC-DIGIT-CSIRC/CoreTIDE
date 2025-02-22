@@ -1,3 +1,4 @@
+
 class TideErrors(Exception):
     """
     Container for all custom OpenTIDE errors
@@ -24,13 +25,19 @@ class TideErrors(Exception):
         Represents all errors related to Detection Rules API operations 
         """
 
-    class DetectionRuleCreationFailed(DetectionRulesOperationErrors): 
+    class DetectionRuleCreationFailed(Exception): 
         """
         Raised when failed to create a detection rule in the target tenant
         """
         ...
 
     class DetectionRuleUpdateFailed(DetectionRulesOperationErrors):
+        """
+        Raised when failed to update a detection rule in the target tenant
+        """
+        ...
+
+    class DetectionRuleDisablingFailed(DetectionRulesOperationErrors):
         """
         Raised when failed to update a detection rule in the target tenant
         """
@@ -56,6 +63,11 @@ class TideErrors(Exception):
     class TideTenantConfigurationErrors(TideSystemConfigurationErrors):
         """
         Represents all errors related to OpenTIDE System Configuration Files
+        """
+        ...
+    class TideTenantConfigurationMissingPermissions(TideSystemConfigurationErrors):
+        """
+        Represents all errors related to API permissions on target systems
         """
         ...
     class TenantNonExistingDeploymentPlan(TideTenantConfigurationErrors):
