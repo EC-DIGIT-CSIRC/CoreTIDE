@@ -714,7 +714,7 @@ class DataTide:
                 )
                 platform = TideLoader.load_platform_config(dict(raw["platform"]), DetectionSystems.DEFENDER_FOR_ENDPOINT)
                 modifiers = TideLoader.load_modifiers_config(raw["modifiers"]) if raw.get("modifiers") else None
-                tenants = TideLoader.load_tenants_config(raw["tenants"], DetectionSystems.DEFENDER_FOR_ENDPOINT)
+                tenants = TideLoader.load_tenants_config(raw["tenants"], DetectionSystems.DEFENDER_FOR_ENDPOINT) if raw.get("tenants") else None
                 defaults = dict(raw.get("defaults", {}))
 
             @dataclass
@@ -724,7 +724,7 @@ class DataTide:
                 )
                 platform = TideLoader.load_platform_config(dict(raw["platform"]), DetectionSystems.SENTINEL_ONE)
                 modifiers = TideLoader.load_modifiers_config(raw["modifiers"]) if raw.get("modifiers") else None
-                tenants = TideLoader.load_tenants_config(raw["tenants"], DetectionSystems.SENTINEL_ONE)
+                tenants = TideLoader.load_tenants_config(raw["tenants"], DetectionSystems.SENTINEL_ONE) if raw.get("tenants") else None
                 defaults = dict(raw.get("defaults", {}))
 
 

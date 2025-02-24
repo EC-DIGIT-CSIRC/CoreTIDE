@@ -10,25 +10,25 @@ to help stop cyberattacks across Windows, macOS, Linux, Android, iOS, and IoT de
 flags = [""]
 device_groups = [""]
 
-[[modifiers]]
-name = "Modifier Demo"
-description = "Example of using modifiers as a development lifecycle automation"
-[modifiers.conditions]
-status = ["STAGING"]
-[modifiers.modifications]
-alert.severity = "Informational"
-alert.title = "prefix::Staging "
+#[[modifiers]]
+#name = "Modifier Demo"
+#description = "Example of using modifiers as a development lifecycle automation"
+#[modifiers.conditions]
+#status = ["STAGING"]
+#[modifiers.modifications]
+#alert.severity = "Informational"
+#alert.title = "prefix::Staging "
 
-[[tenants]]
-name = "Name"
-description = "Tenant Description"
-deployment = "ALWAYS" #STAGING, PRODUCTION, MANUAL (only when defined in MDR) or ALWAYS
-[tenants.setup]
-proxy = false
-ssl = true
-tenant_id = "$MDE_TENANT_ID"
-client_id = "$MDE_CLIENT_ID"
-client_secret = "$MDE_CLIENT_SECRET"
+#[[tenants]]
+#name = "Name"
+#description = "Tenant Description"
+#deployment = "ALWAYS" #STAGING, PRODUCTION, MANUAL (only when defined in MDR) or ALWAYS
+#[tenants.setup]
+#proxy = false
+#ssl = true
+#tenant_id = "$MDE_TENANT_ID"
+#client_id = "$MDE_CLIENT_ID"
+#client_secret = "$MDE_CLIENT_SECRET"
 
 #[defaults]
 #any_parameter.even_nested = "Default Value"

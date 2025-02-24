@@ -420,7 +420,14 @@ class TideDeployment:
         tenants = self.system_configuration_resolver(system).tenants #type: ignore
         mdr_tenants = self.mdr_configuration_resolver(data, system).tenants
         target_tenants = list()
-
+        
+        if not tenants:
+            log("FATAL",
+                "Missing tenant configuration for enabled system",
+                system.name,
+                "Review the system configuration and ensure you have at least one tenant")
+            raise Exception
+        
         for tenant in tenants:
             
             

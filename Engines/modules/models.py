@@ -117,7 +117,7 @@ class SystemConfig:
                 self.deployment = DeploymentStrategy[self.deployment]
 
     platform: Platform
-    tenants: Sequence[Tenant]
+    tenants: Optional[Sequence[Tenant]]
     modifiers: Optional[Sequence[Modifiers]] = None
 
 @dataclass
@@ -171,7 +171,7 @@ class TideConfigs:
                 setup:Setup
 
             platform: Platform
-            tenants: Sequence[Tenant]
+            tenants: Optional[Sequence[Tenant]]
 
 
 
