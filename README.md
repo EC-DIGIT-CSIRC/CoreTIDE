@@ -5,9 +5,6 @@
 
 _Threat Informed Detection Engineering_
 
-Powering DIGIT S2 CATCH Detection Engineering Operations,
-CoreTide is planned to go open source for the benefit of the European - and beyond - SOC community.
-
 </td></tr></table>
 
 **🎤 Talks**
@@ -15,5 +12,16 @@ CoreTide is planned to go open source for the benefit of the European - and beyo
 - [Lightning Talk] Hack.lu 2023 : [TIDeMEC(CoreTIDE) : A Detection Engineering Platform Homegrown At The EC](https://www.youtube.com/watch?v=lng-87nRTGQ)
 - [Slides] FIRST Technical Colloquium Amsterdam 2024 : [CoreTIDE: the First Project of the OpenTIDE Family](https://www.first.org/resources/papers/amsterdam24/Benson-Housmann-Seguy-CoreTIDE-FIRST-TC-Amsterdam-2024.pdf) 
 
-CoreTide is a platform that has been built for the better part of the past 2 years at the EC, and builds on top of years of astute observations of what goes wrong in the detection engineering field. It is an opinionated end-to-end platform, data model, framework and solution built on top of DevOps and as-code principles, with an emphasis on traceability, consistency, safety and automation. The knowledge-graph data architecture of CoreTide scales from the input of a threat intelligence signal to the deployment of a detection rule whilst maintaining strong relations between actors, threat, detection objectives, and rules using a UUID system.
+## A new era for Detection Engineering
+CoreTide is a platform that has been built on thousands of manhours at the European Commission, and firetested for more than two years in a production environment before made Open Source. CoreTide is the backend of OpenTide, the overarching Detection Engineering framework made to empower Detection Engineering Teams.
+
+### Features
+- Highly mature and standardized, cross-system Detection-as-Code
+- Powerful CI/CD architecture, where the client OpenTide instance injects CoreTide - decoupling code and content
+- YAML-based Meta Schemas, defining all Objects within the OpenTide framework
+- Powerul self-documenting JSON Schemas, creating a first of its kind IDE experience in the DE world
+- Schemas, Templates, Indexes that all regenerate, and source from the client OpenTide instance configurations
+- Object validation, Query Validation
+- Documentation Self-Generation, creates a collection of interconnected markdown files 
+- Full UUIDv4 Object system
 
